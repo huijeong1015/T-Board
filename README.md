@@ -35,7 +35,7 @@ For managing and tracking our progress, we are using [Trello](https://trello.com
 You can find our public user story board [here](https://trello.com/b/WXC6CorM/user-story-board).
 
 ### Coding Style
-TODO
+Our team is following [Google's Code Style Guide](https://google.github.io/styleguide/).
 
 ## Project Documentation
 ### System Diagrams

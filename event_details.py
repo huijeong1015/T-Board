@@ -1,9 +1,17 @@
 from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired, Email
 
 app = Flask(__name__)
 
 bootstrap = Bootstrap(app)
+
+# class Login(FlaskForm):
+#     login_username = StringField('What is your name?', validators=[DataRequired()])
+#     login_password = StringField('What is your UofT Email address?', validators=[DataRequired(), Email()])
+#     submit = SubmitField('Submit')
 
 @app.route('/eventdetails')
 def eventdetails():

@@ -18,10 +18,12 @@
   </svg>
 
   <div class="input-login">
-    <div class="input-pwd"></div>
-    <div class="input-id"></div>
-    <div class="txt-pwd">Password</div>
-    <div class="txt-id">Username</div>
+    <input type = "text" id="input-id" name="input-id" placeholder="Username">
+    <input type = "text" id="input-pwd" name="input-pwd" placeholder="Password">
+    <!-- <div class="input-id"></div> -->
+    <!-- <div class="input-pwd"></div> -->
+    <!-- <div class="txt-pwd">Password</div> -->
+    <!-- <div class="txt-id">Username</div> -->
   </div>
   <div class="btn-login">
     <div class="btn-login2"></div>
@@ -64,7 +66,7 @@
   height: 149.5px;
   position: relative;
 }
-.input-pwd {
+#input-pwd {
   background: #d9d9d9;
   border-radius: 15px;
   width: 376px;
@@ -72,19 +74,27 @@
   position: absolute;
   left: 0px;
   top: 93.69px;
+  /* top: 60%; */
+  /* transform: translateY(-50%); */
   box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  padding: 10px; /* Add some padding for text inside the input field */
+  font: 400 italic 24px "Ubuntu Mono", sans-serif;
+  color: #000000;
 }
-.input-id {
+#input-id {
   background: #d9d9d9;
   border-radius: 15px;
   width: 376px;
   height: 55.81px;
   position: absolute;
   left: 0px;
-  top: 0px;
+  top: 0px; 
   box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  padding: 10px; /* Add some padding for text inside the input field */
+  font: 400 italic 24px "Ubuntu Mono", sans-serif;
+  color: #000000;
 }
-.txt-pwd {
+/* .txt-pwd {
   color: #000000;
   text-align: left;
   font: 400 italic 24px "Ubuntu Mono", sans-serif;
@@ -99,7 +109,7 @@
   position: absolute;
   left: 15px;
   top: 15.95px;
-}
+} */
 .btn-login {
   flex-shrink: 0;
   width: 205px;
@@ -170,4 +180,18 @@
   align-items: center;
   justify-content: center;
 }
+/* #username {
+    background: #d9d9d9;
+    border-radius: 15px;
+    width: 376px;
+    height: 55.81px;
+    position: absolute;
+    left: 0px;
+    top: 50%; Adjust the vertical position as needed */
+    /* transform: translateY(-50%);
+    box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    padding: 10px; /* Add some padding for text inside the input field */
+    /* font: 400 italic 24px "Ubuntu Mono", sans-serif;
+    color: #000000;
+} */ 
 </style>

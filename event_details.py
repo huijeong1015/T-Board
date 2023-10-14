@@ -22,6 +22,10 @@ def event_post():
     return render_template('event_post.html')
 
 #login 
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
 #main_dashboard
 
 @app.route('/my_account/event_history')
@@ -41,7 +45,7 @@ def my_account_notification():
     return render_template('my_account_notification.html')
 
 # register account
-# @app.route('/register')
-# def register():
-#     return render_template('register.html')
+@app.route('/register')
+def register():
+    return render_template('register.html')
 

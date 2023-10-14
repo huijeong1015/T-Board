@@ -48,6 +48,10 @@ TODO: Andy to post Dynamic View
 
 #### Deployment  
 We will update this section once our project is deployable
+1. activate the flask virtual environment
+2. set the environment variable to the event_details.py file (e.g. $env:FLASK_APP = "event_details.py" for windows)
+3. run the file (python -m flask run)
+4. use local host plus the extension to see the site 
 
 ## Contact Information
 * Hui Lee: huijeong.lee@mail.utoronto.ca    

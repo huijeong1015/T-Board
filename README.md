@@ -47,7 +47,7 @@ TODO: Andy to post Dynamic View
 * Install [Docker](https://www.docker.com)  
 
 #### Deployment  
-TODO
+We will update this section once our project is deployable
 
 ## Contact Information
 * Hui Lee: huijeong.lee@mail.utoronto.ca    

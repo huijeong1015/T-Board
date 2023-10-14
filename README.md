@@ -22,7 +22,7 @@
 T-Board is a platform that assembles and lists all campus events for students at the University of Toronto. It provides a comprehensive dashboard where verified users and official clubs can effortlessly post and promote their student events and club activities. Users can rate past events and report spam, while refining event searches based on criteria like club affiliation, timing, location, event type, popularity, and ratings. Additionally, T-Board facilitates event engagement by enabling students to RSVP for upcoming events, syncing them with their timetables for easy tracking. Event organizers benefit from access to RSVP lists, ensuring efficient event management and planning.
 
 We are currently in the process of developing this project. Here is a prototype image for proof of concept. 
-![Prototype](/Images for documentation/Prototype Image.png)  
+![Prototype](/Images_for_documentation/Prototype_Image.png)  
 
 ## Tools and Standards
 ### Built with 

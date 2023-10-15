@@ -193,51 +193,25 @@
               <div class="frame-tab">
                 <div class="my-events-tab">
                   <div class="event-history-tab"></div>
-                  <svg
-                    class="events"
-                    width="58"
-                    height="50"
-                    viewBox="0 0 58 50"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M0 0V21.4286H21.4286V0H0ZM28.5714 0V7.14286H57.1429V0H28.5714ZM28.5714 14.2857V21.4286H50V14.2857H28.5714ZM0 28.5714V50H21.4286V28.5714H0ZM28.5714 28.5714V35.7143H57.1429V28.5714H28.5714ZM28.5714 42.8571V50H50V42.8571H28.5714Z"
-                      fill="white"
-                    />
-                  </svg>
+                    <a href="{{ url_for('my_account_myevents') }}"> 
+                      <svg class="events" width="58" height="50" viewBox="0 0 58 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M0 0V21.4286H21.4286V0H0ZM28.5714 0V7.14286H57.1429V0H28.5714ZM28.5714 14.2857V21.4286H50V14.2857H28.5714ZM0 28.5714V50H21.4286V28.5714H0ZM28.5714 28.5714V35.7143H57.1429V28.5714H28.5714ZM28.5714 42.8571V50H50V42.8571H28.5714Z"
+                          fill="white" />
+                      </svg>
+                    </a>
                 </div>
                 <div class="event-history-tab2">
                   <div class="event-history-tab3"></div>
-                  <svg
-                    class="history"
-                    width="50"
-                    height="50"
-                    viewBox="0 0 50 50"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M24.9375 0C38.6875 0 49.9375 11.25 49.9375 25C49.9375 38.75 38.6875 50 24.9375 50C18.0625 50 11.6875 47.3125 7.1875 42.75L11.6875 38.25C15.0625 41.625 19.75 43.75 25 43.75C35.375 43.75 43.75 35.375 43.75 25C43.75 14.625 35.375 6.25 25 6.25C19.8125 6.25 15.3125 8.5 11.9375 11.9375L18.75 18.75H3.8147e-06V0L7.4375 7.4375C11.9375 2.9375 18.125 0 25 0H24.9375Z"
-                      fill="#1E1E1E"
-                    />
-                    <line
-                      x1="24.833"
-                      y1="14.1665"
-                      x2="24.833"
-                      y2="26.6665"
-                      stroke="#1E1E1E"
-                      stroke-width="3"
-                    />
-                    <line
-                      x1="35.087"
-                      y1="31.6996"
-                      x2="24.2518"
-                      y2="25.4668"
-                      stroke="#1E1E1E"
-                      stroke-width="3"
-                    />
-                  </svg>
+                    <a href="{{ url_for('my_account_event_history') }}">
+                      <svg class="history" width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M24.9375 0C38.6875 0 49.9375 11.25 49.9375 25C49.9375 38.75 38.6875 50 24.9375 50C18.0625 50 11.6875 47.3125 7.1875 42.75L11.6875 38.25C15.0625 41.625 19.75 43.75 25 43.75C35.375 43.75 43.75 35.375 43.75 25C43.75 14.625 35.375 6.25 25 6.25C19.8125 6.25 15.3125 8.5 11.9375 11.9375L18.75 18.75H3.8147e-06V0L7.4375 7.4375C11.9375 2.9375 18.125 0 25 0H24.9375Z"
+                          fill="#1E1E1E" />
+                        <line x1="24.833" y1="14.1665" x2="24.833" y2="26.6665" stroke="#1E1E1E" stroke-width="3" />
+                        <line x1="35.087" y1="31.6996" x2="24.2518" y2="25.4668" stroke="#1E1E1E" stroke-width="3" />
+                      </svg>
+                    </a>
                 </div>
                 <div class="friends-tab2">
                   <div class="friends-tab3"></div>
@@ -261,19 +235,13 @@
                 </div>
                 <div class="notification-tab">
                   <div class="notification-tab2"></div>
-                  <svg
-                    class="btn-alarm"
-                    width="50"
-                    height="50"
-                    viewBox="0 0 50 50"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M25 0C18.125 0 12.5 5.625 12.5 12.5C12.5 19 9.25 24.875 4.125 29.125C1.5625 31.25 0 34.25 0 37.5H50C50 34.25 48.5 31.25 45.875 29.125C40.75 24.875 37.5 19 37.5 12.5C37.5 5.625 31.9375 0 25 0ZM18.75 43.75C18.75 47.1875 21.5625 50 25 50C28.4375 50 31.25 47.1875 31.25 43.75H18.75Z"
-                      fill="#FFC633"
-                    />
-                  </svg>
+                    <a href="{{ url_for('my_account_notification') }}"> 
+                      <svg class="btn-alarm" width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M25 0C18.125 0 12.5 5.625 12.5 12.5C12.5 19 9.25 24.875 4.125 29.125C1.5625 31.25 0 34.25 0 37.5H50C50 34.25 48.5 31.25 45.875 29.125C40.75 24.875 37.5 19 37.5 12.5C37.5 5.625 31.9375 0 25 0ZM18.75 43.75C18.75 47.1875 21.5625 50 25 50C28.4375 50 31.25 47.1875 31.25 43.75H18.75Z"
+                          fill="#FFC633" />
+                      </svg>
+                    </a>
                 </div>
               </div>
               <svg

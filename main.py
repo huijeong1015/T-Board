@@ -19,13 +19,9 @@ bootstrap = Bootstrap(app)
 def login():
     return render_template('login.html')
 
-@app.route('/eventdetails')
+@app.route('/event_details')
 def eventdetails():
     return render_template('event_details.html')
-
-@app.route('/search')
-def search():
-    return render_template('search_tab.html')
 
 @app.route('/bookmark')
 def bookmark():

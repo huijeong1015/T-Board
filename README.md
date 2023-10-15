@@ -37,11 +37,6 @@ You can find our public user story board [here](https://trello.com/b/WXC6CorM/us
 ### Coding Style
 Our team is following [Google's Code Style Guide](https://google.github.io/styleguide/).
 
-## Project Documentation
-### System Diagrams
-TODO: Andy to post High Level Static View   
-TODO: Andy to post Dynamic View
-
 ### Getting Started
 #### Prerequisites
 These are the prerequisites for our internal team. We will update this section once our project is deployed with instructions for outside contributors.

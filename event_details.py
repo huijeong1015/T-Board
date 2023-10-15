@@ -13,6 +13,12 @@ bootstrap = Bootstrap(app)
 #     login_password = StringField('What is your UofT Email address?', validators=[DataRequired(), Email()])
 #     submit = SubmitField('Submit')
 
+#login 
+@app.route('/')
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
 @app.route('/eventdetails')
 def eventdetails():
     return render_template('event_details.html')
@@ -30,15 +36,15 @@ def event_post():
     return render_template('event_post.html')
 
 #login 
-@app.route('/login')
-# methods=['GET', 'POST']
-def login():
-    # destination = request.form.get('destination')
-    # if destination == 'main_dashboard' :
-    #     return redirect(url_for('main_dashboard'))
-    # elif destination == 'register' :
-    #     return redirect(url_for('register'))
-    return render_template('login.html')
+# @app.route('/login')
+# # methods=['GET', 'POST']
+# def login():
+#     # destination = request.form.get('destination')
+#     # if destination == 'main_dashboard' :
+#     #     return redirect(url_for('main_dashboard'))
+#     # elif destination == 'register' :
+#     #     return redirect(url_for('register'))
+#     return render_template('login.html')
 
 #main_dashboard
 @app.route('/main_dashboard')

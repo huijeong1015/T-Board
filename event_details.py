@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
@@ -31,10 +31,19 @@ def event_post():
 
 #login 
 @app.route('/login')
+# methods=['GET', 'POST']
 def login():
+    # destination = request.form.get('destination')
+    # if destination == 'main_dashboard' :
+    #     return redirect(url_for('main_dashboard'))
+    # elif destination == 'register' :
+    #     return redirect(url_for('register'))
     return render_template('login.html')
 
 #main_dashboard
+@app.route('/main_dashboard')
+def main_dashboard():
+    return render_template('main_dashboard.html')
 
 @app.route('/my_account/event_history')
 def my_account_event_history():

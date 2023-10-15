@@ -58,10 +58,14 @@
       <input type = "text" id="input3" name="input3" placeholder="interests">
       <div class="txt3">Interests</div>
     </div>
-    <div class="btn-register">
+    <!-- <div class="btn-register">
       <div class="btn-register2"></div>
       <div class="txt-register">CREATE ACCOUNT</div>
-    </div>
+    </div> -->
+    <a href="{{ url_for('main_dashboard') }}" class="btn-register">
+      <button class="btn-register2"></button>
+      <span class="txt-register">CREATE ACCOUNT</span>
+    </a>
 </div>  
 <style>
 .register,

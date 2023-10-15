@@ -14,9 +14,9 @@ bootstrap = Bootstrap(app)
 #     submit = SubmitField('Submit')
 
 #login 
-@app.route('/')
-def login():
-    return render_template('login.html')
+# @app.route('/')
+# def login():
+#     return render_template('login.html')
 
 @app.route('/eventdetails')
 def eventdetails():
@@ -33,6 +33,17 @@ def bookmark():
 @app.route('/event_post')
 def event_post():
     return render_template('event_post.html')
+
+#login , methods=['GET', 'POST']
+@app.route('/login')
+# methods=['GET', 'POST']
+def login():
+    # destination = request.form.get('destination')
+    # if destination == 'main_dashboard' :
+    #     return redirect(url_for('main_dashboard'))
+    # elif destination == 'register' :
+    #     return redirect(url_for('register'))
+    return render_template('login.html')
 
 #main_dashboard
 @app.route('/main_dashboard')
@@ -55,7 +66,7 @@ def my_account_myevents():
 def my_account_notification():
     return render_template('my_account_notification.html')
 
-# register account
+# register account methods=['GET', 'POST']
 @app.route('/register')
 def register():
     return render_template('register.html')

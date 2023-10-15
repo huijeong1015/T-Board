@@ -13,6 +13,11 @@ bootstrap = Bootstrap(app)
 #     login_password = StringField('What is your UofT Email address?', validators=[DataRequired(), Email()])
 #     submit = SubmitField('Submit')
 
+#login 
+@app.route('/')
+def login():
+    return render_template('login.html')
+
 @app.route('/eventdetails')
 def eventdetails():
     return render_template('event_details.html')
@@ -29,13 +34,8 @@ def bookmark():
 def event_post():
     return render_template('event_post.html')
 
-#login 
-@app.route('/login')
-def login():
-    return render_template('login.html')
 
 #main_dashboard
-
 @app.route('/my_account/event_history')
 def my_account_event_history():
     return render_template('my_account_eventhistory.html')

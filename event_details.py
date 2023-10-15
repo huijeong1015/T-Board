@@ -34,7 +34,6 @@ def bookmark():
 def event_post():
     return render_template('event_post.html')
 
-<<<<<<< HEAD
 #login 
 @app.route('/login')
 # methods=['GET', 'POST']
@@ -51,10 +50,6 @@ def login():
 def main_dashboard():
     return render_template('main_dashboard.html')
 
-=======
-
-#main_dashboard
->>>>>>> 17d8f0753bd90cf3d6a1e1bc1bf7b2af17bea9a9
 @app.route('/my_account/event_history')
 def my_account_event_history():
     return render_template('my_account_eventhistory.html')

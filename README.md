@@ -43,15 +43,22 @@ TODO: Andy to post High Level Static View
 TODO: Andy to post Dynamic View
 
 ### Getting Started
-#### Prerequisites 
+#### Prerequisites
+These are the prerequisites for our internal team. We will update this section once our project is deployed with instructions for outside contributors.
+
 * Install [Docker](https://www.docker.com)  
+* Install virtual environment (See chapter 1 in ECE444 textbook for instructions)
 
 #### Deployment  
-We will update this section once our project is deployable
-1. activate the flask virtual environment
-2. set the environment variable to the event_details.py file (e.g. $env:FLASK_APP = "event_details.py" for windows)
-3. run the file (python -m flask run)
-4. use local host plus the extension to see the site 
+These are the deployment instructions for our internal team. We will update this section once our project is deployed with instructions for outside contributors.      
+
+1. Activate your virtual environment
+2. Set the environment variable to the event_details.py file (e.g. $env:FLASK_APP = "event_details.py" for windows)
+3. Run the file (python -m flask run)
+   1. Download neccesary libraries if you see errors in terminal 
+4. Use local host plus the extension to see the site 
+   1. /login to see login page
+   2. /register to see user registration page 
 
 ## Contact Information
 * Hui Lee: huijeong.lee@mail.utoronto.ca    

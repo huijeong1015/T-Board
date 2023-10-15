@@ -34,17 +34,6 @@ def bookmark():
 def event_post():
     return render_template('event_post.html')
 
-#login 
-@app.route('/login')
-# methods=['GET', 'POST']
-def login():
-    # destination = request.form.get('destination')
-    # if destination == 'main_dashboard' :
-    #     return redirect(url_for('main_dashboard'))
-    # elif destination == 'register' :
-    #     return redirect(url_for('register'))
-    return render_template('login.html')
-
 #main_dashboard
 @app.route('/main_dashboard')
 def main_dashboard():

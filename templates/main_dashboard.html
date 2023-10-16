@@ -6,7 +6,7 @@
       <div class="event-list">
         <div class="frame-event">
           <div class="left">
-            <img class="image-1" src="image-1.png" />
+            <img class="event-image" src="image-1.png" />
             <svg
               class="rating"
               width="220"
@@ -47,14 +47,14 @@
           </div>
           <div class="right">
             <div class="frame-info">
-              <div class="name">Name: &lt;name of the event&gt;</div>
-              <div class="date">Date: &lt;date of the event&gt;</div>
-              <div class="time">Time: &lt;time of the event&gt;</div>
-              <div class="location">
+              <div class="event-name-txt">Name: &lt;name of the event&gt;</div>
+              <div class="event-details-txt">Date: &lt;date of the event&gt;</div>
+              <div class="event-details-txt">Time: &lt;time of the event&gt;</div>
+              <div class="event-details-txt">
                 Location: &lt;location of the event&gt;
               </div>
             </div>
-            <div class="frame-btn2">
+            <div class="frame-event-btn">
               <svg
                 class="btn-bookmark"
                 width="27"
@@ -103,9 +103,9 @@
         </div>
         <div class="frame-event">
           <div class="left">
-            <img class="image-1" src="image-1.png" />
+            <img class="event-image" src="image-1.png" />
             <svg
-              class="rating2"
+              class="rating"
               width="220"
               height="40"
               viewBox="0 0 220 40"
@@ -144,16 +144,16 @@
           </div>
           <div class="right">
             <div class="frame-info">
-              <div class="name">Name: &lt;name of the event&gt;</div>
-              <div class="date">Date: &lt;date of the event&gt;</div>
-              <div class="time">Time: &lt;time of the event&gt;</div>
-              <div class="location">
+              <div class="event-name-txt">Name: &lt;name of the event&gt;</div>
+              <div class="event-details-txt">Date: &lt;date of the event&gt;</div>
+              <div class="event-details-txt">Time: &lt;time of the event&gt;</div>
+              <div class="event-details-txt">
                 Location: &lt;location of the event&gt;
               </div>
             </div>
-            <div class="frame-btn2">
+            <div class="frame-event-btn">
               <svg
-                class="btn-bookmark2"
+                class="btn-bookmark"
                 width="27"
                 height="54"
                 viewBox="0 0 27 54"
@@ -168,7 +168,7 @@
               </svg>
 
               <svg
-                class="btn-calendar2"
+                class="btn-calendar"
                 width="48"
                 height="54"
                 viewBox="0 0 48 54"
@@ -182,7 +182,7 @@
               </svg>
 
               <svg
-                class="btn-event-details2"
+                class="btn-event-details"
                 width="68"
                 height="47"
                 viewBox="0 0 68 47"
@@ -199,7 +199,7 @@
         </div>
         <div class="frame-event">
           <div class="left">
-            <img class="image-1" src="image-1.png" />
+            <img class="event-image" src="image-1.png" />
             <svg
               class="rating3"
               width="220"
@@ -240,16 +240,16 @@
           </div>
           <div class="right">
             <div class="frame-info">
-              <div class="name">Name: &lt;name of the event&gt;</div>
-              <div class="date">Date: &lt;date of the event&gt;</div>
-              <div class="time">Time: &lt;time of the event&gt;</div>
-              <div class="location">
+              <div class="event-name-txt">Name: &lt;name of the event&gt;</div>
+              <div class="event-details-txt">Date: &lt;date of the event&gt;</div>
+              <div class="event-details-txt">Time: &lt;time of the event&gt;</div>
+              <div class="event-details-txt">
                 Location: &lt;location of the event&gt;
               </div>
             </div>
-            <div class="frame-btn2">
+            <div class="frame-event-btn">
               <svg
-                class="btn-bookmark3"
+                class="btn-bookmark"
                 width="27"
                 height="54"
                 viewBox="0 0 27 54"
@@ -264,7 +264,7 @@
               </svg>
 
               <svg
-                class="btn-calendar3"
+                class="btn-calendar"
                 width="48"
                 height="54"
                 viewBox="0 0 48 54"
@@ -278,7 +278,7 @@
               </svg>
 
               <svg
-                class="btn-event-details3"
+                class="btn-event-details"
                 width="68"
                 height="47"
                 viewBox="0 0 68 47"
@@ -347,6 +347,7 @@
     </svg>
   </div>
 </div>
+{% include "base_event.html" %}
 <style>
 .dashboard {
   padding: 0px 25px 0px 25px;
@@ -355,8 +356,8 @@
   gap: 25px;
   align-items: center;
   justify-content: center;
-  width: 1435px;
   position: relative;
+  width: 100%;
 }
 .frame {
   background: #786554;
@@ -368,178 +369,6 @@
   background: #d9d9d9;
   position: relative;
   box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-}
-.event-list {
-  padding: 45px 45px 45px 45px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-.frame-event {
-  background: #a2b7ca;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 10px 10px 10px;
-  border-radius: 15px;
-  width: 100%;
-  height: 280px;
-  position: relative;
-}
-.left {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-.image-1 {
-  flex-shrink: 0;
-  width: 365px;
-  height: 189px;
-  position: relative;
-}
-.rating {
-  display: flex;
-  flex-direction: row;
-  gap: 5px;
-  align-items: center;
-  justify-content: flex-start;
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.right {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  width: 527px;
-  height: 239px;
-  position: relative;
-}
-.frame-info {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-shrink: 0;
-  width: 463px;
-  position: relative;
-}
-.name {
-  color: #000000;
-  text-align: left;
-  font: 400 36px "Ubuntu Condensed", sans-serif;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-.date {
-  color: #000000;
-  text-align: left;
-  font: 400 28px "Ubuntu Condensed", sans-serif;
-  position: relative;
-}
-.time {
-  color: #000000;
-  text-align: left;
-  font: 400 28px "Ubuntu Condensed", sans-serif;
-  position: relative;
-}
-.location {
-  color: #000000;
-  text-align: left;
-  font: 400 28px "Ubuntu Condensed", sans-serif;
-  position: relative;
-}
-.frame-btn2 {
-  flex: 1;
-  height: 239px;
-  position: relative;
-}
-.btn-bookmark {
-  position: absolute;
-  left: 13px;
-  top: 0px;
-  overflow: visible;
-}
-.btn-calendar {
-  position: absolute;
-  left: 3px;
-  top: 77px;
-  overflow: visible;
-}
-.btn-event-details {
-  position: absolute;
-  left: -14px;
-  top: 192px;
-  overflow: visible;
-}
-.rating2 {
-  display: flex;
-  flex-direction: row;
-  gap: 5px;
-  align-items: center;
-  justify-content: flex-start;
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.btn-bookmark2 {
-  position: absolute;
-  left: 13px;
-  top: 0px;
-  overflow: visible;
-}
-.btn-calendar2 {
-  position: absolute;
-  left: 3px;
-  top: 77px;
-  overflow: visible;
-}
-.btn-event-details2 {
-  position: absolute;
-  left: -14px;
-  top: 192px;
-  overflow: visible;
-}
-.rating3 {
-  display: flex;
-  flex-direction: row;
-  gap: 5px;
-  align-items: center;
-  justify-content: flex-start;
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.btn-bookmark3 {
-  position: absolute;
-  left: 13px;
-  top: 0px;
-  overflow: visible;
-}
-.btn-calendar3 {
-  position: absolute;
-  left: 3px;
-  top: 77px;
-  overflow: visible;
-}
-.btn-event-details3 {
-  position: absolute;
-  left: -14px;
-  top: 192px;
-  overflow: visible;
 }
 .sidetab {
   padding: 60px 0px 60px 0px;

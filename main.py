@@ -20,7 +20,7 @@ def login():
     return render_template('login.html')
 
 @app.route('/event_details')
-def eventdetails():
+def event_details():
     return render_template('event_details.html')
 
 @app.route('/bookmark')
@@ -46,6 +46,10 @@ def event_post():
 @app.route('/main_dashboard')
 def main_dashboard():
     return render_template('main_dashboard.html')
+
+@app.route('/my_account')
+def my_account():
+    return render_template('my_account.html')
 
 @app.route('/my_account/event_history')
 def my_account_event_history():

@@ -1,477 +1,330 @@
-<div class="bookmark">
-    <div class="bookmark2">
-      <div class="dashboard">
-        <div class="board">
-          <div class="board2"></div>
-          <svg
-            class="frame"
-            width="1024"
-            height="951"
-            viewBox="0 0 1018 951"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <g filter="url(#filter0_d_12_1145)">
+{% extends "bookmark_tab.html" %}
+{% block content %}
+<div class="dashboard">
+  <div class="frame">
+    <div class="board">
+      <div class="event-list">
+        <div class="frame-event">
+          <div class="left">
+            <img class="event-image" src="image-1.png" />
+            <svg
+              class="rating"
+              width="221"
+              height="40"
+              viewBox="0 0 221 40"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M1018 0H0V951H1018V0ZM1002.5 17.5679H15.5V951H1002.5V17.5679Z"
-                fill="#786554"
+                d="M20.5 0L24.9903 13.8197H39.5211L27.7654 22.3607L32.2557 36.1803L20.5 27.6393L8.7443 36.1803L13.2346 22.3607L1.47887 13.8197H16.0097L20.5 0Z"
+                fill="#FF9900"
+                stroke="#838383"
+                stroke-width="2"
               />
-            </g>
-            <defs>
-              <filter
-                id="filter0_d_12_1145"
-                x="-8"
-                y="-4"
-                width="1026"
-                height="959"
-                filterUnits="userSpaceOnUse"
-                color-interpolation-filters="sRGB"
+              <path
+                d="M65.5 0L69.9903 13.8197H84.5211L72.7654 22.3607L77.2557 36.1803L65.5 27.6393L53.7443 36.1803L58.2346 22.3607L46.4789 13.8197H61.0097L65.5 0Z"
+                fill="#FF9900"
+                stroke="#838383"
+                stroke-width="2"
+              />
+              <path
+                d="M110.5 0L114.99 13.8197H129.521L117.765 22.3607L122.256 36.1803L110.5 27.6393L98.7443 36.1803L103.235 22.3607L91.4789 13.8197H106.01L110.5 0Z"
+                fill="#FF9900"
+                stroke="#838383"
+                stroke-width="2"
+              />
+              <path
+                d="M155.5 0L159.99 13.8197H174.521L162.765 22.3607L167.256 36.1803L155.5 27.6393L143.744 36.1803L148.235 22.3607L136.479 13.8197H151.01L155.5 0Z"
+                stroke="#838383"
+                stroke-width="2"
+              />
+              <path
+                d="M200.5 0L204.99 13.8197H219.521L207.765 22.3607L212.256 36.1803L200.5 27.6393L188.744 36.1803L193.235 22.3607L181.479 13.8197H196.01L200.5 0Z"
+                stroke="#838383"
+                stroke-width="2"
+              />
+            </svg>
+          </div>
+          <div class="right">
+            <div class="frame-info">
+              <div class="event-name-txt">Name: &lt;name of the event&gt;</div>
+              <div class="event-details-txt">Date: &lt;date of the event&gt;</div>
+              <div class="event-details-txt">Time: &lt;time of the event&gt;</div>
+              <div class="event-details-txt">
+                Location: &lt;location of the event&gt;
+              </div>
+            </div>
+            <div class="frame-event-btn">
+              <svg
+                class="btn-bookmark"
+                width="23"
+                height="45"
+                viewBox="0 0 23 45"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                <feColorMatrix
-                  in="SourceAlpha"
-                  type="matrix"
-                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                  result="hardAlpha"
+                <path d="M0.5 0V45L11.75 33.75L23 45V0H0.5Z" fill="#A34A4A" />
+              </svg>
+
+              <svg
+                class="btn-alarm"
+                width="45"
+                height="45"
+                viewBox="0 0 45 45"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M22.5 0C16.3125 0 11.25 5.0625 11.25 11.25C11.25 17.1 8.325 22.3875 3.7125 26.2125C1.40625 28.125 0 30.825 0 33.75H45C45 30.825 43.65 28.125 41.2875 26.2125C36.675 22.3875 33.75 17.1 33.75 11.25C33.75 5.0625 28.7437 0 22.5 0ZM16.875 39.375C16.875 42.4688 19.4062 45 22.5 45C25.5938 45 28.125 42.4688 28.125 39.375H16.875Z"
+                  fill="#FFC633"
                 />
-                <feOffset dx="-4" />
-                <feGaussianBlur stdDeviation="2" />
-                <feComposite in2="hardAlpha" operator="out" />
-                <feColorMatrix
-                  type="matrix"
-                  values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+              </svg>
+
+              <svg
+                class="btn-calendar"
+                width="40"
+                height="45"
+                viewBox="0 0 40 45"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M0.05625 0V11.25H39.4313V0H0.05625ZM0.05625 16.875V44.4937C0.05625 44.775 0.28125 45 0.5625 45H38.8688C39.15 45 39.375 44.775 39.375 44.4937V16.875H0H0.05625ZM5.68125 22.5H11.3062V28.125H5.68125V22.5ZM16.9312 22.5H22.5563V28.125H16.9312V22.5ZM28.1813 22.5H33.8063V28.125H28.1813V22.5ZM5.68125 33.75H11.3062V39.375H5.68125V33.75ZM16.9312 33.75H22.5563V39.375H16.9312V33.75Z"
+                  fill="#7CA34A"
                 />
-                <feBlend
-                  mode="normal"
-                  in2="BackgroundImageFix"
-                  result="effect1_dropShadow_12_1145"
+              </svg>
+
+              <svg
+                class="btn-event-details"
+                width="66"
+                height="45"
+                viewBox="0 0 66 45"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M41.1915 0V15H0.5V30H41.1915V45L65.6064 22.275L41.1915 0Z"
+                  fill="#657895"
                 />
-                <feBlend
-                  mode="normal"
-                  in="SourceGraphic"
-                  in2="effect1_dropShadow_12_1145"
-                  result="shape"
-                />
-              </filter>
-            </defs>
-          </svg>
-  
-          <div class="event-list">
-            <div class="frame-event">
-              <div class="bg"></div>
-              <div class="left">
-                <img class="image-1" src="image-1.png" />
-                <svg
-                  class="rating"
-                  width="221"
-                  height="40"
-                  viewBox="0 0 221 40"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M20.5 0L24.9903 13.8197H39.5211L27.7654 22.3607L32.2557 36.1803L20.5 27.6393L8.7443 36.1803L13.2346 22.3607L1.47887 13.8197H16.0097L20.5 0Z"
-                    fill="#FF9900"
-                    stroke="#838383"
-                    stroke-width="2"
-                  />
-                  <path
-                    d="M65.5 0L69.9903 13.8197H84.5211L72.7654 22.3607L77.2557 36.1803L65.5 27.6393L53.7443 36.1803L58.2346 22.3607L46.4789 13.8197H61.0097L65.5 0Z"
-                    fill="#FF9900"
-                    stroke="#838383"
-                    stroke-width="2"
-                  />
-                  <path
-                    d="M110.5 0L114.99 13.8197H129.521L117.765 22.3607L122.256 36.1803L110.5 27.6393L98.7443 36.1803L103.235 22.3607L91.4789 13.8197H106.01L110.5 0Z"
-                    fill="#FF9900"
-                    stroke="#838383"
-                    stroke-width="2"
-                  />
-                  <path
-                    d="M155.5 0L159.99 13.8197H174.521L162.765 22.3607L167.256 36.1803L155.5 27.6393L143.744 36.1803L148.235 22.3607L136.479 13.8197H151.01L155.5 0Z"
-                    stroke="#838383"
-                    stroke-width="2"
-                  />
-                  <path
-                    d="M200.5 0L204.99 13.8197H219.521L207.765 22.3607L212.256 36.1803L200.5 27.6393L188.744 36.1803L193.235 22.3607L181.479 13.8197H196.01L200.5 0Z"
-                    stroke="#838383"
-                    stroke-width="2"
-                  />
-                </svg>
-              </div>
-              <div class="right">
-                <div class="frame-info">
-                  <div class="name">Name: &lt;name of the event&gt;</div>
-                  <div class="date">Date: &lt;date of the event&gt;</div>
-                  <div class="time">Time: &lt;time of the event&gt;</div>
-                  <div class="location">
-                    Location: &lt;location of the event&gt;
-                  </div>
-                </div>
-                <div class="frame-btn">
-                  <svg
-                    class="btn-bookmark"
-                    width="23"
-                    height="45"
-                    viewBox="0 0 23 45"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M0.5 0V45L11.75 33.75L23 45V0H0.5Z" fill="#A34A4A" />
-                  </svg>
-  
-                  <svg
-                    class="btn-alarm"
-                    width="45"
-                    height="45"
-                    viewBox="0 0 45 45"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M22.5 0C16.3125 0 11.25 5.0625 11.25 11.25C11.25 17.1 8.325 22.3875 3.7125 26.2125C1.40625 28.125 0 30.825 0 33.75H45C45 30.825 43.65 28.125 41.2875 26.2125C36.675 22.3875 33.75 17.1 33.75 11.25C33.75 5.0625 28.7437 0 22.5 0ZM16.875 39.375C16.875 42.4688 19.4062 45 22.5 45C25.5938 45 28.125 42.4688 28.125 39.375H16.875Z"
-                      fill="#FFC633"
-                    />
-                  </svg>
-  
-                  <svg
-                    class="btn-calendar"
-                    width="40"
-                    height="45"
-                    viewBox="0 0 40 45"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M0.05625 0V11.25H39.4313V0H0.05625ZM0.05625 16.875V44.4937C0.05625 44.775 0.28125 45 0.5625 45H38.8688C39.15 45 39.375 44.775 39.375 44.4937V16.875H0H0.05625ZM5.68125 22.5H11.3062V28.125H5.68125V22.5ZM16.9312 22.5H22.5563V28.125H16.9312V22.5ZM28.1813 22.5H33.8063V28.125H28.1813V22.5ZM5.68125 33.75H11.3062V39.375H5.68125V33.75ZM16.9312 33.75H22.5563V39.375H16.9312V33.75Z"
-                      fill="#7CA34A"
-                    />
-                  </svg>
-  
-                  <svg
-                    class="btn-event-details"
-                    width="66"
-                    height="45"
-                    viewBox="0 0 66 45"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M41.1915 0V15H0.5V30H41.1915V45L65.6064 22.275L41.1915 0Z"
-                      fill="#657895"
-                    />
-                  </svg>
-                </div>
-              </div>
-            </div>
-            <div class="frame-event">
-              <div class="bg"></div>
-              <div class="left">
-                <img class="image-1" src="image-1.png" />
-                <svg
-                  class="rating2"
-                  width="221"
-                  height="40"
-                  viewBox="0 0 221 40"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M20.5 0L24.9903 13.8197H39.5211L27.7654 22.3607L32.2557 36.1803L20.5 27.6393L8.7443 36.1803L13.2346 22.3607L1.47887 13.8197H16.0097L20.5 0Z"
-                    fill="#FF9900"
-                    stroke="#838383"
-                    stroke-width="2"
-                  />
-                  <path
-                    d="M65.5 0L69.9903 13.8197H84.5211L72.7654 22.3607L77.2557 36.1803L65.5 27.6393L53.7443 36.1803L58.2346 22.3607L46.4789 13.8197H61.0097L65.5 0Z"
-                    fill="#FF9900"
-                    stroke="#838383"
-                    stroke-width="2"
-                  />
-                  <path
-                    d="M110.5 0L114.99 13.8197H129.521L117.765 22.3607L122.256 36.1803L110.5 27.6393L98.7443 36.1803L103.235 22.3607L91.4789 13.8197H106.01L110.5 0Z"
-                    fill="#FF9900"
-                    stroke="#838383"
-                    stroke-width="2"
-                  />
-                  <path
-                    d="M155.5 0L159.99 13.8197H174.521L162.765 22.3607L167.256 36.1803L155.5 27.6393L143.744 36.1803L148.235 22.3607L136.479 13.8197H151.01L155.5 0Z"
-                    stroke="#838383"
-                    stroke-width="2"
-                  />
-                  <path
-                    d="M200.5 0L204.99 13.8197H219.521L207.765 22.3607L212.256 36.1803L200.5 27.6393L188.744 36.1803L193.235 22.3607L181.479 13.8197H196.01L200.5 0Z"
-                    stroke="#838383"
-                    stroke-width="2"
-                  />
-                </svg>
-              </div>
-              <div class="right">
-                <div class="frame-info">
-                  <div class="name">Name: &lt;name of the event&gt;</div>
-                  <div class="date">Date: &lt;date of the event&gt;</div>
-                  <div class="time">Time: &lt;time of the event&gt;</div>
-                  <div class="location">
-                    Location: &lt;location of the event&gt;
-                  </div>
-                </div>
-                <div class="frame-btn">
-                  <svg
-                    class="btn-bookmark2"
-                    width="23"
-                    height="45"
-                    viewBox="0 0 23 45"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M0.5 0V45L11.75 33.75L23 45V0H0.5Z" fill="#A34A4A" />
-                  </svg>
-  
-                  <svg
-                    class="btn-alarm2"
-                    width="45"
-                    height="45"
-                    viewBox="0 0 45 45"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M22.5 0C16.3125 0 11.25 5.0625 11.25 11.25C11.25 17.1 8.325 22.3875 3.7125 26.2125C1.40625 28.125 0 30.825 0 33.75H45C45 30.825 43.65 28.125 41.2875 26.2125C36.675 22.3875 33.75 17.1 33.75 11.25C33.75 5.0625 28.7437 0 22.5 0ZM16.875 39.375C16.875 42.4688 19.4062 45 22.5 45C25.5938 45 28.125 42.4688 28.125 39.375H16.875Z"
-                      fill="#FFC633"
-                    />
-                  </svg>
-  
-                  <svg
-                    class="btn-calendar2"
-                    width="40"
-                    height="45"
-                    viewBox="0 0 40 45"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M0.05625 0V11.25H39.4313V0H0.05625ZM0.05625 16.875V44.4937C0.05625 44.775 0.28125 45 0.5625 45H38.8688C39.15 45 39.375 44.775 39.375 44.4937V16.875H0H0.05625ZM5.68125 22.5H11.3062V28.125H5.68125V22.5ZM16.9312 22.5H22.5563V28.125H16.9312V22.5ZM28.1813 22.5H33.8063V28.125H28.1813V22.5ZM5.68125 33.75H11.3062V39.375H5.68125V33.75ZM16.9312 33.75H22.5563V39.375H16.9312V33.75Z"
-                      fill="#7CA34A"
-                    />
-                  </svg>
-  
-                  <svg
-                    class="btn-event-details2"
-                    width="66"
-                    height="45"
-                    viewBox="0 0 66 45"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M41.1915 0V15H0.5V30H41.1915V45L65.6064 22.275L41.1915 0Z"
-                      fill="#657895"
-                    />
-                  </svg>
-                </div>
-              </div>
-            </div>
-            <div class="frame-event">
-              <div class="bg"></div>
-              <div class="left">
-                <img class="image-1" src="image-1.png" />
-                <svg
-                  class="rating3"
-                  width="221"
-                  height="40"
-                  viewBox="0 0 221 40"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M20.5 0L24.9903 13.8197H39.5211L27.7654 22.3607L32.2557 36.1803L20.5 27.6393L8.7443 36.1803L13.2346 22.3607L1.47887 13.8197H16.0097L20.5 0Z"
-                    fill="#FF9900"
-                    stroke="#838383"
-                    stroke-width="2"
-                  />
-                  <path
-                    d="M65.5 0L69.9903 13.8197H84.5211L72.7654 22.3607L77.2557 36.1803L65.5 27.6393L53.7443 36.1803L58.2346 22.3607L46.4789 13.8197H61.0097L65.5 0Z"
-                    fill="#FF9900"
-                    stroke="#838383"
-                    stroke-width="2"
-                  />
-                  <path
-                    d="M110.5 0L114.99 13.8197H129.521L117.765 22.3607L122.256 36.1803L110.5 27.6393L98.7443 36.1803L103.235 22.3607L91.4789 13.8197H106.01L110.5 0Z"
-                    fill="#FF9900"
-                    stroke="#838383"
-                    stroke-width="2"
-                  />
-                  <path
-                    d="M155.5 0L159.99 13.8197H174.521L162.765 22.3607L167.256 36.1803L155.5 27.6393L143.744 36.1803L148.235 22.3607L136.479 13.8197H151.01L155.5 0Z"
-                    stroke="#838383"
-                    stroke-width="2"
-                  />
-                  <path
-                    d="M200.5 0L204.99 13.8197H219.521L207.765 22.3607L212.256 36.1803L200.5 27.6393L188.744 36.1803L193.235 22.3607L181.479 13.8197H196.01L200.5 0Z"
-                    stroke="#838383"
-                    stroke-width="2"
-                  />
-                </svg>
-              </div>
-              <div class="right">
-                <div class="frame-info">
-                  <div class="name">Name: &lt;name of the event&gt;</div>
-                  <div class="date">Date: &lt;date of the event&gt;</div>
-                  <div class="time">Time: &lt;time of the event&gt;</div>
-                  <div class="location">
-                    Location: &lt;location of the event&gt;
-                  </div>
-                </div>
-                <div class="frame-btn">
-                  <svg
-                    class="btn-bookmark3"
-                    width="23"
-                    height="45"
-                    viewBox="0 0 23 45"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M0.5 0V45L11.75 33.75L23 45V0H0.5Z" fill="#A34A4A" />
-                  </svg>
-  
-                  <svg
-                    class="btn-alarm3"
-                    width="45"
-                    height="45"
-                    viewBox="0 0 45 45"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M22.5 0C16.3125 0 11.25 5.0625 11.25 11.25C11.25 17.1 8.325 22.3875 3.7125 26.2125C1.40625 28.125 0 30.825 0 33.75H45C45 30.825 43.65 28.125 41.2875 26.2125C36.675 22.3875 33.75 17.1 33.75 11.25C33.75 5.0625 28.7437 0 22.5 0ZM16.875 39.375C16.875 42.4688 19.4062 45 22.5 45C25.5938 45 28.125 42.4688 28.125 39.375H16.875Z"
-                      fill="#FFC633"
-                    />
-                  </svg>
-  
-                  <svg
-                    class="btn-calendar3"
-                    width="40"
-                    height="45"
-                    viewBox="0 0 40 45"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M0.05625 0V11.25H39.4313V0H0.05625ZM0.05625 16.875V44.4937C0.05625 44.775 0.28125 45 0.5625 45H38.8688C39.15 45 39.375 44.775 39.375 44.4937V16.875H0H0.05625ZM5.68125 22.5H11.3062V28.125H5.68125V22.5ZM16.9312 22.5H22.5563V28.125H16.9312V22.5ZM28.1813 22.5H33.8063V28.125H28.1813V22.5ZM5.68125 33.75H11.3062V39.375H5.68125V33.75ZM16.9312 33.75H22.5563V39.375H16.9312V33.75Z"
-                      fill="#7CA34A"
-                    />
-                  </svg>
-  
-                  <svg
-                    class="btn-event-details3"
-                    width="66"
-                    height="45"
-                    viewBox="0 0 66 45"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M41.1915 0V15H0.5V30H41.1915V45L65.6064 22.275L41.1915 0Z"
-                      fill="#657895"
-                    />
-                  </svg>
-                </div>
-              </div>
+              </svg>
             </div>
           </div>
         </div>
-      </div>
-      <div class="tab">
-        <div class="title">
-          <svg
-            class="tboard-logo"
-            width="252"
-            height="96"
-            viewBox="0 0 252 96"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <g clip-path="url(#clip0_46_1088)">
+        <div class="frame-event">
+          <div class="left">
+            <img class="event-image" src="image-1.png" />
+            <svg
+              class="rating2"
+              width="221"
+              height="40"
+              viewBox="0 0 221 40"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <path
-                d="M0.53125 20.1066C0.53125 17.5466 1.81125 16.2666 4.37125 16.2666H34.7073C37.2673 16.2666 38.5473 17.5466 38.5473 20.1066V21.1626C38.5473 23.7226 37.2673 25.0026 34.7073 25.0026H27.7953C25.2353 25.0026 23.9553 26.2826 23.9553 28.8426V81.3549C23.9553 83.9149 22.6753 85.1949 20.1153 85.1949H19.0593C16.4993 85.1949 15.2193 83.9149 15.2193 81.3549V28.8426C15.2193 26.2826 13.9393 25.0026 11.3793 25.0026H4.37125C1.81125 25.0026 0.53125 23.7226 0.53125 21.1626V20.1066Z"
-                fill="white"
+                d="M20.5 0L24.9903 13.8197H39.5211L27.7654 22.3607L32.2557 36.1803L20.5 27.6393L8.7443 36.1803L13.2346 22.3607L1.47887 13.8197H16.0097L20.5 0Z"
+                fill="#FF9900"
+                stroke="#838383"
+                stroke-width="2"
               />
               <path
-                d="M65.905 52.8424C65.905 55.4024 64.625 56.6824 62.0648 56.6824H44.3048C41.7448 56.6824 40.4648 55.4024 40.4648 52.8424V51.4024C40.4648 48.8424 41.7448 47.5624 44.3048 47.5624H62.0648C64.625 47.5624 65.905 48.8424 65.905 51.4024V52.8424ZM102.884 42.9544C104.164 44.2344 104.804 45.8024 104.804 47.6584V75.3067C104.804 77.1627 104.164 78.7307 102.884 80.0107L99.7156 83.1787C98.4356 84.4587 96.8676 85.0987 95.0116 85.0987H77.4436C74.8836 85.0987 73.6036 83.8187 73.6036 81.2587V20.0104C73.6036 17.4504 74.8836 16.1704 77.4436 16.1704H78.4996C81.0596 16.1704 82.3396 17.4504 82.3396 20.0104V34.0264C82.3396 36.5864 83.6196 37.8664 86.1796 37.8664H95.0116C96.8676 37.8664 98.4356 38.5064 99.7156 39.7864L102.884 42.9544ZM86.1796 46.6024C83.6196 46.6024 82.3396 47.8824 82.3396 50.4424V72.5227C82.3396 75.0827 83.6196 76.3627 86.1796 76.3627H92.2276C94.7876 76.3627 96.0676 75.0827 96.0676 72.5227V50.4424C96.0676 47.8824 94.7876 46.6024 92.2276 46.6024H86.1796ZM143.857 42.8584C145.137 44.2024 145.777 45.8024 145.777 47.6584V75.4987C145.777 77.3547 145.137 78.9547 143.857 80.2987L140.785 83.3707C139.505 84.6507 137.937 85.2907 136.081 85.2907H124.177C122.321 85.2907 120.753 84.6507 119.473 83.3707L116.305 80.2027C115.025 78.9227 114.385 77.3547 114.385 75.4987V47.6584C114.385 45.8024 115.025 44.2344 116.305 42.9544L119.473 39.7864C120.753 38.5064 122.321 37.8664 124.177 37.8664H136.081C137.937 37.8664 139.505 38.5064 140.785 39.7864L143.857 42.8584ZM137.041 50.4424C137.041 47.8824 135.761 46.6024 133.201 46.6024H126.961C124.401 46.6024 123.121 47.8824 123.121 50.4424V72.7147C123.121 75.2747 124.401 76.5547 126.961 76.5547H133.201C135.761 76.5547 137.041 75.2747 137.041 72.7147V50.4424ZM165.145 85.1947C163.289 85.1947 161.721 84.5547 160.441 83.2747L157.273 80.1067C155.993 78.8267 155.353 77.2587 155.353 75.4027V64.2667C155.353 63.3064 155.513 62.4744 155.833 61.7704C156.153 61.0024 156.665 60.2664 157.369 59.5624L160.441 56.4904C161.721 55.2104 163.289 54.5704 165.145 54.5704H174.265C176.825 54.5704 178.105 53.2904 178.105 50.7304V50.4424C178.105 47.8824 176.825 46.6024 174.265 46.6024H159.481C156.921 46.6024 155.641 45.3224 155.641 42.7624V41.7064C155.641 39.1464 156.921 37.8664 159.481 37.8664H177.049C178.905 37.8664 180.473 38.5064 181.753 39.7864L184.921 42.9544C186.201 44.2344 186.841 45.8024 186.841 47.6584V81.3547C186.841 83.9147 185.561 85.1947 183.001 85.1947H165.145ZM178.105 66.2827C178.105 63.7224 176.825 62.4424 174.265 62.4424H167.929C165.369 62.4424 164.089 63.7224 164.089 66.2827V73.4827C164.089 76.0427 165.369 77.3227 167.929 77.3227H174.265C176.825 77.3227 178.105 76.0427 178.105 73.4827V66.2827ZM207.143 81.3547C207.143 83.9147 205.863 85.1947 203.303 85.1947H202.247C199.687 85.1947 198.407 83.9147 198.407 81.3547V47.6584C198.407 45.8024 199.047 44.2344 200.327 42.9544L203.495 39.7864C204.775 38.5064 206.343 37.8664 208.199 37.8664H209.927C212.487 37.8664 213.767 39.1464 213.767 41.7064V42.7624C213.767 45.3224 212.679 46.6024 210.503 46.6024C209.415 46.6024 208.583 46.9544 208.007 47.6584C207.431 48.2984 207.143 49.2264 207.143 50.4424V81.3547ZM224.564 39.7864C225.844 38.5064 227.444 37.8664 229.364 37.8664H238.196C240.756 37.8664 242.036 36.5864 242.036 34.0264V20.2024C242.036 17.6424 243.316 16.3624 245.876 16.3624H246.932C249.492 16.3624 250.772 17.6424 250.772 20.2024V81.4507C250.772 84.0107 249.492 85.2907 246.932 85.2907H229.364C227.508 85.2907 225.94 84.6507 224.66 83.3707L221.492 80.2027C220.212 78.9227 219.572 77.3547 219.572 75.4987V47.5624C219.572 45.7064 220.212 44.1384 221.492 42.8584L224.564 39.7864ZM228.308 72.7147C228.308 75.2747 229.588 76.5547 232.148 76.5547H238.196C240.756 76.5547 242.036 75.2747 242.036 72.7147V50.4424C242.036 47.8824 240.756 46.6024 238.196 46.6024H232.148C229.588 46.6024 228.308 47.8824 228.308 50.4424V72.7147Z"
-                fill="#A2B7CA"
+                d="M65.5 0L69.9903 13.8197H84.5211L72.7654 22.3607L77.2557 36.1803L65.5 27.6393L53.7443 36.1803L58.2346 22.3607L46.4789 13.8197H61.0097L65.5 0Z"
+                fill="#FF9900"
+                stroke="#838383"
+                stroke-width="2"
               />
-            </g>
-            <defs>
-              <clipPath id="clip0_46_1088">
-                <rect
-                  width="250.88"
-                  height="96"
-                  fill="white"
-                  transform="translate(0.203125)"
+              <path
+                d="M110.5 0L114.99 13.8197H129.521L117.765 22.3607L122.256 36.1803L110.5 27.6393L98.7443 36.1803L103.235 22.3607L91.4789 13.8197H106.01L110.5 0Z"
+                fill="#FF9900"
+                stroke="#838383"
+                stroke-width="2"
+              />
+              <path
+                d="M155.5 0L159.99 13.8197H174.521L162.765 22.3607L167.256 36.1803L155.5 27.6393L143.744 36.1803L148.235 22.3607L136.479 13.8197H151.01L155.5 0Z"
+                stroke="#838383"
+                stroke-width="2"
+              />
+              <path
+                d="M200.5 0L204.99 13.8197H219.521L207.765 22.3607L212.256 36.1803L200.5 27.6393L188.744 36.1803L193.235 22.3607L181.479 13.8197H196.01L200.5 0Z"
+                stroke="#838383"
+                stroke-width="2"
+              />
+            </svg>
+          </div>
+          <div class="right">
+            <div class="frame-info">
+              <div class="event-name-txt">Name: &lt;name of the event&gt;</div>
+              <div class="event-details-txt">Date: &lt;date of the event&gt;</div>
+              <div class="event-details-txt">Time: &lt;time of the event&gt;</div>
+              <div class="event-details-txt">
+                Location: &lt;location of the event&gt;
+              </div>
+            </div>
+            <div class="frame-event-btn">
+              <svg
+                class="btn-bookmark"
+                width="23"
+                height="45"
+                viewBox="0 0 23 45"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M0.5 0V45L11.75 33.75L23 45V0H0.5Z" fill="#A34A4A" />
+              </svg>
+
+              <svg
+                class="btn-alarm"
+                width="45"
+                height="45"
+                viewBox="0 0 45 45"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M22.5 0C16.3125 0 11.25 5.0625 11.25 11.25C11.25 17.1 8.325 22.3875 3.7125 26.2125C1.40625 28.125 0 30.825 0 33.75H45C45 30.825 43.65 28.125 41.2875 26.2125C36.675 22.3875 33.75 17.1 33.75 11.25C33.75 5.0625 28.7437 0 22.5 0ZM16.875 39.375C16.875 42.4688 19.4062 45 22.5 45C25.5938 45 28.125 42.4688 28.125 39.375H16.875Z"
+                  fill="#FFC633"
                 />
-              </clipPath>
-            </defs>
-          </svg>
-  
-          <div class="username-s-bookmarked-events">
-            | &lt;username&gt;’s Bookmarked Events
+              </svg>
+
+              <svg
+                class="btn-calendar"
+                width="40"
+                height="45"
+                viewBox="0 0 40 45"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M0.05625 0V11.25H39.4313V0H0.05625ZM0.05625 16.875V44.4937C0.05625 44.775 0.28125 45 0.5625 45H38.8688C39.15 45 39.375 44.775 39.375 44.4937V16.875H0H0.05625ZM5.68125 22.5H11.3062V28.125H5.68125V22.5ZM16.9312 22.5H22.5563V28.125H16.9312V22.5ZM28.1813 22.5H33.8063V28.125H28.1813V22.5ZM5.68125 33.75H11.3062V39.375H5.68125V33.75ZM16.9312 33.75H22.5563V39.375H16.9312V33.75Z"
+                  fill="#7CA34A"
+                />
+              </svg>
+
+              <svg
+                class="btn-event-details"
+                width="66"
+                height="45"
+                viewBox="0 0 66 45"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M41.1915 0V15H0.5V30H41.1915V45L65.6064 22.275L41.1915 0Z"
+                  fill="#657895"
+                />
+              </svg>
+            </div>
           </div>
         </div>
-        <div class="frame-btn2">
-          <svg
-            class="btn-home"
-            width="86"
-            height="76"
-            viewBox="0 0 86 76"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M42.9402 0.5L0.0830078 32.6429H10.7973V75.5H32.2259V54.0714H53.6544V75.5H75.083V32.3214L85.7973 32.6429L42.9402 0.5Z"
-              fill="#657895"
-            />
-          </svg>
-  
-          <svg
-            class="btn-account"
-            width="76"
-            height="76"
-            viewBox="0 0 76 76"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle cx="38.2969" cy="38" r="37.5" fill="#657895" />
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M67.4051 61.6443C72.6519 55.1929 75.7969 46.9637 75.7969 38C75.7969 17.2893 59.0076 0.5 38.2969 0.5C17.5862 0.5 0.796875 17.2893 0.796875 38C0.796875 47.3377 4.20979 55.8783 9.85626 62.4424C11.9864 57.0933 17.1027 53.2839 23.1219 53C27.1719 57.575 32.7219 60.5 38.7969 60.5C44.8719 60.5 50.4219 57.575 54.4719 53C60.2411 53.2696 65.1187 56.7176 67.4051 61.6443ZM23.7969 34.25C23.7969 23.9 30.5469 15.5 38.7969 15.5C47.0469 15.5 53.7969 23.9 53.7969 34.25C53.7969 44.6 47.0469 53 38.7969 53C30.5469 53 23.7969 44.6 23.7969 34.25Z"
-              fill="#D9D9D9"
-            />
-          </svg>
+        <div class="frame-event">
+          <div class="left">
+            <img class="event-image" src="image-1.png" />
+            <svg
+              class="rating3"
+              width="221"
+              height="40"
+              viewBox="0 0 221 40"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M20.5 0L24.9903 13.8197H39.5211L27.7654 22.3607L32.2557 36.1803L20.5 27.6393L8.7443 36.1803L13.2346 22.3607L1.47887 13.8197H16.0097L20.5 0Z"
+                fill="#FF9900"
+                stroke="#838383"
+                stroke-width="2"
+              />
+              <path
+                d="M65.5 0L69.9903 13.8197H84.5211L72.7654 22.3607L77.2557 36.1803L65.5 27.6393L53.7443 36.1803L58.2346 22.3607L46.4789 13.8197H61.0097L65.5 0Z"
+                fill="#FF9900"
+                stroke="#838383"
+                stroke-width="2"
+              />
+              <path
+                d="M110.5 0L114.99 13.8197H129.521L117.765 22.3607L122.256 36.1803L110.5 27.6393L98.7443 36.1803L103.235 22.3607L91.4789 13.8197H106.01L110.5 0Z"
+                fill="#FF9900"
+                stroke="#838383"
+                stroke-width="2"
+              />
+              <path
+                d="M155.5 0L159.99 13.8197H174.521L162.765 22.3607L167.256 36.1803L155.5 27.6393L143.744 36.1803L148.235 22.3607L136.479 13.8197H151.01L155.5 0Z"
+                stroke="#838383"
+                stroke-width="2"
+              />
+              <path
+                d="M200.5 0L204.99 13.8197H219.521L207.765 22.3607L212.256 36.1803L200.5 27.6393L188.744 36.1803L193.235 22.3607L181.479 13.8197H196.01L200.5 0Z"
+                stroke="#838383"
+                stroke-width="2"
+              />
+            </svg>
+          </div>
+          <div class="right">
+            <div class="frame-info">
+              <div class="event-name-txt">Name: &lt;name of the event&gt;</div>
+              <div class="event-details-txt">Date: &lt;date of the event&gt;</div>
+              <div class="event-details-txt">Time: &lt;time of the event&gt;</div>
+              <div class="event-details-txt">
+                Location: &lt;location of the event&gt;
+              </div>
+            </div>
+            <div class="frame-event-btn">
+              <svg
+                class="btn-bookmark"
+                width="23"
+                height="45"
+                viewBox="0 0 23 45"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M0.5 0V45L11.75 33.75L23 45V0H0.5Z" fill="#A34A4A" />
+              </svg>
+              <svg
+                class="btn-alarm"
+                width="45"
+                height="45"
+                viewBox="0 0 45 45"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M22.5 0C16.3125 0 11.25 5.0625 11.25 11.25C11.25 17.1 8.325 22.3875 3.7125 26.2125C1.40625 28.125 0 30.825 0 33.75H45C45 30.825 43.65 28.125 41.2875 26.2125C36.675 22.3875 33.75 17.1 33.75 11.25C33.75 5.0625 28.7437 0 22.5 0ZM16.875 39.375C16.875 42.4688 19.4062 45 22.5 45C25.5938 45 28.125 42.4688 28.125 39.375H16.875Z"
+                  fill="#FFC633"
+                />
+              </svg>
+              <svg
+                class="btn-calendar"
+                width="40"
+                height="45"
+                viewBox="0 0 40 45"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M0.05625 0V11.25H39.4313V0H0.05625ZM0.05625 16.875V44.4937C0.05625 44.775 0.28125 45 0.5625 45H38.8688C39.15 45 39.375 44.775 39.375 44.4937V16.875H0H0.05625ZM5.68125 22.5H11.3062V28.125H5.68125V22.5ZM16.9312 22.5H22.5563V28.125H16.9312V22.5ZM28.1813 22.5H33.8063V28.125H28.1813V22.5ZM5.68125 33.75H11.3062V39.375H5.68125V33.75ZM16.9312 33.75H22.5563V39.375H16.9312V33.75Z"
+                  fill="#7CA34A"
+                />
+              </svg>
+              <svg
+                class="btn-event-details"
+                width="66"
+                height="45"
+                viewBox="0 0 66 45"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M41.1915 0V15H0.5V30H41.1915V45L65.6064 22.275L41.1915 0Z"
+                  fill="#657895"
+                />
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+  </div>
 </div>
+{% include "base_event.html" %}
 <style>
-    .bookmark,
-.bookmark * {
-  box-sizing: border-box;
-}
-.bookmark {
-  width: 1440px;
-  height: 1024px;
-  position: relative;
-}
-.bookmark2 {
-  background: #202e44;
-  width: 1440px;
-  height: 1163px;
-  position: absolute;
-  left: 0px;
-  top: 0px;
-}
 .dashboard {
   padding: 0px 25px 0px 25px;
   display: flex;
@@ -480,288 +333,18 @@
   align-items: center;
   justify-content: center;
   width: 1435px;
-  position: absolute;
-  left: 2.5px;
-  top: 212px;
-}
-.board {
-  border-radius: 10px;
-  flex-shrink: 0;
-  width: 1017px;
-  height: 812px;
   position: relative;
-}
-.board2 {
-  background: #d9d9d9;
-  width: 1017px;
-  height: 951px;
-  position: absolute;
-  left: 0.5px;
-  top: 0px;
 }
 .frame {
-  position: absolute;
-  left: -0.5px;
-  top: 0px;
-  overflow: visible;
-}
-.event-list {
-  padding: 45px 0px 45px 0px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  align-items: center;
-  justify-content: flex-start;
-  width: 1017px;
-  height: 812px;
-  position: absolute;
-  left: 0px;
-  top: 0px;
-}
-.frame-event {
-  padding: 0px 50px 0px 50px;
-  flex-shrink: 0;
-  width: 1017px;
-  height: 279px;
+  background: #786554;
   position: relative;
+  padding: 20px 20px 20px 20px;
+  overflow: visible;
 }
-.bg {
-  background: #a2b7ca;
-  border-radius: 15px;
-  width: 930px;
-  height: 279px;
-  position: absolute;
-  left: calc(50% - 468.5px);
-  top: calc(50% - 139.5px);
-}
-.left {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: flex-start;
-  justify-content: flex-start;
-  position: absolute;
-  left: 50px;
-  top: 20px;
-}
-.image-1 {
-  flex-shrink: 0;
-  width: 365px;
-  height: 189px;
+.board {
+  background: #d9d9d9;
   position: relative;
-}
-.rating {
-  display: flex;
-  flex-direction: row;
-  gap: 5px;
-  align-items: center;
-  justify-content: flex-start;
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.right {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  width: 527px;
-  height: 239px;
-  position: absolute;
-  left: 433px;
-  top: 20px;
-}
-.frame-info {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-shrink: 0;
-  width: 463px;
-  position: relative;
-}
-.name {
-  color: #000000;
-  text-align: left;
-  font: 400 36px "Ubuntu Condensed", sans-serif;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-.date {
-  color: #000000;
-  text-align: left;
-  font: 400 28px "Ubuntu Condensed", sans-serif;
-  position: relative;
-}
-.time {
-  color: #000000;
-  text-align: left;
-  font: 400 28px "Ubuntu Condensed", sans-serif;
-  position: relative;
-}
-.location {
-  color: #000000;
-  text-align: left;
-  font: 400 28px "Ubuntu Condensed", sans-serif;
-  position: relative;
-}
-.frame-btn {
-  flex: 1;
-  height: 239px;
-  position: relative;
-}
-.btn-bookmark {
-  position: absolute;
-  left: 13px;
-  top: 0px;
-  overflow: visible;
-}
-.btn-alarm {
-  position: absolute;
-  left: 1.5px;
-  top: 120px;
-  overflow: visible;
-}
-.btn-calendar {
-  position: absolute;
-  left: 4.5px;
-  top: 60px;
-  overflow: visible;
-}
-.btn-event-details {
-  position: absolute;
-  left: -11px;
-  top: 194px;
-  overflow: visible;
-}
-.rating2 {
-  display: flex;
-  flex-direction: row;
-  gap: 5px;
-  align-items: center;
-  justify-content: flex-start;
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.btn-bookmark2 {
-  position: absolute;
-  left: 13px;
-  top: 0px;
-  overflow: visible;
-}
-.btn-alarm2 {
-  position: absolute;
-  left: 1.5px;
-  top: 120px;
-  overflow: visible;
-}
-.btn-calendar2 {
-  position: absolute;
-  left: 4.5px;
-  top: 60px;
-  overflow: visible;
-}
-.btn-event-details2 {
-  position: absolute;
-  left: -11px;
-  top: 194px;
-  overflow: visible;
-}
-.rating3 {
-  display: flex;
-  flex-direction: row;
-  gap: 5px;
-  align-items: center;
-  justify-content: flex-start;
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.btn-bookmark3 {
-  position: absolute;
-  left: 13px;
-  top: 0px;
-  overflow: visible;
-}
-.btn-alarm3 {
-  position: absolute;
-  left: 1.5px;
-  top: 120px;
-  overflow: visible;
-}
-.btn-calendar3 {
-  position: absolute;
-  left: 4.5px;
-  top: 60px;
-  overflow: visible;
-}
-.btn-event-details3 {
-  position: absolute;
-  left: -11px;
-  top: 194px;
-  overflow: visible;
-}
-.tab {
-  padding: 0px 50px 0px 50px;
-  display: flex;
-  flex-direction: row;
-  gap: 30px;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  left: calc(50% - 682.8px);
-  top: 91px;
-}
-.title {
-  display: flex;
-  flex-direction: row;
-  gap: 16px;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  position: relative;
-}
-.tboard-logo {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.username-s-bookmarked-events {
-  color: #d9d9d9;
-  text-align: left;
-  font: 400 60px "Ubuntu Condensed", sans-serif;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: 800px; /*KEEP PLAYING WITH THIS- new from here*/
-  overflow: hidden;
-  text-overflow: clip;
-}
-.frame-btn2 {
-  padding: 10px 0px 10px 0px;
-  display: flex;
-  flex-direction: row;
-  gap: 30px;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  position: relative;
-}
-.btn-home {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.btn-account {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
+  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 </style>  
+{% endblock %}

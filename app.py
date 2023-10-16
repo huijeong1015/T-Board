@@ -47,5 +47,12 @@ def show_events():
     # You might return events as a string or JSON, or render them in a template
     return str(events)
 
+@app.cli.command("test")
+def run_tests():
+    """Run the unit tests."""
+    import unittest
+    tests = unittest.TestLoader().discover('tests')  # assumes all test files are in a folder named 'tests'
+    unittest.TextTestRunner(verbosity=2).run(tests)
+
 if __name__ == "__main__":
     app.run(debug=True)

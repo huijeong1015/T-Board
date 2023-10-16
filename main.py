@@ -13,13 +13,14 @@ bootstrap = Bootstrap(app)
 #     login_password = StringField('What is your UofT Email address?', validators=[DataRequired(), Email()])
 #     submit = SubmitField('Submit')
 
-#login 
-# @app.route('/')
-# def login():
-#     return render_template('login.html')
+#Start screen
+@app.route('/')
+@app.route('/login')
+def login():
+    return render_template('login.html')
 
 @app.route('/event_details')
-def eventdetails():
+def event_details():
     return render_template('event_details.html')
 
 @app.route('/bookmark')
@@ -31,20 +32,24 @@ def event_post():
     return render_template('event_post.html')
 
 #login , methods=['GET', 'POST']
-@app.route('/login')
+#@app.route('/login')
 # methods=['GET', 'POST']
-def login():
-    # destination = request.form.get('destination')
-    # if destination == 'main_dashboard' :
-    #     return redirect(url_for('main_dashboard'))
-    # elif destination == 'register' :
-    #     return redirect(url_for('register'))
-    return render_template('login.html')
+# def login():
+#     # destination = request.form.get('destination')
+#     # if destination == 'main_dashboard' :
+#     #     return redirect(url_for('main_dashboard'))
+#     # elif destination == 'register' :
+#     #     return redirect(url_for('register'))
+#     return render_template('login.html')
 
 #main_dashboard
 @app.route('/main_dashboard')
 def main_dashboard():
     return render_template('main_dashboard.html')
+
+@app.route('/my_account')
+def my_account():
+    return render_template('my_account.html')
 
 @app.route('/my_account/event_history')
 def my_account_event_history():

@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Ubuntu+Condensed" />
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Ubuntu+Mono" />
 <div class="login">
   <svg
     class="tboard-logo"
@@ -16,184 +18,95 @@
       fill="#A2B7CA"
     />
   </svg>
-
-  <div class="input-login">
-    <input type = "text" id="input-id" name="input-id" placeholder="Username">
-    <input type = "text" id="input-pwd" name="input-pwd" placeholder="Password">
-    <!-- <div class="input-id"></div> -->
-    <!-- <div class="input-pwd"></div> -->
-    <!-- <div class="txt-pwd">Password</div> -->
-    <!-- <div class="txt-id">Username</div> -->
+  <div class="input-frame">
+    <div class="input">
+      <!-- <div class="input-id"></div> -->
+      <input type = "text" id="input-id" name="input-id" placeholder="Enter your username">
+      <div class="input-txt-white">Username</div>
+    </div>
+    <div class="input">
+      <!-- <div class="input-pwd"></div> -->
+      <input type = "text" id="input-pwd" name="input-pwd" placeholder="Enter your password">
+      <div class="input-txt-white">Password</div>
+    </div>
   </div>
-  <!-- <div class="btn-login"> -->
-    <!-- <div class="btn-login2"></div> -->
-    <!-- <a href="{{ url_for('main_dashboard') }}" class="btn-login2"></a> -->
-    <!-- <div class="txt-login">LOGIN</div> -->
-    <!-- <a href="{{ url_for('main_dashboard') }}" class="txt-login"></a> -->
-  <!-- </div> -->
   <div>
-    <a href="{{ url_for('main_dashboard') }}" class="btn-login">
-      <button class="btn-login2"></button>
-      <span class="txt-login">LOGIN</span>
+    <a href="{{ url_for('main_dashboard') }}">
+      <button class="btn-login">LOGIN</button>
     </a>
   </div>
   <div class="register">
     <div class="don-t-have-account">Don’t have account?</div>
-    <!-- <div class="btn-register">
-      <div class="btn-register2"></div>
-      <div class="txt-register">REGISTER</div>
-    </div> -->
-    <a href="{{ url_for('register') }}" class="btn-register">
-      <button class="btn-register2"></button>
-      <span class="txt-register">REGISTER</span>
+    <a href="{{ url_for('register') }}">
+      <button class="btn-register">REGISTER</button>
     </a>
   </div>
-  
-  
 </div>
+{% include "base_input.html" %}
 <style>
+body {
+  background-color: #202e44;
+}
 .login,
 .login * {
   box-sizing: border-box;
 }
 .login {
   background: #202e44;
-  padding: 218px 532px 218px 532px;
+  padding: 146px;
   display: flex;
   flex-direction: column;
-  gap: 58px;
+  gap: 39px;
+  height: 100%;
   align-items: center;
   justify-content: center;
-  width: 1440px;
-  height: 1024px;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 .tboard-logo {
   flex-shrink: 0;
   position: relative;
   overflow: visible;
 }
-.input-login {
-  flex-shrink: 0;
-  width: 376px;
-  height: 149.5px;
+.input-frame {
+  display: flex;
+  flex-direction: column;
   position: relative;
-}
-#input-pwd {
-  background: #d9d9d9;
-  border-radius: 15px;
-  width: 376px;
-  height: 55.81px;
-  position: absolute;
-  left: 0px;
-  top: 93.69px;
-  /* top: 60%; */
-  /* transform: translateY(-50%); */
-  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  padding: 10px; /* Add some padding for text inside the input field */
-  font: 400 italic 24px "Ubuntu Mono", sans-serif;
-  color: #000000;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 20px;
+  width: 400px;
 }
 #input-id {
-  background: #d9d9d9;
-  border-radius: 15px;
-  width: 376px;
-  height: 55.81px;
-  position: absolute;
-  left: 0px;
-  top: 0px; 
+  background: #ffffff;
+  border-radius: 5px;
+  width: 100%;
+  position: relative;
+  font: 400 20px "Ubuntu Condensed", sans-serif;
   box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  padding: 10px; /* Add some padding for text inside the input field */
-  font: 400 italic 24px "Ubuntu Mono", sans-serif;
-  color: #000000;
 }
-/* .txt-pwd {
-  color: #000000;
-  text-align: left;
-  font: 400 italic 24px "Ubuntu Mono", sans-serif;
-  position: absolute;
-  left: 15px;
-  top: 109.63px;
-}
-.txt-id {
-  color: #000000;
-  text-align: left;
-  font: 400 italic 24px "Ubuntu Mono", sans-serif;
-  position: absolute;
-  left: 15px;
-  top: 15.95px;
-} */
-.btn-login {
-  flex-shrink: 0;
-  width: 205px;
-  height: 55px;
-  position: static;
-}
-.btn-login2 {
-  background: #a2b7ca;
-  border-radius: 15px;
-  width: 205px;
-  height: 55px;
-  position: absolute;
-  left: calc(50% - 102.5px);
-  top: calc(50% - -121.25px);
-  display: inline-block;
-  cursor: pointer;
-}
-.txt-login {
-  color: #202e44;
-  text-align: center;
-  font: 700 32px "Ubuntu Mono", sans-serif;
-  position: absolute;
-  left: calc(50% - 52.5px);
-  top: calc(50% - -133.25px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+#input-pwd {
+  background: #ffffff;
+  border-radius: 5px;
+  width: 100%;
+  position: relative;
+  font: 400 20px "Ubuntu Condensed", sans-serif;
+  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 .register {
   flex-shrink: 0;
-  width: 540.25px;
-  height: 60px;
-  position: static;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
 .don-t-have-account {
   color: #ffffff;
   text-align: center;
   font: 400 32px "Ubuntu Mono", sans-serif;
-  position: absolute;
-  left: 449.88px;
-  top: 746.25px;
-  width: 325px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.btn-register {
-  width: 205px;
-  height: 55px;
-  position: static;
-}
-.btn-register2 {
-  background: #a2b7ca;
-  border-radius: 15px;
-  width: 205px;
-  height: 55px;
-  position: absolute;
-  left: calc(50% - -65.12px);
-  top: calc(50% - -238.88px);
-}
-.txt-register {
-  color: #202e44;
-  text-align: center;
-  font: 700 32px "Ubuntu Mono", sans-serif;
-  position: absolute;
-  left: calc(50% - -93.12px);
-  top: calc(50% - -250.62px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
 }
 </style>

@@ -1,801 +1,375 @@
-<div class="my-account-my-events">
-    <div class="tab">
-      <svg
-        class="tboard-logo"
-        width="252"
-        height="96"
-        viewBox="0 0 252 96"
+{% extends "my_account.html" %}
+{% block tab %}
+<div class="my-events-tab">
+  <div class="frame-tab">
+    <div class="my-events-tab2">
+      <svg class="events" width="58" height="50" viewBox="0 0 58 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M0 0V21.4286H21.4286V0H0ZM28.5714 0V7.14286H57.1429V0H28.5714ZM28.5714 14.2857V21.4286H50V14.2857H28.5714ZM0 28.5714V50H21.4286V28.5714H0ZM28.5714 28.5714V35.7143H57.1429V28.5714H28.5714ZM28.5714 42.8571V50H50V42.8571H28.5714Z"
+          fill="white" />
+      </svg>
+    </div>
+    <div class="event-history-tab">
+      <a href="{{ url_for('my_account_event_history') }}">
+        <svg
+        class="history"
+        width="50"
+        height="50"
+        viewBox="0 0 50 50"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <g clip-path="url(#clip0_46_1097)">
-          <path
-            d="M1.07812 20.1066C1.07812 17.5466 2.35812 16.2666 4.91812 16.2666H35.2542C37.8142 16.2666 39.0942 17.5466 39.0942 20.1066V21.1626C39.0942 23.7226 37.8142 25.0026 35.2542 25.0026H28.3422C25.7822 25.0026 24.5022 26.2826 24.5022 28.8426V81.3549C24.5022 83.9149 23.2222 85.1949 20.6622 85.1949H19.6062C17.0462 85.1949 15.7662 83.9149 15.7662 81.3549V28.8426C15.7662 26.2826 14.4862 25.0026 11.9262 25.0026H4.91812C2.35812 25.0026 1.07812 23.7226 1.07812 21.1626V20.1066Z"
-            fill="white"
-          />
-          <path
-            d="M66.4519 52.8424C66.4519 55.4024 65.1719 56.6824 62.6117 56.6824H44.8517C42.2917 56.6824 41.0117 55.4024 41.0117 52.8424V51.4024C41.0117 48.8424 42.2917 47.5624 44.8517 47.5624H62.6117C65.1719 47.5624 66.4519 48.8424 66.4519 51.4024V52.8424ZM103.43 42.9544C104.71 44.2344 105.35 45.8024 105.35 47.6584V75.3067C105.35 77.1627 104.71 78.7307 103.43 80.0107L100.262 83.1787C98.9825 84.4587 97.4145 85.0987 95.5585 85.0987H77.9905C75.4305 85.0987 74.1505 83.8187 74.1505 81.2587V20.0104C74.1505 17.4504 75.4305 16.1704 77.9905 16.1704H79.0465C81.6065 16.1704 82.8865 17.4504 82.8865 20.0104V34.0264C82.8865 36.5864 84.1665 37.8664 86.7265 37.8664H95.5585C97.4145 37.8664 98.9825 38.5064 100.262 39.7864L103.43 42.9544ZM86.7265 46.6024C84.1665 46.6024 82.8865 47.8824 82.8865 50.4424V72.5227C82.8865 75.0827 84.1665 76.3627 86.7265 76.3627H92.7745C95.3345 76.3627 96.6145 75.0827 96.6145 72.5227V50.4424C96.6145 47.8824 95.3345 46.6024 92.7745 46.6024H86.7265ZM144.404 42.8584C145.684 44.2024 146.324 45.8024 146.324 47.6584V75.4987C146.324 77.3547 145.684 78.9547 144.404 80.2987L141.332 83.3707C140.052 84.6507 138.484 85.2907 136.628 85.2907H124.724C122.868 85.2907 121.3 84.6507 120.02 83.3707L116.852 80.2027C115.572 78.9227 114.932 77.3547 114.932 75.4987V47.6584C114.932 45.8024 115.572 44.2344 116.852 42.9544L120.02 39.7864C121.3 38.5064 122.868 37.8664 124.724 37.8664H136.628C138.484 37.8664 140.052 38.5064 141.332 39.7864L144.404 42.8584ZM137.588 50.4424C137.588 47.8824 136.308 46.6024 133.748 46.6024H127.508C124.948 46.6024 123.668 47.8824 123.668 50.4424V72.7147C123.668 75.2747 124.948 76.5547 127.508 76.5547H133.748C136.308 76.5547 137.588 75.2747 137.588 72.7147V50.4424ZM165.692 85.1947C163.836 85.1947 162.268 84.5547 160.988 83.2747L157.82 80.1067C156.54 78.8267 155.9 77.2587 155.9 75.4027V64.2667C155.9 63.3064 156.06 62.4744 156.38 61.7704C156.7 61.0024 157.212 60.2664 157.916 59.5624L160.988 56.4904C162.268 55.2104 163.836 54.5704 165.692 54.5704H174.812C177.372 54.5704 178.652 53.2904 178.652 50.7304V50.4424C178.652 47.8824 177.372 46.6024 174.812 46.6024H160.028C157.468 46.6024 156.188 45.3224 156.188 42.7624V41.7064C156.188 39.1464 157.468 37.8664 160.028 37.8664H177.596C179.452 37.8664 181.02 38.5064 182.3 39.7864L185.468 42.9544C186.748 44.2344 187.388 45.8024 187.388 47.6584V81.3547C187.388 83.9147 186.108 85.1947 183.548 85.1947H165.692ZM178.652 66.2827C178.652 63.7224 177.372 62.4424 174.812 62.4424H168.476C165.916 62.4424 164.636 63.7224 164.636 66.2827V73.4827C164.636 76.0427 165.916 77.3227 168.476 77.3227H174.812C177.372 77.3227 178.652 76.0427 178.652 73.4827V66.2827ZM207.69 81.3547C207.69 83.9147 206.41 85.1947 203.85 85.1947H202.794C200.234 85.1947 198.954 83.9147 198.954 81.3547V47.6584C198.954 45.8024 199.594 44.2344 200.874 42.9544L204.042 39.7864C205.322 38.5064 206.89 37.8664 208.746 37.8664H210.474C213.034 37.8664 214.314 39.1464 214.314 41.7064V42.7624C214.314 45.3224 213.226 46.6024 211.05 46.6024C209.962 46.6024 209.13 46.9544 208.554 47.6584C207.978 48.2984 207.69 49.2264 207.69 50.4424V81.3547ZM225.111 39.7864C226.391 38.5064 227.991 37.8664 229.911 37.8664H238.743C241.303 37.8664 242.583 36.5864 242.583 34.0264V20.2024C242.583 17.6424 243.863 16.3624 246.423 16.3624H247.479C250.039 16.3624 251.319 17.6424 251.319 20.2024V81.4507C251.319 84.0107 250.039 85.2907 247.479 85.2907H229.911C228.055 85.2907 226.487 84.6507 225.207 83.3707L222.039 80.2027C220.759 78.9227 220.119 77.3547 220.119 75.4987V47.5624C220.119 45.7064 220.759 44.1384 222.039 42.8584L225.111 39.7864ZM228.855 72.7147C228.855 75.2747 230.135 76.5547 232.695 76.5547H238.743C241.303 76.5547 242.583 75.2747 242.583 72.7147V50.4424C242.583 47.8824 241.303 46.6024 238.743 46.6024H232.695C230.135 46.6024 228.855 47.8824 228.855 50.4424V72.7147Z"
-            fill="#A2B7CA"
-          />
-        </g>
-        <defs>
-          <clipPath id="clip0_46_1097">
-            <rect
-              width="250.88"
-              height="96"
-              fill="white"
-              transform="translate(0.75)"
-            />
-          </clipPath>
-        </defs>
-      </svg>
-  
-      <div class="search">
-        <div class="input"></div>
-        <div class="txt">SEARCH</div>
-        <svg
-          class="icon-magnifying-glass"
-          width="40"
-          height="40"
-          viewBox="0 0 40 40"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M17.5393 0.548313C8.21496 0.548313 0.629883 8.13339 0.629883 17.4577C0.629883 26.7821 8.21496 34.3671 17.5393 34.3671C20.3897 34.3671 23.1919 33.6908 25.5592 32.3863C25.7488 32.6145 25.9591 32.8248 26.1873 33.0144L31.0185 37.8456C31.4646 38.3476 32.0086 38.7531 32.6171 39.0372C33.2256 39.3214 33.8857 39.4781 34.557 39.4979C35.2283 39.5176 35.8965 39.4 36.5206 39.1521C37.1448 38.9043 37.7117 38.5315 38.1865 38.0567C38.6614 37.5818 39.0342 37.0149 39.282 36.3907C39.5299 35.7666 39.6475 35.0984 39.6277 34.4271C39.608 33.7558 39.4512 33.0957 39.1671 32.4872C38.883 31.8787 38.4775 31.3347 37.9755 30.8886L33.1443 26.0574C32.9089 25.8219 32.6499 25.6115 32.3713 25.4293C33.6757 23.062 34.497 20.3082 34.497 17.4094C34.497 8.08508 26.9119 0.5 17.5876 0.5L17.5393 0.548313ZM17.5393 5.37957C24.2547 5.37957 29.6174 10.7423 29.6174 17.4577C29.6174 20.6464 28.4579 23.5934 26.4288 25.7675C26.3805 25.8158 26.3322 25.8641 26.2839 25.9124C26.0557 26.1021 25.8454 26.3123 25.6558 26.5405C23.5301 28.473 20.6313 29.5842 17.491 29.5842C10.7755 29.5842 5.41283 24.2215 5.41283 17.506C5.41283 10.7906 10.7755 5.42789 17.491 5.42789L17.5393 5.37957Z"
-            fill="black"
-            fill-opacity="0.7"
-          />
+        <path
+          d="M24.9375 0C38.6875 0 49.9375 11.25 49.9375 25C49.9375 38.75 38.6875 50 24.9375 50C18.0625 50 11.6875 47.3125 7.1875 42.75L11.6875 38.25C15.0625 41.625 19.75 43.75 25 43.75C35.375 43.75 43.75 35.375 43.75 25C43.75 14.625 35.375 6.25 25 6.25C19.8125 6.25 15.3125 8.5 11.9375 11.9375L18.75 18.75H5.24044e-06V0L7.4375 7.4375C11.9375 2.9375 18.125 0 25 0H24.9375Z"
+          fill="#1E1E1E"
+        />
+        <line
+          x1="24.833"
+          y1="14.1665"
+          x2="24.833"
+          y2="26.6665"
+          stroke="#1E1E1E"
+          stroke-width="3"
+        />
+        <line
+          x1="35.087"
+          y1="31.6996"
+          x2="24.2518"
+          y2="25.4668"
+          stroke="#1E1E1E"
+          stroke-width="3"
+        />
         </svg>
-      </div>
-      <div class="frame-btn">
-        <svg
-          class="filter"
-          width="76"
-          height="76"
-          viewBox="0 0 76 76"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M38.1299 0.5C17.5049 0.5 0.629883 17.375 0.629883 38C0.629883 58.625 17.5049 75.5 38.1299 75.5C58.7549 75.5 75.6299 58.625 75.6299 38C75.6299 17.375 58.7549 0.5 38.1299 0.5ZM38.1299 9.875C53.6924 9.875 66.2549 22.4375 66.2549 38C66.2549 53.5625 53.6924 66.125 38.1299 66.125C22.5674 66.125 10.0049 53.5625 10.0049 38C10.0049 22.4375 22.5674 9.875 38.1299 9.875ZM38.1299 19.25C27.8174 19.25 19.3799 27.6875 19.3799 38C19.3799 48.3125 27.8174 56.75 38.1299 56.75C48.4424 56.75 56.8799 48.3125 56.8799 38C56.8799 27.6875 48.4424 19.25 38.1299 19.25ZM38.1299 28.625C43.3799 28.625 47.5049 32.75 47.5049 38C47.5049 43.25 43.3799 47.375 38.1299 47.375C32.8799 47.375 28.7549 43.25 28.7549 38C28.7549 32.75 32.8799 28.625 38.1299 28.625Z"
-            fill="#A2B7CA"
-          />
-        </svg>
-  
-        <svg
-          class="bookmark"
-          width="39"
-          height="76"
-          viewBox="0 0 39 76"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M0.629883 0.5V75.5L19.3799 56.75L38.1299 75.5V0.5H0.629883Z"
-            fill="#A34A4A"
-          />
-        </svg>
-  
-        <svg
-          class="account"
-          width="76"
-          height="76"
-          viewBox="0 0 76 76"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <circle cx="37.6299" cy="38" r="37.5" fill="#657895" />
-          <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-            d="M66.7381 61.6443C71.9849 55.1929 75.1299 46.9637 75.1299 38C75.1299 17.2893 58.3406 0.5 37.6299 0.5C16.9192 0.5 0.129883 17.2893 0.129883 38C0.129883 47.3377 3.5428 55.8783 9.18927 62.4424C11.3195 57.0933 16.4357 53.2839 22.4549 53C26.5049 57.575 32.0549 60.5 38.1299 60.5C44.2049 60.5 49.7549 57.575 53.8049 53C59.5741 53.2696 64.4517 56.7176 66.7381 61.6443ZM23.1299 34.25C23.1299 23.9 29.8799 15.5 38.1299 15.5C46.3799 15.5 53.1299 23.9 53.1299 34.25C53.1299 44.6 46.3799 53 38.1299 53C29.8799 53 23.1299 44.6 23.1299 34.25Z"
-            fill="#D9D9D9"
-          />
-        </svg>
-      </div>
+      </a>
     </div>
-    <div class="board">
-      <div class="board2">
-        <div class="board3"></div>
-        <svg
-          class="frame"
-          width="1018"
-          height="951"
-          viewBox="0 0 1018 951"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <g filter="url(#filter0_d_46_939)">
+    <div class="friends-tab">
+        <a href="{{ url_for('my_account_friends') }}">
+          <svg class="add-friend" width="75" height="50" viewBox="0 0 75 50" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M1018 0H0.5V951L15.5074 951V17.5679H1002.99V951L1018 951V0Z"
-              fill="#786554"
-            />
-          </g>
-          <defs>
-            <filter
-              id="filter0_d_46_939"
-              x="-7.5"
-              y="-4"
-              width="1025.5"
-              height="959"
-              filterUnits="userSpaceOnUse"
-              color-interpolation-filters="sRGB"
-            >
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
-              <feColorMatrix
-                in="SourceAlpha"
-                type="matrix"
-                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                result="hardAlpha"
-              />
-              <feOffset dx="-4" />
-              <feGaussianBlur stdDeviation="2" />
-              <feComposite in2="hardAlpha" operator="out" />
-              <feColorMatrix
-                type="matrix"
-                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
-              />
-              <feBlend
-                mode="normal"
-                in2="BackgroundImageFix"
-                result="effect1_dropShadow_46_939"
-              />
-              <feBlend
-                mode="normal"
-                in="SourceGraphic"
-                in2="effect1_dropShadow_46_939"
-                result="shape"
-              />
-            </filter>
-          </defs>
+              d="M25 0C18.125 0 12.5 7 12.5 15.625C12.5 24.25 18.125 31.25 25 31.25C31.875 31.25 37.5 24.25 37.5 15.625C37.5 7 31.875 0 25 0ZM11.9375 31.25C5.3125 31.5625 0 37 0 43.75V50H50V43.75C50 37 44.75 31.5625 38.0625 31.25C34.6875 35.0625 30.0625 37.5 25 37.5C19.9375 37.5 15.3125 35.0625 11.9375 31.25Z"
+              fill="#202E44" />
+            <path d="M59.3846 0V9.29969H50.085V15.4995H59.3846V24.7992H65.5844V15.4995H74.8841V9.29969H65.5844V0H59.3846Z"
+              fill="#202E44" />
+          </svg>
+        </a>
+    </div>
+    <div class="notification-tab">
+      <a href="{{ url_for('my_account_notification') }}"> 
+        <svg class="alarm" width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M25 0C18.125 0 12.5 5.625 12.5 12.5C12.5 19 9.25 24.875 4.125 29.125C1.5625 31.25 0 34.25 0 37.5H50C50 34.25 48.5 31.25 45.875 29.125C40.75 24.875 37.5 19 37.5 12.5C37.5 5.625 31.9375 0 25 0ZM18.75 43.75C18.75 47.1875 21.5625 50 25 50C28.4375 50 31.25 47.1875 31.25 43.75H18.75Z"
+            fill="#FFC633" />
         </svg>
-  
-        <div class="account-info">
-          <div class="top">
-            <div class="left">
-              <svg
-                class="account2"
-                width="201"
-                height="200"
-                viewBox="0 0 201 200"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle
-                  cx="100.5"
-                  cy="100"
-                  r="101.5"
-                  fill="#657895"
-                  stroke="#657895"
-                  stroke-width="3"
-                />
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M178.122 163.051C192.113 145.847 200.5 123.903 200.5 100C200.5 44.7715 155.728 0 100.5 0C45.2715 0 0.5 44.7715 0.5 100C0.5 124.901 9.60129 147.676 24.6588 165.18C30.3392 150.916 43.9827 140.757 60.034 140C70.834 152.2 85.634 160 101.834 160C118.034 160 132.834 152.2 143.634 140C159.018 140.719 172.025 149.913 178.122 163.051ZM61.834 90C61.834 62.4 79.834 40 101.834 40C123.834 40 141.834 62.4 141.834 90C141.834 117.6 123.834 140 101.834 140C79.834 140 61.834 117.6 61.834 90Z"
-                  fill="#D9D9D9"
-                />
-              </svg>
-            </div>
-            <div class="right">
-              <div class="hello">HELLO, &lt;username&gt;!</div>
-              <div class="interests">
-                Interests: &lt;list of interests entered during account
-                creation&gt;
-              </div>
-            </div>
-          </div>
-          <div class="frame-3">
-            <div class="event-history-tab">
-              <div class="frame-tab">
-                <div class="my-events-tab">
-                  <div class="event-history-tab2"></div>
-                  <svg
-                    class="events"
-                    width="58"
-                    height="50"
-                    viewBox="0 0 58 50"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M0 0V21.4286H21.4286V0H0ZM28.5714 0V7.14286H57.1429V0H28.5714ZM28.5714 14.2857V21.4286H50V14.2857H28.5714ZM0 28.5714V50H21.4286V28.5714H0ZM28.5714 28.5714V35.7143H57.1429V28.5714H28.5714ZM28.5714 42.8571V50H50V42.8571H28.5714Z"
-                      fill="white"
-                    />
-                  </svg>
-                </div>
-                <div class="event-history-tab3">
-                  <div class="event-history-tab4"></div>
-                    <a href="{{ url_for('my_account_event_history') }}">
-                      <svg class="history" width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                          d="M24.9375 0C38.6875 0 49.9375 11.25 49.9375 25C49.9375 38.75 38.6875 50 24.9375 50C18.0625 50 11.6875 47.3125 7.1875 42.75L11.6875 38.25C15.0625 41.625 19.75 43.75 25 43.75C35.375 43.75 43.75 35.375 43.75 25C43.75 14.625 35.375 6.25 25 6.25C19.8125 6.25 15.3125 8.5 11.9375 11.9375L18.75 18.75H3.8147e-06V0L7.4375 7.4375C11.9375 2.9375 18.125 0 25 0H24.9375Z"
-                          fill="#1E1E1E" />
-                        <line x1="24.833" y1="14.1665" x2="24.833" y2="26.6665" stroke="#1E1E1E" stroke-width="3" />
-                        <line x1="35.087" y1="31.6996" x2="24.2518" y2="25.4668" stroke="#1E1E1E" stroke-width="3" />
-                      </svg>
-                    </a>
-                </div>
-                <div class="friends-tab">
-                  <div class="friends-tab2"></div>
-                    <a href="{{ url_for('my_account_friends') }}"> 
-                      <svg class="btn-add-friend" width="75" height="50" viewBox="0 0 75 50" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                          d="M25 0C18.125 0 12.5 7 12.5 15.625C12.5 24.25 18.125 31.25 25 31.25C31.875 31.25 37.5 24.25 37.5 15.625C37.5 7 31.875 0 25 0ZM11.9375 31.25C5.3125 31.5625 0 37 0 43.75V50H50V43.75C50 37 44.75 31.5625 38.0625 31.25C34.6875 35.0625 30.0625 37.5 25 37.5C19.9375 37.5 15.3125 35.0625 11.9375 31.25Z"
-                          fill="#202E44" />
-                        <path d="M59.3846 0V9.29969H50.085V15.4995H59.3846V24.7992H65.5844V15.4995H74.8841V9.29969H65.5844V0H59.3846Z"
-                          fill="#202E44" />
-                      </svg>
-                    </a>
-                </div>
-                <div class="notification-tab">
-                  <div class="notification-tab2"></div>
-                    <a href="{{ url_for('my_account_notification') }}"> 
-                      <svg class="btn-alarm" width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                          d="M25 0C18.125 0 12.5 5.625 12.5 12.5C12.5 19 9.25 24.875 4.125 29.125C1.5625 31.25 0 34.25 0 37.5H50C50 34.25 48.5 31.25 45.875 29.125C40.75 24.875 37.5 19 37.5 12.5C37.5 5.625 31.9375 0 25 0ZM18.75 43.75C18.75 47.1875 21.5625 50 25 50C28.4375 50 31.25 47.1875 31.25 43.75H18.75Z"
-                          fill="#FFC633" />
-                      </svg>
-                    </a>
-                </div>
-              </div>
-              <svg
-                class="intersect"
-                width="917"
-                height="621"
-                viewBox="0 0 917 621"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M13.1724 0C5.61988 2.85822 0.25 10.1578 0.25 18.7116V621H917V15.5405C915.86 8.38669 910.927 2.49763 904.328 0H13.1724Z"
-                  fill="#A2B7CA"
-                />
-              </svg>
-  
-              <div class="frame-content">
-                <div class="my-events">MY EVENTS</div>
-                <div class="frame-event">
-                  <div class="left">
-                    <img class="image-1" src="image-1.png" />
-                    <div class="rating">
-                      <svg
-                        class="star-1"
-                        width="41"
-                        height="40"
-                        viewBox="0 0 41 40"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M20.75 0L25.2403 13.8197H39.7711L28.0154 22.3607L32.5057 36.1803L20.75 27.6393L8.9943 36.1803L13.4846 22.3607L1.72887 13.8197H16.2597L20.75 0Z"
-                          fill="#FF9900"
-                          stroke="#838383"
-                          stroke-width="2"
-                        />
-                      </svg>
-  
-                      <svg
-                        class="star-2"
-                        width="41"
-                        height="40"
-                        viewBox="0 0 41 40"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M20.75 0L25.2403 13.8197H39.7711L28.0154 22.3607L32.5057 36.1803L20.75 27.6393L8.9943 36.1803L13.4846 22.3607L1.72887 13.8197H16.2597L20.75 0Z"
-                          fill="#FF9900"
-                          stroke="#838383"
-                          stroke-width="2"
-                        />
-                      </svg>
-  
-                      <svg
-                        class="star-3"
-                        width="41"
-                        height="40"
-                        viewBox="0 0 41 40"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M20.75 0L25.2403 13.8197H39.7711L28.0154 22.3607L32.5057 36.1803L20.75 27.6393L8.9943 36.1803L13.4846 22.3607L1.72887 13.8197H16.2597L20.75 0Z"
-                          fill="#FF9900"
-                          stroke="#838383"
-                          stroke-width="2"
-                        />
-                      </svg>
-  
-                      <svg
-                        class="star-4"
-                        width="41"
-                        height="40"
-                        viewBox="0 0 41 40"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M20.75 0L25.2403 13.8197H39.7711L28.0154 22.3607L32.5057 36.1803L20.75 27.6393L8.9943 36.1803L13.4846 22.3607L1.72887 13.8197H16.2597L20.75 0Z"
-                          stroke="#838383"
-                          stroke-width="2"
-                        />
-                      </svg>
-  
-                      <svg
-                        class="star-5"
-                        width="41"
-                        height="40"
-                        viewBox="0 0 41 40"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M20.75 0L25.2403 13.8197H39.7711L28.0154 22.3607L32.5057 36.1803L20.75 27.6393L8.9943 36.1803L13.4846 22.3607L1.72887 13.8197H16.2597L20.75 0Z"
-                          stroke="#838383"
-                          stroke-width="2"
-                        />
-                      </svg>
-  
-                      <div class="btn-edit">
-                        <svg
-                          class="icon-pencil"
-                          width="41"
-                          height="40"
-                          viewBox="0 0 41 40"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M30.75 0L25.75 5L35.75 15L40.75 10L30.75 0ZM20.75 10L0.75 30V40H10.75L30.75 20L20.75 10Z"
-                            fill="white"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="right2">
-                    <div class="frame-info">
-                      <div class="name">Name: &lt;name of the event&gt;</div>
-                      <div class="date">Date: &lt;date of the event&gt;</div>
-                      <div class="time">Time: &lt;time of the event&gt;</div>
-                      <div class="location">
-                        Location: &lt;location of the event&gt;
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="frame-event">
-                  <div class="left">
-                    <img class="image-1" src="image-1.png" />
-                    <div class="rating">
-                      <svg
-                        class="star-12"
-                        width="41"
-                        height="40"
-                        viewBox="0 0 41 40"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M20.75 0L25.2403 13.8197H39.7711L28.0154 22.3607L32.5057 36.1803L20.75 27.6393L8.9943 36.1803L13.4846 22.3607L1.72887 13.8197H16.2597L20.75 0Z"
-                          fill="#FF9900"
-                          stroke="#838383"
-                          stroke-width="2"
-                        />
-                      </svg>
-  
-                      <svg
-                        class="star-22"
-                        width="41"
-                        height="40"
-                        viewBox="0 0 41 40"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M20.75 0L25.2403 13.8197H39.7711L28.0154 22.3607L32.5057 36.1803L20.75 27.6393L8.9943 36.1803L13.4846 22.3607L1.72887 13.8197H16.2597L20.75 0Z"
-                          fill="#FF9900"
-                          stroke="#838383"
-                          stroke-width="2"
-                        />
-                      </svg>
-  
-                      <svg
-                        class="star-32"
-                        width="41"
-                        height="40"
-                        viewBox="0 0 41 40"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M20.75 0L25.2403 13.8197H39.7711L28.0154 22.3607L32.5057 36.1803L20.75 27.6393L8.9943 36.1803L13.4846 22.3607L1.72887 13.8197H16.2597L20.75 0Z"
-                          fill="#FF9900"
-                          stroke="#838383"
-                          stroke-width="2"
-                        />
-                      </svg>
-  
-                      <svg
-                        class="star-42"
-                        width="41"
-                        height="40"
-                        viewBox="0 0 41 40"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M20.75 0L25.2403 13.8197H39.7711L28.0154 22.3607L32.5057 36.1803L20.75 27.6393L8.9943 36.1803L13.4846 22.3607L1.72887 13.8197H16.2597L20.75 0Z"
-                          stroke="#838383"
-                          stroke-width="2"
-                        />
-                      </svg>
-  
-                      <svg
-                        class="star-52"
-                        width="41"
-                        height="40"
-                        viewBox="0 0 41 40"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M20.75 0L25.2403 13.8197H39.7711L28.0154 22.3607L32.5057 36.1803L20.75 27.6393L8.9943 36.1803L13.4846 22.3607L1.72887 13.8197H16.2597L20.75 0Z"
-                          stroke="#838383"
-                          stroke-width="2"
-                        />
-                      </svg>
-  
-                      <div class="btn-edit">
-                        <svg
-                          class="icon-pencil2"
-                          width="41"
-                          height="40"
-                          viewBox="0 0 41 40"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M30.75 0L25.75 5L35.75 15L40.75 10L30.75 0ZM20.75 10L0.75 30V40H10.75L30.75 20L20.75 10Z"
-                            fill="white"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="right2">
-                    <div class="frame-info">
-                      <div class="name">Name: &lt;name of the event&gt;</div>
-                      <div class="date">Date: &lt;date of the event&gt;</div>
-                      <div class="time">Time: &lt;time of the event&gt;</div>
-                      <div class="location">
-                        Location: &lt;location of the event&gt;
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+      </a>
+    </div>
+  </div>
+  <div class="frame-content">
+    <div class="heading">MY EVENTS</div>
+    <div class="frame-event">
+      <div class="left">
+        <img class="image-1" src="image-1.png" />
+        <div class="rating">
+          <svg
+            class="star"
+            width="41"
+            height="40"
+            viewBox="0 0 41 40"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20.75 0L25.2403 13.8197H39.7711L28.0154 22.3607L32.5057 36.1803L20.75 27.6393L8.9943 36.1803L13.4846 22.3607L1.72887 13.8197H16.2597L20.75 0Z"
+              fill="#FF9900"
+              stroke="#838383"
+              stroke-width="2"
+            />
+          </svg>
+
+          <svg
+            class="star"
+            width="41"
+            height="40"
+            viewBox="0 0 41 40"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20.75 0L25.2403 13.8197H39.7711L28.0154 22.3607L32.5057 36.1803L20.75 27.6393L8.9943 36.1803L13.4846 22.3607L1.72887 13.8197H16.2597L20.75 0Z"
+              fill="#FF9900"
+              stroke="#838383"
+              stroke-width="2"
+            />
+          </svg>
+
+          <svg
+            class="star"
+            width="41"
+            height="40"
+            viewBox="0 0 41 40"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20.75 0L25.2403 13.8197H39.7711L28.0154 22.3607L32.5057 36.1803L20.75 27.6393L8.9943 36.1803L13.4846 22.3607L1.72887 13.8197H16.2597L20.75 0Z"
+              fill="#FF9900"
+              stroke="#838383"
+              stroke-width="2"
+            />
+          </svg>
+
+          <svg
+            class="star"
+            width="41"
+            height="40"
+            viewBox="0 0 41 40"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20.75 0L25.2403 13.8197H39.7711L28.0154 22.3607L32.5057 36.1803L20.75 27.6393L8.9943 36.1803L13.4846 22.3607L1.72887 13.8197H16.2597L20.75 0Z"
+              stroke="#838383"
+              stroke-width="2"
+            />
+          </svg>
+
+          <svg
+            class="star"
+            width="41"
+            height="40"
+            viewBox="0 0 41 40"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20.75 0L25.2403 13.8197H39.7711L28.0154 22.3607L32.5057 36.1803L20.75 27.6393L8.9943 36.1803L13.4846 22.3607L1.72887 13.8197H16.2597L20.75 0Z"
+              stroke="#838383"
+              stroke-width="2"
+            />
+          </svg>
+
+          <div class="btn-edit">
+            <svg
+              class="icon-pencil"
+              width="41"
+              height="40"
+              viewBox="0 0 41 40"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M30.75 0L25.75 5L35.75 15L40.75 10L30.75 0ZM20.75 10L0.75 30V40H10.75L30.75 20L20.75 10Z"
+                fill="white"
+              />
+            </svg>
           </div>
         </div>
       </div>
+      <div class="frame-info">
+        <div class="event-name-txt">Name: &lt;name of the event&gt;</div>
+        <div class="event-details-txt">Date: &lt;date of the event&gt;</div>
+        <div class="event-details-txt">Time: &lt;time of the event&gt;</div>
+        <div class="event-details-txt">
+          Location: &lt;location of the event&gt;
+        </div>
+      </div>
     </div>
+    <div class="frame-event">
+      <div class="left">
+        <img class="image-1" src="image-1.png" />
+        <div class="rating">
+          <svg
+            class="star"
+            width="41"
+            height="40"
+            viewBox="0 0 41 40"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20.75 0L25.2403 13.8197H39.7711L28.0154 22.3607L32.5057 36.1803L20.75 27.6393L8.9943 36.1803L13.4846 22.3607L1.72887 13.8197H16.2597L20.75 0Z"
+              fill="#FF9900"
+              stroke="#838383"
+              stroke-width="2"
+            />
+          </svg>
+
+          <svg
+            class="star"
+            width="41"
+            height="40"
+            viewBox="0 0 41 40"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20.75 0L25.2403 13.8197H39.7711L28.0154 22.3607L32.5057 36.1803L20.75 27.6393L8.9943 36.1803L13.4846 22.3607L1.72887 13.8197H16.2597L20.75 0Z"
+              fill="#FF9900"
+              stroke="#838383"
+              stroke-width="2"
+            />
+          </svg>
+
+          <svg
+            class="star"
+            width="41"
+            height="40"
+            viewBox="0 0 41 40"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20.75 0L25.2403 13.8197H39.7711L28.0154 22.3607L32.5057 36.1803L20.75 27.6393L8.9943 36.1803L13.4846 22.3607L1.72887 13.8197H16.2597L20.75 0Z"
+              fill="#FF9900"
+              stroke="#838383"
+              stroke-width="2"
+            />
+          </svg>
+
+          <svg
+            class="star"
+            width="41"
+            height="40"
+            viewBox="0 0 41 40"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20.75 0L25.2403 13.8197H39.7711L28.0154 22.3607L32.5057 36.1803L20.75 27.6393L8.9943 36.1803L13.4846 22.3607L1.72887 13.8197H16.2597L20.75 0Z"
+              stroke="#838383"
+              stroke-width="2"
+            />
+          </svg>
+
+          <svg
+            class="star"
+            width="41"
+            height="40"
+            viewBox="0 0 41 40"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20.75 0L25.2403 13.8197H39.7711L28.0154 22.3607L32.5057 36.1803L20.75 27.6393L8.9943 36.1803L13.4846 22.3607L1.72887 13.8197H16.2597L20.75 0Z"
+              stroke="#838383"
+              stroke-width="2"
+            />
+          </svg>
+
+          <div class="btn-edit">
+            <svg
+              class="icon-pencil"
+              width="41"
+              height="40"
+              viewBox="0 0 41 40"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M30.75 0L25.75 5L35.75 15L40.75 10L30.75 0ZM20.75 10L0.75 30V40H10.75L30.75 20L20.75 10Z"
+                fill="white"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="frame-info">
+        <div class="event-name-txt">Name: &lt;name of the event&gt;</div>
+        <div class="event-details-txt">Date: &lt;date of the event&gt;</div>
+        <div class="event-details-txt">Time: &lt;time of the event&gt;</div>
+        <div class="event-details-txt">
+          Location: &lt;location of the event&gt;
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <style>
-    .my-account-my-events,
-.my-account-my-events * {
-  box-sizing: border-box;
-}
-.my-account-my-events {
-  background: #202e44;
-  width: 1440px;
-  height: 1163px;
-  position: relative;
-}
-.tab {
-  padding: 0px 50px 0px 50px;
-  display: flex;
-  flex-direction: row;
-  gap: 30px;
-  align-items: center;
-  justify-content: flex-end;
-  position: absolute;
-  left: 29.75px;
-  top: 91px;
-}
-.tboard-logo {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.search {
-  flex-shrink: 0;
-  width: 718px;
-  height: 75px;
-  position: static;
-}
-.input {
-  background: #d9d9d9;
-  border-radius: 20px;
-  width: 718px;
-  height: 75px;
-  position: absolute;
-  left: calc(50% - 357.31px);
-  top: calc(50% - 37.5px);
-  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-}
-.txt {
-  color: rgba(0, 0, 0, 0.7);
-  text-align: left;
-  font: 700 34px "Ubuntu Mono", sans-serif;
-  position: absolute;
-  left: calc(50% - 280.31px);
-  top: calc(50% - 15.5px);
-}
-.icon-magnifying-glass {
-  position: absolute;
-  left: 348.88px;
-  top: 29.5px;
-  overflow: visible;
-}
-.frame-btn {
-  display: flex;
-  flex-direction: row;
-  gap: 30px;
-  align-items: center;
-  justify-content: flex-start;
-  flex-shrink: 0;
-  position: relative;
-}
-.filter {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.bookmark {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.account {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.board {
-  padding: 0px 25px 0px 25px;
-  display: flex;
-  flex-direction: row;
-  gap: 25px;
-  align-items: center;
-  justify-content: center;
-  width: 1435px;
-  position: absolute;
-  left: 2.5px;
-  top: 212px;
-}
-.board2 {
-  border-radius: 10px;
-  flex-shrink: 0;
-  width: 1017px;
-  height: 812px;
-  position: relative;
-}
-.board3 {
-  background: #d9d9d9;
-  width: 1017px;
-  height: 951px;
-  position: absolute;
-  left: 0.5px;
-  top: 0px;
-}
-.frame {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  overflow: visible;
-}
-.account-info {
-  padding: 50px;
-  display: flex;
-  flex-direction: column;
-  gap: 0px;
-  align-items: center;
-  justify-content: flex-start;
-  width: 1017px;
-  height: 812px;
-  position: absolute;
-  left: 0px;
-  top: 0px;
-}
-.top {
-  display: flex;
-  flex-direction: row;
-  gap: 50px;
-  align-items: center;
-  justify-content: flex-start;
-  align-self: stretch;
-  flex-shrink: 0;
-  position: relative;
-}
-.left {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-shrink: 0;
-  position: relative;
-}
-.account2 {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.right {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  align-items: flex-start;
-  justify-content: center;
-  flex-shrink: 0;
-  position: relative;
-}
-.hello {
-  color: #1e1e1e;
-  text-align: left;
-  font: 700 64px "Ubuntu Mono", sans-serif;
-  position: relative;
-  /*changes*/
-  width: 800px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.interests {
-  color: #000000;
-  text-align: left;
-  font: 400 32px "Ubuntu Condensed", sans-serif;
-  position: relative;
-  align-self: stretch;
-  /*changes*/
-  width: 700px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.frame-3 {
-  flex-shrink: 0;
-  width: 917.5px;
-  height: 571px;
-  position: relative;
-}
-.event-history-tab {
-  position: absolute;
-  inset: 0;
+.my-events-tab {
+  width: 100%;
+  height: 100%;
 }
 .frame-tab {
   display: flex;
   flex-direction: row;
+  padding-right: 15px;
   gap: 20px;
   align-items: flex-start;
   justify-content: flex-end;
-  position: absolute;
-  left: 469.75px;
-  top: 0px;
+  position: relative;
+  height: fit-content;
 }
-.my-events-tab {
-  flex-shrink: 0;
-  width: 92px;
-  height: 92px;
-  position: static;
-}
-.event-history-tab2 {
+.my-events-tab2 {
   background: #a2b7ca;
   border-radius: 10px;
   width: 92px;
   height: 92px;
-  position: absolute;
-  left: 0px;
-  top: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
 .events {
-  position: absolute;
-  left: 17px;
-  top: 21px;
+  position: relative;
   overflow: visible;
 }
-.event-history-tab3 {
-  flex-shrink: 0;
-  width: 92px;
-  height: 92px;
-  position: static;
-}
-.event-history-tab4 {
+.event-history-tab {
   background: #657895;
   border-radius: 10px;
   width: 92px;
   height: 92px;
-  position: absolute;
-  left: 112px;
-  top: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
 .history {
-  position: absolute;
-  left: 133px;
-  top: 21px;
+  position: relative;
   overflow: visible;
 }
 .friends-tab {
-  flex-shrink: 0;
-  width: 92px;
-  height: 92px;
-  position: static;
-}
-.friends-tab2 {
   background: #657895;
   border-radius: 10px;
   width: 92px;
   height: 92px;
-  position: absolute;
-  left: 224px;
-  top: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
-.btn-add-friend {
-  position: absolute;
-  left: 233px;
-  top: 21px;
+.add-friend {
+  position: relative;
   overflow: visible;
 }
 .notification-tab {
-  flex-shrink: 0;
-  width: 92px;
-  height: 92px;
-  position: static;
-}
-.notification-tab2 {
   background: #657895;
   border-radius: 10px;
   width: 92px;
   height: 92px;
-  position: absolute;
-  left: 336px;
-  top: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
-.btn-alarm {
-  position: absolute;
-  left: 357px;
-  top: 21px;
-  overflow: visible;
-}
-.intersect {
-  position: absolute;
-  left: 0px;
-  top: 80px;
+.alarm {
+  position: relative;
   overflow: visible;
 }
 .frame-content {
+  background: #a2b7ca;
+  border-radius: 15px;
   padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
   align-items: flex-start;
   justify-content: flex-start;
-  width: 917px;
-  height: 491px;
-  position: absolute;
-  left: calc(50% - 458.25px);
-  top: calc(50% - 205.5px);
+  top: -15px;
+  position: relative;
 }
-.my-events {
+.heading {
   color: #000000;
   text-align: left;
-  font: 700 48px "Ubuntu Mono", sans-serif;
+  font: 700 40px "Ubuntu Mono", sans-serif;
   position: relative;
 }
 .frame-event {
@@ -806,6 +380,15 @@
   justify-content: flex-start;
   align-self: stretch;
   flex-shrink: 0;
+  position: relative;
+  width: fit-content;
+}
+.left {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: flex-start;
   position: relative;
 }
 .image-1 {
@@ -824,27 +407,7 @@
   flex-shrink: 0;
   position: relative;
 }
-.star-1 {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.star-2 {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.star-3 {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.star-4 {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.star-5 {
+.star {
   flex-shrink: 0;
   position: relative;
   overflow: visible;
@@ -864,83 +427,28 @@
   position: relative;
   overflow: visible;
 }
-.right2 {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  flex-shrink: 0;
-  width: 527px;
-  height: 239px;
-  position: relative;
-}
 .frame-info {
   display: flex;
   flex-direction: column;
   gap: 15px;
   align-items: flex-start;
-  justify-content: flex-start;
+  justify-content: space-between;
   flex-shrink: 0;
   width: 463px;
+  height: 189px;
   position: relative;
 }
-.name {
+.event-name-txt {
   color: #000000;
   text-align: left;
-  font: 400 36px "Ubuntu Condensed", sans-serif;
+  font: 400 30px "Ubuntu Condensed", sans-serif;
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
 }
-.date {
+.event-details-txt {
   color: #000000;
   text-align: left;
-  font: 400 28px "Ubuntu Condensed", sans-serif;
+  font: 400 25px "Ubuntu Condensed", sans-serif;
   position: relative;
-}
-.time {
-  color: #000000;
-  text-align: left;
-  font: 400 28px "Ubuntu Condensed", sans-serif;
-  position: relative;
-}
-.location {
-  color: #000000;
-  text-align: left;
-  font: 400 28px "Ubuntu Condensed", sans-serif;
-  position: relative;
-}
-.star-12 {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.star-22 {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.star-32 {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.star-42 {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.star-52 {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.icon-pencil2 {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
 }
 </style>
+{% endblock %}

@@ -51,9 +51,7 @@ These are the deployment instructions for our internal team. We will update this
 2. Set the environment variable to the event_details.py file (e.g. $env:FLASK_APP = "event_details.py" for windows)
 3. Run the file (python -m flask run)
    1. Download neccesary libraries if you see errors in terminal 
-4. Use local host plus the extension to see the site 
-   1. /login to see login page
-   2. /register to see user registration page 
+4. Paste local host address into browser of your choice
 
 ## Contact Information
 * Hui Lee: huijeong.lee@mail.utoronto.ca    

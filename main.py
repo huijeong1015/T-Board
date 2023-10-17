@@ -67,6 +67,10 @@ def my_account_myevents():
 def my_account_notification():
     return render_template('my_account_notification.html')
 
+@app.route('/my_account/settings')
+def my_account_settings():
+    return render_template('my_account_settings.html')
+
 # register account methods=['GET', 'POST']
 @app.route('/register')
 def register():

@@ -75,4 +75,3 @@ def my_account_settings():
 @app.route('/register')
 def register():
     return render_template('register.html')
-

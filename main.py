@@ -3,6 +3,11 @@ from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, Email
+import os
+from flask import Flask, render_template, request, url_for, redirect
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import func
+
 
 app = Flask(__name__)
 
@@ -27,6 +32,15 @@ def event_details():
 def bookmark():
     return render_template('bookmark.html')
 
+@app.route('/event_post', methods=['POST'])
+def event_post_data(): 
+    name= request.form["input-name"]
+    date= request.form["input-date"]
+    time= request.form["input-time"]
+    location= request.form["input-loc"]
+    time= request.form["input-reg"]
+    time= request.form["input-desc"]
+    return
 @app.route('/event_post')
 def event_post():
     return render_template('event_post.html')
@@ -71,8 +85,15 @@ def my_account_notification():
 def my_account_settings():
     return render_template('my_account_settings.html')
 
-# register account methods=['GET', 'POST']
+# register account methods=['GET', 'POST'],methods=['GET', 'POST']
 @app.route('/register')
 def register():
+    # username = request.form["input-id"]
+    # email = request.form["input-email"]
     return render_template('register.html')
 
+@app.route('/register/data', methods=['POST'])
+def register_post():
+    username = request.form["input-id"]
+    email = request.form["input-email"]
+    return "Username: {:s}\nEmail: {:s}".format(username, email)

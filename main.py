@@ -7,6 +7,7 @@ import os
 from flask import Flask, render_template, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
+from app import *
 
 
 app = Flask(__name__)
@@ -59,7 +60,7 @@ def event_post():
 #main_dashboard
 @app.route('/main_dashboard')
 def main_dashboard():
-    return render_template('main_dashboard.html')
+    return render_template('main_dashboard.html', events=sample_events)
 
 @app.route('/my_account')
 def my_account():

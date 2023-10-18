@@ -1,18 +1,19 @@
 {% extends "my_account.html" %}
 {% block tab %}
-<div class="event-history-tab">
+<div class="settings-tab">
   <div class="frame-tab">
     <div class="my-events-tab">
-        <a href="{{ url_for('my_account_myevents') }}"> 
-          <svg class="events" width="58" height="50" viewBox="0 0 58 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M0 0V21.4286H21.4286V0H0ZM28.5714 0V7.14286H57.1429V0H28.5714ZM28.5714 14.2857V21.4286H50V14.2857H28.5714ZM0 28.5714V50H21.4286V28.5714H0ZM28.5714 28.5714V35.7143H57.1429V28.5714H28.5714ZM28.5714 42.8571V50H50V42.8571H28.5714Z"
-              fill="white" />
-          </svg>
-        </a>
+      <a href="{{ url_for('my_account_myevents') }}"> 
+        <svg class="events" width="58" height="50" viewBox="0 0 58 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M0 0V21.4286H21.4286V0H0ZM28.5714 0V7.14286H57.1429V0H28.5714ZM28.5714 14.2857V21.4286H50V14.2857H28.5714ZM0 28.5714V50H21.4286V28.5714H0ZM28.5714 28.5714V35.7143H57.1429V28.5714H28.5714ZM28.5714 42.8571V50H50V42.8571H28.5714Z"
+            fill="white" />
+        </svg>
+      </a>
     </div>
-    <div class="event-history-tab2">
-      <svg
+    <div class="event-history-tab">
+      <a href="{{ url_for('my_account_event_history') }}">
+        <svg
         class="history"
         width="50"
         height="50"
@@ -40,7 +41,8 @@
           stroke="#1E1E1E"
           stroke-width="3"
         />
-      </svg>
+        </svg>
+      </a>
     </div>
     <div class="friends-tab">
         <a href="{{ url_for('my_account_friends') }}">
@@ -62,41 +64,30 @@
         </svg>
       </a>
     </div>
-    <div class="settings-tab">
-      <a href="{{ url_for('my_account_settings') }}"> 
-        <svg
-          class="settings"
-          width="50"
-          height="50"
-          viewBox="0 0 50 50"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M21.8828 0L18.7656 7.41895C18.1421 7.60598 17.581 7.91771 17.0199 8.22943L9.601 5.11222L5.11222 9.601L8.22943 17.0199C7.9177 17.6434 7.66833 18.1421 7.41895 18.7656L0 21.8828V28.1172L7.41895 31.2344C7.66833 31.8579 7.9177 32.3566 8.22943 32.98L5.11222 40.399L9.601 44.8878L17.0199 41.7706C17.581 42.0199 18.1421 42.3317 18.7656 42.581L21.8828 50H28.1172L31.2344 42.581C31.7955 42.3317 32.419 42.0823 32.9801 41.7706L40.399 44.8878L44.8878 40.399L41.7706 32.98C42.0199 32.419 42.3317 31.7955 42.581 31.2344L50 28.1172V21.8828L42.581 18.7656C42.394 18.2045 42.0823 17.581 41.7706 17.0199L44.8878 9.601L40.399 5.11222L32.9801 8.22943C32.419 7.98005 31.7955 7.66833 31.2344 7.41895L28.1172 0L21.8828 0ZM25 15.586C30.1746 15.586 34.3516 19.7631 34.3516 24.9377C34.3516 30.1122 30.1746 34.2893 25 34.2893C19.8254 34.2893 15.6484 30.1122 15.6484 24.9377C15.6484 19.7631 19.8254 15.586 25 15.586Z"
-            fill="#D9D9D9"
-          />
-        </svg>
-      </a>
+    <div class="settings-tab2">
+      <svg
+        class="settings"
+        width="50"
+        height="50"
+        viewBox="0 0 50 50"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M21.8828 0L18.7656 7.41895C18.1421 7.60598 17.581 7.91771 17.0199 8.22943L9.601 5.11222L5.11222 9.601L8.22943 17.0199C7.9177 17.6434 7.66833 18.1421 7.41895 18.7656L0 21.8828V28.1172L7.41895 31.2344C7.66833 31.8579 7.9177 32.3566 8.22943 32.98L5.11222 40.399L9.601 44.8878L17.0199 41.7706C17.581 42.0199 18.1421 42.3317 18.7656 42.581L21.8828 50H28.1172L31.2344 42.581C31.7955 42.3317 32.419 42.0823 32.9801 41.7706L40.399 44.8878L44.8878 40.399L41.7706 32.98C42.0199 32.419 42.3317 31.7955 42.581 31.2344L50 28.1172V21.8828L42.581 18.7656C42.394 18.2045 42.0823 17.581 41.7706 17.0199L44.8878 9.601L40.399 5.11222L32.9801 8.22943C32.419 7.98005 31.7955 7.66833 31.2344 7.41895L28.1172 0L21.8828 0ZM25 15.586C30.1746 15.586 34.3516 19.7631 34.3516 24.9377C34.3516 30.1122 30.1746 34.2893 25 34.2893C19.8254 34.2893 15.6484 30.1122 15.6484 24.9377C15.6484 19.7631 19.8254 15.586 25 15.586Z"
+          fill="#D9D9D9"
+        />
+      </svg>
     </div>
   </div>
   <div class="frame-content">
-    <div class="heading">EVENT HISTORY</div>
-    <div class="event">
-      <div class="date">Oct 12, 2023:</div>
-      <div class="name">&lt;name of the event&gt;</div>
-      <div class="name">&lt;name of the event&gt;</div>
-      <div class="name">&lt;name of the event&gt;</div>
-    </div>
-    <div class="event">
-      <div class="date">Oct 11, 2023:</div>
-      <div class="name">&lt;name of the event&gt;</div>
-      <div class="name">&lt;name of the event&gt;</div>
-    </div>
-  </div>
+    <a href="{{ url_for('login') }}"> 
+      <button class="btn-logout">LOGOUT</button>
+    </a>
 </div>
+{% include "base_input.html" %}
 <style>
-.event-history-tab {
+.settings-tab {
   width: 100%;
   height: 100%;
 }
@@ -124,8 +115,8 @@
   position: relative;
   overflow: visible;
 }
-.event-history-tab2 {
-  background: #a2b7ca;
+.event-history-tab {
+  background: #657895;
   border-radius: 10px;
   width: 92px;
   height: 92px;
@@ -166,8 +157,8 @@
   position: relative;
   overflow: visible;
 }
-.settings-tab {
-  background: #657895;
+.settings-tab2 {
+  background: #a2b7ca;
   border-radius: 10px;
   width: 92px;
   height: 92px;
@@ -183,41 +174,20 @@
 .frame-content {
   background: #a2b7ca;
   border-radius: 15px;
-  padding: 20px;
+  padding: 30px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  align-items: flex-start;
-  justify-content: flex-start;
+  gap: 30px;
+  align-items: center;
+  justify-content: center;
   top: -15px;
   position: relative;
 }
-.heading {
-  color: #000000;
-  text-align: left;
-  font: 700 40px "Ubuntu Mono", sans-serif;
-  position: relative;
+.btn-edit-profile {
+  background: #d9d9d9;
 }
-.event {
-  display: flex;
-  flex-direction: column;
-  gap: 21px;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-shrink: 0;
-  position: relative;
-}
-.date {
-  color: #000000;
-  text-align: left;
-  font: 400 32px "Ubuntu Condensed", sans-serif;
-  position: relative;
-}
-.name {
-  color: #000000;
-  text-align: left;
-  font: 400 32px "Ubuntu Condensed", sans-serif;
-  position: relative;
+.btn-logout {
+  background: #d9d9d9;
 }
 </style>
 {% endblock %}

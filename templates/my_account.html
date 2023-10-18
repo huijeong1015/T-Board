@@ -1,0 +1,140 @@
+{% extends "search_tab.html" %}
+{% block content %}
+<div class="dashboard">
+  <div class="frame">
+    <div class="board">
+      <div class="account-info">
+        <div class="top">
+          <div class="left">
+            <svg
+              class="account"
+              width="201"
+              height="200"
+              viewBox="0 0 201 200"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="100.5"
+                cy="100"
+                r="101.5"
+                fill="#657895"
+                stroke="#657895"
+                stroke-width="3"
+              />
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M178.122 163.051C192.113 145.847 200.5 123.903 200.5 100C200.5 44.7715 155.728 0 100.5 0C45.2715 0 0.5 44.7715 0.5 100C0.5 124.901 9.60129 147.676 24.6588 165.18C30.3392 150.916 43.9827 140.757 60.034 140C70.834 152.2 85.634 160 101.834 160C118.034 160 132.834 152.2 143.634 140C159.018 140.719 172.025 149.913 178.122 163.051ZM61.834 90C61.834 62.4 79.834 40 101.834 40C123.834 40 141.834 62.4 141.834 90C141.834 117.6 123.834 140 101.834 140C79.834 140 61.834 117.6 61.834 90Z"
+                fill="#D9D9D9"
+              />
+            </svg>
+          </div>
+          <div class="right">
+            <div class="hello">HELLO, &lt;username&gt;!</div>
+            <div class="interests">
+              Interests: &lt;list of interests entered during account
+              creation&gt;
+            </div>
+          </div>
+        </div>
+        <div class="bottom">
+            {% block tab %}{% endblock %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+.dashboard {
+  padding: 0px 25px 25px 25px;
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  height: fit-content;
+  position: relative;
+  width: 100%;
+}
+.frame {
+  background: #786554;
+  position: relative;
+  padding: 20px 20px 20px 20px;
+  width: 1007px;
+  height: fit-content;
+}
+.board {
+  background: #d9d9d9;
+  position: relative;
+  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  padding: 50px;
+  width: 967px;
+}
+.account-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.top {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 1;
+  position: relative;
+}
+.left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  width: fit-content;
+  height: fit-content;
+}
+.account {
+  flex-shrink: 0;
+  width: 100%;
+  height: fit-content;
+  position: relative;
+  overflow: visible;
+}
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: center;
+  flex-shrink: 1;
+  position: relative;
+}
+.hello {
+  color: #1e1e1e;
+  text-align: left;
+  font: 700 64px "Ubuntu Mono", sans-serif;
+  position: relative;
+  width: 100%;
+}
+.interests {
+  color: #1e1e1e;
+  text-align: left;
+  font: 400 32px "Ubuntu Condensed", sans-serif;
+  position: relative;
+  width: 100%;
+}
+.bottom {
+    display: flex;
+    justify-content: end;
+    width: 100%;
+    height: 100%;
+}
+</style>
+{% endblock %}

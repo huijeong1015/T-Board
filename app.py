@@ -10,10 +10,10 @@ db = SQLAlchemy(app)
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    date = db.Column(db.String(10), nullable=False)
-    time = db.Column(db.String(5), nullable=False)
+    date = db.Column(db.Date(), nullable=False)
+    time = db.Column(db.Time(), nullable=False)
     location = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.Text, nullable=False)
+    description = db.Column(db.Text, nullable=True)
 
     def __repr__(self):
         return f"<Event {self.name}>"
@@ -26,7 +26,8 @@ sample_events = [
     {"name": "Tech Conference 2023", "date": "2023-11-20", "time": "09:00", "location": "Silicon Valley Convention Center", "description": "Join industry leaders..."},
     {"name": "Music Festival", "date": "2023-08-15", "time": "12:00", "location": "Central Park, New York", "description": "A celebration of music..."},
     {"name": "Charity Run", "date": "2023-05-01", "time": "07:00", "location": "Los Angeles City Center", "description": "A 5K run to raise funds..."},
-    {"name": "Science Fair", "date": "2023-07-10", "time": "10:00", "location": "Science Museum, London", "description": "Engage with scientific discoveries..."}
+    {"name": "Science Fair", "date": "2023-07-10", "time": "10:00", "location": "Science Museum, London", "description": "Engage with scientific discoveries..."},
+    {"name": "T-Board App Grand Release Press Conference", "date": "2023-11-15", "time": "23:59", "location":"Sandford Fleming Building SF1105, U of T", "description": "Grand release of T-Board App!!!"},
 ]
 
 with app.app_context():

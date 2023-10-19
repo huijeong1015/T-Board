@@ -48,7 +48,9 @@
           </div>
           <div class="middle">
             <div class="left">
-              <img class="image-1" src="event_photos/club.png"/>
+              <!-- <img class="image-1" src="event_photos/club.png"/> -->
+              <img src="{{ url_for('static', filename='event_photos/club.png') }}" alt="Image" class="image-1">
+
               <div class="frame-btn2">
                 <svg
                   class="btn-bookmark"
@@ -214,6 +216,9 @@
   width: 365px;
   height: 189px;
   position: relative;
+  max-width: 95%;
+  max-height: 95%;
+  display: block;
 }
 .frame-btn2 {
   display: flex;

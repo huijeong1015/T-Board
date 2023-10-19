@@ -6,7 +6,8 @@
       <div class="event-list">
         <div class="frame-event">
           <div class="left">
-            <img class="event-image" src="image-1.png" />
+            <!-- <img class="event-image" src="image-1.png" /> -->
+            <img src="{{ url_for('static', filename='event_photos/club.png') }}" alt="Image" class="image-1">
             <svg
               class="rating"
               width="220"
@@ -103,7 +104,8 @@
         </div>
         <div class="frame-event">
           <div class="left">
-            <img class="event-image" src="image-1.png" />
+            <!-- <img class="event-image" src="image-1.png" /> -->
+            <img src="{{ url_for('static', filename='event_photos/club.png') }}" alt="Image" class="image-1">
             <svg
               class="rating"
               width="220"
@@ -199,7 +201,8 @@
         </div>
         <div class="frame-event">
           <div class="left">
-            <img class="event-image" src="image-1.png" />
+            <!-- <img class="event-image" src="image-1.png" /> -->
+            <img src="{{ url_for('static', filename='event_photos/club.png') }}" alt="Image" class="image-1">
             <svg
               class="rating3"
               width="220"
@@ -455,6 +458,15 @@
   flex-shrink: 0;
   position: relative;
   overflow: visible;
+}
+.image-1 {
+  flex-shrink: 0;
+  width: 365px;
+  height: 189px;
+  position: relative;
+  max-width: 95%;
+  max-height: 95%;
+  display: block;
 }
 </style>
 {% endblock %}

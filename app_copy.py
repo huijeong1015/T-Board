@@ -1,11 +1,28 @@
 from flask import Flask, render_template_string
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text  # Correct import for 'text'
+from flask import Flask, request, render_template
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///events.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+
+
 db = SQLAlchemy(app)
+
+# search funciton
+@app.route('/search_results', methods=["POST"])
+def searchEvent():
+    keyword=request.form["input-search"]
+    #some error handling before results are used
+    results = []
+    if keyword:
+        results = Event.query.filter(Event.name.contains(keyword)).all()
+    print(results)
+    return render_template('results.html', results=results)
+
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -18,8 +35,6 @@ class Event(db.Model):
     def __repr__(self):
         return f"<Event {self.name}>"
 
-with app.app_context():
-    db.create_all()
 
 
 sample_events = [
@@ -30,13 +45,17 @@ sample_events = [
 ]
 
 with app.app_context():
+    db.create_all()
+
+
+with app.app_context():
     if Event.query.first() is None:
         for event_data in sample_events:
             event = Event(**event_data)
             db.session.add(event)
         db.session.commit()
 
-@app.route('/')
+@app.route('/dataset')
 def show_events():
     sql = text("SELECT * FROM event;")
     result = db.session.execute(sql)
@@ -53,6 +72,26 @@ def run_tests():
     import unittest
     tests = unittest.TestLoader().discover('tests')  # assumes all test files are in a folder named 'tests'
     unittest.TextTestRunner(verbosity=2).run(tests)
+
+
+# @app.route('/event_post', methods=['POST'])
+# def event_post_data(): 
+#     return
+@app.route('/event_post')
+def add_event():
+    print('hello world')
+    # event_name = request.form.get('name')  
+    # if event_name:
+    event_name= request.form.get["input-name"]
+    event_date= request.form.get["input-date"]
+    event_time= request.form.get["input-time"]
+    event_location= request.form.get["input-loc"]
+    event_description= request.form.get["input-desc"]
+    new_event = Event(name= event_name, date =event_date, time= event_time, location= event_location, description= event_description)
+    db.session.add(new_event)
+    db.session.commit()
+    return 'Event added successfully!'
+    # return 'Name is required!'
 
 if __name__ == "__main__":
     app.run(debug=True)

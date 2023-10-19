@@ -19,22 +19,22 @@
     />
   </svg>
   <div class="input-frame">
-    <div class="input">
-      <!-- <div class="input-id"></div> -->
-      <input type = "text" id="input-id" name="input-id" placeholder="Enter your username">
-      <div class="input-txt-white">Username</div>
-    </div>
-    <div class="input">
-      <!-- <div class="input-pwd"></div> -->
-      <input type = "text" id="input-pwd" name="input-pwd" placeholder="Enter your password">
-      <div class="input-txt-white">Password</div>
-    </div>
+    <form action="/main_dashboard">
+      <div class="input">
+        <!-- <div class="input-id"></div> -->
+        <input type = "text" id="input-id" name="input-id" placeholder="Enter your username" required>
+        <div class="input-txt-white">Username</div>
+      </div>
+      <div class="input">
+        <!-- <div class="input-pwd"></div> -->
+        <input type = "text" id="input-pwd" name="input-pwd" placeholder="Enter your password" required>
+        <div class="input-txt-white">Password</div>
+      </div>
   </div>
   <div>
-    <a href="{{ url_for('main_dashboard') }}">
       <button class="btn-login">LOGIN</button>
-    </a>
   </div>
+  </form>
   <div class="register">
     <div class="don-t-have-account">Don’t have account?</div>
     <a href="{{ url_for('register') }}">

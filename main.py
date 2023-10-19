@@ -7,13 +7,16 @@ import os
 from flask import Flask, render_template, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
-from app import *
+from app_copy import *
 
-
-app = Flask(__name__)
-
-bootstrap = Bootstrap(app)
-
+# app = Flask(__name__)
+# # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///events.db'
+# # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# app.config['SQLALCHEMY_DATABASE_URI'] =\
+#         'sqlite:///' + os.path.join(basedir, 'events.db')
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# bootstrap = Bootstrap(app)
+# db = SQLAlchemy(app)
 # class Login(FlaskForm):
 #     login_username = StringField('What is your name?', validators=[DataRequired()])
 #     login_password = StringField('What is your UofT Email address?', validators=[DataRequired(), Email()])
@@ -33,15 +36,6 @@ def event_details():
 def bookmark():
     return render_template('bookmark.html')
 
-@app.route('/event_post', methods=['POST'])
-def event_post_data(): 
-    name= request.form["input-name"]
-    date= request.form["input-date"]
-    time= request.form["input-time"]
-    location= request.form["input-loc"]
-    time= request.form["input-reg"]
-    time= request.form["input-desc"]
-    return
 @app.route('/event_post')
 def event_post():
     return render_template('event_post.html')
@@ -58,10 +52,24 @@ def event_post():
 #     return render_template('login.html')
 
 #main_dashboard
+
+
+# this does not work for some reason 
 @app.route('/main_dashboard')
 def main_dashboard():
-    return render_template('main_dashboard.html', events=sample_events)
-
+    sql = text("SELECT * FROM event;")
+    result = db.session.execute(sql)
+    return render_template('main_dashboard.html', events=result)
+# @app.('/')
+@app.route('/search_dashboard', methods=['POST'])
+def searchEvent():
+    keyword=request.form["input-search"]
+    #some error handling before results are used
+    results = []
+    if keyword:
+        results = Event.query.filter(Event.name.contains(keyword)).all()
+    print(results)
+    return render_template('search_dashboard.html', events=results)
 @app.route('/my_account')
 def my_account():
     return render_template('my_account.html')

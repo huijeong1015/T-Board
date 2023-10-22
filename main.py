@@ -100,9 +100,11 @@ def register():
     # username = request.form["input-id"]
     # email = request.form["input-email"]
     return render_template('register.html')
+    
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
-@app.route('/register/data', methods=['POST'])
-def register_post():
-    username = request.form["input-id"]
-    email = request.form["input-email"]
-    return "Username: {:s}\nEmail: {:s}".format(username, email)
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html'), 500

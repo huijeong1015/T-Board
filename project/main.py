@@ -37,40 +37,26 @@ def login():
             return redirect(url_for("main_dashboard"))
     return render_template('login.html', error=error)
 
-@app.route('/event_details')
+@app.route('/event_details/')
 def event_details():
     return render_template('event_details.html')
 
-@app.route('/bookmark')
+@app.route('/bookmark/')
 def bookmark():
     return render_template('bookmark.html')
 
-@app.route('/event_post')
+@app.route('/event_post/')
 def event_post():
     return render_template('event_post.html')
 
-#login 
-# @app.route('/login')
-# # methods=['GET', 'POST']
-# def login():
-#     # destination = request.form.get('destination')
-#     # if destination == 'main_dashboard' :
-#     #     return redirect(url_for('main_dashboard'))
-#     # elif destination == 'register' :
-#     #     return redirect(url_for('register'))
-#     return render_template('login.html')
-
-#main_dashboard
-
-
-# this does not work for some reason 
 @app.route('/main_dashboard/')
 def main_dashboard():
     sql = text("SELECT * FROM event;")
     result = db.session.execute(sql)
     return render_template('main_dashboard.html', events=result)
+
 # @app.('/')
-@app.route('/search_dashboard', methods=['POST'])
+@app.route('/search_dashboard/', methods=['POST'])
 def searchEvent():
     keyword=request.form["input-search"]
     #some error handling before results are used
@@ -80,28 +66,28 @@ def searchEvent():
     print(results)
     return render_template('search_dashboard.html', events=results)
 
-@app.route('/my_account/event_history')
+@app.route('/my_account/event_history/')
 def my_account_event_history():
     return render_template('my_account_eventhistory.html', username=app.config["USERNAME"], interests=app.config["INTERESTS"])
 
-@app.route('/my_account/friends')
+@app.route('/my_account/friends/')
 def my_account_friends():
     return render_template('my_account_friends.html', username=app.config["USERNAME"], interests=app.config["INTERESTS"])
 
-@app.route('/my_account/myevents')
+@app.route('/my_account/myevents/')
 def my_account_myevents():
     return render_template('my_account_myevents.html', username=app.config["USERNAME"], interests=app.config["INTERESTS"])
 
-@app.route('/my_account/notification')
+@app.route('/my_account/notification/')
 def my_account_notification():
     return render_template('my_account_notification.html', username=app.config["USERNAME"], interests=app.config["INTERESTS"])
 
-@app.route('/my_account/settings')
+@app.route('/my_account/settings/')
 def my_account_settings():
     return render_template('my_account_settings.html', username=app.config["USERNAME"], interests=app.config["INTERESTS"])
 
 # register account methods=['GET', 'POST'],methods=['GET', 'POST']
-@app.route('/register')
+@app.route('/register/')
 def register():
     # username = request.form["input-id"]
     # email = request.form["input-email"]

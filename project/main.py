@@ -7,7 +7,7 @@ import os
 from flask import Flask, render_template, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
-from app_copy import *
+from db import *
 
 # app = Flask(__name__)
 # # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///events.db'
@@ -23,10 +23,19 @@ from app_copy import *
 #     submit = SubmitField('Submit')
 
 #login 
-@app.route('/')
-@app.route('/login')
+@app.route('/', methods=["GET", "POST"])
+@app.route('/login/', methods=["GET", "POST"])
 def login():
-    return render_template('login.html')
+    """User login management"""
+    error = None
+    if request.method == "POST":
+        if request.form["input-id"] != USERNAME:
+            error = "Invalid username"
+        elif request.form["input-pwd"] != PASSWORD:
+            error = "Invalid password"
+        else:
+            return redirect(url_for("main_dashboard"))
+    return render_template('login.html', error=error)
 
 @app.route('/event_details')
 def event_details():

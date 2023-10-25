@@ -25,42 +25,40 @@
             </div>
           </div>
         </div>
-        <div class="bottom">
-          <div class="input">
-            <!-- <div class="input-name"></div> -->
-            <input type = "text" id="input-name" name="input-name" placeholder="Enter name of the event">
-            <div class="input-txt">Name of the event</div>
-          </div>
-          <div class="input">
-            <!-- <div class="input-date"></div> -->
-            <input type = "text" id="input-date" name="input-date" placeholder="Specify date of the event">
-            <div class="input-txt">Date of the event</div>
-          </div>
-          <div class="input">
-            <!-- <div class="input-time"></div> -->
-            <input type = "text" id="input-time" name="input-time" placeholder="Specify time of the event">
-            <div class="input-txt">Time of the event</div>
-          </div>
-          <div class="input">
-            <!-- <div class="input-loc"></div> -->
-            <input type = "text" id="input-loc" name="input-loc" placeholder="Specify location of the event">
-            <div class="input-txt">Location of the event</div>
-          </div>
-          <div class="input">
-            <!-- <div class="input-reg"></div> -->
-            <input type = "text" id="input-reg" name="input-reg" placeholder="Add registration link (optional)">
-            <div class="input-txt">Registration link (optional)</div>
-          </div>
-          <div class="input">
-            <!-- <div class="input-desc"></div> -->
-            <textarea id="input-desc" name="input-desc" placeholder="Add description of the event"></textarea>
-            <div class="input-txt">Description</div>
-          </div>
-          <div class="btn-frame">
-            <a href="{{ url_for('main_dashboard') }}" class="btn-submit">
-              <div class="btn-txt">SUBMIT</div>
-            </a>
-          </div>
+        <div class="bottom">      
+          <form action="/event_post" method="POST">
+            <div class="input">
+              <!-- <div class="input-name"></div> -->
+              <input type = "text" id="input-name" name="input-name" placeholder="Enter name of the event">
+              <div class="input-txt">Name of the event</div>
+            </div>
+            <div class="input">
+              <!-- <div class="input-date"></div> -->
+              <input type = "date" id="input-date" name="input-date" placeholder="Specify date of the event">
+              <div class="input-txt">Date of the event</div>
+            </div>
+            <div class="input">
+              <!-- <div class="input-time"></div> -->
+              <input type = "time" id="input-time" name="input-time" placeholder="Specify time of the event">
+              <div class="input-txt">Time of the event</div>
+            </div>
+            <div class="input">
+              <!-- <div class="input-loc"></div> -->
+              <input type = "text" id="input-loc" name="input-loc" placeholder="Specify location of the event">
+              <div class="input-txt">Location of the event</div>
+            </div>
+            <div class="input">
+              <!-- <div class="input-reg"></div> -->
+              <input type = "url" id="input-reg" name="input-reg" placeholder="Add registration link (optional)">
+              <div class="input-txt">Registration link (optional)</div>
+            </div>
+            <div class="input">
+              <!-- <div class="input-desc"></div> -->
+              <textarea id="input-desc" name="input-desc" placeholder="Add description of the event"></textarea>
+              <div class="input-txt">Description</div>
+            </div>
+              <button class="btn-register">SUBMIT</button>
+          </form>
         </div>
       </div>
     </div>

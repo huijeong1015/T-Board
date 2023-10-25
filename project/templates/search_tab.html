@@ -37,7 +37,10 @@
                 </a>
             </div>
             <div class="search">
-                <input type = "text" id="input-search" name="input-search" placeholder="Search keyword">
+                <form method="POST" action="/search_dashboard">
+                    <input type = "text" id="input-search" name="input-search" placeholder="Search keyword">
+                    <button class="btn-search">Search</button>
+                </form>
                 <svg
                     class="icon-magnifying-glass"
                     width="40"

@@ -1,0 +1,9 @@
+{% if results %}
+    <ul>
+    {% for event in results %}
+        <li>{{ event.name }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No results found!</p>
+{% endif %}

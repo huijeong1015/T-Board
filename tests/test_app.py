@@ -1,5 +1,5 @@
 import unittest
-from app import app, db, Event
+from .. import "app.py"
 
 class BaseTestCase(unittest.TestCase):
 

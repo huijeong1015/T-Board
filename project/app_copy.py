@@ -6,21 +6,17 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 from flask import Flask, render_template, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
-
 from sqlalchemy.sql import func
+from pathlib import Path
 
-
-basedir = os.path.abspath(os.path.dirname(__file__))
+DATABASE="events.db"
+basedir = Path(__file__).resolve().parent
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] =\
-        'sqlite:///' + os.path.join(basedir, 'events.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{Path(basedir).joinpath(DATABASE)}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
-
-
-
 
 # search funciton
 # @app.route('/search_results', methods=["POST"])

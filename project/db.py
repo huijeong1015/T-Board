@@ -9,7 +9,11 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 from pathlib import Path
 
+# configuration
 DATABASE="events.db"
+USERNAME = "test"
+PASSWORD = "ece444test"
+
 basedir = Path(__file__).resolve().parent
 
 app = Flask(__name__)

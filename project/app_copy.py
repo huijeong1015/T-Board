@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text  # Correct import for 'text'
 from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
-import os
 from flask import Flask, render_template, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
@@ -13,6 +12,7 @@ from pathlib import Path
 DATABASE="events.db"
 USERNAME = "test"
 PASSWORD = "ece444test"
+INTERESTS = "Computer Engineering"
 
 basedir = Path(__file__).resolve().parent
 

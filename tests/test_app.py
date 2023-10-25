@@ -44,3 +44,23 @@ def test_my_account_page_contains_userinfo(client):
     rv = client.get("/my_account/myevents")
     assert "HELLO, {:s}!".format(app.config['USERNAME']).encode() in rv.data
     assert "Interests: {:s}".format(app.config['INTERESTS']).encode() in rv.data
+
+# Jennifer: checking if result of search contains the input keyword
+def test_search_event_keywords(client):
+    # add the event
+    event = Event(name="Tech Conference 2023", date="2023-11-20", time="09:00", location="Silicon Valley Convention Center", description="")
+    with app.app_context():
+        db.session.add(event)
+        db.session.commit()
+
+    #search action
+    response = client.post('/search_dashboard', data={"input-search": "Tech"})
+
+    # has keyword
+    assert b"Tech" in response.data
+
+    # is keyword in response
+    events = response.context['events']
+    expected_keyword = "Tech"
+    for event in events:
+        assert expected_keyword in event.name

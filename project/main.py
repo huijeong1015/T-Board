@@ -55,7 +55,7 @@ def event_post():
 
 
 # this does not work for some reason 
-@app.route('/main_dashboard')
+@app.route('/main_dashboard/')
 def main_dashboard():
     sql = text("SELECT * FROM event;")
     result = db.session.execute(sql)

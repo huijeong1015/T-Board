@@ -17,6 +17,7 @@ PASSWORD = "ece444test"
 basedir = Path(__file__).resolve().parent
 
 app = Flask(__name__)
+app.config.from_object(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{Path(basedir).joinpath(DATABASE)}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

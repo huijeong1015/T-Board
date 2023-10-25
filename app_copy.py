@@ -20,38 +20,29 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
-
-
-# search funciton
-# @app.route('/search_results', methods=["POST"])
-# def searchEvent():
-#     keyword=request.form["input-search"]
-#     #some error handling before results are used
-#     results = []
-#     if keyword:
-#         results = Event.query.filter(Event.name.contains(keyword)).all()
-#     print(results)
-#     return render_template('results.html', results=results)
-
 class User(db.Model):
+    __tablename__= 'users'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(100), nullable=False)
+    username = db.Column(db.String(100), unique=True , nullable=False)
     events = db.relationship('Event', backref='user')
     def __repr__(self):
         return f"<User {self.name}>"
 
 class Event(db.Model):
+    __tablename__='events'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     date = db.Column(db.String(10), nullable=False)
     time = db.Column(db.String(5), nullable=False)
     location = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey(users.id))
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable = False)
     def __repr__(self):
         return f"<Event {self.name}>"
 
-
+sample_users = [
+    
+]
 
 
 sample_events = [
@@ -59,6 +50,10 @@ sample_events = [
     {"name": "Music Festival", "date": "2023-08-15", "time": "12:00", "location": "Central Park, New York", "description": "A celebration of music..."},
     {"name": "Charity Run", "date": "2023-05-01", "time": "07:00", "location": "Los Angeles City Center", "description": "A 5K run to raise funds..."},
     {"name": "Science Fair", "date": "2023-07-10", "time": "10:00", "location": "Science Museum, London", "description": "Engage with scientific discoveries..."}
+]
+sample_events = [
+    {"username": "slinky"},
+    {"username": "ploinky"},
 ]
 
 with app.app_context():
@@ -71,8 +66,15 @@ with app.app_context():
             event = Event(**event_data)
             db.session.add(event)
         db.session.commit()
+with app.app_context():
+    if User.query.first() is None:
+        for user_data in sample_users:
+            user = User(**user_data)
+            db.session.add(user)
+        db.session.commit()
 
-@app.route('/dataset')
+
+@app.route('/dataset/events')
 def show_events():
     sql = text("SELECT * FROM event;")
     result = db.session.execute(sql)
@@ -82,6 +84,16 @@ def show_events():
 
     # You might return events as a string or JSON, or render them in a template
     return str(events)
+@app.route('/dataset/users')
+def show_events():
+    sql = text("SELECT * FROM user;")
+    result = db.session.execute(sql)
+    
+    # Extracting data from the ResultProxy object
+    users = [{column: value for column, value in zip(result.keys(), row)} for row in result]
+
+    # You might return users as a string or JSON, or render them in a template
+    return str(users)
 
 @app.cli.command("test")
 def run_tests():
@@ -110,9 +122,9 @@ def add_event():
     # return 'Event added successfully!'
     # return 'Name is required!'
 
-def delete_event():
-    db.session.delete(event)
-    db.session.commit()
+# def delete_event():
+#     db.session.delete(event)
+#     db.session.commit()
 
 if __name__ == "__main__":
     app.run(debug=True)

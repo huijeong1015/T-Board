@@ -33,6 +33,12 @@ db = SQLAlchemy(app)
 #     print(results)
 #     return render_template('results.html', results=results)
 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), nullable=False)
+    events = db.relationship('Event', backref='user')
+    def __repr__(self):
+        return f"<User {self.name}>"
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -41,9 +47,10 @@ class Event(db.Model):
     time = db.Column(db.String(5), nullable=False)
     location = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
-
+    user_id = db.Column(db.Integer, db.ForeignKey(users.id))
     def __repr__(self):
         return f"<Event {self.name}>"
+
 
 
 
@@ -102,6 +109,10 @@ def add_event():
     return render_template('event_post.html')
     # return 'Event added successfully!'
     # return 'Name is required!'
+
+def delete_event():
+    db.session.delete(event)
+    db.session.commit()
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -69,7 +69,7 @@ def searchEvent():
     if keyword:
         results = Event.query.filter(Event.name.contains(keyword)).all()
     print(results)
-    return render_template('search_dashboard.html', events=results)
+    return render_template('main_dashboard.html', events=results)
 @app.route('/my_account')
 def my_account():
     return render_template('my_account.html')

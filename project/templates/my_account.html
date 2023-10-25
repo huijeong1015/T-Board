@@ -31,10 +31,9 @@
             </svg>
           </div>
           <div class="right">
-            <div class="hello">HELLO, &lt;username&gt;!</div>
+            <div class="hello">HELLO, {{ username }}!</div>
             <div class="interests">
-              Interests: &lt;list of interests entered during account
-              creation&gt;
+              Interests: {{ interests }}
             </div>
           </div>
         </div>
@@ -87,6 +86,7 @@
   gap: 50px;
   align-items: center;
   justify-content: center;
+  align-self: flex-start;
   flex-shrink: 1;
   position: relative;
 }

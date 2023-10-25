@@ -7,7 +7,7 @@ import os
 from flask import Flask, render_template, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
-from db import *
+from project.app_copy import *
 
 # app = Flask(__name__)
 # # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///events.db'
@@ -29,9 +29,9 @@ def login():
     """User login management"""
     error = None
     if request.method == "POST":
-        if request.form["input-id"] != USERNAME:
+        if request.form["username"] != app.config["USERNAME"]:
             error = "Invalid username"
-        elif request.form["input-pwd"] != PASSWORD:
+        elif request.form["password"] != app.config["PASSWORD"]:
             error = "Invalid password"
         else:
             return redirect(url_for("main_dashboard"))
@@ -79,29 +79,26 @@ def searchEvent():
         results = Event.query.filter(Event.name.contains(keyword)).all()
     print(results)
     return render_template('search_dashboard.html', events=results)
-@app.route('/my_account')
-def my_account():
-    return render_template('my_account.html')
 
 @app.route('/my_account/event_history')
 def my_account_event_history():
-    return render_template('my_account_eventhistory.html')
+    return render_template('my_account_eventhistory.html', username=app.config["USERNAME"], interests=app.config["INTERESTS"])
 
 @app.route('/my_account/friends')
 def my_account_friends():
-    return render_template('my_account_friends.html')
+    return render_template('my_account_friends.html', username=app.config["USERNAME"], interests=app.config["INTERESTS"])
 
 @app.route('/my_account/myevents')
 def my_account_myevents():
-    return render_template('my_account_myevents.html')
+    return render_template('my_account_myevents.html', username=app.config["USERNAME"], interests=app.config["INTERESTS"])
 
 @app.route('/my_account/notification')
 def my_account_notification():
-    return render_template('my_account_notification.html')
+    return render_template('my_account_notification.html', username=app.config["USERNAME"], interests=app.config["INTERESTS"])
 
 @app.route('/my_account/settings')
 def my_account_settings():
-    return render_template('my_account_settings.html')
+    return render_template('my_account_settings.html', username=app.config["USERNAME"], interests=app.config["INTERESTS"])
 
 # register account methods=['GET', 'POST'],methods=['GET', 'POST']
 @app.route('/register')

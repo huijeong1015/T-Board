@@ -76,7 +76,9 @@ def my_account_friends():
 
 @app.route('/my_account/myevents/')
 def my_account_myevents():
-    return render_template('my_account_myevents.html', username=app.config["USERNAME"], interests=app.config["INTERESTS"])
+    sql = text("SELECT * FROM event;")
+    result = db.session.execute(sql)
+    return render_template('my_account_myevents.html', username=app.config["USERNAME"], interests=app.config["INTERESTS"], myevents=result)
 
 @app.route('/my_account/notification/')
 def my_account_notification():

@@ -3,16 +3,21 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text  # Correct import for 'text'
 from flask import Flask, request, render_template
 from flask_sqlalchemy import SQLAlchemy
-import os
 from flask import Flask, render_template, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 from pathlib import Path
 
+# configuration
 DATABASE="events.db"
+USERNAME = "test"
+PASSWORD = "ece444test"
+INTERESTS = "Computer Engineering"
+
 basedir = Path(__file__).resolve().parent
 
 app = Flask(__name__)
+app.config.from_object(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{Path(basedir).joinpath(DATABASE)}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

@@ -4,7 +4,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, Email
 import os
-from flask import Flask, render_template, request, url_for, redirect
+from flask import Flask, render_template, request, url_for, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 from project.app_copy import *
@@ -102,4 +102,14 @@ def page_not_found(e):
 @app.errorhandler(500)
 def internal_server_error(e):
     return render_template('500.html'), 500
+
+#I need something called is_toggled to save the states
+# @app.route('/toggle/<int:event_id>', methods=['POST'])
+# def toggle_bookmark(event_id):
+#     event = Event.query.get(event_id)
+#     if event:
+#         event.is_toggled = not event.is_toggled
+#         db.session.commit()
+#         return jsonify({'message': 'Successfully colored'})
+#     return jsonify({'message': 'Event/button does not exist'})
 

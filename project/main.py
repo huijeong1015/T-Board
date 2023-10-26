@@ -37,10 +37,6 @@ def login():
             return redirect(url_for("main_dashboard"))
     return render_template('login.html', error=error)
 
-@app.route('/event_details/')
-def event_details():
-    return render_template('event_details.html')
-
 @app.route('/bookmark/')
 def bookmark():
     return render_template('bookmark.html')
@@ -49,10 +45,14 @@ def bookmark():
 def event_post():
     return render_template('event_post.html')
 
-@app.route('/main_dashboard/')
+@app.route('/main_dashboard/', methods=['GET', 'POST'])
 def main_dashboard():
     sql = text("SELECT * FROM event;")
     result = db.session.execute(sql)
+    if request.method == "POST":
+        event_id = int(request.form['event-details'])
+        event = Event.query.filter_by(id=event_id).first()
+        return render_template('event_details.html', event=event.__dict__)
     return render_template('main_dashboard.html', events=result)
 
 # @app.('/')
@@ -63,7 +63,6 @@ def searchEvent():
     results = []
     if keyword:
         results = Event.query.filter(Event.name.contains(keyword)).all()
-    print(results)
     return render_template('search_dashboard.html', events=results)
 
 @app.route('/my_account/event_history/')

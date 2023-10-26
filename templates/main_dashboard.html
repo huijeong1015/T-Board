@@ -1,0 +1,473 @@
+{% extends "search_tab.html" %}
+{% block content %}
+<div class="dashboard">
+  <div class="frame">
+    <div class="board">
+      <div class="event-list">
+        <div class="frame-event">
+          <div class="left">
+            <!-- <img class="event-image" src="image-1.png" /> -->
+            <img src="{{ url_for('static', filename='event_photos/club.png') }}" alt="Image" class="image-1">
+            <svg
+              class="rating"
+              width="220"
+              height="40"
+              viewBox="0 0 220 40"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M20 0L24.4903 13.8197H39.0211L27.2654 22.3607L31.7557 36.1803L20 27.6393L8.2443 36.1803L12.7346 22.3607L0.97887 13.8197H15.5097L20 0Z"
+                fill="#FF9900"
+                stroke="#838383"
+                stroke-width="2"
+              />
+              <path
+                d="M65 0L69.4903 13.8197H84.0211L72.2654 22.3607L76.7557 36.1803L65 27.6393L53.2443 36.1803L57.7346 22.3607L45.9789 13.8197H60.5097L65 0Z"
+                fill="#FF9900"
+                stroke="#838383"
+                stroke-width="2"
+              />
+              <path
+                d="M110 0L114.49 13.8197H129.021L117.265 22.3607L121.756 36.1803L110 27.6393L98.2443 36.1803L102.735 22.3607L90.9789 13.8197H105.51L110 0Z"
+                fill="#FF9900"
+                stroke="#838383"
+                stroke-width="2"
+              />
+              <path
+                d="M155 0L159.49 13.8197H174.021L162.265 22.3607L166.756 36.1803L155 27.6393L143.244 36.1803L147.735 22.3607L135.979 13.8197H150.51L155 0Z"
+                stroke="#838383"
+                stroke-width="2"
+              />
+              <path
+                d="M200 0L204.49 13.8197H219.021L207.265 22.3607L211.756 36.1803L200 27.6393L188.244 36.1803L192.735 22.3607L180.979 13.8197H195.51L200 0Z"
+                stroke="#838383"
+                stroke-width="2"
+              />
+            </svg>
+          </div>
+          <div class="right">
+            <div class="frame-info">
+              <div class="event-name-txt">Name: &lt;name of the event&gt;</div>
+              <div class="event-details-txt">Date: &lt;date of the event&gt;</div>
+              <div class="event-details-txt">Time: &lt;time of the event&gt;</div>
+              <div class="event-details-txt">
+                Location: &lt;location of the event&gt;
+              </div>
+            </div>
+            <div class="frame-event-btn">
+              <svg
+                class="btn-bookmark"
+                width="27"
+                height="54"
+                viewBox="0 0 27 54"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12.7929 39.7929L1 51.5858V1H26V51.5858L14.2071 39.7929L13.5 39.0858L12.7929 39.7929Z"
+                  fill="#A34A4A"
+                  stroke="#A34A4A"
+                  stroke-width="2"
+                />
+              </svg>
+
+              <svg
+                class="btn-calendar"
+                width="48"
+                height="54"
+                viewBox="0 0 48 54"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M0.0675 0V13.5H47.3175V0H0.0675ZM0.0675 20.25V53.3925C0.0675 53.73 0.3375 54 0.675 54H46.6425C46.98 54 47.25 53.73 47.25 53.3925V20.25H0H0.0675ZM6.8175 27H13.5675V33.75H6.8175V27ZM20.3175 27H27.0675V33.75H20.3175V27ZM33.8175 27H40.5675V33.75H33.8175V27ZM6.8175 40.5H13.5675V47.25H6.8175V40.5ZM20.3175 40.5H27.0675V47.25H20.3175V40.5Z"
+                  fill="#7CA34A"
+                />
+              </svg>
+
+              <svg
+                class="btn-event-details"
+                width="68"
+                height="47"
+                viewBox="0 0 68 47"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M42.5 0V15.6667H0V31.3333H42.5V47L68 23.265L42.5 0Z"
+                  fill="#657895"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="frame-event">
+          <div class="left">
+            <!-- <img class="event-image" src="image-1.png" /> -->
+            <!-- <img src="{{ url_for('static', filename='event_photos/club.png') }}" alt="Image" class="image-1"> -->
+            <img src="{{ url_for('static', filename='project\static\event_photos\club.png') }}" alt="Image" class="image-1">
+            <svg
+              class="rating"
+              width="220"
+              height="40"
+              viewBox="0 0 220 40"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M20 0L24.4903 13.8197H39.0211L27.2654 22.3607L31.7557 36.1803L20 27.6393L8.2443 36.1803L12.7346 22.3607L0.97887 13.8197H15.5097L20 0Z"
+                fill="#FF9900"
+                stroke="#838383"
+                stroke-width="2"
+              />
+              <path
+                d="M65 0L69.4903 13.8197H84.0211L72.2654 22.3607L76.7557 36.1803L65 27.6393L53.2443 36.1803L57.7346 22.3607L45.9789 13.8197H60.5097L65 0Z"
+                fill="#FF9900"
+                stroke="#838383"
+                stroke-width="2"
+              />
+              <path
+                d="M110 0L114.49 13.8197H129.021L117.265 22.3607L121.756 36.1803L110 27.6393L98.2443 36.1803L102.735 22.3607L90.9789 13.8197H105.51L110 0Z"
+                fill="#FF9900"
+                stroke="#838383"
+                stroke-width="2"
+              />
+              <path
+                d="M155 0L159.49 13.8197H174.021L162.265 22.3607L166.756 36.1803L155 27.6393L143.244 36.1803L147.735 22.3607L135.979 13.8197H150.51L155 0Z"
+                stroke="#838383"
+                stroke-width="2"
+              />
+              <path
+                d="M200 0L204.49 13.8197H219.021L207.265 22.3607L211.756 36.1803L200 27.6393L188.244 36.1803L192.735 22.3607L180.979 13.8197H195.51L200 0Z"
+                stroke="#838383"
+                stroke-width="2"
+              />
+            </svg>
+          </div>
+          <div class="right">
+            <div class="frame-info">
+              <div class="event-name-txt">Name: &lt;name of the event&gt;</div>
+              <div class="event-details-txt">Date: &lt;date of the event&gt;</div>
+              <div class="event-details-txt">Time: &lt;time of the event&gt;</div>
+              <div class="event-details-txt">
+                Location: &lt;location of the event&gt;
+              </div>
+            </div>
+            <div class="frame-event-btn">
+              <svg
+                class="btn-bookmark"
+                width="27"
+                height="54"
+                viewBox="0 0 27 54"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12.7929 39.7929L1 51.5858V1H26V51.5858L14.2071 39.7929L13.5 39.0858L12.7929 39.7929Z"
+                  stroke="#A34A4A"
+                  stroke-width="2"
+                />
+              </svg>
+
+              <svg
+                class="btn-calendar"
+                width="48"
+                height="54"
+                viewBox="0 0 48 54"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M0.0675 0V13.5H47.3175V0H0.0675ZM0.0675 20.25V53.3925C0.0675 53.73 0.3375 54 0.675 54H46.6425C46.98 54 47.25 53.73 47.25 53.3925V20.25H0H0.0675ZM6.8175 27H13.5675V33.75H6.8175V27ZM20.3175 27H27.0675V33.75H20.3175V27ZM33.8175 27H40.5675V33.75H33.8175V27ZM6.8175 40.5H13.5675V47.25H6.8175V40.5ZM20.3175 40.5H27.0675V47.25H20.3175V40.5Z"
+                  fill="#7CA34A"
+                />
+              </svg>
+
+              <svg
+                class="btn-event-details"
+                width="68"
+                height="47"
+                viewBox="0 0 68 47"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M42.5 0V15.6667H0V31.3333H42.5V47L68 23.265L42.5 0Z"
+                  fill="#657895"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="frame-event">
+          <div class="left">
+            <!-- <img class="event-image" src="image-1.png" /> -->
+            <img src="{{ url_for('static', filename='event_photos/club.png') }}" alt="Image" class="image-1">
+            <svg
+              class="rating3"
+              width="220"
+              height="40"
+              viewBox="0 0 220 40"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M20 0L24.4903 13.8197H39.0211L27.2654 22.3607L31.7557 36.1803L20 27.6393L8.2443 36.1803L12.7346 22.3607L0.97887 13.8197H15.5097L20 0Z"
+                fill="#FF9900"
+                stroke="#838383"
+                stroke-width="2"
+              />
+              <path
+                d="M65 0L69.4903 13.8197H84.0211L72.2654 22.3607L76.7557 36.1803L65 27.6393L53.2443 36.1803L57.7346 22.3607L45.9789 13.8197H60.5097L65 0Z"
+                fill="#FF9900"
+                stroke="#838383"
+                stroke-width="2"
+              />
+              <path
+                d="M110 0L114.49 13.8197H129.021L117.265 22.3607L121.756 36.1803L110 27.6393L98.2443 36.1803L102.735 22.3607L90.9789 13.8197H105.51L110 0Z"
+                fill="#FF9900"
+                stroke="#838383"
+                stroke-width="2"
+              />
+              <path
+                d="M155 0L159.49 13.8197H174.021L162.265 22.3607L166.756 36.1803L155 27.6393L143.244 36.1803L147.735 22.3607L135.979 13.8197H150.51L155 0Z"
+                stroke="#838383"
+                stroke-width="2"
+              />
+              <path
+                d="M200 0L204.49 13.8197H219.021L207.265 22.3607L211.756 36.1803L200 27.6393L188.244 36.1803L192.735 22.3607L180.979 13.8197H195.51L200 0Z"
+                stroke="#838383"
+                stroke-width="2"
+              />
+            </svg>
+          </div>
+          <div class="right">
+            <div class="frame-info">
+              <div class="event-name-txt">Name: &lt;name of the event&gt;</div>
+              <div class="event-details-txt">Date: &lt;date of the event&gt;</div>
+              <div class="event-details-txt">Time: &lt;time of the event&gt;</div>
+              <div class="event-details-txt">
+                Location: &lt;location of the event&gt;
+              </div>
+            </div>
+            <div class="frame-event-btn">
+              <svg
+                class="btn-bookmark"
+                width="27"
+                height="54"
+                viewBox="0 0 27 54"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12.7929 39.7929L1 51.5858V1H26V51.5858L14.2071 39.7929L13.5 39.0858L12.7929 39.7929Z"
+                  stroke="#A34A4A"
+                  stroke-width="2"
+                />
+              </svg>
+
+              <svg
+                class="btn-calendar"
+                width="48"
+                height="54"
+                viewBox="0 0 48 54"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M0.0675 0V13.5H47.3175V0H0.0675ZM0.0675 20.25V53.3925C0.0675 53.73 0.3375 54 0.675 54H46.6425C46.98 54 47.25 53.73 47.25 53.3925V20.25H0H0.0675ZM6.8175 27H13.5675V33.75H6.8175V27ZM20.3175 27H27.0675V33.75H20.3175V27ZM33.8175 27H40.5675V33.75H33.8175V27ZM6.8175 40.5H13.5675V47.25H6.8175V40.5ZM20.3175 40.5H27.0675V47.25H20.3175V40.5Z"
+                  fill="#7CA34A"
+                />
+              </svg>
+
+              <svg
+                class="btn-event-details"
+                width="68"
+                height="47"
+                viewBox="0 0 68 47"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M42.5 0V15.6667H0V31.3333H42.5V47L68 23.265L42.5 0Z"
+                  fill="#657895"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sidetab">
+    <div class="show-bookmark">
+      <div class="checkbox"></div>
+      <div class="show-bookmarked-events">Show bookmarked events</div>
+      <svg
+        class="icon-check"
+        width="32"
+        height="33"
+        viewBox="0 0 32 33"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M29.065 0L26.9268 3.08L11.8624 24.64L5.85366 14.9916L2.93503 10.7652L0 14.9916L2.93503 19.4018L9.04968 28.5898L11.8624 33L14.7975 28.5898L29.065 7.15124L32 2.74103L29.065 0Z"
+          fill="#1E1E1E"
+        />
+      </svg>
+    </div>
+    <div class="sort">
+      <div class="dropdown"></div>
+      <div class="sort-by">Sort by</div>
+      <div class="atoz">A-Z</div>
+      <svg
+        class="btn-dropdown"
+        width="25"
+        height="21"
+        viewBox="0 0 25 21"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12.5 20.8335L1.67468 5.20849L23.3253 5.2085L12.5 20.8335Z"
+          fill="#657895"
+        />
+      </svg>
+    </div>
+    <svg
+      class="icon-cog"
+      width="50"
+      height="50"
+      viewBox="0 0 50 50"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M21.8828 0L18.7656 7.41895C18.1421 7.60598 17.581 7.91771 17.0199 8.22943L9.601 5.11222L5.11222 9.601L8.22943 17.0199C7.9177 17.6434 7.66833 18.1421 7.41895 18.7656L0 21.8828V28.1172L7.41895 31.2344C7.66833 31.8579 7.9177 32.3566 8.22943 32.98L5.11222 40.399L9.601 44.8878L17.0199 41.7706C17.581 42.0199 18.1421 42.3317 18.7656 42.581L21.8828 50H28.1172L31.2344 42.581C31.7955 42.3317 32.419 42.0823 32.9801 41.7706L40.399 44.8878L44.8878 40.399L41.7706 32.98C42.0199 32.419 42.3317 31.7955 42.581 31.2344L50 28.1172V21.8828L42.581 18.7656C42.394 18.2045 42.0823 17.581 41.7706 17.0199L44.8878 9.601L40.399 5.11222L32.9801 8.22943C32.419 7.98005 31.7955 7.66833 31.2344 7.41895L28.1172 0L21.8828 0ZM25 15.586C30.1746 15.586 34.3516 19.7631 34.3516 24.9377C34.3516 30.1122 30.1746 34.2893 25 34.2893C19.8254 34.2893 15.6484 30.1122 15.6484 24.9377C15.6484 19.7631 19.8254 15.586 25 15.586Z"
+        fill="#D9D9D9"
+      />
+    </svg>
+  </div>
+</div>
+{% include "base_event.html" %}
+<style>
+.dashboard {
+  padding: 0px 25px 0px 25px;
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+.frame {
+  background: #786554;
+  position: relative;
+  padding: 20px 20px 20px 20px;
+  overflow: visible;
+}
+.board {
+  background: #d9d9d9;
+  position: relative;
+  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+.sidetab {
+  padding: 60px 0px 60px 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 43px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
+}
+.show-bookmark {
+  flex-shrink: 0;
+  width: 236px;
+  height: 48px;
+  position: static;
+}
+.checkbox {
+  background: #d9d9d9;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  left: 0px;
+  top: 64px;
+  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+.show-bookmarked-events {
+  color: #ffffff;
+  text-align: left;
+  font: 400 24px "Ubuntu Mono", sans-serif;
+  position: absolute;
+  left: 54px;
+  top: 60px;
+  width: 182px;
+}
+.icon-check {
+  position: absolute;
+  left: 4px;
+  top: 69px;
+  overflow: visible;
+}
+.sort {
+  flex-shrink: 0;
+  width: 236px;
+  height: 74px;
+  position: static;
+}
+.dropdown {
+  background: #d9d9d9;
+  border-radius: 5px;
+  width: 236px;
+  height: 50px;
+  position: absolute;
+  left: 0px;
+  top: 175px;
+}
+.sort-by {
+  color: #ffffff;
+  text-align: left;
+  font: 400 24px "Ubuntu Mono", sans-serif;
+  position: absolute;
+  left: 0px;
+  top: 151px;
+  width: 126px;
+}
+.atoz {
+  color: rgba(30, 30, 30, 0.7);
+  text-align: left;
+  font: 700 24px "Ubuntu Mono", sans-serif;
+  position: absolute;
+  left: 13px;
+  top: 187px;
+  width: 126px;
+}
+.btn-dropdown {
+  position: absolute;
+  left: 227px;
+  top: 210.83px;
+  transform: translate(-23.33px, -15.62px);
+  overflow: visible;
+}
+.icon-cog {
+  flex-shrink: 0;
+  position: relative;
+  overflow: visible;
+}
+.image-1 {
+  flex-shrink: 0;
+  width: 365px;
+  height: 189px;
+  position: relative;
+  max-width: 95%;
+  max-height: 95%;
+  display: block;
+}
+</style>
+{% endblock %}

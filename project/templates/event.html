@@ -42,14 +42,14 @@
     </div>
     <div class="right">
         <div class="frame-info">
-        <div class="event-name-txt">Name: {{ event['name'] }}</div>
-        <div class="event-details-txt">Date: {{ event['date'] }}</div>
-        <div class="event-details-txt">Time: {{ event['time'] }}</div>
-        <div class="event-details-txt">
-            Location: {{ event['location'] }}
+            <div class="event-name-txt">Name: {{ event['name'] }}</div>
+            <div class="event-details-txt">Date: {{ event['date'] }}</div>
+            <div class="event-details-txt">Time: {{ event['time'] }}</div>
+            <div class="event-details-txt">
+                Location: {{ event['location'] }}
+            </div>
         </div>
-        </div>
-        <form>
+        <form method="POST" action="/main_dashboard">
             <div class="frame-event-btn">
                 <!-- id = "bookmark-icon" -->
                 <button class="btn-bookmark" id="bookmark-{{ event.id }}">
@@ -109,7 +109,7 @@
                         />
                     </svg>
                 </button>
-                <button class="btn-event-details">
+                <button name="event-details" class="btn-event-details" value="{{ event['id'] }}">
                     <svg
                         class="btn-event-details"
                         width="68"

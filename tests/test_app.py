@@ -39,6 +39,7 @@ def login(client, username, password):
         follow_redirects=True,
     )
 
+# Hui: Test the my account page contains user's id and their interests
 def test_my_account_page_contains_userinfo(client):
     login(client, app.config['USERNAME'], app.config['PASSWORD'])
     rv = client.get("/my_account/myevents")

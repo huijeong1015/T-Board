@@ -9,7 +9,10 @@ from sqlalchemy.sql import func
 from pathlib import Path
 
 # configuration
-DATABASE="events.db"
+
+DATABASE="app.db"
+EVENTS_DATABASE="events.db"
+USERS_DATABASE="users.db"
 USERNAME = "test"
 PASSWORD = "ece444test"
 INTERESTS = "Computer Engineering"
@@ -17,7 +20,15 @@ INTERESTS = "Computer Engineering"
 basedir = Path(__file__).resolve().parent
 
 app = Flask(__name__)
+
 app.config.from_object(__name__)
+
+# app.config['SQLALCHEMY_BINDS'] = {
+#     'users': f"sqlite:///{Path(basedir).joinpath(USERS_DATABASE)}",
+#     'events': f"sqlite:///{Path(basedir).joinpath(EVENTS_DATABASE)}"
+# }
+
+
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{Path(basedir).joinpath(DATABASE)}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -25,14 +36,16 @@ db = SQLAlchemy(app)
 
 
 class User(db.Model):
+    # __bind_key__='users'
     __tablename__= 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True , nullable=False)
     events = db.relationship('Event', backref='user')
     def __repr__(self):
-        return f"<User {self.name}>"
+        return f"<User {self.username}>"
 
 class Event(db.Model):
+    # __bind_key__='events'
     __tablename__='events'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -44,38 +57,41 @@ class Event(db.Model):
     def __repr__(self):
         return f"<Event {self.name}>"
 
+
+
+sample_events = [
+    {"name": "Tech Conference 2023", "date": "2023-11-20", "time": "09:00", "location": "Silicon Valley Convention Center", "description": "Join industry leaders...", "user_id": 1},
+    {"name": "Music Festival", "date": "2023-08-15", "time": "12:00", "location": "Central Park, New York", "description": "A celebration of music...", "user_id": 1},
+    {"name": "Charity Run", "date": "2023-05-01", "time": "07:00", "location": "Los Angeles City Center", "description": "A 5K run to raise funds...", "user_id": 2},
+    {"name": "Science Fair", "date": "2023-07-10", "time": "10:00", "location": "Science Museum, London", "description": "Engage with scientific discoveries...", "user_id": 2}
+]
 sample_users = [
-    
-]
-
-
-sample_events = [
-    {"name": "Tech Conference 2023", "date": "2023-11-20", "time": "09:00", "location": "Silicon Valley Convention Center", "description": "Join industry leaders..."},
-    {"name": "Music Festival", "date": "2023-08-15", "time": "12:00", "location": "Central Park, New York", "description": "A celebration of music..."},
-    {"name": "Charity Run", "date": "2023-05-01", "time": "07:00", "location": "Los Angeles City Center", "description": "A 5K run to raise funds..."},
-    {"name": "Science Fair", "date": "2023-07-10", "time": "10:00", "location": "Science Museum, London", "description": "Engage with scientific discoveries..."}
-]
-sample_events = [
     {"username": "slinky"},
     {"username": "ploinky"},
 ]
+@app.shell_context_processor
+def make_shell_context():
+    return dict(db=db, User=User, Event=Event)
+# with app.app_context():
+#     db.create_all()
 
-with app.app_context():
-    db.create_all()
-
-
-with app.app_context():
-    if Event.query.first() is None:
-        for event_data in sample_events:
-            event = Event(**event_data)
-            db.session.add(event)
-        db.session.commit()
 with app.app_context():
     if User.query.first() is None:
         for user_data in sample_users:
             user = User(**user_data)
+            print(user)
+            print("aaaaaaaaaaaaaaaaaaaafefefefefe")
             db.session.add(user)
         db.session.commit()
+
+# with app.app_context():
+#     if Event.query.first() is None:
+#         for event_data in sample_events:
+#             event = Event(**event_data)
+#             db.session.add(event)
+#         db.session.commit()
+
+
 
 
 @app.route('/dataset/events')
@@ -88,8 +104,9 @@ def show_events():
 
     # You might return events as a string or JSON, or render them in a template
     return str(events)
+
 @app.route('/dataset/users')
-def show_events():
+def show_users():
     sql = text("SELECT * FROM user;")
     result = db.session.execute(sql)
     

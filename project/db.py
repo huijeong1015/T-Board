@@ -44,7 +44,7 @@ class User(db.Model):
         return '<User {}>'.format(self.username)
 
 sample_users = [
-    {"username": "test", "password": "ece444test", "email": "test@mail.utoronto.ca", "interests": "Computer Engineering"}
+    {"username": "admin", "password": "adminpass", "email": "admin@mail.utoronto.ca", "interests": "Being an administrator"}
 ]
 
 sample_events = [

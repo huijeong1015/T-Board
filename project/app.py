@@ -1,28 +1,15 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired, Email
 import os
-from flask import Flask, render_template, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 from sqlalchemy.sql import func
 from project.db import *
 
-# app = Flask(__name__)
-# # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///events.db'
-# # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# app.config['SQLALCHEMY_DATABASE_URI'] =\
-#         'sqlite:///' + os.path.join(basedir, 'events.db')
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# bootstrap = Bootstrap(app)
-# db = SQLAlchemy(app)
-# class Login(FlaskForm):
-#     login_username = StringField('What is your name?', validators=[DataRequired()])
-#     login_password = StringField('What is your UofT Email address?', validators=[DataRequired(), Email()])
-#     submit = SubmitField('Submit')
-
+app.config['SECRET_KEY'] = os.urandom(24)
 
 @app.route('/', methods=["GET", "POST"])
 @app.route('/login/', methods=['GET', 'POST'])
@@ -43,7 +30,9 @@ def login():
             elif user.password != password:  # Directly comparing the plaintext password
                 error = 'Password does not match for the provided username.'
             else:
-                # Here you should start a user session
+                # Start a user session
+                session['username'] = username
+                session['interests'] = user.interests 
                 return redirect(url_for('main_dashboard'))
 
     return render_template('login.html', error=error)
@@ -67,7 +56,6 @@ def main_dashboard():
         return render_template('event_details.html', event=event.__dict__)
     return render_template('main_dashboard.html', events=result)
 
-# @app.('/')
 @app.route('/search_dashboard/', methods=['POST'])
 def searchEvent():
     keyword=request.form["input-search"]
@@ -79,25 +67,25 @@ def searchEvent():
 
 @app.route('/my_account/event_history/')
 def my_account_event_history():
-    return render_template('my_account_eventhistory.html', username=app.config["USERNAME"], interests=app.config["INTERESTS"])
+    return render_template('my_account_eventhistory.html', username=session.get('username'), interests=session.get('interests'))
 
 @app.route('/my_account/friends/')
 def my_account_friends():
-    return render_template('my_account_friends.html', username=app.config["USERNAME"], interests=app.config["INTERESTS"])
+    return render_template('my_account_friends.html', username=session.get('username'), interests=session.get('interests'))
 
 @app.route('/my_account/myevents/')
 def my_account_myevents():
     sql = text("SELECT * FROM events;")
     result = db.session.execute(sql)
-    return render_template('my_account_myevents.html', username=app.config["USERNAME"], interests=app.config["INTERESTS"], myevents=result)
+    return render_template('my_account_myevents.html', username=session.get('username'), interests=session.get('interests'), myevents=result)
 
 @app.route('/my_account/notification/')
 def my_account_notification():
-    return render_template('my_account_notification.html', username=app.config["USERNAME"], interests=app.config["INTERESTS"])
+    return render_template('my_account_notification.html', username=session.get('username'), interests=session.get('interests'))
 
 @app.route('/my_account/settings/')
 def my_account_settings():
-    return render_template('my_account_settings.html', username=app.config["USERNAME"], interests=app.config["INTERESTS"])
+    return render_template('my_account_settings.html', username=session.get('username'), interests=session.get('interests'))
 
 @app.route('/dataset')
 def show_events():
@@ -115,13 +103,8 @@ def show_users():
     users = User.query.all()
     return render_template('users.html', users=users)
 
-# @app.route('/event_post', methods=['POST'])
-# def event_post_data(): 
-#     return
 @app.route('/event_post', methods=['POST'])
 def add_event():
-    # event_name = request.form.get('name')  
-    # if event_name:
     event_name= request.form["input-name"]
     event_date= request.form["input-date"]
     event_time= request.form["input-time"]
@@ -131,8 +114,6 @@ def add_event():
     db.session.add(new_event)
     db.session.commit()
     return render_template('event_post.html')
-    # return 'Event added successfully!'
-    # return 'Name is required!'
     
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
@@ -151,13 +132,10 @@ def register():
 
         # Perform validation checks on the form data
         if not username or not email or not confirm_email or not password or not confirm_password:
-            print(1)
             error = 'All fields are required.'
         elif email != confirm_email:
-            print(2)
             error = 'Emails do not match.'
         elif password != confirm_password:
-            print(3)
             error = 'Passwords do not match.'
         elif username_check is not None:
             error = 'This Username is taken, please try a different one.'  
@@ -165,7 +143,6 @@ def register():
             error = 'This email has already been used. Please return to the login page or use a different email'
         else:
             #TODO: Need to send email verification
-            print(4)
             new_user = User(username=username, password=password, email=email) 
             db.session.add(new_user)
             db.session.commit()

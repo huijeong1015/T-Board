@@ -7,7 +7,7 @@ import os
 from flask import Flask, render_template, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
-from project.app_copy import *
+from project.db import *
 
 # app = Flask(__name__)
 # # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///events.db'
@@ -30,8 +30,6 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-
-        print(f"Login Attempt: Username: {username}, Password: {password}")
 
         if not username:
             error = 'Username field is empty.'
@@ -100,6 +98,41 @@ def my_account_notification():
 def my_account_settings():
     return render_template('my_account_settings.html', username=app.config["USERNAME"], interests=app.config["INTERESTS"])
 
+@app.route('/dataset')
+def show_events():
+    sql = text("SELECT * FROM event;")
+    result = db.session.execute(sql)
+    
+    # Extracting data from the ResultProxy object
+    events = [{column: value for column, value in zip(result.keys(), row)} for row in result]
+
+    # You might return events as a string or JSON, or render them in a template
+    return str(events)
+
+@app.route('/users')
+def show_users():
+    users = User.query.all()
+    return render_template('users.html', users=users)
+
+# @app.route('/event_post', methods=['POST'])
+# def event_post_data(): 
+#     return
+@app.route('/event_post', methods=['POST'])
+def add_event():
+    # event_name = request.form.get('name')  
+    # if event_name:
+    event_name= request.form["input-name"]
+    event_date= request.form["input-date"]
+    event_time= request.form["input-time"]
+    event_location= request.form["input-loc"]
+    event_description= request.form["input-desc"]
+    new_event = Event(name= event_name, date =event_date, time= event_time, location= event_location, description= event_description)
+    db.session.add(new_event)
+    db.session.commit()
+    return render_template('event_post.html')
+    # return 'Event added successfully!'
+    # return 'Name is required!'
+    
 # register account methods=['GET', 'POST'],methods=['GET', 'POST']
 @app.route('/register/')
 def register():

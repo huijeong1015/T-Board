@@ -23,18 +23,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-# search funciton
-# @app.route('/search_results', methods=["POST"])
-# def searchEvent():
-#     keyword=request.form["input-search"]
-#     #some error handling before results are used
-#     results = []
-#     if keyword:
-#         results = Event.query.filter(Event.name.contains(keyword)).all()
-#     print(results)
-#     return render_template('results.html', results=results)
-
-
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -45,8 +33,6 @@ class Event(db.Model):
 
     def __repr__(self):
         return f"<Event {self.name}>"
-
-
 
 sample_events = [
     {"name": "Tech Conference 2023", "date": "2023-11-20", "time": "09:00", "location": "Silicon Valley Convention Center", "description": "Join industry leaders..."},
@@ -68,8 +54,7 @@ with app.app_context():
     db.create_all()
     
     if User.query.first() is None:
-        user = User(username='admin')
-        user.password = generate_password_hash('adminpass')  # Hashing the password before storing
+        user = User(username='admin', password='adminpass')  # Setting password directly
         db.session.add(user)
     
     if Event.query.first() is None:
@@ -81,41 +66,4 @@ with app.app_context():
 
 
 
-@app.route('/dataset')
-def show_events():
-    sql = text("SELECT * FROM event;")
-    result = db.session.execute(sql)
-    
-    # Extracting data from the ResultProxy object
-    events = [{column: value for column, value in zip(result.keys(), row)} for row in result]
-
-    # You might return events as a string or JSON, or render them in a template
-    return str(events)
-
-@app.cli.command("test")
-def run_tests():
-    """Run the unit tests."""
-    import unittest
-    tests = unittest.TestLoader().discover('tests')  # assumes all test files are in a folder named 'tests'
-    unittest.TextTestRunner(verbosity=2).run(tests)
-
-
-# @app.route('/event_post', methods=['POST'])
-# def event_post_data(): 
-#     return
-@app.route('/event_post', methods=['POST'])
-def add_event():
-    # event_name = request.form.get('name')  
-    # if event_name:
-    event_name= request.form["input-name"]
-    event_date= request.form["input-date"]
-    event_time= request.form["input-time"]
-    event_location= request.form["input-loc"]
-    event_description= request.form["input-desc"]
-    new_event = Event(name= event_name, date =event_date, time= event_time, location= event_location, description= event_description)
-    db.session.add(new_event)
-    db.session.commit()
-    return render_template('event_post.html')
-    # return 'Event added successfully!'
-    # return 'Name is required!'
 

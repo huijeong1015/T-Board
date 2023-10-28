@@ -32,7 +32,6 @@ def login():
             else:
                 # Start a user session
                 session['username'] = username
-                session['interests'] = user.interests 
                 return redirect(url_for('main_dashboard'))
 
     return render_template('login.html', error=error)
@@ -65,27 +64,32 @@ def searchEvent():
         results = Event.query.filter(Event.name.contains(keyword)).all()
     return render_template('search_dashboard.html', events=results)
 
+def get_user_interests():
+    username=session.get('username')
+    user = User.query.filter_by(username=username).first()
+    return user.interests
+
 @app.route('/my_account/event_history/')
 def my_account_event_history():
-    return render_template('my_account_eventhistory.html', username=session.get('username'), interests=session.get('interests'))
+    return render_template('my_account_eventhistory.html', username=session.get('username'), interests=get_user_interests())
 
 @app.route('/my_account/friends/')
 def my_account_friends():
-    return render_template('my_account_friends.html', username=session.get('username'), interests=session.get('interests'))
+    return render_template('my_account_friends.html', username=session.get('username'), interests=get_user_interests())
 
 @app.route('/my_account/myevents/')
 def my_account_myevents():
     sql = text("SELECT * FROM events;")
     result = db.session.execute(sql)
-    return render_template('my_account_myevents.html', username=session.get('username'), interests=session.get('interests'), myevents=result)
+    return render_template('my_account_myevents.html', username=session.get('username'), interests=get_user_interests(), myevents=result)
 
 @app.route('/my_account/notification/')
 def my_account_notification():
-    return render_template('my_account_notification.html', username=session.get('username'), interests=session.get('interests'))
+    return render_template('my_account_notification.html', username=session.get('username'), interests=get_user_interests())
 
 @app.route('/my_account/settings/')
 def my_account_settings():
-    return render_template('my_account_settings.html', username=session.get('username'), interests=session.get('interests'))
+    return render_template('my_account_settings.html', username=session.get('username'), interests=get_user_interests())
 
 @app.route('/dataset')
 def show_events():
@@ -143,7 +147,7 @@ def register():
             error = 'This email has already been used. Please return to the login page or use a different email'
         else:
             #TODO: Need to send email verification
-            new_user = User(username=username, password=password, email=email) 
+            new_user = User(username=username, password=password, email=email, interests=interests) 
             db.session.add(new_user)
             db.session.commit()
             return redirect(url_for('login'))

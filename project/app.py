@@ -133,12 +133,44 @@ def add_event():
     # return 'Event added successfully!'
     # return 'Name is required!'
     
-# register account methods=['GET', 'POST'],methods=['GET', 'POST']
-@app.route('/register/')
+@app.route('/register/', methods=['GET', 'POST'])
 def register():
-    # username = request.form["input-id"]
-    # email = request.form["input-email"]
-    return render_template('register.html')
+    error = None
+    print("We are registering")
+    if request.method == 'POST':
+        username = request.form['input-id']
+        email = request.form['input-email']
+        confirm_email = request.form['input-confirm-email']
+        password = request.form['input-pwd']
+        confirm_password = request.form['input-confirm-pwd']
+        interests = request.form['input-interests']
+
+        username_check = User.query.filter_by(username=username).first()
+        email_check = User.query.filter_by(email=email).first()
+
+        # Perform validation checks on the form data
+        if not username or not email or not confirm_email or not password or not confirm_password:
+            print(1)
+            error = 'All fields are required.'
+        elif email != confirm_email:
+            print(2)
+            error = 'Emails do not match.'
+        elif password != confirm_password:
+            print(3)
+            error = 'Passwords do not match.'
+        elif username_check is not None:
+            error = 'This Username is taken, please try a different one.'  
+        elif email_check is not None:
+            error = 'This email has already been used. Please return to the login page or use a different email'
+        else:
+            #TODO: Need to send email verification
+            print(4)
+            new_user = User(username=username, password=password, email=email) 
+            db.session.add(new_user)
+            db.session.commit()
+            return redirect(url_for('login'))
+
+    return render_template('register.html', error=error)
 
 @app.errorhandler(404)
 def page_not_found(e):

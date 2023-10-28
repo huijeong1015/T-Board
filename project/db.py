@@ -12,6 +12,7 @@ from pathlib import Path
 DATABASE="events.db"
 USERNAME = "test"
 PASSWORD = "ece444test"
+EMAIL = "test@mail.utoronto.ca"
 INTERESTS = "Computer Engineering"
 
 basedir = Path(__file__).resolve().parent
@@ -24,6 +25,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 class Event(db.Model):
+    __tablename__ = 'events'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     date = db.Column(db.String(10), nullable=False)
@@ -42,9 +44,11 @@ sample_events = [
 ]
 
 class User(db.Model):
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
+    email = db.Column(db.String(128), unique=True, nullable=False)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -54,7 +58,7 @@ with app.app_context():
     db.create_all()
     
     if User.query.first() is None:
-        user = User(username='admin', password='adminpass')  # Setting password directly
+        user = User(username='admin', password='adminpass', email='admin@mail.utoronto.ca')  # Setting password directly
         db.session.add(user)
     
     if Event.query.first() is None:
@@ -63,7 +67,3 @@ with app.app_context():
             db.session.add(event)
 
     db.session.commit()
-
-
-
-

@@ -6,6 +6,7 @@ from wtforms.validators import DataRequired, Email
 import os
 from flask import Flask, render_template, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text
 from sqlalchemy.sql import func
 from project.db import *
 
@@ -58,7 +59,7 @@ def event_post():
 
 @app.route('/main_dashboard/', methods=['GET', 'POST'])
 def main_dashboard():
-    sql = text("SELECT * FROM event;")
+    sql = text("SELECT * FROM events;")
     result = db.session.execute(sql)
     if request.method == "POST":
         event_id = int(request.form['event-details'])
@@ -86,7 +87,7 @@ def my_account_friends():
 
 @app.route('/my_account/myevents/')
 def my_account_myevents():
-    sql = text("SELECT * FROM event;")
+    sql = text("SELECT * FROM events;")
     result = db.session.execute(sql)
     return render_template('my_account_myevents.html', username=app.config["USERNAME"], interests=app.config["INTERESTS"], myevents=result)
 
@@ -100,7 +101,7 @@ def my_account_settings():
 
 @app.route('/dataset')
 def show_events():
-    sql = text("SELECT * FROM event;")
+    sql = text("SELECT * FROM events;")
     result = db.session.execute(sql)
     
     # Extracting data from the ResultProxy object

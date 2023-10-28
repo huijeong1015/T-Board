@@ -63,7 +63,9 @@ def searchEvent():
     results = []
     if keyword:
         results = Event.query.filter(Event.name.contains(keyword)).all()
-    return render_template('search_dashboard.html', events=results)
+    print(results)
+    return render_template('main_dashboard.html', events=results)
+
 
 @app.route('/my_account/event_history/')
 def my_account_event_history():

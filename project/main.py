@@ -22,20 +22,33 @@ from project.app_copy import *
 #     login_password = StringField('What is your UofT Email address?', validators=[DataRequired(), Email()])
 #     submit = SubmitField('Submit')
 
-#login 
+
 @app.route('/', methods=["GET", "POST"])
-@app.route('/login/', methods=["GET", "POST"])
+@app.route('/login/', methods=['GET', 'POST'])
 def login():
-    """User login management"""
     error = None
-    if request.method == "POST":
-        if request.form["username"] != app.config["USERNAME"]:
-            error = "Invalid username"
-        elif request.form["password"] != app.config["PASSWORD"]:
-            error = "Invalid password"
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        print(f"Login Attempt: Username: {username}, Password: {password}")
+
+        if not username:
+            error = 'Username field is empty.'
+        elif not password:
+            error = 'Password field is empty.'
         else:
-            return redirect(url_for("main_dashboard"))
+            user = User.query.filter_by(username=username).first()
+            if user is None:
+                error = f'No user found with username: {username}'
+            elif user.password != password:  # Directly comparing the plaintext password
+                error = 'Password does not match for the provided username.'
+            else:
+                # Here you should start a user session
+                return redirect(url_for('main_dashboard'))
+
     return render_template('login.html', error=error)
+
 
 @app.route('/bookmark/')
 def bookmark():

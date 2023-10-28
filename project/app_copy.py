@@ -55,16 +55,31 @@ sample_events = [
     {"name": "Science Fair", "date": "2023-07-10", "time": "10:00", "location": "Science Museum, London", "description": "Engage with scientific discoveries..."}
 ]
 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(128), nullable=False)
+
+    def __repr__(self):
+        return '<User {}>'.format(self.username)
+
+
 with app.app_context():
     db.create_all()
-
-
-with app.app_context():
+    
+    if User.query.first() is None:
+        user = User(username='admin')
+        user.password = generate_password_hash('adminpass')  # Hashing the password before storing
+        db.session.add(user)
+    
     if Event.query.first() is None:
         for event_data in sample_events:
             event = Event(**event_data)
             db.session.add(event)
-        db.session.commit()
+
+    db.session.commit()
+
+
 
 @app.route('/dataset')
 def show_events():
@@ -104,5 +119,3 @@ def add_event():
     # return 'Event added successfully!'
     # return 'Name is required!'
 
-if __name__ == "__main__":
-    app.run(debug=True)

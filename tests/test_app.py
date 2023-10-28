@@ -1,6 +1,7 @@
 import pytest
 from pathlib import Path
 from project.main import app, db, Event
+from flask import abort
 
 TEST_DB = "test.db"
 
@@ -65,3 +66,21 @@ def test_search_event_keywords(client):
     expected_keyword = "Tech"
     for event in events:
         assert expected_keyword in event.name
+
+#Dasha: Check error handling
+def test_error_handling_404(client):
+    response = client.get('/this_is_not_a_valid_route')
+    assert response.status_code == 404
+    assert b"Page Not Found" in response.data 
+    assert b"Please return to the main page" in response.data
+
+@app.route('/trigger_error')
+def trigger_error():
+    abort(500)
+
+def test_error_handling_500(client):
+    with app.app_context():
+        response = client.get('/trigger_error')
+    
+    assert response.status_code == 500 
+    assert b"Internal Server Error" in response.data

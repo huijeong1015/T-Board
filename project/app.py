@@ -107,6 +107,11 @@ def get_user_interests():
     user = User.query.filter_by(username=username).first()
     return user.interests
 
+def get_user_email():
+    username=session.get('username')
+    user = User.query.filter_by(username=username).first()
+    return user.email
+
 @app.route('/my_account/event_history/')
 def my_account_event_history():
     return render_template('my_account_eventhistory.html', username=session.get('username'), interests=get_user_interests())
@@ -128,6 +133,10 @@ def my_account_notification():
 @app.route('/my_account/settings/')
 def my_account_settings():
     return render_template('my_account_settings.html', username=session.get('username'), interests=get_user_interests())
+
+@app.route('/my_account/edit_profile/')
+def my_account_edit_profile():
+    return render_template('my_account_edit_profile.html', username=session.get('username'), email=get_user_email(), password=session.get('password'), interests=get_user_interests())
 
 @app.route('/dataset')
 def show_events():

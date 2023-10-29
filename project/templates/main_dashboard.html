@@ -14,39 +14,18 @@
   </div>
   <div class="sidetab">
     <div class="show-bookmark">
-      <div class="checkbox"></div>
-      <div class="show-bookmarked-events">Show bookmarked events</div>
-      <svg
-        class="icon-check"
-        width="32"
-        height="33"
-        viewBox="0 0 32 33"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M29.065 0L26.9268 3.08L11.8624 24.64L5.85366 14.9916L2.93503 10.7652L0 14.9916L2.93503 19.4018L9.04968 28.5898L11.8624 33L14.7975 28.5898L29.065 7.15124L32 2.74103L29.065 0Z"
-          fill="#1E1E1E"
-        />
-      </svg>
+      <input type="checkbox" id="show-bookmarked" name="show-bookmarked" value="show-bookmarked" class="checkbox">
+      <label for="show-bookmarked" class="show-bookmarked-events">Show bookmarked events</label><br>
     </div>
     <div class="sort">
-      <div class="dropdown"></div>
-      <div class="sort-by">Sort by</div>
-      <div class="atoz">A-Z</div>
-      <svg
-        class="btn-dropdown"
-        width="25"
-        height="21"
-        viewBox="0 0 25 21"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M12.5 20.8335L1.67468 5.20849L23.3253 5.2085L12.5 20.8335Z"
-          fill="#657895"
-        />
-      </svg>
+      <label for="sort-by" class="sort-by">Sort by:</label>
+      <select id="sort-by" name="sort-by" class="dropdown">
+        <option value="asc-alphabetic">A to Z</option>
+        <option value="desc-alphabetic">Z to A</option>
+        <option value="asc-date">Oldest to Newest</option>
+        <option value="desc-date">Newest to Oldest</option>
+        <option value="relevant">Relevancy</option>
+      </select>
     </div>
     <svg
       class="icon-cog"
@@ -99,28 +78,25 @@
   position: relative;
 }
 .show-bookmark {
-  flex-shrink: 0;
-  width: 236px;
-  height: 48px;
-  position: static;
+  display: flex;
+  flex-direction: row;
+  width: 240px;
+  justify-content: space-between;
+  align-items: center;
 }
 .checkbox {
   background: #d9d9d9;
-  width: 40px;
-  height: 40px;
-  position: absolute;
-  left: 0px;
-  top: 64px;
-  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  width: 30px;
+  height: 30px;
+  position: relative;
 }
 .show-bookmarked-events {
   color: #ffffff;
   text-align: left;
   font: 400 24px "Ubuntu Mono", sans-serif;
-  position: absolute;
-  left: 54px;
-  top: 60px;
-  width: 182px;
+  position: relative;
+  width: 190px;
+  display: inline-flex;
 }
 .icon-check {
   position: absolute;
@@ -129,44 +105,20 @@
   overflow: visible;
 }
 .sort {
-  flex-shrink: 0;
-  width: 236px;
-  height: 74px;
-  position: static;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 .dropdown {
-  background: #d9d9d9;
-  border-radius: 5px;
-  width: 236px;
-  height: 50px;
-  position: absolute;
-  left: 0px;
-  top: 175px;
+  text-align: left;
+  font: 400 24px "Ubuntu Mono", sans-serif;
+  position: relative;
 }
 .sort-by {
   color: #ffffff;
   text-align: left;
   font: 400 24px "Ubuntu Mono", sans-serif;
-  position: absolute;
-  left: 0px;
-  top: 151px;
-  width: 126px;
-}
-.atoz {
-  color: rgba(30, 30, 30, 0.7);
-  text-align: left;
-  font: 700 24px "Ubuntu Mono", sans-serif;
-  position: absolute;
-  left: 13px;
-  top: 187px;
-  width: 126px;
-}
-.btn-dropdown {
-  position: absolute;
-  left: 227px;
-  top: 210.83px;
-  transform: translate(-23.33px, -15.62px);
-  overflow: visible;
+  position: relative;
 }
 .icon-cog {
   flex-shrink: 0;

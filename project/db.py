@@ -45,18 +45,20 @@ class Event(db.Model):
         return f"<Event {self.name}>"
 
 # Model for users
+#Current support profile picture: ["Default", "Surprised", "LaughingCrying", "Laughing", "Happy", "Excited", "Cool"]
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), unique=True, nullable=False)
-    interests = db.Column(db.String(255), nullable=True)  
+    interests = db.Column(db.String(255), nullable=True)
+    profile_picture = db.Column(db.String(100), nullable=False)
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
 sample_users = [
-    {"username": "admin", "password": "adminpass", "email": "admin@mail.utoronto.ca", "interests": "Being an administrator"}
+    {"username": "admin", "password": "adminpass", "email": "admin@mail.utoronto.ca", "interests": "Being an administrator","profile_picture": "Happy" }
 ]
 
 sample_events = [

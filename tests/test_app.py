@@ -84,3 +84,17 @@ def test_error_handling_500(client):
     
     assert response.status_code == 500 
     assert b"Internal Server Error" in response.data
+
+#An: Attempted to generate errors and injections to the database
+def test_injection(client):
+    # Attempted to inject with raw SQL language
+    event = Event(name="T-Board App Grand Release Press Conference", date="2023-11-15", time="23:59", location="BA1160", description="Sample'); drop table events; --")
+    with app.app_context():
+        db.session.add(event)
+        db.session.commit()
+
+    # Fetch the show_events route
+    response = client.get('/')
+    
+    # Ensure the sample event is present in the response
+    assert "T-Board App Grand Release Press Conference", response.data.decode()

@@ -1,4 +1,10 @@
-from flask import Flask, render_template_string
+from flask import Flask, render_template_string, render_template, request, redirect, url_for, jsonify
+from flask_bootstrap import Bootstrap
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired, Email
+import os
+
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text  # Correct import for 'text'
 
@@ -54,5 +60,16 @@ def run_tests():
     tests = unittest.TestLoader().discover('tests')  # assumes all test files are in a folder named 'tests'
     unittest.TextTestRunner(verbosity=2).run(tests)
 
+
 if __name__ == "__main__":
     app.run(debug=True)
+    
+# #I need something called is_toggled to save the states
+# @app.route('/toggle/<int:event_id>', methods=['POST'])
+# def toggle_bookmark(event_id):
+#     event = Event.query.get(event_id)
+#     if event:
+#         event.is_toggled = not event.is_toggled
+#         db.session.commit()
+#         return jsonify({'message': 'Successfully colored'})
+#     return jsonify({'message': 'Event/button does not exist'})

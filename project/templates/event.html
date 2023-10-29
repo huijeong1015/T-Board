@@ -1,7 +1,7 @@
 {% block event %}
 <div class="frame-event">
     <div class="left">
-        <img src="{{ url_for('static', filename='event_photos/club.png') }}" alt="Image" class="event-image">
+        <img src="{{ url_for('static', filename='event_photos/' + event['event_type'].lower() + '.png') }}" alt="Image" class="event-image">
         <svg
         class="rating"
         width="220"

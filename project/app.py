@@ -8,6 +8,10 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 from sqlalchemy.sql import func
 from project.db import *
+import random #Temporary until we link event type frontend -> backend 
+
+#List of supported event types
+event_types = ["Tutoring", "Sports", "Club", "Networking", "Other"]  
 
 app.config['SECRET_KEY'] = os.urandom(24)
 
@@ -162,7 +166,8 @@ def add_event():
     event_time= request.form["input-time"]
     event_location= request.form["input-loc"]
     event_description= request.form["input-desc"]
-    new_event = Event(name= event_name, date =event_date, time= event_time, location= event_location, description= event_description)
+    #TEMP: Random event type assigned to new events. remove once front end is complete
+    new_event = Event(name=event_name, date=event_date, time=event_time, location=event_location, description=event_description, event_type=random.choice(event_types))
     db.session.add(new_event)
     db.session.commit()
     return render_template('event_post.html')

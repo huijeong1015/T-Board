@@ -7,6 +7,16 @@ USERS_DATABASE = "users.db"
 EVENTS_DATABASE = "events.db"
 basedir = Path(__file__).resolve().parent
 
+# Delete the databases if they exist
+users_db_path = basedir.joinpath(USERS_DATABASE)
+events_db_path = basedir.joinpath(EVENTS_DATABASE)
+
+if users_db_path.exists():
+    users_db_path.unlink()
+
+if events_db_path.exists():
+    events_db_path.unlink()
+
 # Setting up Flask app instance
 app = Flask(__name__)
 
@@ -20,6 +30,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 # Model for events
+#Current supported event types: ["Tutoring", "Sports", "Club", "Networking", "Other"] 
 class Event(db.Model):
     __tablename__ = 'events'
     id = db.Column(db.Integer, primary_key=True)
@@ -28,6 +39,7 @@ class Event(db.Model):
     time = db.Column(db.String(5), nullable=False)
     location = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
+    event_type = db.Column(db.String(100), nullable=False)
 
     def __repr__(self):
         return f"<Event {self.name}>"
@@ -48,10 +60,10 @@ sample_users = [
 ]
 
 sample_events = [
-    {"name": "Tech Conference 2023", "date": "2023-11-20", "time": "09:00", "location": "Silicon Valley Convention Center", "description": "Join industry leaders..."},
-    {"name": "Music Festival", "date": "2023-08-15", "time": "12:00", "location": "Central Park, New York", "description": "A celebration of music..."},
-    {"name": "Charity Run", "date": "2023-05-01", "time": "07:00", "location": "Los Angeles City Center", "description": "A 5K run to raise funds..."},
-    {"name": "Science Fair", "date": "2023-07-10", "time": "10:00", "location": "Science Museum, London", "description": "Engage with scientific discoveries..."}
+    {"name": "Tech Conference 2023", "date": "2023-11-20", "time": "09:00", "location": "Silicon Valley Convention Center", "description": "Join industry leaders...", "event_type": "Networking"},
+    {"name": "Music Festival", "date": "2023-08-15", "time": "12:00", "location": "Central Park, New York", "description": "A celebration of music...", "event_type": "Other"},
+    {"name": "Concrete Canoe General Meeting", "date": "2023-05-01", "time": "07:00", "location": "Bahen Centre", "description": "General meeting open to the public", "event_type": "Club"},
+    {"name": "MAT188 Tutoring", "date": "2023-07-10", "time": "10:00", "location": "Zoom", "description": "Running through Mat188 homework problems", "event_type": "Tutoring"}
 ]
 
 with app.app_context():

@@ -33,16 +33,21 @@
     position: relative;
     }
     button {
-        background: #a2b7ca;
-        border-radius: 15px;
-        flex-shrink: 0;
-        width: auto;
-        height: auto;
-        position: relative;
-        color: #202e44;
-        text-align: center;
-        font: 700 28px "Ubuntu Mono", sans-serif;
-        padding: 10px 20px 10px 20px;
+    background: #a2b7ca;
+    border-radius: 15px;
+    flex-shrink: 0;
+    width: auto;
+    height: auto;
+    position: relative;
+    color: #202e44;
+    text-align: center;
+    font: 700 28px "Ubuntu Mono", sans-serif;
+    padding: 10px 20px 10px 20px;
+    }
+    .required::before {
+    color: red;
+    font: 400 25px "Ubuntu Condensed", sans-serif;
+    content: "* ";  
     }
 </style>
 {% endblock %}

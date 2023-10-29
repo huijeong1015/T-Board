@@ -26,26 +26,26 @@
           </div>
         </div>
         <div class="bottom">      
-          <form action="/event_post" method="POST">
+          <form action="/event_post" method="POST" class="event-post-form">
             <div class="input">
               <!-- <div class="input-name"></div> -->
               <input type = "text" id="input-name" name="input-name" placeholder="Enter name of the event">
-              <div class="input-txt">Name of the event</div>
+              <div class="input-txt required">Name of the event</div>
             </div>
             <div class="input">
               <!-- <div class="input-date"></div> -->
               <input type = "date" id="input-date" name="input-date" placeholder="Specify date of the event">
-              <div class="input-txt">Date of the event</div>
+              <div class="input-txt required">Date of the event</div>
             </div>
             <div class="input">
               <!-- <div class="input-time"></div> -->
               <input type = "time" id="input-time" name="input-time" placeholder="Specify time of the event">
-              <div class="input-txt">Time of the event</div>
+              <div class="input-txt required">Time of the event</div>
             </div>
             <div class="input">
               <!-- <div class="input-loc"></div> -->
               <input type = "text" id="input-loc" name="input-loc" placeholder="Specify location of the event">
-              <div class="input-txt">Location of the event</div>
+              <div class="input-txt required">Location of the event</div>
             </div>
             <div class="input">
               <!-- <div class="input-reg"></div> -->
@@ -55,9 +55,9 @@
             <div class="input">
               <!-- <div class="input-desc"></div> -->
               <textarea id="input-desc" name="input-desc" placeholder="Add description of the event"></textarea>
-              <div class="input-txt">Description</div>
+              <div class="input-txt required">Description</div>
             </div>
-              <button class="btn-register">SUBMIT</button>
+              <button class="btn-submit">SUBMIT</button>
           </form>
         </div>
       </div>
@@ -96,6 +96,14 @@
   align-items: center;
   justify-content: flex-start;
   position: relative;
+}
+.event-post-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
 }
 .top {
   display: flex;

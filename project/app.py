@@ -8,6 +8,29 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 from sqlalchemy.sql import func
 from project.db import *
+import random #Temporary until we link event type frontend -> backend 
+
+#List of supported event types
+event_types = ["Tutoring", "Sports", "Club", "Networking", "Other"]  
+
+#List of supported profile picture: 
+Profile_pictures = ["default", "Surprised", "LaughingCrying", "Laughing", "Happy", "Excited", "Cool"]
+
+#Temp helper functions
+def get_user_interests():
+    username=session.get('username')
+    user = User.query.filter_by(username=username).first()
+    return user.interests
+
+def get_user_email():
+    username=session.get('username')
+    user = User.query.filter_by(username=username).first()
+    return user.email
+
+def get_user_profile_picture():
+    username=session.get('username')
+    user = User.query.filter_by(username=username).first()
+    return user.profile_picture
 
 app.config['SECRET_KEY'] = os.urandom(24)
 
@@ -69,7 +92,7 @@ def register():
             flash(error)
         else:
             #TODO: Need to send email verification
-            new_user = User(username=username, password=password, email=email, interests=interests) 
+            new_user = User(username=username, password=password, email=email, interests=interests, profile_picture = "default") 
             db.session.add(new_user)
             db.session.commit()
             return redirect(url_for('login'))
@@ -77,11 +100,11 @@ def register():
 
 @app.route('/bookmark/')
 def bookmark():
-    return render_template('bookmark.html')
+    return render_template('bookmark.html', profile_picture=get_user_profile_picture())
 
 @app.route('/event_post/')
 def event_post():
-    return render_template('event_post.html')
+    return render_template('event_post.html', profile_picture=get_user_profile_picture())
 
 @app.route('/main_dashboard/', methods=['GET', 'POST'])
 def main_dashboard():
@@ -90,9 +113,9 @@ def main_dashboard():
     if request.method == "POST":
         if request.form.get('event-details') != None:
             event_id = int(request.form['event-details'])
-            event = Event.query.filter_by(id=event_id).first()              
-            return render_template('event_details.html', event=event.__dict__)
-    return render_template('main_dashboard.html', events=result)
+            event = Event.query.filter_by(id=event_id).first()
+            return render_template('event_details.html', event=event.__dict__, profile_picture=get_user_profile_picture())
+    return render_template('main_dashboard.html', events=result, profile_picture=get_user_profile_picture())
 
 @app.route('/search_dashboard/', methods=['POST'])
 def searchEvent():
@@ -101,43 +124,40 @@ def searchEvent():
     results = []
     if keyword:
         results = Event.query.filter(Event.name.contains(keyword)).all()
-    return render_template('main_dashboard.html', events=results)
-
-def get_user_interests():
-    username=session.get('username')
-    user = User.query.filter_by(username=username).first()
-    return user.interests
-
-def get_user_email():
-    username=session.get('username')
-    user = User.query.filter_by(username=username).first()
-    return user.email
+    return render_template('main_dashboard.html', events=results, profile_picture=get_user_profile_picture())
 
 @app.route('/my_account/event_history/')
 def my_account_event_history():
-    return render_template('my_account_eventhistory.html', username=session.get('username'), interests=get_user_interests())
+    return render_template('my_account_eventhistory.html', username=session.get('username'), 
+                           interests=get_user_interests(), profile_picture=get_user_profile_picture())
 
 @app.route('/my_account/friends/')
 def my_account_friends():
-    return render_template('my_account_friends.html', username=session.get('username'), interests=get_user_interests())
+    return render_template('my_account_friends.html', username=session.get('username'), 
+                           interests=get_user_interests(), profile_picture=get_user_profile_picture())
 
 @app.route('/my_account/myevents/')
 def my_account_myevents():
     sql = text("SELECT * FROM events;")
     result = db.session.execute(sql)
-    return render_template('my_account_myevents.html', username=session.get('username'), interests=get_user_interests(), myevents=result)
+    return render_template('my_account_myevents.html', username=session.get('username'), interests=get_user_interests(), 
+                           myevents=result, profile_picture=get_user_profile_picture())
 
 @app.route('/my_account/notification/')
 def my_account_notification():
-    return render_template('my_account_notification.html', username=session.get('username'), interests=get_user_interests())
+    return render_template('my_account_notification.html', username=session.get('username'), 
+                           interests=get_user_interests(), profile_picture=get_user_profile_picture())
 
 @app.route('/my_account/settings/')
 def my_account_settings():
-    return render_template('my_account_settings.html', username=session.get('username'), interests=get_user_interests())
+    return render_template('my_account_settings.html', username=session.get('username'), 
+                           interests=get_user_interests(), profile_picture=get_user_profile_picture())
 
 @app.route('/my_account/edit_profile/')
 def my_account_edit_profile():
-    return render_template('my_account_edit_profile.html', username=session.get('username'), email=get_user_email(), password=session.get('password'), interests=get_user_interests())
+    return render_template('my_account_edit_profile.html', username=session.get('username'), 
+                           email=get_user_email(), password=session.get('password'), interests=get_user_interests(),
+                           profile_picture=get_user_profile_picture())
 
 @app.route('/dataset')
 def show_events():
@@ -162,10 +182,12 @@ def add_event():
     event_time= request.form["input-time"]
     event_location= request.form["input-loc"]
     event_description= request.form["input-desc"]
-    new_event = Event(name= event_name, date =event_date, time= event_time, location= event_location, description= event_description)
+
+    #TEMP: Random event type assigned to new events. remove once front end is complete
+    new_event = Event(name=event_name, date=event_date, time=event_time, location=event_location, description=event_description, event_type=random.choice(event_types))
     db.session.add(new_event)
     db.session.commit()
-    return render_template('event_post.html')
+    return render_template('event_post.html', profile_picture=get_user_profile_picture())
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -174,15 +196,3 @@ def page_not_found(e):
 @app.errorhandler(500)
 def internal_server_error(e):
     return render_template('500.html'), 500
-
-# I am starting to question about whether it needs to route or not 
-# @app.route('/get_bookmark_state/<int:event_id>', methods=['POST'])
-def get_bookmark_state(event_id):
-    event = Event.query.get(event_id)
-    if event:
-        event.bookmarked = not event.bookmarked
-        db.session.commit()
-        return jsonify({'bookmarked': event.bookmarked})
-    else:
-        return jsonify({'can not bookmarked': "no event"})
-

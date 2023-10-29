@@ -50,10 +50,9 @@ These are the deployment instructions for our internal team. We will update this
 2. Activate your virtual environment
 3. Download all requirements using 'pip install -r requirements.txt'
 4. Set the environment variable to the app.py file (e.g. set FLASK_APP = project/app.py for windows)
-5. Delete events.db and users.db 
-6. Run "python db.py"
-7. Run "python -m flask run"
-8. Paste local host address into browser of your choice
+5. Run "python db.py"
+6. Run "python -m flask run"
+7. Paste local host address into browser of your choice
 
 ## Contact Information
 * Hui Lee: huijeong.lee@mail.utoronto.ca    

@@ -78,6 +78,7 @@
             />
           </svg>
   
+          {% if profile_picture.lower() == "default" %}
           <svg
             class="account"
             width="76"
@@ -94,6 +95,16 @@
               fill="#D9D9D9"
             />
           </svg>
+          {% else %}
+            <img 
+              class="account"
+              src="{{ url_for('static', filename='profile_picture/' + profile_picture.lower() + '.png') }}" 
+              alt="Profile Picture" 
+              width="61"
+              height="61"
+              viewBox="0 0 61 61"
+            >
+          {% endif %}
         </div>
       </div>
       <div class="dashboard">

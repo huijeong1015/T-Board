@@ -18,22 +18,20 @@
       fill="#A2B7CA"
     />
   </svg>
-  <div class="input-frame">
-    <form action="/login/" method="post" class="form_group">
-      <div class="input">
-        <!-- <div class="input-id"></div> -->
-        <input type = "text" id="input-id" name="username" placeholder="Enter your username" required>
-        <div class="input-txt-white">Username</div>
-      </div>
-      <div class="input">
-        <!-- <div class="input-pwd"></div> -->
-        <input type = "text" id="input-pwd" name="password" placeholder="Enter your password" required>
-        <div class="input-txt-white">Password</div>
-      </div>
-      <div>
-          <button class="btn-login">LOGIN</button>
-      </div>
-  </div>
+  <form action="/login" method="post" class="form-group">
+    <div class="input">
+      <!-- <div class="input-id"></div> -->
+      <input type = "text" id="input-id" name="username" placeholder="Enter your username" required>
+      <div class="input-txt-white">Username</div>
+    </div>
+    <div class="input">
+      <!-- <div class="input-pwd"></div> -->
+      <input type = "password" id="input-pwd" name="password" placeholder="Enter your password" required>
+      <div class="input-txt-white">Password</div>
+    </div>
+    <div>
+        <button class="btn-login">LOGIN</button>
+    </div>
   </form>
   <div class="register">
     <div class="don-t-have-account">Don’t have account?</div>
@@ -68,14 +66,13 @@ body {
   position: relative;
   overflow: visible;
 }
-.input-frame {
+.form-group {
   display: flex;
   flex-direction: column;
-  position: relative;
-  justify-content: flex-start;
-  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
   gap: 20px;
-  width: 400px;
+  width: 350px;
 }
 #input-id {
   background: #ffffff;

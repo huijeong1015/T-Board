@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
@@ -35,7 +35,45 @@ def login():
                 return redirect(url_for('main_dashboard'))
 
     return render_template('login.html', error=error)
+    
+@app.route('/register/', methods=['GET', 'POST'])
+def register():
+    error = None
+    print("We are registering")
+    if request.method == 'POST':
+        username = request.form['input-id']
+        email = request.form['input-email']
+        confirm_email = request.form['input-confirm-email']
+        password = request.form['input-pwd']
+        confirm_password = request.form['input-confirm-pwd']
+        interests = request.form['input-interests']
 
+        username_check = User.query.filter_by(username=username).first()
+        email_check = User.query.filter_by(email=email).first()
+
+        # Perform validation checks on the form data
+        if not username or not email or not confirm_email or not password or not confirm_password:
+            error = 'All fields are required.'
+            flash(error)
+        elif email != confirm_email:
+            error = 'Emails do not match.'
+            flash(error)
+        elif password != confirm_password:
+            error = 'Passwords do not match.'
+            flash(error)
+        elif username_check is not None:
+            error = 'This Username is taken, please try a different one.'  
+            flash(error)
+        elif email_check is not None:
+            error = 'This email has already been used. Please return to the login page or use a different email'
+            flash(error)
+        else:
+            #TODO: Need to send email verification
+            new_user = User(username=username, password=password, email=email, interests=interests) 
+            db.session.add(new_user)
+            db.session.commit()
+            return redirect(url_for('login'))
+    return render_template('register.html')
 
 @app.route('/bookmark/')
 def bookmark():
@@ -118,41 +156,6 @@ def add_event():
     db.session.add(new_event)
     db.session.commit()
     return render_template('event_post.html')
-    
-@app.route('/register/', methods=['GET', 'POST'])
-def register():
-    error = None
-    print("We are registering")
-    if request.method == 'POST':
-        username = request.form['input-id']
-        email = request.form['input-email']
-        confirm_email = request.form['input-confirm-email']
-        password = request.form['input-pwd']
-        confirm_password = request.form['input-confirm-pwd']
-        interests = request.form['input-interests']
-
-        username_check = User.query.filter_by(username=username).first()
-        email_check = User.query.filter_by(email=email).first()
-
-        # Perform validation checks on the form data
-        if not username or not email or not confirm_email or not password or not confirm_password:
-            error = 'All fields are required.'
-        elif email != confirm_email:
-            error = 'Emails do not match.'
-        elif password != confirm_password:
-            error = 'Passwords do not match.'
-        elif username_check is not None:
-            error = 'This Username is taken, please try a different one.'  
-        elif email_check is not None:
-            error = 'This email has already been used. Please return to the login page or use a different email'
-        else:
-            #TODO: Need to send email verification
-            new_user = User(username=username, password=password, email=email, interests=interests) 
-            db.session.add(new_user)
-            db.session.commit()
-            return redirect(url_for('login'))
-
-    return render_template('register.html', error=error)
 
 @app.errorhandler(404)
 def page_not_found(e):

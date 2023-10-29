@@ -7,7 +7,7 @@
         <div class="frame-event">
           <div class="left">
             <!-- <img class="event-image" src="image-1.png" /> -->
-            <img src="{{ url_for('static', filename='event_photos/club.png') }}" alt="Image" class="image-1">
+            <img class="image-1" src="{{ url_for('static', filename='event_photos/' + event['event_type'].lower() + '.png') }}" alt="Event Image"/>
             <svg
               class="rating"
               width="220"
@@ -105,8 +105,7 @@
         <div class="frame-event">
           <div class="left">
             <!-- <img class="event-image" src="image-1.png" /> -->
-            <!-- <img src="{{ url_for('static', filename='event_photos/club.png') }}" alt="Image" class="image-1"> -->
-            <img src="{{ url_for('static', filename='project\static\event_photos\club.png') }}" alt="Image" class="image-1">
+            <img class="image-1" src="{{ url_for('static', filename='event_photos/' + event['event_type'].lower() + '.png') }}" alt="Event Image"/>
             <svg
               class="rating"
               width="220"
@@ -203,7 +202,7 @@
         <div class="frame-event">
           <div class="left">
             <!-- <img class="event-image" src="image-1.png" /> -->
-            <img src="{{ url_for('static', filename='event_photos/club.png') }}" alt="Image" class="image-1">
+            <img class="image-1" src="{{ url_for('static', filename='event_photos/' + event['event_type'].lower() + '.png') }}" alt="Event Image"/>
             <svg
               class="rating3"
               width="220"

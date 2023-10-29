@@ -47,7 +47,7 @@
         </div>
         <div class="middle">
           <div class="left">
-            <img class="image-1" src="event_photos/other.png"/>
+            <img class="image-1" src="{{ url_for('static', filename='event_photos/' + event['event_type'].lower() + '.png') }}" alt="Event Image"/>
             <div class="frame-btn2">
               <svg
                 class="btn-bookmark"

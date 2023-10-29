@@ -88,9 +88,10 @@ def main_dashboard():
     sql = text("SELECT * FROM events;")
     result = db.session.execute(sql)
     if request.method == "POST":
-        event_id = int(request.form['event-details'])
-        event = Event.query.filter_by(id=event_id).first()
-        return render_template('event_details.html', event=event.__dict__)
+        if request.form.get('event-details') != None:
+            event_id = int(request.form['event-details'])
+            event = Event.query.filter_by(id=event_id).first()
+            return render_template('event_details.html', event=event.__dict__)
     return render_template('main_dashboard.html', events=result)
 
 @app.route('/search_dashboard/', methods=['POST'])
@@ -100,7 +101,7 @@ def searchEvent():
     results = []
     if keyword:
         results = Event.query.filter(Event.name.contains(keyword)).all()
-    return render_template('search_dashboard.html', events=results)
+    return render_template('main_dashboard.html', events=results)
 
 def get_user_interests():
     username=session.get('username')

@@ -81,12 +81,26 @@
     </div>
   </div>
   <div class="frame-content">
-    <a href="{{ url_for('login') }}"> 
-      <button class="btn-logout">LOGOUT</button>
-    </a>
-    <a href="{{ url_for('my_account_edit_profile') }}">
-      <button class="btn-edit-profile">EDIT PROFILE</button>
-    </a>
+    <form class="form_edit_profile" action="/my_account/settings">
+      <div class="edit">
+        <div class="input-txt-white">Username: </div>
+        <input value="{{ username }}" type="text" class="input-txt">
+      </div>
+      <div class="edit">
+        <!-- <div class="input-email"></div> -->
+        <div class="input-txt-white">U of T Email: </div>
+        <input value="{{ email }}" type="text" class="input-txt">
+      </div>
+      <div class="edit">
+        <div class="input-txt-white">Password: </div>
+        <input value="{{ password }}" type="password" class="input-txt">
+      </div>
+      <div class="edit">
+        <div class="input-txt-white">Interests: </div>
+        <input value="{{ interests }}" type="text" class="input-txt">
+      </div>
+      <button class="btn-finish">FINISH EDIT</button>
+    </form>
   </div>
 </div>
 {% include "base_input.html" %}
@@ -192,6 +206,35 @@
 }
 .btn-logout {
   background: #d9d9d9;
+}
+.btn-edit {
+  background: transparent;
+  border: transparent;
+  width: fit-content;
+  height: fit-content;
+  padding: 0%;
+}
+.btn-finish {
+  align-self: center;
+  justify-self: center;
+}
+.edit {
+  display: flex;
+  flex-direction: row;
+}
+.input-txt-white {
+  align-self: center;
+  width: fit-content;
+  padding-right: 10px;
+  text-wrap: nowrap;
+}
+.form_edit_profile {
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  gap: 20px;
+  align-self: center;
+  width: 100%;
 }
 </style>
 {% endblock %}

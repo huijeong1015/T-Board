@@ -28,6 +28,7 @@ class Event(db.Model):
     time = db.Column(db.String(5), nullable=False)
     location = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
+    bookmarked = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return f"<Event {self.name}>"

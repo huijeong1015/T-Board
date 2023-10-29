@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash,jsonify
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
@@ -90,7 +90,7 @@ def main_dashboard():
     if request.method == "POST":
         if request.form.get('event-details') != None:
             event_id = int(request.form['event-details'])
-            event = Event.query.filter_by(id=event_id).first()
+            event = Event.query.filter_by(id=event_id).first()              
             return render_template('event_details.html', event=event.__dict__)
     return render_template('main_dashboard.html', events=result)
 
@@ -174,4 +174,15 @@ def page_not_found(e):
 @app.errorhandler(500)
 def internal_server_error(e):
     return render_template('500.html'), 500
+
+# I am starting to question about whether it needs to route or not 
+# @app.route('/get_bookmark_state/<int:event_id>', methods=['POST'])
+def get_bookmark_state(event_id):
+    event = Event.query.get(event_id)
+    if event:
+        event.bookmarked = not event.bookmarked
+        db.session.commit()
+        return jsonify({'bookmarked': event.bookmarked})
+    else:
+        return jsonify({'can not bookmarked': "no event"})
 

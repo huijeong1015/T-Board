@@ -51,11 +51,9 @@
         </div>
         <form>
             <div class="frame-event-btn">
-                <!-- id = "bookmark-icon" -->
                 <button class="btn-bookmark" id="bookmark-{{ event.id }}">
                     <svg
                         class="btn-bookmark"
-                        id = "bookmark-icon"
                         colored = "false"
                         width="27"
                         height="54"
@@ -70,7 +68,9 @@
                         />
                     </svg>
                 </button>
-                <script>
+
+                <!-- this is for the toggle in javascript -->
+                <!-- <script>
             const bookmarkIcon = document.getElementById("bookmark-icon");
             // let isClicked = false;
             if (bookmarkIcon.getAttribute("colored") === true) { //true needs color
@@ -93,31 +93,6 @@
               }
 
               localStorage.setItem("colored", bookmarkIcon.getAttribute("colored"));
-            }
-            );
-          </script> 
-                <!-- <script>
-            const bookmarkIcon = document.getElementById("bookmark-icon");
-            if (bookmarkIcon.getAttribute("colored") === true) { //true needs color
-                bookmarkIcon.querySelector("path").setAttribute("fill", "A34A4A");
-            } else {
-                    // always goes here 
-                bookmarkIcon.querySelector("path").setAttribute("fill", "red");
-            }
-          
-            bookmarkIcon.addEventListener("click", () => {
-            const isColored = bookmarkIcon.getAttribute("colored") === true;
-              if (isColored) {
-                //never in here 
-                bookmarkIcon.querySelector("path").setAttribute("fill", "none"); // Change the fill color when bookmarked
-                bookmarkIcon.setAttribute("colored", "false");
-              } else {
-                //goes in here
-                bookmarkIcon.querySelector("path").setAttribute("fill", "white"); // Revert to the original fill color when unbookmarked
-                bookmarkIcon.setAttribute("colored", "true");
-              }
-
-              localStorage.setItem("colored", bookmarkIcon.getAttribute("A34A4A"));
             }
             );
           </script>  -->
@@ -153,41 +128,6 @@
                 </button>
             </div>
         </form>
-          <!-- <script>
-            const buttons = document.querySelectorAll('.btn-bookmark');
-    
-            buttons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const eventId = button.id.split('-')[1];
-    
-                    fetch(`/toggle/${eventId}`, {
-                        method: 'POST'
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.message === 'Successfully colored') {
-                            const svg = button.querySelector('svg');
-                            svg.querySelector('path').setAttribute('fill', svg.getAttribute('fill') === 'none' ? 'A34A4A' : 'none');
-                        }
-                    });
-                });
-            });
-        </script> -->
-
-        <!-- <script>
-            const bookmarkIcon = document.getElementById("bookmark-icon");
-          
-            let isClicked = false;
-          
-            bookmarkIcon.addEventListener("click", () => {
-              isClicked = !isClicked;
-              if (isClicked) {
-                bookmarkIcon.querySelector("path").setAttribute("fill", "A34A4A"); // Change the fill color when bookmarked
-              } else {
-                bookmarkIcon.querySelector("path").setAttribute("fill", "#none"); // Revert to the original fill color when unbookmarked
-              }
-            });
-          </script>  -->
     </div>
 </div>
 {% include "base_event.html" %}

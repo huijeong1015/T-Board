@@ -1,6 +1,6 @@
 import pytest
 from pathlib import Path
-from project.main import app, db, Event
+from project.app import app, db, Event
 from flask import abort
 
 TEST_DB = "test.db"
@@ -39,6 +39,21 @@ def login(client, username, password):
         data=dict(username=username, password=password),
         follow_redirects=True,
     )
+
+# Weihang: Test that the empty login shouldn't redirect the user
+def test_empty_login(client):
+    """Test login with empty username and password."""
+    login_url = "/login/"
+    response = client.post(
+        login_url,
+        data=dict(username="", password=""),
+        follow_redirects=True
+    )
+
+    # Assert that the response URL is still the login URL, indicating the page hasn't changed
+    assert response.request.path == login_url
+
+
 
 # Hui: Test the my account page contains user's id and their interests
 def test_my_account_page_contains_userinfo(client):

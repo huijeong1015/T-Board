@@ -16,6 +16,21 @@ event_types = ["Tutoring", "Sports", "Club", "Networking", "Other"]
 #List of supported profile picture: 
 Profile_pictures = ["default", "Surprised", "LaughingCrying", "Laughing", "Happy", "Excited", "Cool"]
 
+#Temp helper functions
+def get_user_interests():
+    username=session.get('username')
+    user = User.query.filter_by(username=username).first()
+    return user.interests
+
+def get_user_email():
+    username=session.get('username')
+    user = User.query.filter_by(username=username).first()
+    return user.email
+
+def get_user_profile_picture():
+    username=session.get('username')
+    user = User.query.filter_by(username=username).first()
+    return user.profile_picture
 
 app.config['SECRET_KEY'] = os.urandom(24)
 
@@ -85,11 +100,11 @@ def register():
 
 @app.route('/bookmark/')
 def bookmark():
-    return render_template('bookmark.html')
+    return render_template('bookmark.html', profile_picture=get_user_profile_picture())
 
 @app.route('/event_post/')
 def event_post():
-    return render_template('event_post.html')
+    return render_template('event_post.html', profile_picture=get_user_profile_picture())
 
 @app.route('/main_dashboard/', methods=['GET', 'POST'])
 def main_dashboard():
@@ -99,8 +114,8 @@ def main_dashboard():
         if request.form.get('event-details') != None:
             event_id = int(request.form['event-details'])
             event = Event.query.filter_by(id=event_id).first()
-            return render_template('event_details.html', event=event.__dict__)
-    return render_template('main_dashboard.html', events=result)
+            return render_template('event_details.html', event=event.__dict__, profile_picture=get_user_profile_picture())
+    return render_template('main_dashboard.html', events=result, profile_picture=get_user_profile_picture())
 
 @app.route('/search_dashboard/', methods=['POST'])
 def searchEvent():
@@ -109,22 +124,7 @@ def searchEvent():
     results = []
     if keyword:
         results = Event.query.filter(Event.name.contains(keyword)).all()
-    return render_template('main_dashboard.html', events=results)
-
-def get_user_interests():
-    username=session.get('username')
-    user = User.query.filter_by(username=username).first()
-    return user.interests
-
-def get_user_email():
-    username=session.get('username')
-    user = User.query.filter_by(username=username).first()
-    return user.email
-
-def get_user_profile_picture():
-    username=session.get('username')
-    user = User.query.filter_by(username=username).first()
-    return user.profile_picture
+    return render_template('main_dashboard.html', events=results, profile_picture=get_user_profile_picture())
 
 @app.route('/my_account/event_history/')
 def my_account_event_history():
@@ -187,7 +187,7 @@ def add_event():
     new_event = Event(name=event_name, date=event_date, time=event_time, location=event_location, description=event_description, event_type=random.choice(event_types))
     db.session.add(new_event)
     db.session.commit()
-    return render_template('event_post.html')
+    return render_template('event_post.html', profile_picture=get_user_profile_picture())
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -196,4 +196,3 @@ def page_not_found(e):
 @app.errorhandler(500)
 def internal_server_error(e):
     return render_template('500.html'), 500
-

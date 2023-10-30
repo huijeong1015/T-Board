@@ -46,6 +46,7 @@ def test_my_account_page_contains_userinfo(client):
     rv = client.get("/my_account/myevents")
     assert "HELLO, {:s}!".format(app.config['USERNAME']).encode() in rv.data
     assert "Interests: {:s}".format(app.config['INTERESTS']).encode() in rv.data
+    
 
 # Jennifer: checking if result of search contains the input keyword
 def test_search_event_keywords(client):
@@ -85,6 +86,8 @@ def test_error_handling_500(client):
     assert response.status_code == 500 
     assert b"Internal Server Error" in response.data
 
+
+
 #An: Attempted to generate errors and injections to the database
 def test_injection(client):
     # Attempted to inject with raw SQL language
@@ -98,3 +101,18 @@ def test_injection(client):
     
     # Ensure the sample event is present in the response
     assert "T-Board App Grand Release Press Conference", response.data.decode()
+
+#Ghamr: ensure that added events show up on the main dashboard
+def test_event_post(client):
+    login(client, app.config['USERNAME'], app.config['PASSWORD'])
+    rv = client.post(
+        "/event_post",
+        data=dict(event_name = "test event name", event_date="01/01/2030", time = "02:20", location="test location", description = "test event description"),
+        follow_redirects=True,
+    )
+    assert b"no event added" not in rv.data
+    assert b"test event name" in rv.data
+    assert b"01/01/2030" in rv.data
+    assert "02:20" in rv.data
+    assert "test location" in rv.data
+    assert "test event description" in rv.data

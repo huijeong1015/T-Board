@@ -46,7 +46,6 @@ def test_my_account_page_contains_userinfo(client):
     rv = client.get("/my_account/myevents")
     assert "HELLO, {:s}!".format(app.config['USERNAME']).encode() in rv.data
     assert "Interests: {:s}".format(app.config['INTERESTS']).encode() in rv.data
-    
 
 # Jennifer: checking if result of search contains the input keyword
 def test_search_event_keywords(client):
@@ -85,8 +84,6 @@ def test_error_handling_500(client):
     
     assert response.status_code == 500 
     assert b"Internal Server Error" in response.data
-
-
 
 #An: Attempted to generate errors and injections to the database
 def test_injection(client):

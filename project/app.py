@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, render_template_string
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
@@ -8,6 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 from sqlalchemy.sql import func
 from project.db import *
+
 
 app.config['SECRET_KEY'] = os.urandom(24)
 
@@ -150,11 +151,6 @@ def show_events():
     # You might return events as a string or JSON, or render them in a template
     return str(events)
 
-@app.route('/users')
-def show_users():
-    users = User.query.all()
-    return render_template('users.html', users=users)
-
 @app.route('/event_post', methods=['POST'])
 def add_event():
     event_name= request.form["input-name"]
@@ -175,3 +171,41 @@ def page_not_found(e):
 def internal_server_error(e):
     return render_template('500.html'), 500
 
+
+### friends
+
+def dfs(graph, start, k):
+    visited, stack = set(), [(start, 0)]
+    recommendations = set()
+    while stack:
+        vertex, depth = stack.pop()
+        if depth <= k and vertex not in visited:
+            visited.add(vertex)
+            if depth > 0:  # Exclude the start user
+                recommendations.add(vertex)
+            stack.extend((friend, depth + 1) for friend in graph[vertex] - visited)
+    return recommendations
+
+@app.route('/users')
+def show_users():
+    users = User.query.all()
+    user_data = {user.username: user.friends.split(',') if user.friends else [] for user in users}
+    user_list_html = '<ul>'
+    for username, friends in user_data.items():
+        user_list_html += f'<li>{username}: Friends - {", ".join(friends) if friends else "None"}</li>'
+    user_list_html += '</ul>'
+    return render_template_string(f"<h1>Users and Their Friends</h1>{user_list_html}")
+
+@app.route('/recommendations')
+def friend_recommendations():
+    k = int(request.args.get('k', 2))
+    users = User.query.all()
+    user_data = {user.username: set(user.friends.split(',')) if user.friends else set() for user in users}
+    
+    recommendations_html = '<ul>'
+    for username in user_data:
+        recommendations = dfs(user_data, username, k)
+        recommendations_html += f'<li>{username}: Recommendations - {", ".join(recommendations)}</li>'
+    recommendations_html += '</ul>'
+    
+    return render_template_string(f"<h1>Friend Recommendations</h1>{recommendations_html}")

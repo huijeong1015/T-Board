@@ -25,6 +25,9 @@ class Event(db.Model):
     location = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
 
+    def __repr__(self):
+        return f"<Event {self.name}>"
+
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -33,6 +36,9 @@ class User(db.Model):
     email = db.Column(db.String(128), unique=True, nullable=False)
     interests = db.Column(db.String(255), nullable=True)
     friends = db.Column(db.String(255), default="")
+
+    def __repr__(self):
+        return '<User {}>'.format(self.username)
 
 # Sample data
 sample_users = [

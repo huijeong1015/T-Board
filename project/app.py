@@ -85,6 +85,7 @@ def event_post():
 
 @app.route('/main_dashboard/', methods=['GET', 'POST'])
 def main_dashboard():
+    error_msg = ""
     sql = text("SELECT * FROM events;")
     result = db.session.execute(sql)
     if request.method == "POST":
@@ -92,16 +93,19 @@ def main_dashboard():
             event_id = int(request.form['event-details'])
             event = Event.query.filter_by(id=event_id).first()
             return render_template('event_details.html', event=event.__dict__)
-    return render_template('main_dashboard.html', events=result)
+    return render_template('main_dashboard.html', events=result, error_msg=error_msg)
 
 @app.route('/search_dashboard/', methods=['POST'])
 def searchEvent():
     keyword=request.form["input-search"]
+    error_msg = ""
     #some error handling before results are used
     results = []
     if keyword:
         results = Event.query.filter(Event.name.contains(keyword)).all()
-    return render_template('main_dashboard.html', events=results)
+    if len(results) == 0:
+        error_msg = "We couldn't find any matches for \"" + keyword + "\"."
+    return render_template('main_dashboard.html', events=results, error_msg=error_msg)
 
 def get_user_interests():
     username=session.get('username')

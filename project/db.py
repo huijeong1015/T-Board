@@ -3,23 +3,19 @@ from flask_sqlalchemy import SQLAlchemy
 from pathlib import Path
 
 # Configuration
-USERS_DATABASE = "users.db"
-EVENTS_DATABASE = "events.db"
-basedir = Path(__file__).resolve().parent
-
-# Setting up Flask app instance
 app = Flask(__name__)
+basedir = Path(__file__).resolve().parent
+USERS_DATABASE = f"sqlite:///{Path(basedir).joinpath('users.db')}"
+EVENTS_DATABASE = f"sqlite:///{Path(basedir).joinpath('events.db')}"
 
-app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{Path(basedir).joinpath(EVENTS_DATABASE)}"
-app.config['SQLALCHEMY_BINDS'] = {
-    'users': f"sqlite:///{Path(basedir).joinpath(USERS_DATABASE)}",
-    'events': f"sqlite:///{Path(basedir).joinpath(EVENTS_DATABASE)}"
-}
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
+app.config.update(
+    SQLALCHEMY_DATABASE_URI=EVENTS_DATABASE,
+    SQLALCHEMY_BINDS={'users': USERS_DATABASE, 'events': EVENTS_DATABASE},
+    SQLALCHEMY_TRACK_MODIFICATIONS=False
+)
 db = SQLAlchemy(app)
 
-# Model for events
+# Models
 class Event(db.Model):
     __tablename__ = 'events'
     id = db.Column(db.Integer, primary_key=True)
@@ -29,22 +25,21 @@ class Event(db.Model):
     location = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
 
-    def __repr__(self):
-        return f"<Event {self.name}>"
-
-# Model for users
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), unique=True, nullable=False)
-    interests = db.Column(db.String(255), nullable=True)  
-    def __repr__(self):
-        return '<User {}>'.format(self.username)
+    interests = db.Column(db.String(255), nullable=True)
+    friends = db.Column(db.String(255), default="")
 
+# Sample data
 sample_users = [
-    {"username": "admin", "password": "adminpass", "email": "admin@mail.utoronto.ca", "interests": "Being an administrator"}
+    {"username": "admin", "password": "adminpass", "email": "admin@mail.utoronto.ca", "interests": "Being an administrator"},
+    {"username": "a", "password": "password_a", "email": "a@mail.com", "interests": "Interests A", "friends": "b"},
+    {"username": "b", "password": "password_b", "email": "b@mail.com", "interests": "Interests B", "friends": "a,c"},
+    {"username": "c", "password": "password_c", "email": "c@mail.com", "interests": "Interests C", "friends": "b"}
 ]
 
 sample_events = [
@@ -54,29 +49,11 @@ sample_events = [
     {"name": "Science Fair", "date": "2023-07-10", "time": "10:00", "location": "Science Museum, London", "description": "Engage with scientific discoveries..."}
 ]
 
-event_types = [
-    {'name': 'Networking'}, 
-    {'name': 'Sports'}, 
-    {'name': 'Tutoring'}, 
-    {'name': 'Club'},
-    {'name': 'Others'}
-]
-
+# Database initialization
 with app.app_context():
-    # Create tables
     db.create_all()
-
-    # Populate events table
     if not Event.query.first():
-        for event_data in sample_events:
-            event = Event(**event_data)
-            db.session.add(event)
-        db.session.commit()  
-
-    # Populate users table
+        db.session.bulk_insert_mappings(Event, sample_events)
     if not User.query.first():
-        for user_data in sample_users:
-            user = User(**user_data)
-            db.session.add(user)
-        db.session.commit() 
-
+        db.session.bulk_insert_mappings(User, sample_users)
+    db.session.commit()

@@ -81,7 +81,7 @@ def bookmark():
 
 @app.route('/event_post/')
 def event_post():
-    return render_template('event_post.html')
+    return render_template('event_post.html', event_types=event_types)
 
 @app.route('/main_dashboard/', methods=['GET', 'POST'])
 def main_dashboard():
@@ -162,7 +162,7 @@ def add_event():
     event_time= request.form["input-time"]
     event_location= request.form["input-loc"]
     event_description= request.form["input-desc"]
-    new_event = Event(name= event_name, date =event_date, time= event_time, location= event_location, description= event_description)
+    new_event = Event(name=event_name, date=event_date, time=event_time, location=event_location, description=event_description)
     db.session.add(new_event)
     db.session.commit()
     return render_template('event_post.html')

@@ -84,7 +84,7 @@ def register():
         elif password != confirm_password:
             error = "Passwords do not match."
             flash(error)
-        elif password_strength != "Strong":
+        elif password_strength != "strong":
             error = f"Password strength is {password_strength}. Please use a stronger password."
             flash(error)
         elif username_check is not None:
@@ -111,11 +111,11 @@ def check_password_strength(password):
     has_special = any(not char.isalnum() for char in password)
 
     if length >= 8 and has_upper and has_lower and has_digit and has_special:
-        return "Strong"
+        return "strong"
     elif length >= 6 and has_upper and has_lower and has_digit:
-        return "Medium"
+        return "medium"
     else:
-        return "Weak"
+        return "weak"
 
 
 @app.route("/bookmark/")

@@ -1,6 +1,8 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from pathlib import Path
+from werkzeug.security import generate_password_hash
+
 
 # Configuration
 USERS_DATABASE = "users.db"
@@ -55,6 +57,9 @@ class User(db.Model):
     interests = db.Column(db.String(255), nullable=True)
     friends = db.relationship('User', secondary=user_friends, primaryjoin=(user_friends.c.user_id == id), secondaryjoin=(user_friends.c.friend_id == id), backref=db.backref('friends_ref', lazy='dynamic'))
 
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
@@ -80,10 +85,10 @@ with app.app_context():
 
     # Populate users table, set up friendships, and add users to events
     if not User.query.first():
-        admin = User(username="admin", password="adminpass", email="admin@mail.utoronto.ca", interests="Being an administrator")
-        user_a = User(username="user_a", password="password_a", email="a@mail.com", interests="Interests A")
-        user_b = User(username="user_b", password="password_b", email="b@mail.com", interests="Interests B")
-        user_c = User(username="user_c", password="password_c", email="c@mail.com", interests="Interests C")
+        admin = User(username="admin", password=generate_password_hash("adminpass"), email="admin@mail.utoronto.ca", interests="Being an administrator")
+        user_a = User(username="user_a", password=generate_password_hash("password_a"), email="a@mail.com", interests="Interests A")
+        user_b = User(username="user_b", password=generate_password_hash("password_b"), email="b@mail.com", interests="Interests B")
+        user_c = User(username="user_c", password=generate_password_hash("password_c"), email="c@mail.com", interests="Interests C")
 
         # Setting up friendships
         user_a.friends.append(user_b)  # a and b are friends

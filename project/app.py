@@ -8,6 +8,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 from sqlalchemy.sql import func
 from project.db import *
+from werkzeug.security import check_password_hash
+
 
 
 app.config['SECRET_KEY'] = os.urandom(24)
@@ -28,7 +30,7 @@ def login():
             user = User.query.filter_by(username=username).first()
             if user is None:
                 error = f'No user found with username: {username}'
-            elif user.password != password:  # Directly comparing the plaintext password
+            elif not check_password_hash(user.password, password):
                 error = 'Password does not match for the provided username.'
             else:
                 # Start a user session
@@ -69,11 +71,12 @@ def register():
             error = 'This email has already been used. Please return to the login page or use a different email'
             flash(error)
         else:
-            #TODO: Need to send email verification
-            new_user = User(username=username, password=password, email=email, interests=interests) 
+            new_user = User(username=username, email=email, interests=interests)
+            new_user.set_password(password)  # Hash the password
             db.session.add(new_user)
             db.session.commit()
             return redirect(url_for('login'))
+
     return render_template('register.html')
 
 @app.route('/bookmark/')

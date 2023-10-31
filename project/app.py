@@ -9,6 +9,7 @@ from sqlalchemy import text
 from sqlalchemy.sql import func
 from project.db import *
 from werkzeug.security import check_password_hash
+import re
 
 
 
@@ -42,7 +43,6 @@ def login():
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
     error = None
-    print("We are registering")
     if request.method == 'POST':
         username = request.form['input-id']
         email = request.form['input-email']
@@ -51,8 +51,12 @@ def register():
         confirm_password = request.form['input-confirm-pwd']
         interests = request.form['input-interests']
 
+        # Check if username or email is already taken
         username_check = User.query.filter_by(username=username).first()
         email_check = User.query.filter_by(email=email).first()
+
+        # Password strength check
+        password_strength = check_password_strength(password)
 
         # Perform validation checks on the form data
         if not username or not email or not confirm_email or not password or not confirm_password:
@@ -64,11 +68,14 @@ def register():
         elif password != confirm_password:
             error = 'Passwords do not match.'
             flash(error)
+        elif password_strength != "Strong":
+            error = f'Password strength is {password_strength}. Please use a stronger password.'
+            flash(error)
         elif username_check is not None:
-            error = 'This Username is taken, please try a different one.'  
+            error = 'This Username is taken, please try a different one.'
             flash(error)
         elif email_check is not None:
-            error = 'This email has already been used. Please return to the login page or use a different email'
+            error = 'This email has already been used. Please return to the login page or use a different email.'
             flash(error)
         else:
             new_user = User(username=username, email=email, interests=interests)
@@ -78,6 +85,20 @@ def register():
             return redirect(url_for('login'))
 
     return render_template('register.html')
+
+def check_password_strength(password):
+    length = len(password)
+    has_upper = any(char.isupper() for char in password)
+    has_lower = any(char.islower() for char in password)
+    has_digit = any(char.isdigit() for char in password)
+    has_special = any(not char.isalnum() for char in password)
+
+    if length >= 8 and has_upper and has_lower and has_digit and has_special:
+        return "Strong"
+    elif length >= 6 and has_upper and has_lower and has_digit:
+        return "Medium"
+    else:
+        return "Weak"
 
 @app.route('/bookmark/')
 def bookmark():

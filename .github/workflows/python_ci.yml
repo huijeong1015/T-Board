@@ -25,7 +25,7 @@ jobs:
         pip install -r requirements.txt  # Install project dependencies
 
     - name: Run tests
-      run: pytest /test/test_app.py  # Run the tests
+      run: pytest tests/test_app.py  # Run the tests
 
     - name: Run black (reformat code)
       run: black .  # Automatically reformat the code according to black's standards

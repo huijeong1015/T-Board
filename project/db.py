@@ -12,64 +12,101 @@ basedir = Path(__file__).resolve().parent
 # Setting up Flask app instance
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{Path(basedir).joinpath(EVENTS_DATABASE)}"
-app.config['SQLALCHEMY_BINDS'] = {
-    'users': f"sqlite:///{Path(basedir).joinpath(USERS_DATABASE)}",
-    'events': f"sqlite:///{Path(basedir).joinpath(EVENTS_DATABASE)}"
+app.config[
+    "SQLALCHEMY_DATABASE_URI"
+] = f"sqlite:///{Path(basedir).joinpath(EVENTS_DATABASE)}"
+app.config["SQLALCHEMY_BINDS"] = {
+    "users": f"sqlite:///{Path(basedir).joinpath(USERS_DATABASE)}",
+    "events": f"sqlite:///{Path(basedir).joinpath(EVENTS_DATABASE)}",
 }
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
 # Association table for many-to-many relationship between users and events
-attendees = db.Table('attendees',
-    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
-    db.Column('event_id', db.Integer, db.ForeignKey('events.id'), primary_key=True)
+attendees = db.Table(
+    "attendees",
+    db.Column("user_id", db.Integer, db.ForeignKey("users.id"), primary_key=True),
+    db.Column("event_id", db.Integer, db.ForeignKey("events.id"), primary_key=True),
 )
 
 # Association table for self-referential many-to-many relationship (friends)
-user_friends = db.Table('user_friends',
-    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
-    db.Column('friend_id', db.Integer, db.ForeignKey('users.id'), primary_key=True)
+user_friends = db.Table(
+    "user_friends",
+    db.Column("user_id", db.Integer, db.ForeignKey("users.id"), primary_key=True),
+    db.Column("friend_id", db.Integer, db.ForeignKey("users.id"), primary_key=True),
 )
+
 
 # Model for events
 class Event(db.Model):
-    __tablename__ = 'events'
+    __tablename__ = "events"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     date = db.Column(db.String(10), nullable=False)
     time = db.Column(db.String(5), nullable=False)
     location = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    attendees = db.relationship('User', secondary=attendees, backref=db.backref('events', lazy='dynamic'))
+    attendees = db.relationship(
+        "User", secondary=attendees, backref=db.backref("events", lazy="dynamic")
+    )
 
     def __repr__(self):
         return f"<Event {self.name}>"
 
+
 # Model for users
 class User(db.Model):
-    __tablename__ = 'users'
+    __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), unique=True, nullable=False)
     interests = db.Column(db.String(255), nullable=True)
-    friends = db.relationship('User', secondary=user_friends, primaryjoin=(user_friends.c.user_id == id), secondaryjoin=(user_friends.c.friend_id == id), backref=db.backref('friends_ref', lazy='dynamic'))
+    friends = db.relationship(
+        "User",
+        secondary=user_friends,
+        primaryjoin=(user_friends.c.user_id == id),
+        secondaryjoin=(user_friends.c.friend_id == id),
+        backref=db.backref("friends_ref", lazy="dynamic"),
+    )
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
     def __repr__(self):
-        return '<User {}>'.format(self.username)
-
+        return "<User {}>".format(self.username)
 
 
 sample_events = [
-    {"name": "Tech Conference 2023", "date": "2023-11-20", "time": "09:00", "location": "Silicon Valley Convention Center", "description": "Join industry leaders..."},
-    {"name": "Music Festival", "date": "2023-08-15", "time": "12:00", "location": "Central Park, New York", "description": "A celebration of music..."},
-    {"name": "Charity Run", "date": "2023-05-01", "time": "07:00", "location": "Los Angeles City Center", "description": "A 5K run to raise funds..."},
-    {"name": "Science Fair", "date": "2023-07-10", "time": "10:00", "location": "Science Museum, London", "description": "Engage with scientific discoveries..."}
+    {
+        "name": "Tech Conference 2023",
+        "date": "2023-11-20",
+        "time": "09:00",
+        "location": "Silicon Valley Convention Center",
+        "description": "Join industry leaders...",
+    },
+    {
+        "name": "Music Festival",
+        "date": "2023-08-15",
+        "time": "12:00",
+        "location": "Central Park, New York",
+        "description": "A celebration of music...",
+    },
+    {
+        "name": "Charity Run",
+        "date": "2023-05-01",
+        "time": "07:00",
+        "location": "Los Angeles City Center",
+        "description": "A 5K run to raise funds...",
+    },
+    {
+        "name": "Science Fair",
+        "date": "2023-07-10",
+        "time": "10:00",
+        "location": "Science Museum, London",
+        "description": "Engage with scientific discoveries...",
+    },
 ]
 
 with app.app_context():
@@ -85,10 +122,30 @@ with app.app_context():
 
     # Populate users table, set up friendships, and add users to events
     if not User.query.first():
-        admin = User(username="admin", password=generate_password_hash("adminpass"), email="admin@mail.utoronto.ca", interests="Being an administrator")
-        user_a = User(username="user_a", password=generate_password_hash("password_a"), email="a@mail.com", interests="Interests A")
-        user_b = User(username="user_b", password=generate_password_hash("password_b"), email="b@mail.com", interests="Interests B")
-        user_c = User(username="user_c", password=generate_password_hash("password_c"), email="c@mail.com", interests="Interests C")
+        admin = User(
+            username="admin",
+            password=generate_password_hash("adminpass"),
+            email="admin@mail.utoronto.ca",
+            interests="Being an administrator",
+        )
+        user_a = User(
+            username="user_a",
+            password=generate_password_hash("password_a"),
+            email="a@mail.com",
+            interests="Interests A",
+        )
+        user_b = User(
+            username="user_b",
+            password=generate_password_hash("password_b"),
+            email="b@mail.com",
+            interests="Interests B",
+        )
+        user_c = User(
+            username="user_c",
+            password=generate_password_hash("password_c"),
+            email="c@mail.com",
+            interests="Interests C",
+        )
 
         # Setting up friendships
         user_a.friends.append(user_b)  # a and b are friends

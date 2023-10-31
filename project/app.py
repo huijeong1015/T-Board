@@ -130,6 +130,7 @@ def event_post():
 
 @app.route("/main_dashboard/", methods=["GET", "POST"])
 def main_dashboard():
+    error_msg = ""
     sql = text("SELECT * FROM events;")
     result = db.session.execute(sql)
     if request.method == "POST":
@@ -137,17 +138,20 @@ def main_dashboard():
             event_id = int(request.form["event-details"])
             event = Event.query.filter_by(id=event_id).first()
             return render_template("event_details.html", event=event.__dict__)
-    return render_template("main_dashboard.html", events=result)
+    return render_template("main_dashboard.html", events=result, error_msg=error_msg)
 
 
 @app.route("/search_dashboard/", methods=["POST"])
 def searchEvent():
+    error_msg = ""
     keyword = request.form["input-search"]
     # some error handling before results are used
     results = []
     if keyword:
         results = Event.query.filter(Event.name.contains(keyword)).all()
-    return render_template("main_dashboard.html", events=results)
+    if len(results) == 0:
+        error_msg = "We couldn't find any matches for \"" + keyword + '".'
+    return render_template("main_dashboard.html", events=results, error_msg=error_msg)
 
 
 def get_user_interests():
@@ -339,3 +343,43 @@ def new_events():
     return render_template_string(
         f"<h1>Events and Their Attendees</h1>{event_list_html}"
     )
+
+
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+from gensim.downloader import load as gensim_load
+
+# Load GloVe embeddings
+glove_model = gensim_load("glove-wiki-gigaword-100")
+
+
+def text_to_vector(text):
+    tokens = text.split()
+    vectors = [glove_model[token] for token in tokens if token in glove_model]
+    if vectors:
+        return np.mean(vectors, axis=0)
+    return np.zeros(100)  # Assuming 100-dimensional GloVe vectors
+
+
+@app.route("/recommend_events/<user_id>")
+def recommend_events(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return "User not found", 404
+
+    user_interest_vector = text_to_vector(user.interests)
+
+    events = Event.query.all()
+    event_vectors = [(event, text_to_vector(event.description)) for event in events]
+
+    similarities = [
+        (event, cosine_similarity([user_interest_vector], [event_vector]).flatten()[0])
+        for event, event_vector in event_vectors
+    ]
+
+    # Sort events based on similarity
+    recommended_events = sorted(similarities, key=lambda x: x[1], reverse=True)
+
+    # Return top N recommended events
+    top_n = 5
+    return jsonify([event[0].name for event in recommended_events[:top_n]])

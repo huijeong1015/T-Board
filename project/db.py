@@ -54,6 +54,14 @@ sample_events = [
     {"name": "Science Fair", "date": "2023-07-10", "time": "10:00", "location": "Science Museum, London", "description": "Engage with scientific discoveries..."}
 ]
 
+event_types = [
+    {'name': 'Networking'}, 
+    {'name': 'Sports'}, 
+    {'name': 'Tutoring'}, 
+    {'name': 'Club'},
+    {'name': 'Others'}
+]
+
 with app.app_context():
     # Create tables
     db.create_all()

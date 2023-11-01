@@ -1,7 +1,7 @@
 {% block event %}
 <div class="frame-event">
     <div class="left">
-        <img src="{{ url_for('static', filename='event_photos/' + event['event_type'].lower() + '.png') }}" alt="Image" class="event-image">
+        <img src="{{ url_for('static', filename='event_photos/club.png') }}" alt="Image" class="event-image">
         <svg
         class="rating"
         width="220"
@@ -49,9 +49,10 @@
                 Location: {{ event['location'] }}
             </div>
         </div>
+
         <form method="POST" action="/main_dashboard">
             <div class="frame-event-btn">
-                <button class="btn-bookmark">
+                <button class="btn-bookmark" type="submit" name="bookmark" value="{{ event['id'] }}">
                     <svg
                         class="btn-bookmark"
                         width="27"
@@ -67,6 +68,8 @@
                         />
                     </svg>
                 </button>
+        </form>
+        <form method="POST" aciton="/main_dashboard">
                 <button class="btn-calendar">
                     <svg
                         class="btn-calendar"

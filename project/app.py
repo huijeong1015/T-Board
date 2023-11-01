@@ -16,6 +16,16 @@ event_types = ["Tutoring", "Sports", "Club", "Networking", "Other"]
 #List of supported profile picture: 
 Profile_pictures = ["default", "Surprised", "LaughingCrying", "Laughing", "Happy", "Excited", "Cool"]
 
+# #Helper function that gets the current user
+# def current_user(attribute='id'):
+#     if(attribute == 'id'):
+#        username=session.get('username')
+#        user = User.query.filter_by(username=username).first
+#        return user
+#     elif(attribute == 'name'):
+#        username=session.get('username')
+#        return username
+
 #Temp helper functions
 def get_user_interests():
     username=session.get('username')
@@ -55,6 +65,7 @@ def login():
             else:
                 # Start a user session
                 session['username'] = username
+                session['user_id'] = user.id
                 return redirect(url_for('main_dashboard'))
 
     return render_template('login.html', error=error)
@@ -115,6 +126,17 @@ def main_dashboard():
             event_id = int(request.form['event-details'])
             event = Event.query.filter_by(id=event_id).first()
             return render_template('event_details.html', event=event.__dict__, profile_picture=get_user_profile_picture())
+        if request.form.get('bookmark') != None:
+            bookmark_id = int(request.form['bookmark'])
+            event_to_bookmark = Event.query.filter_by(id=bookmark_id).first
+            print(bookmark_id)
+
+            current_user_id = session['user_id']
+            print(current_user_id)
+            user = db.session.query(User).get(current_user_id)
+            user.bookmarked_events.append(event_to_bookmark)
+            # current_user_id.bookmarked_events.append(bookmark_id)
+            # if no work try printing the events being queried in the db.py file
     return render_template('main_dashboard.html', events=result, profile_picture=get_user_profile_picture())
 
 @app.route('/search_dashboard/', methods=['POST'])

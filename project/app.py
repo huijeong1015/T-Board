@@ -128,14 +128,14 @@ def main_dashboard():
             return render_template('event_details.html', event=event.__dict__, profile_picture=get_user_profile_picture())
         if request.form.get('bookmark') != None:
             bookmark_id = int(request.form['bookmark'])
-            event_to_bookmark = Event.query.filter_by(id=bookmark_id).first
+            event_to_bookmark = Event.query.filter_by(id=bookmark_id).first()
             print(bookmark_id)
             username = session.get('username')
             # current_user_id = session['user_id']
             # print(current_user_id)
             user = User.query.filter_by(username=username)
             print(user)
-            user.events.append(event_to_bookmark)
+            user.bookmarked_events.append(event_to_bookmark)
             # current_user_id.bookmarked_events.append(bookmark_id)
             # if no work try printing the events being queried in the db.py file
     return render_template('main_dashboard.html', events=result, profile_picture=get_user_profile_picture())

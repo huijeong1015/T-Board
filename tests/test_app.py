@@ -29,6 +29,7 @@ def test_show_events(client):
         time="10:00",
         location="Test Location",
         description="This is a test event.",
+        event_type="other"
     )
     with app.app_context():
         db.session.add(event)

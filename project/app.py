@@ -20,9 +20,7 @@ from project.db import *
 from werkzeug.security import check_password_hash
 import re
 
-
 app.config["SECRET_KEY"] = os.urandom(24)
-import random #Temporary until we link event type frontend -> backend 
 
 #List of supported profile picture: 
 Profile_pictures = ["default", "Surprised", "LaughingCrying", "Laughing", "Happy", "Excited", "Cool"]

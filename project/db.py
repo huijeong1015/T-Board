@@ -47,7 +47,6 @@ user_friends = db.Table(
     db.Column("friend_id", db.Integer, db.ForeignKey("users.id"), primary_key=True),
 )
 
-
 # Model for events
 #Current supported event types: ["Tutoring", "Sports", "Club", "Networking", "Other"] 
 class Event(db.Model):
@@ -91,10 +90,6 @@ class User(db.Model):
     def __repr__(self):
         return "<User {}>".format(self.username)
 
-sample_users = [
-    {"username": "admin", "password": "adminpass", "email": "admin@mail.utoronto.ca", "interests": "Being an administrator","profile_picture": "Admin" }
-]
-
 sample_events = [
     {"name": "Tech Conference 2023", "date": "2023-11-20", "time": "09:00", "location": "Silicon Valley Convention Center", "description": "Join industry leaders...", "event_type": "Networking"},
     {"name": "Music Festival", "date": "2023-08-15", "time": "12:00", "location": "Central Park, New York", "description": "A celebration of music...", "event_type": "Other"},
@@ -120,24 +115,28 @@ with app.app_context():
             password=generate_password_hash("adminpass"),
             email="admin@mail.utoronto.ca",
             interests="Being an administrator",
+            profile_picture="Admin"
         )
         user_a = User(
             username="user_a",
             password=generate_password_hash("password_a"),
             email="a@mail.com",
             interests="Interests A",
+            profile_picture="Default"
         )
         user_b = User(
             username="user_b",
             password=generate_password_hash("password_b"),
             email="b@mail.com",
             interests="Interests B",
+             profile_picture="Happy"
         )
         user_c = User(
             username="user_c",
             password=generate_password_hash("password_c"),
             email="c@mail.com",
             interests="Interests C",
+             profile_picture="Cool"
         )
 
         # Setting up friendships
@@ -148,11 +147,11 @@ with app.app_context():
         # Adding users to events
         tech_conference = Event.query.filter_by(name="Tech Conference 2023").first()
         music_festival = Event.query.filter_by(name="Music Festival").first()
-        charity_run = Event.query.filter_by(name="Charity Run").first()
+        MAT188 = Event.query.filter_by(name="MAT188 Tutoring").first()
 
         user_a.events.append(tech_conference)
         user_b.events.append(music_festival)
-        user_c.events.append(charity_run)
+        user_c.events.append(MAT188)
 
         db.session.add(admin)
         db.session.add(user_a)

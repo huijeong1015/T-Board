@@ -73,7 +73,7 @@
                 {% endfor %}
               </div>
             </div>
-            <button class="btn-submit" onclick="checkEventTypeSelected()">SUBMIT</button>
+            <button class="btn-submit" onclick="return checkEventTypeSelected()">SUBMIT</button>
           </form>
         </div>
       </div>
@@ -116,6 +116,15 @@ function isChecked() {
   }
   return false;
 }
+
+function checkEventTypeSelected() {
+  if (!isChecked()) {
+    const error_msg= 'A type of event must be selected.';
+    return false;
+  }
+  return true; 
+}
+
 
 function checkEventTypeSelected() {
   const error_msg = !isChecked() ? 'A type of event must be selected.' : '';

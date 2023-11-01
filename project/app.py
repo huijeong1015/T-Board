@@ -225,12 +225,12 @@ def add_event():
     event_time= request.form["input-time"]
     event_location= request.form["input-loc"]
     event_description= request.form["input-desc"]
+    event_type = request.form.get("event_type")
 
-    #TEMP: Random event type assigned to new events. remove once front end is complete
-    new_event = Event(name=event_name, date=event_date, time=event_time, location=event_location, description=event_description, event_type=random.choice(event_types)['name'])
+    new_event = Event(name=event_name, date=event_date, time=event_time, location=event_location, description=event_description, event_type=event_type)
     db.session.add(new_event)
     db.session.commit()
-    return render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_types)
+    return render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_type)
 
 @app.errorhandler(404)
 def page_not_found(e):

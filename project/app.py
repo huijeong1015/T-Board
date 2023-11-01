@@ -22,9 +22,6 @@ import re
 
 app.config["SECRET_KEY"] = os.urandom(24)
 
-#List of supported profile picture: 
-Profile_pictures = ["default", "Surprised", "LaughingCrying", "Laughing", "Happy", "Excited", "Cool"]
-
 #Temp helper functions
 def get_user_interests():
     username=session.get('username')
@@ -135,7 +132,6 @@ def check_password_strength(password):
     else:
         return "weak"
 
-
 @app.route("/bookmark/")
 def bookmark():
     return render_template('bookmark.html', profile_picture=get_user_profile_picture())
@@ -155,7 +151,6 @@ def main_dashboard():
             event = Event.query.filter_by(id=event_id).first()
             return render_template("event_details.html", event=event.__dict__, profile_picture=get_user_profile_picture())
     return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg)
-
 
 @app.route("/search_dashboard/", methods=["POST"])
 def searchEvent():
@@ -191,16 +186,30 @@ def my_account_notification():
     return render_template('my_account_notification.html', username=session.get('username'), 
                            interests=get_user_interests(), profile_picture=get_user_profile_picture())
 
-@app.route("/my_account/settings/")
+@app.route("/my_account/settings/", methods=["GET", "POST"])
 def my_account_settings():
     return render_template('my_account_settings.html', username=session.get('username'), 
                            interests=get_user_interests(), profile_picture=get_user_profile_picture())
 
-@app.route("/my_account/edit_profile/")
+@app.route("/my_account/edit_profile/", methods=["GET", "POST"])
 def my_account_edit_profile():
+    username = session.get('username')
+    user = User.query.filter_by(username=username).first()
+
+    # If the request method is POST, process form submission
+    if request.method == "POST":
+        #Important: Resricting user to only being able to edit interests and profile picture.
+        new_interests = request.form["input-interests"]
+        new_profile_picture = request.form.get('profile_picture').lower()
+        
+        user.interests = new_interests
+        user.profile_picture = new_profile_picture
+        db.session.commit()  
+        
+
     return render_template('my_account_edit_profile.html', username=session.get('username'), 
                            email=get_user_email(), password=session.get('password'), interests=get_user_interests(),
-                           profile_picture=get_user_profile_picture())
+                           profile_picture=get_user_profile_picture(), profile_pics=profile_pic_types)
 
 @app.route("/dataset")
 def show_events():
@@ -214,7 +223,6 @@ def show_events():
 
     # You might return events as a string or JSON, or render them in a template
     return str(events)
-
 
 @app.route("/event_post", methods=["POST"])
 def add_event():

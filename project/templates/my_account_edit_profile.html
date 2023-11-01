@@ -81,28 +81,87 @@
     </div>
   </div>
   <div class="frame-content">
-    <form class="form_edit_profile" action="/my_account/settings">
+    <form class="form_edit_profile" action="{{ url_for('my_account_edit_profile') }}" method="POST">
       <div class="edit">
         <div class="input-txt-white">Username: </div>
-        <input value="{{ username }}" type="text" class="input-txt">
+        <input name="input-id" value="{{ username }}" type="text" class="input-txt">
       </div>
       <div class="edit">
-        <!-- <div class="input-email"></div> -->
         <div class="input-txt-white">U of T Email: </div>
-        <input value="{{ email }}" type="text" class="input-txt">
+        <input name="input-email" value="{{ email }}" type="text" class="input-txt">
       </div>
       <div class="edit">
         <div class="input-txt-white">Password: </div>
-        <input value="{{ password }}" type="password" class="input-txt">
+        <input name="input-pwd" value="{{ password }}" type="password" class="input-txt">
       </div>
       <div class="edit">
         <div class="input-txt-white">Interests: </div>
-        <input value="{{ interests }}" type="text" class="input-txt">
+        <input name="input-interests" value="{{ interests }}" type="text" class="input-txt">
       </div>
-      <button class="btn-finish">FINISH EDIT</button>
+      <div class="edit">
+        <div class="input-txt-white">Profile Picture:</div>
+        <div class="multi-select-profile-pic">
+            <div class="profile-pic-dropdown" onclick="showProfilePics()">
+                <input type="text" class="input-txt" id="selected-pic" readonly name="profile_picture" value="{{ profile_picture }}" placeholder="Select a profile picture">
+                <button class="toggle" id="toggle-pic-btn" type="button">
+                    <svg class="dropdown-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="18 20 12 7.25">
+                        <path d="m29 21-5 5.25-5-5.25" stroke="#222" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                    </button>
+                </div>
+                <div id="pic-checkboxes" class="profile-pic-options">
+                    {% for pic in profile_pics %}
+                    <label for="{{ pic.name }}">
+                        <input type="radio" name="profile_pic" id="{{ pic.name }}" value="{{ pic.name }}" class="radio" onchange="displaySelected()"/>{{ pic.name }}
+                    </label>
+                    {% endfor %}
+                </div>
+        </div>
+      </div>
+    <button class="btn-finish" type="submit" onclick="return checkEventTypeSelected()">FINISH EDIT</button>
     </form>
   </div>
 </div>
+<script>
+var expanded = false;
+var radios = document.querySelectorAll('.radio');
+
+function showProfilePics() {
+  var picCheckboxes = document.getElementById("pic-checkboxes");
+  if (!expanded) {
+    picCheckboxes.style.display = "block";
+    expanded = true;
+  } else {
+    picCheckboxes.style.display = "none";
+    expanded = false;
+  }
+}
+
+function displaySelected() {
+    var selectedPicInput = document.getElementById("selected-pic");
+    for (var i = 0; i < radios.length; i++) {
+        if (radios[i].checked) {
+            selectedPicInput.value = radios[i].value;
+            break;
+        }
+    }
+}
+
+  function isChecked() {
+    for (var i = 0; i < radios.length; i++) {
+      if (radios[i].checked) return true;
+    }
+    return false;
+  }
+    
+  function checkEventTypeSelected() {
+    if (!isChecked()) {
+      const error_msg= 'A profile picture must be selected.';
+      return false;
+    }
+    return true; 
+  }
+
+</script>
 {% include "base_input.html" %}
 <style>
 .settings-tab {

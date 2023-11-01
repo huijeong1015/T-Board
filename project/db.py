@@ -13,11 +13,11 @@ basedir = Path(__file__).resolve().parent
 users_db_path = basedir.joinpath(USERS_DATABASE)
 events_db_path = basedir.joinpath(EVENTS_DATABASE)
 
-if users_db_path.exists():
-    users_db_path.unlink()
+#if users_db_path.exists():
+#    users_db_path.unlink()
 
-if events_db_path.exists():
-    events_db_path.unlink()
+#if events_db_path.exists():
+#    events_db_path.unlink()
 
 # Setting up Flask app instance
 app = Flask(__name__)
@@ -74,9 +74,17 @@ class Event(db.Model):
     def __repr__(self):
         return f"<Event {self.name}>"
 
+profile_pic_types = [
+    {"name": "Default"},
+    {"name": "Surprised"},
+    {"name": "LaughingCrying"},
+    {"name": "Laughing"},
+    {"name": "Happy"},
+    {"name": "Excited"},
+    {"name": "Cool"},
+]
 
 # Model for users
-#Current support profile picture: ["Default", "Surprised", "LaughingCrying", "Laughing", "Happy", "Excited", "Cool"]
 class User(db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)

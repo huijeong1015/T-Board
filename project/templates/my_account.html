@@ -8,7 +8,7 @@
           <div class="left">
             {% if profile_picture.lower() == "default" %}
               <svg
-                class="account"
+                class="account1"
                 width="201"
                 height="200"
                 viewBox="0 0 201 200"
@@ -34,10 +34,8 @@
               <img 
                 src="{{ url_for('static', filename='profile_picture/' + profile_picture.lower() + '.png') }}" 
                 alt="Profile Picture" 
-                class="account"
-                width="201"
-                height="200"
                 viewBox="0 0 201 200"
+                class="account1"
               >
             {% endif %}
           </div>
@@ -112,12 +110,18 @@
   width: fit-content;
   height: fit-content;
 }
-.account {
+.account1 {
   flex-shrink: 0;
   width: 100%;
   height: fit-content;
   position: relative;
   overflow: visible;
+  width: 201;
+  height: 200;
+  max-width: 100%; 
+  max-height: 100%; 
+  display: block; 
+  margin: 0 auto;
 }
 .right {
   display: flex;

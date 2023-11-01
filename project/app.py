@@ -24,9 +24,6 @@ import re
 app.config["SECRET_KEY"] = os.urandom(24)
 import random #Temporary until we link event type frontend -> backend 
 
-#List of supported event types
-event_types = ["Tutoring", "Sports", "Club", "Networking", "Other"]  
-
 #List of supported profile picture: 
 Profile_pictures = ["default", "Surprised", "LaughingCrying", "Laughing", "Happy", "Excited", "Cool"]
 
@@ -243,10 +240,10 @@ def add_event():
     event_description= request.form["input-desc"]
 
     #TEMP: Random event type assigned to new events. remove once front end is complete
-    new_event = Event(name=event_name, date=event_date, time=event_time, location=event_location, description=event_description, event_type=random.choice(event_types))
+    new_event = Event(name=event_name, date=event_date, time=event_time, location=event_location, description=event_description, event_type=random.choice(event_types)['name'])
     db.session.add(new_event)
     db.session.commit()
-    return render_template('event_post.html', profile_picture=get_user_profile_picture())
+    return render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_types)
 
 @app.errorhandler(404)
 def page_not_found(e):

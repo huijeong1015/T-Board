@@ -47,6 +47,15 @@ user_friends = db.Table(
     db.Column("friend_id", db.Integer, db.ForeignKey("users.id"), primary_key=True),
 )
 
+# Types of events users can select
+event_types = [
+    {"name": "Networking"},
+    {"name": "Sports"},
+    {"name": "Tutoring"},
+    {"name": "Club"},
+    {"name": "Others"},
+]
+
 # Model for events
 #Current supported event types: ["Tutoring", "Sports", "Club", "Networking", "Other"] 
 class Event(db.Model):

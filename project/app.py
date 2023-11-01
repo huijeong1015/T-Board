@@ -200,12 +200,11 @@ def my_account_edit_profile():
     if request.method == "POST":
         #Important: Resricting user to only being able to edit interests and profile picture.
         new_interests = request.form["input-interests"]
-        new_profile_picture = request.form.get('profile_picture').lower()
+        new_profile_picture = request.form["submit-btn"]
         
         user.interests = new_interests
         user.profile_picture = new_profile_picture
         db.session.commit()  
-        
 
     return render_template('my_account_edit_profile.html', username=session.get('username'), 
                            email=get_user_email(), password=session.get('password'), interests=get_user_interests(),

@@ -43,11 +43,11 @@
             />
           </svg>
 
-          <div class="name">Name: {{ event['name'] }}</div>
+          <div class="name"><b>{{ event['name'] }}</b></div>
         </div>
         <div class="middle">
           <div class="left">
-            <img class="image-1" src="{{ url_for('static', filename='event_photos/' + event['event_type'].lower() + '.png') }}" alt="Event Image"/>
+            <img class="event-image" src="{{ url_for('static', filename='event_photos/' + event['event_type'].lower() + '.png') }}" alt="Event Image"/>
             <div class="frame-btn2">
               <svg
                 class="btn-bookmark"
@@ -94,9 +94,9 @@
           </div>
           <div class="right">
             <div class="frame-info">
-              <div class="date">Date: {{ event['date'] }}</div>
-              <div class="time">Time: {{ event['time'] }}</div>
-              <div class="location">Location: {{ event['location'] }}</div>
+              <div class="date">Date: <b>{{ event['date'] }}</b></div>
+              <div class="time">Time: <b>{{ event['time'] }}</b></div>
+              <div class="location">Location: <b>{{ event['location'] }}</b></div>
             </div>
           </div>
         </div>
@@ -114,7 +114,7 @@
       </div>
     </div>
 </div>
-
+{% include "base_event.html" %}
 <style>
 .dashboard {
   padding: 0px 25px 0px 25px;
@@ -138,10 +138,10 @@
   box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 .frame-event-details {
-  padding: 14px 54px 14px 54px;
+  padding: 20px 54px 20px 54px;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 15px;
   align-items: center;
   justify-content: flex-start;
   align-self: stretch;
@@ -195,15 +195,6 @@
   flex-shrink: 0;
   position: relative;
 }
-.image-1 {
-  flex-shrink: 0;
-  width: 365px;
-  height: 189px;
-  position: relative;
-  max-width: 95%;
-  max-height: 95%;
-  display: block;
-}
 .frame-btn2 {
   display: flex;
   flex-direction: row;
@@ -254,19 +245,19 @@
 .date {
   color: #000000;
   text-align: left;
-  font: 400 32px "Ubuntu Condensed", sans-serif;
+  font: 400 30px "Ubuntu Condensed", sans-serif;
   position: relative;
 }
 .time {
   color: #000000;
   text-align: left;
-  font: 400 32px "Ubuntu Condensed", sans-serif;
+  font: 400 30px "Ubuntu Condensed", sans-serif;
   position: relative;
 }
 .location {
   color: #000000;
   text-align: left;
-  font: 400 32px "Ubuntu Condensed", sans-serif;
+  font: 400 30px "Ubuntu Condensed", sans-serif;
   position: relative;
 }
 .bottom {
@@ -282,19 +273,19 @@
 .registration {
   color: #000000;
   text-align: left;
-  font: 400 32px "Ubuntu Condensed", sans-serif;
+  font: 400 30px "Ubuntu Condensed", sans-serif;
   position: relative;
 }
 .description {
   color: #000000;
   text-align: left;
-  font: 400 32px "Ubuntu Condensed", sans-serif;
+  font: 400 30px "Ubuntu Condensed", sans-serif;
   position: relative;
 }
 .review {
   color: #000000;
   text-align: left;
-  font: 400 32px "Ubuntu Condensed", sans-serif;
+  font: 400 30px "Ubuntu Condensed", sans-serif;
   position: relative;
 }
 </style>  

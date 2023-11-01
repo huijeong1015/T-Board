@@ -105,7 +105,7 @@ def register():
             error = "Passwords do not match."
             flash(error)
         elif password_strength != "strong":
-            error = f"Password strength is {password_strength}. Please use a stronger password."
+            error = f"Password strength is {password_strength}. Please use a stronger password at least 8 characters long with one upper case, lower case, digit, and special character."
             flash(error)
         elif username_check is not None:
             error = "This Username is taken, please try a different one."
@@ -170,19 +170,6 @@ def searchEvent():
     if len(results) == 0:
         error_msg = "We couldn't find any matches for \"" + keyword + '".'
     return render_template("main_dashboard.html", events=results, error_msg=error_msg, profile_picture=get_user_profile_picture())
-
-
-def get_user_interests():
-    username = session.get("username")
-    user = User.query.filter_by(username=username).first()
-    return user.interests
-
-
-def get_user_email():
-    username = session.get("username")
-    user = User.query.filter_by(username=username).first()
-    return user.email
-
 
 @app.route("/my_account/event_history/")
 def my_account_event_history():

@@ -80,7 +80,8 @@ def test_search_event_keywords(client):
         date="2023-11-20",
         time="09:00",
         location="Silicon Valley Convention Center",
-        description="",
+        description="Join industry leaders...", 
+        event_type="Networking",
     )
     with app.app_context():
         db.session.add(event)
@@ -129,6 +130,7 @@ def test_injection(client):
         time="23:59",
         location="BA1160",
         description="Sample'); drop table events; --",
+        event_type= "Networking",
     )
     with app.app_context():
         db.session.add(event)
@@ -153,6 +155,7 @@ def test_event_post(client):
             time="02:20",
             location="test location",
             description="test event description",
+            event_type="other"
         ),
         follow_redirects=True,
     )

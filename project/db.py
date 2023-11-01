@@ -168,16 +168,20 @@ with app.app_context():
         music_festival = Event.query.filter_by(name="Music Festival").first()
         charity_run = Event.query.filter_by(name="Charity Run").first()
 
-        user_a.bookmarked_events.append(music_festival)
-
+        # user_a.bookmarked_events.append(music_festival)
         user_a.events.append(tech_conference)
         user_b.events.append(music_festival)
         user_c.events.append(charity_run)
-        print(user_a)
-        print(user_a)
+        
+        admin.events.append(music_festival)
+        
+
         db.session.add(admin)
         db.session.add(user_a)
         db.session.add(user_b)
         db.session.add(user_c)
-
+        
         db.session.commit()
+
+
+

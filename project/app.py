@@ -117,7 +117,7 @@ def bookmark():
 def event_post():
     return render_template('event_post.html', profile_picture=get_user_profile_picture())
 
-@app.route('/main_dashboard/', methods=['GET', 'POST'])
+@app.route('/main_dashboard', methods=['GET', 'POST'])
 def main_dashboard():
     sql = text("SELECT * FROM events;")
     result = db.session.execute(sql)
@@ -130,11 +130,12 @@ def main_dashboard():
             bookmark_id = int(request.form['bookmark'])
             event_to_bookmark = Event.query.filter_by(id=bookmark_id).first
             print(bookmark_id)
-
-            current_user_id = session['user_id']
-            print(current_user_id)
-            user = db.session.query(User).get(current_user_id)
-            user.bookmarked_events.append(event_to_bookmark)
+            username = session.get('username')
+            # current_user_id = session['user_id']
+            # print(current_user_id)
+            user = User.query.filter_by(username=username)
+            print(user)
+            user.events.append(event_to_bookmark)
             # current_user_id.bookmarked_events.append(bookmark_id)
             # if no work try printing the events being queried in the db.py file
     return render_template('main_dashboard.html', events=result, profile_picture=get_user_profile_picture())
@@ -218,3 +219,12 @@ def page_not_found(e):
 @app.errorhandler(500)
 def internal_server_error(e):
     return render_template('500.html'), 500
+
+
+@app.route('/users')
+def users():
+    print('hellooooo')
+    all_users = User.query.all()
+    print("users")
+
+    return render_template('show_users.html', users=all_users)

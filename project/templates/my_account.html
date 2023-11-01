@@ -8,7 +8,7 @@
           <div class="left">
             {% if profile_picture.lower() == "default" %}
               <svg
-                class="account"
+                class="img-account"
                 width="201"
                 height="200"
                 viewBox="0 0 201 200"
@@ -34,7 +34,7 @@
               <img 
                 src="{{ url_for('static', filename='profile_picture/' + profile_picture.lower() + '.png') }}" 
                 alt="Profile Picture" 
-                class="account"
+                class="img-account"
                 width="201"
                 height="200"
                 viewBox="0 0 201 200"
@@ -112,12 +112,14 @@
   width: fit-content;
   height: fit-content;
 }
-.account {
+.img-account {
   flex-shrink: 0;
-  width: 100%;
-  height: fit-content;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  border: 10px solid #6f879e;;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
 }
 .right {
   display: flex;

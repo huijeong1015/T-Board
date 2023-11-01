@@ -132,9 +132,16 @@ def check_password_strength(password):
     else:
         return "weak"
 
-@app.route("/bookmark/")
+@app.route("/bookmark/", methods=["GET", "POST"])
 def bookmark():
-    return render_template('bookmark.html', profile_picture=get_user_profile_picture())
+    sql = text("SELECT * FROM events;")
+    result = db.session.execute(sql)
+    if request.method == "POST":
+        if request.form.get("event-details") != None:
+            event_id = int(request.form["event-details"])
+            event = Event.query.filter_by(id=event_id).first()
+            return render_template("event_details.html", event=event.__dict__, profile_picture=get_user_profile_picture())   
+    return render_template('bookmark.html', bookmarked_events=result, profile_picture=get_user_profile_picture())
 
 @app.route("/event_post/")
 def event_post():

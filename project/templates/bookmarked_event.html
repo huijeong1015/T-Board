@@ -1,0 +1,108 @@
+{% block event %}
+<div class="frame-event">
+    <div class="left">
+      <!-- <img class="event-image" src="image-1.png" /> -->
+      <img src="{{ url_for('static', filename='event_photos/club.png') }}" alt="Image" class="event-image">
+      <svg
+      class="rating"
+      width="220"
+      height="40"
+      viewBox="0 0 220 40"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      >
+      <path
+          d="M20 0L24.4903 13.8197H39.0211L27.2654 22.3607L31.7557 36.1803L20 27.6393L8.2443 36.1803L12.7346 22.3607L0.97887 13.8197H15.5097L20 0Z"
+          fill="#FF9900"
+          stroke="#838383"
+          stroke-width="2"
+      />
+      <path
+          d="M65 0L69.4903 13.8197H84.0211L72.2654 22.3607L76.7557 36.1803L65 27.6393L53.2443 36.1803L57.7346 22.3607L45.9789 13.8197H60.5097L65 0Z"
+          fill="#FF9900"
+          stroke="#838383"
+          stroke-width="2"
+      />
+      <path
+          d="M110 0L114.49 13.8197H129.021L117.265 22.3607L121.756 36.1803L110 27.6393L98.2443 36.1803L102.735 22.3607L90.9789 13.8197H105.51L110 0Z"
+          fill="#FF9900"
+          stroke="#838383"
+          stroke-width="2"
+      />
+      <path
+          d="M155 0L159.49 13.8197H174.021L162.265 22.3607L166.756 36.1803L155 27.6393L143.244 36.1803L147.735 22.3607L135.979 13.8197H150.51L155 0Z"
+          stroke="#838383"
+          stroke-width="2"
+      />
+      <path
+          d="M200 0L204.49 13.8197H219.021L207.265 22.3607L211.756 36.1803L200 27.6393L188.244 36.1803L192.735 22.3607L180.979 13.8197H195.51L200 0Z"
+          stroke="#838383"
+          stroke-width="2"
+      />
+      </svg>
+    </div>
+    <div class="right">
+      <div class="frame-info">
+        <div class="event-name-txt">Name: {{ event['name'] }}</div>
+        <div class="event-details-txt">Date: {{ event['date'] }}</div>
+        <div class="event-details-txt">Time: {{ event['time'] }}</div>
+        <div class="event-details-txt">Location: {{ event['location'] }}</div>
+      </div>
+      <form method="POST" action="/bookmark">
+        <div class="frame-event-btn">
+          <svg
+            class="btn-bookmark"
+            width="23"
+            height="45"
+            viewBox="0 0 23 45"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M0.5 0V45L11.75 33.75L23 45V0H0.5Z" fill="#A34A4A" />
+          </svg>
+          <svg
+            class="btn-alarm"
+            width="45"
+            height="45"
+            viewBox="0 0 45 45"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M22.5 0C16.3125 0 11.25 5.0625 11.25 11.25C11.25 17.1 8.325 22.3875 3.7125 26.2125C1.40625 28.125 0 30.825 0 33.75H45C45 30.825 43.65 28.125 41.2875 26.2125C36.675 22.3875 33.75 17.1 33.75 11.25C33.75 5.0625 28.7437 0 22.5 0ZM16.875 39.375C16.875 42.4688 19.4062 45 22.5 45C25.5938 45 28.125 42.4688 28.125 39.375H16.875Z"
+              fill="#FFC633"
+            />
+          </svg>
+          <svg
+            class="btn-calendar"
+            width="40"
+            height="45"
+            viewBox="0 0 40 45"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M0.05625 0V11.25H39.4313V0H0.05625ZM0.05625 16.875V44.4937C0.05625 44.775 0.28125 45 0.5625 45H38.8688C39.15 45 39.375 44.775 39.375 44.4937V16.875H0H0.05625ZM5.68125 22.5H11.3062V28.125H5.68125V22.5ZM16.9312 22.5H22.5563V28.125H16.9312V22.5ZM28.1813 22.5H33.8063V28.125H28.1813V22.5ZM5.68125 33.75H11.3062V39.375H5.68125V33.75ZM16.9312 33.75H22.5563V39.375H16.9312V33.75Z"
+              fill="#7CA34A"
+            />
+          </svg>
+          <button name="event-details" class="btn-event-details" value="{{ event['id'] }}">
+            <svg
+                class="btn-event-details"
+                width="68"
+                height="47"
+                viewBox="0 0 68 47"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <path
+                d="M42.5 0V15.6667H0V31.3333H42.5V47L68 23.265L42.5 0Z"
+                fill="#657895"
+                />
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  {% endblock %}

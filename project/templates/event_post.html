@@ -61,14 +61,14 @@
               <label for="event-type" class="input-txt required">Event Type</label>
               <div class="event-type" onclick="showCheckboxes()">
                 <button class="toggle" id="toggle-btn" type="button">
-                  Select type(s) of the event
+                  Select type of the event
                   <svg class="dropdown-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="18 20 12 7.25"><path d="m29 21-5 5.25-5-5.25" stroke="#222" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
                 </button>
               </div>
               <div id="checkboxes">
                 {% for o in event_types %}
                 <label for="{{ o.name }}">
-                  <input type="checkbox" id="{{ o.name }}" value="{{ o.name }}" class="checkbox" onchange="displaySelected()"/>{{ o.name }}
+                  <input type="radio" name="event_type" id="{{ o.name }}" value="{{ o.name }}" class="radio" onchange="displaySelected()"/>{{ o.name }}
                 </label>
                 {% endfor %}
               </div>
@@ -94,34 +94,32 @@ function showCheckboxes() {
   }
 }
 
-var checkboxes=document.querySelectorAll('input[type="checkbox"]');
+var radios = document.querySelectorAll('input[type="radio"]');
+
 function displaySelected() {
   var disp_btn=document.getElementById('toggle-btn');
-  var selected_items=[];
-  var selected_items_txt='';
-  
-  checkboxes.forEach((checkbox) => {
-    if (checkbox.checked) {
-      selected_items.push(checkbox.value);
-      selected_items_txt += '#' + checkbox.value + " ";
+  var selected_item = '';
+  radios.forEach((radio) => {
+    if (radio.checked) {
+      selected_item = radio.value;
     }
-    var html_txt = selected_items.length > 0 
-          ? selected_items_txt : 'Select type(s) of the event';
+    var html_txt = selected_item !== '' 
+          ? '#' + selected_item : 'Select type of the event';
     html_txt += '<svg class="dropdown-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="18 20 12 7.25"><path d="m29 21-5 5.25-5-5.25" stroke="#222" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>';
     disp_btn.innerHTML = html_txt;
   })
 }
 
 function isChecked() {
-  for (var i = 0; i < checkboxes.length; i++) {
-    if (checkboxes[i].checked) return true;
+  for (var i = 0; i < radios.length; i++) {
+    if (radios[i].checked) return true;
   }
   return false;
 }
 
 function checkEventTypeSelected() {
-  const error_msg = !isChecked() ? 'At least one checkbox must be selected.' : '';
-  checkboxes[0].setCustomValidity(error_msg);
+  const error_msg = !isChecked() ? 'A type of event must be selected.' : '';
+  radios[0].setCustomValidity(error_msg);
 }
 </script>
 {% include "base_input.html" %}

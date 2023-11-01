@@ -4,27 +4,6 @@
   <div class="frame">
     <div class="board">
       <div class="event-details">
-        <div class="top">
-          <div class="left">
-            <!-- <img class="image-1" src="image-1.png" /> -->
-            <img src="{{ url_for('static', filename='event_photos/club.png') }}" alt="Image" class="image-1">
-            <div class="btn-edit">
-              <svg
-                class="icon-pencil"
-                width="40"
-                height="40"
-                viewBox="0 0 40 40"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M30 0L25 5L35 15L40 10L30 0ZM20 10L0 30V40H10L30 20L20 10Z"
-                  fill="#657895"
-                />
-              </svg>
-            </div>
-          </div>
-        </div>
         <div class="bottom">      
           <form action="{{url_for('add_event')}}" method="POST" class="event-post-form">
             <div class="input">

@@ -109,9 +109,18 @@ def register():
             return redirect(url_for('login'))
     return render_template('register.html')
 
+
+def get_user():
+    username = session.get('username')
+    user = User.query.filter_by(username=username).first()
+    return(user)  
+
 @app.route('/bookmark/')
 def bookmark():
-    return render_template('bookmark.html', profile_picture=get_user_profile_picture())
+    username = session.get('username')
+    user = User.query.filter_by(username=username).first() 
+    bookmarked = user.bookmarked_events
+    return render_template('bookmark.html', profile_picture=get_user_profile_picture(), events=bookmarked)
 
 @app.route('/event_post/')
 def event_post():
@@ -130,12 +139,15 @@ def main_dashboard():
             bookmark_id = int(request.form['bookmark'])
             event_to_bookmark = Event.query.filter_by(id=bookmark_id).first()
             print(bookmark_id)
+            print(event_to_bookmark)
             username = session.get('username')
             # current_user_id = session['user_id']
             # print(current_user_id)
-            user = User.query.filter_by(username=username)
+            user = User.query.filter_by(username=username).first()
             print(user)
             user.bookmarked_events.append(event_to_bookmark)
+            for event in user.bookmarked_events:
+                print(event)
             # current_user_id.bookmarked_events.append(bookmark_id)
             # if no work try printing the events being queried in the db.py file
     return render_template('main_dashboard.html', events=result, profile_picture=get_user_profile_picture())

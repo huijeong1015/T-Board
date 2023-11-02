@@ -1,6 +1,7 @@
 import openai
 
-openai.api_key = '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'
+openai.api_key = "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"
+
 
 def get_events():
     messages = [
@@ -37,24 +38,22 @@ def get_events():
             [example output2]
 
 
-            """
-
+            """,
         },
         {
             "role": "user",
             "content": f"""
             I want to see all events that occur at UofT.
-            """
-        }
+            """,
+        },
     ]
 
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo-16k",
-        temperature=0,
-        messages=messages
+        model="gpt-3.5-turbo-16k", temperature=0, messages=messages
     )
-    
-    return response.choices[0].message['content'].strip()
+
+    return response.choices[0].message["content"].strip()
+
 
 # Using the function
 data = get_events()

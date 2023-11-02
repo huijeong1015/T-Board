@@ -51,7 +51,7 @@ def get_user_profile_picture():
     user = User.query.filter_by(username=username).first()
     return user.profile_picture
 
-
+app.config['SECRET_KEY'] = os.urandom(24)
 @app.route("/", methods=["GET", "POST"])
 @app.route("/login/", methods=["GET", "POST"])
 def login():
@@ -72,9 +72,9 @@ def login():
                 error = "Password does not match for the provided username."
             else:
                 # Start a user session
-                session['username'] = username
+                session["username"] = username
                 session['user_id'] = user.id
-                return redirect(url_for('main_dashboard'))
+                return redirect(url_for("main_dashboard"))
 
     return render_template("login.html", error=error)
 
@@ -150,12 +150,24 @@ def get_user():
     user = User.query.filter_by(username=username).first()
     return(user)  
 
+
+def get_user():
+    username = session.get('username')
+    user = User.query.filter_by(username=username).first()
+    return(user)  
+
 @app.route("/bookmark/", methods=["GET", "POST"])
 def bookmark():
     username = session.get('username')
     user = User.query.filter_by(username=username).first() 
     bookmarked = user.bookmarked_events
-    return render_template('bookmark.html', profile_picture=get_user_profile_picture(), events=bookmarked)
+
+    if request.method == "POST":
+        if request.form.get("event-details") != None:
+            event_id = int(request.form["event-details"])
+            event = Event.query.filter_by(id=event_id).first()
+            return render_template("event_details.html", event=event.__dict__, profile_picture=get_user_profile_picture())   
+    return render_template('bookmark.html', bookmarked_events=bookmarked, profile_picture=get_user_profile_picture())
 
 @app.route("/event_post/")
 def event_post():
@@ -181,11 +193,20 @@ def main_dashboard():
             # print(current_user_id)
             user = User.query.filter_by(username=username).first()
             print(user)
-            user.bookmarked_events.append(event_to_bookmark)
-            for event in user.bookmarked_events:
-                print(event)
-            # current_user_id.bookmarked_events.append(bookmark_id)
-            # if no work try printing the events being queried in the db.py file
+
+            if event_to_bookmark not in user.bookmarked_events:
+                user.bookmarked_events.append(event_to_bookmark)
+                db.session.commit()
+                for event in user.bookmarked_events:
+                    print(event)
+                # current_user_id.bookmarked_events.append(bookmark_id)
+                # if no work try printing the events being queried in the db.py file
+            else:
+                user.bookmarked_events.remove(event_to_bookmark)
+                db.session.commit()
+                for event in user.bookmarked_events:
+                    print(event)
+
     return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg)
 
 @app.route("/search_dashboard/", methods=["POST"])

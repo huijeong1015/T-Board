@@ -253,6 +253,11 @@ def add_event():
     render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_type)
     return redirect(url_for("main_dashboard"))
 
+@app.route('/edit_event/<int:event_id>', methods=['GET'])
+def edit_event(event_id):
+    return render_template('event_edit.html', profile_picture=get_user_profile_picture())
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("404.html"), 404

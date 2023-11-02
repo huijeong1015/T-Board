@@ -41,7 +41,7 @@
                 stroke-width="2"
             />
             </svg>
-            <button class="btn-edit">
+            <a href="{{ url_for('edit_event', event_id=event['id']) }}" class="btn-edit">
                 <svg
                 class="icon-pencil"
                 width="41"
@@ -55,7 +55,8 @@
                     fill="white"
                 />
                 </svg>
-            </button>
+            </a>
+            
         </div>
     </div>
     <div class="sub-right">

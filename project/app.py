@@ -150,16 +150,28 @@ def get_user():
 
 @app.route("/bookmark/", methods=["GET", "POST"])
 def bookmark():
+    error_msg = ""
     username = session.get('username')
     user = User.query.filter_by(username=username).first() 
+    print(user)
     bookmarked = user.bookmarked_events
+    
 
     if request.method == "POST":
         if request.form.get("event-details") != None:
             event_id = int(request.form["event-details"])
             event = Event.query.filter_by(id=event_id).first()
             return render_template("event_details.html", event=event.__dict__, profile_picture=get_user_profile_picture())   
-    return render_template('bookmark.html', bookmarked_events=bookmarked, profile_picture=get_user_profile_picture())
+        if request.form.get("remove-from-bookmarks") != None:
+            bookmark_id = int(request.form["remove-from-bookmarks"])
+            event_to_remove = Event.query.filter_by(id=bookmark_id).first() 
+            if event_to_remove in user.bookmarked_events:
+                user.bookmarked_events.remove(event_to_remove)
+                bookmarked = user.bookmarked_events
+                db.session.commit()
+            else:
+                error_msg = str(event_to_remove) + "is not associated with this user's bookmarked events"
+    return render_template('bookmark.html', bookmarked_events=bookmarked, profile_picture=get_user_profile_picture(), error_msg = error_msg)
 
 @app.route("/event_post/")
 def event_post():

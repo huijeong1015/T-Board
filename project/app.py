@@ -180,6 +180,10 @@ def event_post():
 @app.route("/main_dashboard/", methods=["GET", "POST"])
 def main_dashboard():
     error_msg = ""
+    bookmark_checked = False
+    username = session.get('username')
+    user = User.query.filter_by(username=username).first()
+    print(user)
     sql = text("SELECT * FROM events;")
     result = db.session.execute(sql)
     if request.method == "POST":
@@ -192,11 +196,7 @@ def main_dashboard():
             event_to_bookmark = Event.query.filter_by(id=bookmark_id).first()
             print(bookmark_id)
             print(event_to_bookmark)
-            username = session.get('username')
-            # current_user_id = session['user_id']
-            # print(current_user_id)
-            user = User.query.filter_by(username=username).first()
-            print(user)
+            
 
             if event_to_bookmark not in user.bookmarked_events:
                 user.bookmarked_events.append(event_to_bookmark)
@@ -210,8 +210,12 @@ def main_dashboard():
                 db.session.commit()
                 for event in user.bookmarked_events:
                     print(event)
+        if request.form.get('show-bookmarked') != None:
+            bookmark_checked = request.form.get('show-bookmarked')
+            print (request.form.get("show-bookmarked"))
+            result = user.bookmarked_events
 
-    return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg)
+    return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg, bookmark_checked=bookmark_checked)
 
 @app.route("/search_dashboard/", methods=["POST"])
 def searchEvent():

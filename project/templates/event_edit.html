@@ -6,23 +6,7 @@
       <div class="event-details">
         <div class="top">
           <div class="left">
-            <!-- <img class="image-1" src="image-1.png" /> -->
-            <img src="{{ url_for('static', filename='event_photos/club.png') }}" alt="Image" class="image-1">
-            <div class="btn-edit">
-              <svg
-                class="icon-pencil"
-                width="40"
-                height="40"
-                viewBox="0 0 40 40"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M30 0L25 5L35 15L40 10L30 0ZM20 10L0 30V40H10L30 20L20 10Z"
-                  fill="#657895"
-                />
-              </svg>
-            </div>
+            <h1>Edit your event details</h1>
           </div>
         </div>
         <div class="bottom">      
@@ -30,12 +14,12 @@
             <div class="input">
               <!-- <div class="input-name"></div> -->
               <label for="input-name" class="input-txt required">Name</label>
-              <input type = "text" id="input-name" name="input-name" placeholder="Enter name of the event" required>
+              <input name="input-name" value="{{ event.name }}" type="text" class="input-txt2" required>
             </div>
             <div class="input">
               <!-- <div class="input-date"></div> -->
               <label for="input-date" class="input-txt required">Date of the event</label>
-              <input type = "date" id="input-date" name="input-date" placeholder="Specify date of the event" required>
+              <input name="input-date" value="{{ event.date }}" type="date" class="input-txt2" required>
             </div>
             <div class="input">
               <!-- <div class="input-time"></div> -->
@@ -170,7 +154,7 @@ function checkEventTypeSelected() {
   flex-direction: row;
   gap: 18px;
   align-items: flex-end;
-  justify-content: center;
+  justify-content: left;
   align-self: stretch;
   flex-shrink: 0;
   position: relative;
@@ -339,6 +323,9 @@ function checkEventTypeSelected() {
   text-align: center;
   font: 700 30px "Ubuntu Mono", sans-serif;
   position: relative;
+}
+.left h1 {
+  font-size: 50px;
 }
 </style>
 {% endblock %}

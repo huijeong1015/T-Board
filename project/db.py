@@ -53,7 +53,7 @@ event_types = [
     {"name": "Sports"},
     {"name": "Tutoring"},
     {"name": "Club"},
-    {"name": "Others"},
+    {"name": "Other"},
 ]
 
 # Model for events

@@ -248,7 +248,7 @@ def add_event():
     event_description= request.form["input-desc"]
     event_type = request.form.get("event_type")
 
-    new_event = Event(name=event_name, date=event_date, time=event_time, location=event_location, 
+    new_event = Event(name=event_name, date=event_date, time=event_time, location=event_location, reg_link=reg_link,
                       description=event_description, event_type=event_type, created_by=user)
     db.session.add(new_event)
     db.session.commit()

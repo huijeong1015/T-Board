@@ -1,3 +1,4 @@
+{% block top %}
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Ubuntu+Condensed" />
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Ubuntu+Mono" />
 <body style="background-color: #202e44;">
@@ -38,7 +39,7 @@
             </div>
             <div class="search">
                 <form method="POST" action="/search_dashboard" class="search-form">
-                    <input type = "text" id="input-search" name="input-search" placeholder="Search keyword" class="input-search">
+                    <input type = "text" id="input-search" name="input-search" placeholder="Search keyword" class="input-search" required>
                     <button class="btn-search">
                         <svg
                             class="icon-magnifying-glass"
@@ -151,7 +152,7 @@
         overflow: visible;
     }
     .search {
-        background: #d9d9d9;
+        background: #ebebeb;
         border-radius: 15px;
         display: flex;
         flex-direction: reverse;
@@ -222,6 +223,11 @@
     .account {
         flex-shrink: 0;
         position: relative;
-        overflow: visible;
+        overflow: hidden;
+        width: 65px;
+        height: 65px;
+        border-radius: 50%;
+        border: 3px solid #6f879e;
     }
 </style>
+{% endblock %}

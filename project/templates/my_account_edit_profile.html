@@ -81,29 +81,81 @@
     </div>
   </div>
   <div class="frame-content">
-    <form class="form_edit_profile" action="/my_account/settings">
+    <form class="form_edit_profile" action="/my_account/edit_profile" method="POST">
       <div class="edit">
-        <div class="input-txt-white">Username: </div>
-        <input value="{{ username }}" type="text" class="input-txt">
+        <label for="input-id" class="label">Username: </label>
+        <input id="input-id" name="input-id" value="{{ username }}" type="text" class="input-txt2" disabled>
       </div>
       <div class="edit">
-        <!-- <div class="input-email"></div> -->
-        <div class="input-txt-white">U of T Email: </div>
-        <input value="{{ email }}" type="text" class="input-txt">
+        <label for="input-email" class="label">U of T Email: </label>
+        <input id="input-email" name="input-email" value="{{ email }}" type="text" class="input-txt2" disabled>
       </div>
       <div class="edit">
-        <div class="input-txt-white">Password: </div>
-        <input value="{{ password }}" type="password" class="input-txt">
+        <label for="input-pwd" class="label">Password: </label>
+        <input id="input-pwd" name="input-pwd" value="{{ password }}" type="password" class="input-txt2" disabled>
       </div>
       <div class="edit">
-        <div class="input-txt-white">Interests: </div>
-        <input value="{{ interests }}" type="text" class="input-txt">
+        <label for="input-interests" class="label">Interests: </label>
+        <input name="input-interests" value="{{ interests }}" type="text" class="input-txt2">
       </div>
-      <button class="btn-finish">FINISH EDIT</button>
+      <div class="multi-select-profile-pic">
+        <label for="profile-pic-dropdown" class="label">Profile Picture: </label>
+        <div class="profile-pic-dropdown" onclick="showCheckboxes()">
+          <button class="toggle" id="toggle-btn" name="toggle-btn" type="button">
+            {{ profile_picture }}
+          </button>
+          </div>
+          <div id="checkboxes">
+              {% for pic in profile_pics %}
+              {% if pic.name == profile_picture %}
+              <label for="{{ pic.name }}">
+                <input type="radio" name="profile_pic" id="{{ pic.name }}" value="{{ pic.name }}" class="radio" onchange="displaySelected()" checked/>{{ pic.name }}
+              </label>    
+              {% else %}          
+              <label for="{{ pic.name }}">
+                  <input type="radio" name="profile_pic" id="{{ pic.name }}" value="{{ pic.name }}" class="radio" onchange="displaySelected()"/>{{ pic.name }}
+              </label>
+              {% endif %}
+              {% endfor %}
+          </div>
+        </div>
+      </div>
+      <button class="btn-finish" type="submit" name="submit-btn" id="submit-btn" value="{{ profile_picture }}">FINISH EDIT</button>
     </form>
   </div>
 </div>
-{% include "base_input.html" %}
+<script>
+var expanded = false;
+
+function showCheckboxes() {
+  var checkboxes = document.getElementById("checkboxes");
+  if (!expanded) {
+    checkboxes.style.display = "block";
+    expanded = true;
+  } else {
+    checkboxes.style.display = "none";
+    expanded = false;
+  }
+}
+
+var radios = document.querySelectorAll('input[type="radio"]');
+
+function displaySelected() {
+  var disp_btn=document.getElementById('toggle-btn');
+  var submit_btn=document.getElementById('submit-btn')
+  var selected_item = '';
+  radios.forEach((radio) => {
+    if (radio.checked) {
+      selected_item = radio.value;
+    }
+    var html_txt = selected_item !== ''
+          ? selected_item : 'Select profile picture';
+    html_txt += '<svg class="dropdown-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="18 20 12 7.25"><path d="m29 21-5 5.25-5-5.25" stroke="#222" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>';
+    submit_btn.value = selected_item;
+    disp_btn.innerHTML = html_txt;
+  })
+}
+</script>
 <style>
 .settings-tab {
   width: 100%;
@@ -222,11 +274,17 @@
   display: flex;
   flex-direction: row;
 }
-.input-txt-white {
+.input-txt2 {
+  font: 400 20px "Ubuntu Condensed", sans-serif;
+  width: 100%;
+  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+.label {
   align-self: center;
-  width: fit-content;
   padding-right: 10px;
   text-wrap: nowrap;
+  font: 400 25px "Ubuntu Condensed", sans-serif;
+  color: #242424;
 }
 .form_edit_profile {
   display: flex;
@@ -235,6 +293,56 @@
   gap: 20px;
   align-self: center;
   width: 100%;
+}
+.toggle {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  font: 400 20px "Ubuntu Condensed", sans-serif;
+  border-radius: 5px;
+  background-color: white;
+  border: 2px solid #657895;
+  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  text-align: left;
+}
+.dropdown-svg {
+  width: 15px;
+  height: 15px;
+}
+#checkboxes {
+  display: none;
+  font: 400 20px "Ubuntu Condensed", sans-serif;
+  background-color: #ffffffb6;
+  border: 2px solid #657895;
+}
+#checkboxes label {
+  display: block;
+}
+#checkboxes label:hover {
+  background-color: #a2b7ca;
+}
+.checkbox {
+  accent-color: #657895;
+}
+.multi-select-profile-pic {
+  width: 100%;
+}
+.profile-pic-dropdown {
+  position: relative;
+}
+.profile-pic-dropdown select {
+  width: 100%;
+  font-weight: bold;
+}
+.over-select {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
 }
 </style>
 {% endblock %}

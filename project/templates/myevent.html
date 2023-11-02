@@ -2,7 +2,7 @@
 <div class="frame-myevent">
     <div class="left">
         <!-- <img class="event-image" src="image-1.png" /> -->
-        <img class="image-1" src="{{ url_for('static', filename='event_photos/' + event['event_type'].lower() + '.png') }}" alt="Event Image"/>
+        <img class="event-image" src="{{ url_for('static', filename='event_photos/' + event['event_type'].lower() + '.png') }}" alt="Event Image"/>
         <div class="sub-bottom">
             <svg
             class="rating"

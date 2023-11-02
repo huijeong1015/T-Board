@@ -65,6 +65,7 @@ class Event(db.Model):
     date = db.Column(db.String(10), nullable=False)
     time = db.Column(db.String(5), nullable=False)
     location = db.Column(db.String(100), nullable=False)
+    reg_link = db.Column(db.String(200), nullable=True) 
     description = db.Column(db.Text, nullable=False)
     event_type = db.Column(db.String(100), nullable=False)
     attendees = db.relationship(

@@ -244,10 +244,12 @@ def add_event():
     event_date= request.form["input-date"]
     event_time= request.form["input-time"]
     event_location= request.form["input-loc"]
+    reg_link= request.form["input-reg"]
     event_description= request.form["input-desc"]
     event_type = request.form.get("event_type")
 
-    new_event = Event(name=event_name, date=event_date, time=event_time, location=event_location, description=event_description, event_type=event_type, created_by=user)
+    new_event = Event(name=event_name, date=event_date, time=event_time, location=event_location, 
+                      description=event_description, event_type=event_type, created_by=user)
     db.session.add(new_event)
     db.session.commit()
     render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_type)

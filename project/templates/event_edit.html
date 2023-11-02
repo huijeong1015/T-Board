@@ -44,15 +44,15 @@
               <label for="event-type" class="input-txt required">Event Type</label>
               <div class="event-type" onclick="showCheckboxes()">
                 <button class="toggle" id="toggle-btn" type="button">
-                  Select type(s) of the event
+                  {{ event.event_type }}
                   <svg class="dropdown-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="18 20 12 7.25"><path d="m29 21-5 5.25-5-5.25" stroke="#222" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
                 </button>
               </div>
               <div id="checkboxes">
                 {% for o in event_types %}
-                <label for="{{ o.name }}">
-                  <input type="checkbox" id="{{ o.name }}" value="{{ o.name }}" class="checkbox" onchange="displaySelected()"/>{{ o.name }}
-                </label>
+                  <label for="{{ o.name }}">
+                      <input type="checkbox" id="{{ o.name }}" value="{{ o.name }}" class="checkbox" onchange="displaySelected()" {% if o.name == event.event_type %}checked{% endif %} />{{ o.name }}
+                  </label>
                 {% endfor %}
               </div>
             </div>
@@ -92,7 +92,7 @@ function displaySelected() {
       selected_items_txt += '#' + checkbox.value + " ";
     }
     var html_txt = selected_items.length > 0 
-          ? selected_items_txt : 'Select type(s) of the event';
+          ? selected_items_txt : 'Select an event type';
     html_txt += '<svg class="dropdown-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="18 20 12 7.25"><path d="m29 21-5 5.25-5-5.25" stroke="#222" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>';
     disp_btn.innerHTML = html_txt;
   })

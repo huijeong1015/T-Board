@@ -14,22 +14,22 @@
             <div class="input">
               <!-- <div class="input-name"></div> -->
               <label for="input-name" class="input-txt required">Name</label>
-              <input name="input-name" value="{{ event.name }}" type="text" class="input-txt2" required>
+              <input name="input-name" value="{{ event.name }}" type="text" class="input-txt" required>
             </div>
             <div class="input">
               <!-- <div class="input-date"></div> -->
               <label for="input-date" class="input-txt required">Date of the event</label>
-              <input name="input-date" value="{{ event.date }}" type="date" class="input-txt2" required>
+              <input name="input-date" value="{{ event.date }}" type="date" class="input-txt" required>
             </div>
             <div class="input">
               <!-- <div class="input-time"></div> -->
               <label for="input-time" class="input-txt required">Time of the event</label>
-              <input type = "time" id="input-time" name="input-time" placeholder="Specify time of the event" required>
+              <input name="input-time" value="{{ event.time }}" type="time" class="input-txt" required>
             </div>
             <div class="input">
               <!-- <div class="input-loc"></div> -->
               <label for="input-loc" class="input-txt required">Location of the event</label>
-              <input type = "text" id="input-loc" name="input-loc" placeholder="Specify location of the event" required>
+              <input name="input-loc" value="{{ event.location }}" type="text" class="input-txt" required>
             </div>
             <div class="input">
               <!-- <div class="input-reg"></div> -->
@@ -39,7 +39,7 @@
             <div class="input">
               <!-- <div class="input-desc"></div> -->
               <label for="input-desc" class="input-txt required">Description</label>
-              <textarea id="input-desc" name="input-desc" placeholder="Add description of the event" required></textarea>
+              <input name="input-desc" value="{{ event.description }}" type="text" class="input-txt" required>
             </div>
             <div class="multi-select-event-type">
               <label for="event-type" class="input-txt required">Event Type</label>

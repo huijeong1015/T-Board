@@ -70,6 +70,8 @@ class Event(db.Model):
     attendees = db.relationship(
         "User", secondary=attendees, backref=db.backref("events", lazy="dynamic")
     )
+    created_by_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    created_by = db.relationship('User', back_populates='created_events')
 
     def __repr__(self):
         return f"<Event {self.name}>"
@@ -100,6 +102,7 @@ class User(db.Model):
         secondaryjoin=(user_friends.c.friend_id == id),
         backref=db.backref("friends_ref", lazy="dynamic"),
     )
+    created_events = db.relationship('Event', back_populates='created_by', lazy='dynamic')
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
@@ -111,7 +114,7 @@ sample_events = [
     {"name": "Tech Conference 2023", "date": "2023-11-20", "time": "09:00", "location": "Silicon Valley Convention Center", "description": "Join industry leaders...", "event_type": "Networking"},
     {"name": "Music Festival", "date": "2023-08-15", "time": "12:00", "location": "Central Park, New York", "description": "A celebration of music...", "event_type": "Other"},
     {"name": "Concrete Canoe General Meeting", "date": "2023-05-01", "time": "07:00", "location": "Bahen Centre", "description": "General meeting open to the public", "event_type": "Club"},
-    {"name": "MAT188 Tutoring", "date": "2023-07-10", "time": "10:00", "location": "Zoom", "description": "Running through Mat188 homework problems", "event_type": "Tutoring"}
+    {"name": "MAT188 Tutoring", "date": "2023-07-10", "time": "10:00", "location": "Zoom", "description": "Running through Mat188 homework problems", "event_type": "Tutoring"}, 
 ]
 
 with app.app_context():

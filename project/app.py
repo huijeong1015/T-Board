@@ -232,6 +232,9 @@ def show_events():
 
 @app.route("/event_post", methods=["POST"])
 def add_event():
+    username = session.get('username')
+    user = User.query.filter_by(username=username).first()
+    
     event_name= request.form["input-name"]
     event_date= request.form["input-date"]
     event_time= request.form["input-time"]
@@ -239,7 +242,7 @@ def add_event():
     event_description= request.form["input-desc"]
     event_type = request.form.get("event_type")
 
-    new_event = Event(name=event_name, date=event_date, time=event_time, location=event_location, description=event_description, event_type=event_type)
+    new_event = Event(name=event_name, date=event_date, time=event_time, location=event_location, description=event_description, event_type=event_type, created_by=user)
     db.session.add(new_event)
     db.session.commit()
     render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_type)

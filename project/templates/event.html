@@ -49,6 +49,7 @@
             Location: {{ event['location'] }}
         </div>
         </div>
+        <form method="POST" action="/main_dashboard"></form>
         <form>
             <div class="frame-event-btn">
                 <button class="btn-bookmark" id="bookmark-{{ event.id }}">
@@ -68,34 +69,6 @@
                         />
                     </svg>
                 </button>
-
-                <!-- this is for the toggle in javascript -->
-                <!-- <script>
-            const bookmarkIcon = document.getElementById("bookmark-icon");
-            // let isClicked = false;
-            if (bookmarkIcon.getAttribute("colored") === true) { //true needs color
-                bookmarkIcon.querySelector("path").setAttribute("fill", "A34A4A");
-            } else {
-                    // always goes here 
-                bookmarkIcon.querySelector("path").setAttribute("fill", "red");
-            }
-          
-            bookmarkIcon.addEventListener("click", () => {
-            const isColored = bookmarkIcon.getAttribute("colored") === true;
-              if (isColored) {
-                //never in here 
-                bookmarkIcon.querySelector("path").setAttribute("fill", "black"); // Change the fill color when bookmarked
-                bookmarkIcon.setAttribute("colored", "false");
-              } else {
-                //goes in here
-                bookmarkIcon.querySelector("path").setAttribute("fill", "white"); // Revert to the original fill color when unbookmarked
-                bookmarkIcon.setAttribute("colored", "true");
-              }
-
-              localStorage.setItem("colored", bookmarkIcon.getAttribute("colored"));
-            }
-            );
-          </script>  -->
                 <button class="btn-calendar">
                     <svg
                         class="btn-calendar"
@@ -111,6 +84,7 @@
                         />
                     </svg>
                 </button>
+                <button name="event-details" class="btn-event-details" value="{{ event['id'] }}"></button>
                 <button class="btn-event-details">
                     <svg
                         class="btn-event-details"

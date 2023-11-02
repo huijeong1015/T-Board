@@ -92,7 +92,7 @@
                 </a>
                 <a href="{{ url_for('my_account_myevents') }}">
                     <!-- default doesn't work -->
-                    <!-- {% if profile_picture.lower() == "default" %} -->
+                    {% if profile_picture.lower() == "default" %}
                         <svg
                             class="account"
                             width="61"
@@ -109,7 +109,7 @@
                             fill="#D9D9D9"
                             />
                         </svg>
-                    <!-- {% else %} -->
+                    {% else %}
                         <img 
                             src="{{ url_for('static', filename='profile_picture/' + profile_picture.lower() + '.png') }}" 
                             alt="Profile Picture" 
@@ -118,7 +118,7 @@
                             height="61"
                             viewBox="0 0 61 61"
                         >
-                    <!-- {% endif %} -->
+                    {% endif %}
                 </a>
             </div>
         </div>
@@ -225,10 +225,6 @@
     .account {
         flex-shrink: 0;
         position: relative;
-        max-width: 100%;
-        max-height: 100%;
-        display: block;
-        margin: 0 auto;
         object-fit: cover;
         overflow: hidden;
         width: 65px;

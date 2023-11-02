@@ -32,9 +32,8 @@
               <input name="input-loc" value="{{ event.location }}" type="text" class="input-txt" required>
             </div>
             <div class="input">
-              <!-- <div class="input-reg"></div> -->
               <label for="input-reg" class="input-txt">Registration Link (optional)</label>
-              <input type = "url" id="input-reg" name="input-reg" placeholder="Add registration link (optional)">
+              <input type="url" id="input-reg" name="input-reg" placeholder="Add registration link (optional)" {% if event.reg_link %}value="{{ event.reg_link }}"{% endif %}>
             </div>
             <div class="input">
               <!-- <div class="input-desc"></div> -->

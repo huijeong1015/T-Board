@@ -56,7 +56,10 @@
                 {% endfor %}
               </div>
             </div>
-            <button class="btn-submit" onclick="checkEventTypeSelected()">SUBMIT</button>
+            <div class="buttons-container">
+              <button class="btn-submit" onclick="checkEventTypeSelected()">FINISH EDITS</button>
+              <button class="btn-submit btn-delete">DELETE EVENT</button>
+            </div>
           </form>
         </div>
       </div>
@@ -323,6 +326,23 @@ function checkEventTypeSelected() {
   font: 700 30px "Ubuntu Mono", sans-serif;
   position: relative;
 }
+.buttons-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.btn-delete {
+  background: #cd6262;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  padding: 10px;
+  position: relative;
+}
+
 .left h1 {
   font-size: 50px;
 }

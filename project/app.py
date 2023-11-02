@@ -145,27 +145,12 @@ def check_password_strength(password):
         return "medium"
     else:
         return "weak"
-
-
-
 def get_user():
     username = session.get('username')
     user = User.query.filter_by(username=username).first()
     return(user)  
 
-
-def get_user():
-    username = session.get('username')
-    user = User.query.filter_by(username=username).first()
-    return(user)  
-
-
-def get_user():
-    username = session.get('username')
-    user = User.query.filter_by(username=username).first()
-    return(user)  
-
-@app.route('/bookmark/')
+@app.route("/bookmark/", methods=["GET", "POST"])
 def bookmark():
     username = session.get('username')
     user = User.query.filter_by(username=username).first() 
@@ -203,7 +188,6 @@ def main_dashboard():
             # if no work try printing the events being queried in the db.py file
     return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg)
 
-
 @app.route("/search_dashboard/", methods=["POST"])
 def searchEvent():
     error_msg = ""
@@ -238,16 +222,29 @@ def my_account_notification():
     return render_template('my_account_notification.html', username=session.get('username'), 
                            interests=get_user_interests(), profile_picture=get_user_profile_picture())
 
-@app.route("/my_account/settings/")
+@app.route("/my_account/settings/", methods=["GET", "POST"])
 def my_account_settings():
     return render_template('my_account_settings.html', username=session.get('username'), 
                            interests=get_user_interests(), profile_picture=get_user_profile_picture())
 
-@app.route("/my_account/edit_profile/")
+@app.route("/my_account/edit_profile/", methods=["GET", "POST"])
 def my_account_edit_profile():
+    username = session.get('username')
+    user = User.query.filter_by(username=username).first()
+
+    # If the request method is POST, process form submission
+    if request.method == "POST":
+        #Important: Resricting user to only being able to edit interests and profile picture.
+        new_interests = request.form["input-interests"]
+        new_profile_picture = request.form["submit-btn"]
+        
+        user.interests = new_interests
+        user.profile_picture = new_profile_picture
+        db.session.commit()  
+
     return render_template('my_account_edit_profile.html', username=session.get('username'), 
                            email=get_user_email(), password=session.get('password'), interests=get_user_interests(),
-                           profile_picture=get_user_profile_picture())
+                           profile_picture=get_user_profile_picture(), profile_pics=profile_pic_types)
 
 @app.route("/dataset")
 def show_events():
@@ -261,7 +258,6 @@ def show_events():
 
     # You might return events as a string or JSON, or render them in a template
     return str(events)
-
 
 @app.route("/event_post", methods=["POST"])
 def add_event():

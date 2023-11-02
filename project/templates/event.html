@@ -52,8 +52,9 @@
 
         <form method="POST" action="/main_dashboard">
             <div class="frame-event-btn">
-                <button class="btn-bookmark" type="submit" name="bookmark" value="{{ event['id'] }}">
+                <button class="btn-bookmark" type="submit" name="bookmark" value="{{ event['id'] }}" onclick='fillEmptyButton()'>
                     <svg
+                        id="btn-bookmark"
                         class="btn-bookmark"
                         width="27"
                         height="54"
@@ -102,5 +103,16 @@
         </form>
     </div>
 </div>
+<script>   
+    function fillEmptyButton() {
+        var event_id = {{ event['id'] }};
+        var bookmarked_events = {{ bookmarked_events }};
+        var bookmark_btn = document.getElementById('btn-bookmark');
+
+        if  (bookmarked_events.include(event_id)) {
+            bookmark_btn.style.fill = 
+        }
+    }
+</script>
 {% include "base_event.html" %}
 {% endblock %}

@@ -183,10 +183,15 @@ def my_account_friends():
 
 @app.route("/my_account/myevents/")
 def my_account_myevents():
-    sql = text("SELECT * FROM events;")
-    result = db.session.execute(sql)
-    return render_template('my_account_myevents.html', username=session.get('username'), interests=get_user_interests(), 
-                           myevents=result, profile_picture=get_user_profile_picture())
+    username=session.get('username')
+    user = User.query.filter_by(username=username).first()
+    events_created_by_user = Event.query.filter_by(created_by_id=user.id).all()
+
+    return render_template('my_account_myevents.html', 
+                           username=session.get('username'), 
+                           interests=get_user_interests(), 
+                           myevents=events_created_by_user, 
+                           profile_picture=get_user_profile_picture())
 
 @app.route("/my_account/notification/")
 def my_account_notification():

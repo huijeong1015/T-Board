@@ -22,10 +22,6 @@ import re
 
 app.config["SECRET_KEY"] = os.urandom(24)
 
-#List of supported profile picture: 
-Profile_pictures = ["default", "Surprised", "LaughingCrying", "Laughing", "Happy", "Excited", "Cool"]
-
-# #Helper function that gets the current user
 # def current_user(attribute='id'):
 #     if(attribute == 'id'):
 #        username=session.get('username')
@@ -151,10 +147,6 @@ def get_user():
     return(user)  
 
 
-def get_user():
-    username = session.get('username')
-    user = User.query.filter_by(username=username).first()
-    return(user)  
 
 @app.route("/bookmark/", methods=["GET", "POST"])
 def bookmark():

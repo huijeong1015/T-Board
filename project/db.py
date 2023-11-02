@@ -99,7 +99,7 @@ class User(db.Model):
     password = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), unique=True, nullable=False)
     interests = db.Column(db.String(255), nullable=True)
-    profile_picture = db.Column(db.String(255), nullable=True)
+    profile_picture = db.Column(db.String(100), nullable=False)
     friends = db.relationship(
         "User",
         secondary=user_friends,

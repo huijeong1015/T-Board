@@ -3,3 +3,4 @@ __pycache__
 __pycache__/
 project/*.db
 project/events.db
+project/events.db

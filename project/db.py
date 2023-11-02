@@ -37,12 +37,7 @@ user_friends = db.Table(
     db.Column("friend_id", db.Integer, db.ForeignKey("users.id"), primary_key=True),
 )
 
-#Association table between users and events they want to save for later
-saved_events = db.Table(
-    'saved_events',
-    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
-    db.Column('event_id', db.Integer, db.ForeignKey('events.id'), primary_key=True),
-)
+
 # Model for events
 class Event(db.Model):
     __tablename__ = "events"
@@ -68,7 +63,6 @@ class User(db.Model):
     password = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), unique=True, nullable=False)
     interests = db.Column(db.String(255), nullable=True)
-    profile_picture = db.Column(db.String(255), nullable=True)
     friends = db.relationship(
         "User",
         secondary=user_friends,
@@ -76,13 +70,9 @@ class User(db.Model):
         secondaryjoin=(user_friends.c.friend_id == id),
         backref=db.backref("friends_ref", lazy="dynamic"),
     )
-    bookmarked_events = db.relationship('Event', secondary=saved_events,
-                                             backref=db.backref('bookmarked_ref', lazy='dynamic'))  
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
-
-        
 
     def __repr__(self):
         return "<User {}>".format(self.username)
@@ -162,26 +152,18 @@ with app.app_context():
         user_b.friends.append(user_a)  # a and b are friends
         user_b.friends.append(user_c)  # b and c are friends
 
-
         # Adding users to events
         tech_conference = Event.query.filter_by(name="Tech Conference 2023").first()
         music_festival = Event.query.filter_by(name="Music Festival").first()
         charity_run = Event.query.filter_by(name="Charity Run").first()
 
-        # user_a.bookmarked_events.append(music_festival)
         user_a.events.append(tech_conference)
         user_b.events.append(music_festival)
         user_c.events.append(charity_run)
-        
-        admin.events.append(music_festival)
-        
 
         db.session.add(admin)
         db.session.add(user_a)
         db.session.add(user_b)
         db.session.add(user_c)
-        
+
         db.session.commit()
-
-
-

@@ -4,338 +4,28 @@
   <div class="frame">
     <div class="board">
       <div class="event-list">
-        <div class="frame-event">
-          <div class="left">
-            <!-- <img class="event-image" src="image-1.png" /> -->
-            <img src="{{ url_for('static', filename='event_photos/club.png') }}" alt="Image" class="image-1">
-            <svg
-              class="rating"
-              width="221"
-              height="40"
-              viewBox="0 0 221 40"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M20.5 0L24.9903 13.8197H39.5211L27.7654 22.3607L32.2557 36.1803L20.5 27.6393L8.7443 36.1803L13.2346 22.3607L1.47887 13.8197H16.0097L20.5 0Z"
-                fill="#FF9900"
-                stroke="#838383"
-                stroke-width="2"
-              />
-              <path
-                d="M65.5 0L69.9903 13.8197H84.5211L72.7654 22.3607L77.2557 36.1803L65.5 27.6393L53.7443 36.1803L58.2346 22.3607L46.4789 13.8197H61.0097L65.5 0Z"
-                fill="#FF9900"
-                stroke="#838383"
-                stroke-width="2"
-              />
-              <path
-                d="M110.5 0L114.99 13.8197H129.521L117.765 22.3607L122.256 36.1803L110.5 27.6393L98.7443 36.1803L103.235 22.3607L91.4789 13.8197H106.01L110.5 0Z"
-                fill="#FF9900"
-                stroke="#838383"
-                stroke-width="2"
-              />
-              <path
-                d="M155.5 0L159.99 13.8197H174.521L162.765 22.3607L167.256 36.1803L155.5 27.6393L143.744 36.1803L148.235 22.3607L136.479 13.8197H151.01L155.5 0Z"
-                stroke="#838383"
-                stroke-width="2"
-              />
-              <path
-                d="M200.5 0L204.99 13.8197H219.521L207.765 22.3607L212.256 36.1803L200.5 27.6393L188.744 36.1803L193.235 22.3607L181.479 13.8197H196.01L200.5 0Z"
-                stroke="#838383"
-                stroke-width="2"
-              />
-            </svg>
-          </div>
-          <div class="right">
-            <div class="frame-info">
-              <div class="event-name-txt">Name: &lt;name of the event&gt;</div>
-              <div class="event-details-txt">Date: &lt;date of the event&gt;</div>
-              <div class="event-details-txt">Time: &lt;time of the event&gt;</div>
-              <div class="event-details-txt">
-                Location: &lt;location of the event&gt;
-              </div>
-            </div>
-            <div class="frame-event-btn">
-              <svg
-                class="btn-bookmark"
-                width="23"
-                height="45"
-                viewBox="0 0 23 45"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M0.5 0V45L11.75 33.75L23 45V0H0.5Z" fill="#A34A4A" />
-              </svg>
-
-              <svg
-                class="btn-alarm"
-                width="45"
-                height="45"
-                viewBox="0 0 45 45"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M22.5 0C16.3125 0 11.25 5.0625 11.25 11.25C11.25 17.1 8.325 22.3875 3.7125 26.2125C1.40625 28.125 0 30.825 0 33.75H45C45 30.825 43.65 28.125 41.2875 26.2125C36.675 22.3875 33.75 17.1 33.75 11.25C33.75 5.0625 28.7437 0 22.5 0ZM16.875 39.375C16.875 42.4688 19.4062 45 22.5 45C25.5938 45 28.125 42.4688 28.125 39.375H16.875Z"
-                  fill="#FFC633"
-                />
-              </svg>
-
-              <svg
-                class="btn-calendar"
-                width="40"
-                height="45"
-                viewBox="0 0 40 45"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M0.05625 0V11.25H39.4313V0H0.05625ZM0.05625 16.875V44.4937C0.05625 44.775 0.28125 45 0.5625 45H38.8688C39.15 45 39.375 44.775 39.375 44.4937V16.875H0H0.05625ZM5.68125 22.5H11.3062V28.125H5.68125V22.5ZM16.9312 22.5H22.5563V28.125H16.9312V22.5ZM28.1813 22.5H33.8063V28.125H28.1813V22.5ZM5.68125 33.75H11.3062V39.375H5.68125V33.75ZM16.9312 33.75H22.5563V39.375H16.9312V33.75Z"
-                  fill="#7CA34A"
-                />
-              </svg>
-
-              <svg
-                class="btn-event-details"
-                width="66"
-                height="45"
-                viewBox="0 0 66 45"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M41.1915 0V15H0.5V30H41.1915V45L65.6064 22.275L41.1915 0Z"
-                  fill="#657895"
-                />
-              </svg>
-            </div>
-          </div>
-        </div>
-        <div class="frame-event">
-          <div class="left">
-            <!-- <img class="event-image" src="image-1.png" /> -->
-            <img src="{{ url_for('static', filename='event_photos/club.png') }}" alt="Image" class="image-1">
-            <svg
-              class="rating2"
-              width="221"
-              height="40"
-              viewBox="0 0 221 40"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M20.5 0L24.9903 13.8197H39.5211L27.7654 22.3607L32.2557 36.1803L20.5 27.6393L8.7443 36.1803L13.2346 22.3607L1.47887 13.8197H16.0097L20.5 0Z"
-                fill="#FF9900"
-                stroke="#838383"
-                stroke-width="2"
-              />
-              <path
-                d="M65.5 0L69.9903 13.8197H84.5211L72.7654 22.3607L77.2557 36.1803L65.5 27.6393L53.7443 36.1803L58.2346 22.3607L46.4789 13.8197H61.0097L65.5 0Z"
-                fill="#FF9900"
-                stroke="#838383"
-                stroke-width="2"
-              />
-              <path
-                d="M110.5 0L114.99 13.8197H129.521L117.765 22.3607L122.256 36.1803L110.5 27.6393L98.7443 36.1803L103.235 22.3607L91.4789 13.8197H106.01L110.5 0Z"
-                fill="#FF9900"
-                stroke="#838383"
-                stroke-width="2"
-              />
-              <path
-                d="M155.5 0L159.99 13.8197H174.521L162.765 22.3607L167.256 36.1803L155.5 27.6393L143.744 36.1803L148.235 22.3607L136.479 13.8197H151.01L155.5 0Z"
-                stroke="#838383"
-                stroke-width="2"
-              />
-              <path
-                d="M200.5 0L204.99 13.8197H219.521L207.765 22.3607L212.256 36.1803L200.5 27.6393L188.744 36.1803L193.235 22.3607L181.479 13.8197H196.01L200.5 0Z"
-                stroke="#838383"
-                stroke-width="2"
-              />
-            </svg>
-          </div>
-          <div class="right">
-            <div class="frame-info">
-              <div class="event-name-txt">Name: &lt;name of the event&gt;</div>
-              <div class="event-details-txt">Date: &lt;date of the event&gt;</div>
-              <div class="event-details-txt">Time: &lt;time of the event&gt;</div>
-              <div class="event-details-txt">
-                Location: &lt;location of the event&gt;
-              </div>
-            </div>
-            <div class="frame-event-btn">
-              <svg
-                class="btn-bookmark"
-                width="23"
-                height="45"
-                viewBox="0 0 23 45"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M0.5 0V45L11.75 33.75L23 45V0H0.5Z" fill="#A34A4A" />
-              </svg>
-
-              <svg
-                class="btn-alarm"
-                width="45"
-                height="45"
-                viewBox="0 0 45 45"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M22.5 0C16.3125 0 11.25 5.0625 11.25 11.25C11.25 17.1 8.325 22.3875 3.7125 26.2125C1.40625 28.125 0 30.825 0 33.75H45C45 30.825 43.65 28.125 41.2875 26.2125C36.675 22.3875 33.75 17.1 33.75 11.25C33.75 5.0625 28.7437 0 22.5 0ZM16.875 39.375C16.875 42.4688 19.4062 45 22.5 45C25.5938 45 28.125 42.4688 28.125 39.375H16.875Z"
-                  fill="#FFC633"
-                />
-              </svg>
-
-              <svg
-                class="btn-calendar"
-                width="40"
-                height="45"
-                viewBox="0 0 40 45"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M0.05625 0V11.25H39.4313V0H0.05625ZM0.05625 16.875V44.4937C0.05625 44.775 0.28125 45 0.5625 45H38.8688C39.15 45 39.375 44.775 39.375 44.4937V16.875H0H0.05625ZM5.68125 22.5H11.3062V28.125H5.68125V22.5ZM16.9312 22.5H22.5563V28.125H16.9312V22.5ZM28.1813 22.5H33.8063V28.125H28.1813V22.5ZM5.68125 33.75H11.3062V39.375H5.68125V33.75ZM16.9312 33.75H22.5563V39.375H16.9312V33.75Z"
-                  fill="#7CA34A"
-                />
-              </svg>
-
-              <svg
-                class="btn-event-details"
-                width="66"
-                height="45"
-                viewBox="0 0 66 45"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M41.1915 0V15H0.5V30H41.1915V45L65.6064 22.275L41.1915 0Z"
-                  fill="#657895"
-                />
-              </svg>
-            </div>
-          </div>
-        </div>
-        <div class="frame-event">
-          <div class="left">
-            <!-- <img class="event-image" src="image-1.png" /> -->
-            <img src="{{ url_for('static', filename='event_photos/club.png') }}" alt="Image" class="image-1">
-            <svg
-              class="rating3"
-              width="221"
-              height="40"
-              viewBox="0 0 221 40"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M20.5 0L24.9903 13.8197H39.5211L27.7654 22.3607L32.2557 36.1803L20.5 27.6393L8.7443 36.1803L13.2346 22.3607L1.47887 13.8197H16.0097L20.5 0Z"
-                fill="#FF9900"
-                stroke="#838383"
-                stroke-width="2"
-              />
-              <path
-                d="M65.5 0L69.9903 13.8197H84.5211L72.7654 22.3607L77.2557 36.1803L65.5 27.6393L53.7443 36.1803L58.2346 22.3607L46.4789 13.8197H61.0097L65.5 0Z"
-                fill="#FF9900"
-                stroke="#838383"
-                stroke-width="2"
-              />
-              <path
-                d="M110.5 0L114.99 13.8197H129.521L117.765 22.3607L122.256 36.1803L110.5 27.6393L98.7443 36.1803L103.235 22.3607L91.4789 13.8197H106.01L110.5 0Z"
-                fill="#FF9900"
-                stroke="#838383"
-                stroke-width="2"
-              />
-              <path
-                d="M155.5 0L159.99 13.8197H174.521L162.765 22.3607L167.256 36.1803L155.5 27.6393L143.744 36.1803L148.235 22.3607L136.479 13.8197H151.01L155.5 0Z"
-                stroke="#838383"
-                stroke-width="2"
-              />
-              <path
-                d="M200.5 0L204.99 13.8197H219.521L207.765 22.3607L212.256 36.1803L200.5 27.6393L188.744 36.1803L193.235 22.3607L181.479 13.8197H196.01L200.5 0Z"
-                stroke="#838383"
-                stroke-width="2"
-              />
-            </svg>
-          </div>
-          <div class="right">
-            <div class="frame-info">
-              <div class="event-name-txt">Name: &lt;name of the event&gt;</div>
-              <div class="event-details-txt">Date: &lt;date of the event&gt;</div>
-              <div class="event-details-txt">Time: &lt;time of the event&gt;</div>
-              <div class="event-details-txt">
-                Location: &lt;location of the event&gt;
-              </div>
-            </div>
-            <div class="frame-event-btn">
-              <svg
-                class="btn-bookmark"
-                width="23"
-                height="45"
-                viewBox="0 0 23 45"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M0.5 0V45L11.75 33.75L23 45V0H0.5Z" fill="#A34A4A" />
-              </svg>
-              <svg
-                class="btn-alarm"
-                width="45"
-                height="45"
-                viewBox="0 0 45 45"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M22.5 0C16.3125 0 11.25 5.0625 11.25 11.25C11.25 17.1 8.325 22.3875 3.7125 26.2125C1.40625 28.125 0 30.825 0 33.75H45C45 30.825 43.65 28.125 41.2875 26.2125C36.675 22.3875 33.75 17.1 33.75 11.25C33.75 5.0625 28.7437 0 22.5 0ZM16.875 39.375C16.875 42.4688 19.4062 45 22.5 45C25.5938 45 28.125 42.4688 28.125 39.375H16.875Z"
-                  fill="#FFC633"
-                />
-              </svg>
-              <svg
-                class="btn-calendar"
-                width="40"
-                height="45"
-                viewBox="0 0 40 45"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M0.05625 0V11.25H39.4313V0H0.05625ZM0.05625 16.875V44.4937C0.05625 44.775 0.28125 45 0.5625 45H38.8688C39.15 45 39.375 44.775 39.375 44.4937V16.875H0H0.05625ZM5.68125 22.5H11.3062V28.125H5.68125V22.5ZM16.9312 22.5H22.5563V28.125H16.9312V22.5ZM28.1813 22.5H33.8063V28.125H28.1813V22.5ZM5.68125 33.75H11.3062V39.375H5.68125V33.75ZM16.9312 33.75H22.5563V39.375H16.9312V33.75Z"
-                  fill="#7CA34A"
-                />
-              </svg>
-              <svg
-                class="btn-event-details"
-                width="66"
-                height="45"
-                viewBox="0 0 66 45"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M41.1915 0V15H0.5V30H41.1915V45L65.6064 22.275L41.1915 0Z"
-                  fill="#657895"
-                />
-              </svg>
-            </div>
-          </div>
-        </div>
+        {% for event in bookmarked_events %}
+          {% with event=event %}
+            {% include "bookmarked_event.html" %}
+          {% endwith %}
+        {% endfor %}         
       </div>
     </div>
   </div>
 </div>
 {% include "base_event.html" %}
 <style>
+* {
+  box-sizing: border-box;
+}
 .dashboard {
   padding: 0px 25px 0px 25px;
   display: flex;
   flex-direction: row;
   gap: 25px;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
-  width: 1435px;
+  width: 100%;
   position: relative;
 }
 .frame {
@@ -344,20 +34,13 @@
   padding: 20px 20px 20px 20px;
   overflow: visible;
   width: 1080px;
+  height: fit-content;
 }
 .board {
   background: #d9d9d9;
   position: relative;
   box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-}
-.image-1 {
-  flex-shrink: 0;
-  width: 365px;
-  height: 189px;
-  position: relative;
-  max-width: 95%;
-  max-height: 95%;
-  display: block;
+  height: fit-content;
 }
 </style>  
 {% endblock %}

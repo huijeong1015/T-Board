@@ -258,7 +258,7 @@ def add_event():
 @app.route('/edit_event/<int:event_id>', methods=['GET'])
 def edit_event(event_id):
     event = Event.query.get(event_id)
-    return render_template('event_edit.html', profile_picture=get_user_profile_picture(), event=event)
+    return render_template('event_edit.html', profile_picture=get_user_profile_picture(), event=event, event_types=event_types)
 
 
 @app.errorhandler(404)

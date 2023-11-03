@@ -141,6 +141,7 @@ def check_password_strength(password):
         return "medium"
     else:
         return "weak"
+    
 def get_user():
     username = session.get('username')
     user = User.query.filter_by(username=username).first()
@@ -228,10 +229,35 @@ def my_account_event_history():
     return render_template('my_account_eventhistory.html', username=session.get('username'), 
                            interests=get_user_interests(), profile_picture=get_user_profile_picture())
 
+def get_current_user_friends(username):
+    # Assuming 'db' is your database connection object and 'User' is your user model
+    current_user = User.query.filter_by(username=username).first()
+    if current_user:
+        return current_user.friends  # This depends on how your user's friends are stored/retrieved
+    else:
+        return []
+
 @app.route("/my_account/friends/")
 def my_account_friends():
-    return render_template('my_account_friends.html', username=session.get('username'), 
-                           interests=get_user_interests(), profile_picture=get_user_profile_picture())
+    username = session.get('username')
+    
+    # Ensure the user is logged in or handle appropriately if not
+    if not username:
+        # Redirect to login page or handle it however you prefer
+        return redirect(url_for('login'))
+
+    # Fetch user-specific data
+    interests = get_user_interests()
+    profile_picture = get_user_profile_picture()
+    friends_list = get_current_user_friends(username)  # This should be a function you create
+    
+    # Pass everything to the template
+    return render_template('my_account_friends.html', 
+                           username=username,
+                           interests=interests, 
+                           profile_picture=profile_picture,
+                           friends=friends_list)
+
 
 @app.route("/my_account/myevents/")
 def my_account_myevents():

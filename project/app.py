@@ -272,7 +272,7 @@ def edit_event(event_id):
             return redirect(url_for("my_account_myevents"))
 
         elif 'delete_event' in request.form:
-            return redirect(url_for("are_you_sure"))
+            return redirect(url_for("are_you_sure", event_id=event_id))
 
     return render_template('event_edit.html', profile_picture=get_user_profile_picture(), event=event, event_types=event_types)
 
@@ -357,10 +357,17 @@ def new_events():
         f"<h1>Events and Their Attendees</h1>{event_list_html}"
     )
 
-@app.route('/are_you_sure', methods=['GET', 'POST'])
-def are_you_sure():
+@app.route('/are_you_sure/<int:event_id>', methods=['GET', 'POST'])
+def are_you_sure(event_id):
+    event = Event.query.filter_by(id=event_id).first()
     if request.method == 'POST':
-        # Handle the POST request here (e.g. if the user clicks YES or NO)
-        pass
+        if 'yes' in request.form:
+            db.session.delete(event)
+            db.session.commit()
+            flash('Event has been deleted!', 'success')
+            return redirect(url_for('my_account_myevents'))
+        elif 'no' in request.form:
+            flash('Event deletion cancelled.', 'info')
+            return redirect(url_for('edit_event', event_id=event_id))
+    return render_template('are_you_sure.html', event_id=event_id, event=event, profile_picture=get_user_profile_picture())
 
-    return render_template('are_you_sure.html', profile_picture=get_user_profile_picture())

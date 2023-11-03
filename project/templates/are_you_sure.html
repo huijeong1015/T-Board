@@ -9,13 +9,16 @@
             <h1>Are you sure you want to delete your event?</h1>
           </div>
         </div>
-        <div class="middle">      
+        <!-- Start of the form -->
+        <form action="{{ url_for('are_you_sure', event_id=event_id) }}" method="post">
+          <div class="middle">      
             <div class="buttons-container">
-              <button class="btn-submit btn-yes">YES</button>
-              <button class="btn-submit btn-no">NO</button>
+              <button type="submit" class="btn-submit btn-yes" name="yes" value="yes">YES</button>
+              <button type="button" class="btn-submit btn-no" onclick="window.history.back();">NO</button>
             </div>
-          </form>
-        </div>
+          </div>
+        </form>
+        <!-- End of the form -->
       </div>
     </div>
   </div>

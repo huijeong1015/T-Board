@@ -23,16 +23,7 @@ import re
 
 app.config["SECRET_KEY"] = os.urandom(24)
 
-# def current_user(attribute='id'):
-#     if(attribute == 'id'):
-#        username=session.get('username')
-#        user = User.query.filter_by(username=username).first
-#        return user
-#     elif(attribute == 'name'):
-#        username=session.get('username')
-#        return username
-
-#Temp helper functions
+#Helper functions
 def get_user_interests():
     username=session.get('username')
     user = User.query.filter_by(username=username).first()
@@ -47,6 +38,11 @@ def get_user_profile_picture():
     username=session.get('username')
     user = User.query.filter_by(username=username).first()
     return user.profile_picture
+
+def get_user():
+    username = session.get('username')
+    user = User.query.filter_by(username=username).first()
+    return(user)  
 
 app.config['SECRET_KEY'] = os.urandom(24)
 @app.route("/", methods=["GET", "POST"])
@@ -74,7 +70,6 @@ def login():
                 return redirect(url_for("main_dashboard"))
 
     return render_template("login.html", error=error)
-
 
 @app.route("/register/", methods=["GET", "POST"])
 def register():
@@ -128,7 +123,6 @@ def register():
 
     return render_template("register.html")
 
-
 def check_password_strength(password):
     length = len(password)
     has_upper = any(char.isupper() for char in password)
@@ -143,11 +137,6 @@ def check_password_strength(password):
     else:
         return "weak"
     
-def get_user():
-    username = session.get('username')
-    user = User.query.filter_by(username=username).first()
-    return(user)  
-
 @app.route("/bookmark/", methods=["GET", "POST"])
 def bookmark():
     error_msg = ""
@@ -264,7 +253,6 @@ def my_account_friends():
                            profile_picture=profile_picture,
                            friends=friends_list)
 
-
 @app.route("/my_account/myevents/")
 def my_account_myevents():
     username=session.get('username')
@@ -348,7 +336,7 @@ def add_event():
         render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_type)
         return redirect(url_for("main_dashboard"))
     else:
-        print("invalid date or time. should b ")
+        print("invalid date or time. should b ") #TODO: Give useful message to user
         return (render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_type))
 
 @app.route('/edit_event/<int:event_id>', methods=["GET", "POST"])
@@ -358,14 +346,25 @@ def edit_event(event_id):
         if 'finish_edit' in request.form:
             event = Event.query.filter_by(id=event_id).first()
             event.name= request.form["input-name"]
-            event.date= request.form["input-date"]
-            event.time= request.form["input-time"]
+
             event.location= request.form["input-loc"]
             event.reg_link= request.form["input-reg"]
             event.description= request.form["input-desc"]
             event.event_type = request.form.get("event_type")
-            db.session.commit()
-            return redirect(url_for("my_account_myevents"))
+
+            event_date= request.form["input-date"]
+            event_time= request.form["input-time"]
+            event_datetime = f"{event_date} {event_time}"
+            event_datetime_dt = datetime.strptime(event_datetime, "%Y-%m-%d %H:%M")
+            current_datetime = datetime.now()
+            if event_datetime_dt > current_datetime:
+                event.time= event_time
+                event.date= event_date
+                db.session.commit()
+                return redirect(url_for("my_account_myevents"))
+            else:
+                #TODO: Give useful message to user
+                pass
 
         elif 'delete_event' in request.form:
             return redirect(url_for("are_you_sure", event_id=event_id))

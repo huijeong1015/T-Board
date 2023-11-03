@@ -1,0 +1,234 @@
+{% extends "my_account.html" %}
+{% block tab %}
+<div class="my-events-tab">
+  <div class="frame-tab">
+    <div class="my-events-tab2">
+      <svg class="events" width="58" height="50" viewBox="0 0 58 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M0 0V21.4286H21.4286V0H0ZM28.5714 0V7.14286H57.1429V0H28.5714ZM28.5714 14.2857V21.4286H50V14.2857H28.5714ZM0 28.5714V50H21.4286V28.5714H0ZM28.5714 28.5714V35.7143H57.1429V28.5714H28.5714ZM28.5714 42.8571V50H50V42.8571H28.5714Z"
+          fill="white" />
+      </svg>
+    </div>
+    <div class="event-history-tab">
+      <a href="{{ url_for('my_account_event_history') }}">
+        <svg
+        class="history"
+        width="50"
+        height="50"
+        viewBox="0 0 50 50"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M24.9375 0C38.6875 0 49.9375 11.25 49.9375 25C49.9375 38.75 38.6875 50 24.9375 50C18.0625 50 11.6875 47.3125 7.1875 42.75L11.6875 38.25C15.0625 41.625 19.75 43.75 25 43.75C35.375 43.75 43.75 35.375 43.75 25C43.75 14.625 35.375 6.25 25 6.25C19.8125 6.25 15.3125 8.5 11.9375 11.9375L18.75 18.75H5.24044e-06V0L7.4375 7.4375C11.9375 2.9375 18.125 0 25 0H24.9375Z"
+          fill="#1E1E1E"
+        />
+        <line
+          x1="24.833"
+          y1="14.1665"
+          x2="24.833"
+          y2="26.6665"
+          stroke="#1E1E1E"
+          stroke-width="3"
+        />
+        <line
+          x1="35.087"
+          y1="31.6996"
+          x2="24.2518"
+          y2="25.4668"
+          stroke="#1E1E1E"
+          stroke-width="3"
+        />
+        </svg>
+      </a>
+    </div>
+    <div class="friends-tab">
+        <a href="{{ url_for('my_account_friends') }}">
+          <svg class="add-friend" width="75" height="50" viewBox="0 0 75 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M25 0C18.125 0 12.5 7 12.5 15.625C12.5 24.25 18.125 31.25 25 31.25C31.875 31.25 37.5 24.25 37.5 15.625C37.5 7 31.875 0 25 0ZM11.9375 31.25C5.3125 31.5625 0 37 0 43.75V50H50V43.75C50 37 44.75 31.5625 38.0625 31.25C34.6875 35.0625 30.0625 37.5 25 37.5C19.9375 37.5 15.3125 35.0625 11.9375 31.25Z"
+              fill="#202E44" />
+            <path d="M59.3846 0V9.29969H50.085V15.4995H59.3846V24.7992H65.5844V15.4995H74.8841V9.29969H65.5844V0H59.3846Z"
+              fill="#202E44" />
+          </svg>
+        </a>
+    </div>
+    <div class="notification-tab">
+      <a href="{{ url_for('my_account_notification') }}"> 
+        <svg class="alarm" width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M25 0C18.125 0 12.5 5.625 12.5 12.5C12.5 19 9.25 24.875 4.125 29.125C1.5625 31.25 0 34.25 0 37.5H50C50 34.25 48.5 31.25 45.875 29.125C40.75 24.875 37.5 19 37.5 12.5C37.5 5.625 31.9375 0 25 0ZM18.75 43.75C18.75 47.1875 21.5625 50 25 50C28.4375 50 31.25 47.1875 31.25 43.75H18.75Z"
+            fill="#FFC633" />
+        </svg>
+      </a>
+    </div>
+    <div class="settings-tab">
+      <a href="{{ url_for('my_account_settings') }}"> 
+        <svg
+          class="settings"
+          width="50"
+          height="50"
+          viewBox="0 0 50 50"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M21.8828 0L18.7656 7.41895C18.1421 7.60598 17.581 7.91771 17.0199 8.22943L9.601 5.11222L5.11222 9.601L8.22943 17.0199C7.9177 17.6434 7.66833 18.1421 7.41895 18.7656L0 21.8828V28.1172L7.41895 31.2344C7.66833 31.8579 7.9177 32.3566 8.22943 32.98L5.11222 40.399L9.601 44.8878L17.0199 41.7706C17.581 42.0199 18.1421 42.3317 18.7656 42.581L21.8828 50H28.1172L31.2344 42.581C31.7955 42.3317 32.419 42.0823 32.9801 41.7706L40.399 44.8878L44.8878 40.399L41.7706 32.98C42.0199 32.419 42.3317 31.7955 42.581 31.2344L50 28.1172V21.8828L42.581 18.7656C42.394 18.2045 42.0823 17.581 41.7706 17.0199L44.8878 9.601L40.399 5.11222L32.9801 8.22943C32.419 7.98005 31.7955 7.66833 31.2344 7.41895L28.1172 0L21.8828 0ZM25 15.586C30.1746 15.586 34.3516 19.7631 34.3516 24.9377C34.3516 30.1122 30.1746 34.2893 25 34.2893C19.8254 34.2893 15.6484 30.1122 15.6484 24.9377C15.6484 19.7631 19.8254 15.586 25 15.586Z"
+            fill="#D9D9D9"
+          />
+        </svg>
+      </a>
+    </div>
+  </div>
+  <div class="frame-content">
+    <div class="heading">MY EVENTS</div>
+    {% for event in myevents %}
+      {% with event=event %}
+        {% include "myevent.html" %}
+      {% endwith %}
+    {% endfor %} 
+  </div>
+</div>
+{% include "base_event.html" %}
+<style>
+.my-events-tab {
+  width: 100%;
+  height: 100%;
+}
+.frame-tab {
+  display: flex;
+  flex-direction: row;
+  padding-right: 15px;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: flex-end;
+  position: relative;
+  height: fit-content;
+}
+.my-events-tab2 {
+  background: #a2b7ca;
+  border-radius: 10px;
+  width: 92px;
+  height: 92px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.events {
+  position: relative;
+  overflow: visible;
+}
+.event-history-tab {
+  background: #657895;
+  border-radius: 10px;
+  width: 92px;
+  height: 92px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.history {
+  position: relative;
+  overflow: visible;
+}
+.friends-tab {
+  background: #657895;
+  border-radius: 10px;
+  width: 92px;
+  height: 92px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.add-friend {
+  position: relative;
+  overflow: visible;
+}
+.notification-tab {
+  background: #657895;
+  border-radius: 10px;
+  width: 92px;
+  height: 92px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.alarm {
+  position: relative;
+  overflow: visible;
+}
+.settings-tab {
+  background: #657895;
+  border-radius: 10px;
+  width: 92px;
+  height: 92px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.settings {
+  position: relative;
+  overflow: visible;
+}
+.frame-content {
+  background: #a2b7ca;
+  border-radius: 15px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  top: -15px;
+  position: relative;
+}
+.heading {
+  color: #000000;
+  text-align: left;
+  font: 700 40px "Ubuntu Mono", sans-serif;
+  position: relative;
+}
+.frame-myevent {
+  background: transparent;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 15px;
+  width: 100%;
+  height: fit-content;
+  position: relative;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.sub-bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 350px;
+}
+.sub-right {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: column;
+  height: 239px;
+  position: relative;
+}
+.frame-info {
+  width: fit-content;
+}
+.btn-edit {
+  padding: 0%;
+}
+.icon-pencil {
+  width: 38px;
+  height: 38px;
+}
+</style>
+{% endblock %}

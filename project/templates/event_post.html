@@ -1,0 +1,338 @@
+{% extends "search_tab.html" %}
+{% block content %}
+<div class="dashboard">
+  <div class="frame">
+    <div class="board">
+      <div class="event-details">
+        <div class="top">
+          <div class="left">
+            <h1>Create your event</h1>
+          </div>
+        </div>
+        <div class="bottom">      
+          <form action="{{url_for('add_event')}}" method="POST" class="event-post-form">
+            <div class="input">
+              <!-- <div class="input-name"></div> -->
+              <label for="input-name" class="input-txt required">Name</label>
+              <input type = "text" id="input-name" name="input-name" placeholder="Enter name of the event" required>
+            </div>
+            <div class="input">
+              <!-- <div class="input-date"></div> -->
+              <label for="input-date" class="input-txt required">Date of the event</label>
+              <input type = "date" id="input-date" name="input-date" placeholder="Specify date of the event" required>
+            </div>
+            <div class="input">
+              <!-- <div class="input-time"></div> -->
+              <label for="input-time" class="input-txt required">Time of the event</label>
+              <input type = "time" id="input-time" name="input-time" placeholder="Specify time of the event" required>
+            </div>
+            <div class="input">
+              <!-- <div class="input-loc"></div> -->
+              <label for="input-loc" class="input-txt required">Location of the event</label>
+              <input type = "text" id="input-loc" name="input-loc" placeholder="Specify location of the event" required>
+            </div>
+            <div class="input">
+              <!-- <div class="input-reg"></div> -->
+              <label for="input-reg" class="input-txt">Registration Link (optional)</label>
+              <input type = "url" id="input-reg" name="input-reg" placeholder="Add registration link (optional)">
+            </div>
+            <div class="input">
+              <!-- <div class="input-desc"></div> -->
+              <label for="input-desc" class="input-txt required">Description</label>
+              <textarea id="input-desc" name="input-desc" placeholder="Add description of the event" required></textarea>
+            </div>
+            <div class="multi-select-event-type">
+              <label for="event-type" class="input-txt required">Event Type</label>
+              <div class="event-type" onclick="showCheckboxes()">
+                <button class="toggle" id="toggle-btn" type="button">
+                  Select an event type
+                  <svg class="dropdown-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="18 20 12 7.25"><path d="m29 21-5 5.25-5-5.25" stroke="#222" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+                </button>
+              </div>
+              <div id="checkboxes">
+                {% for o in event_types %}
+                <label for="{{ o.name }}">
+                  <input type="radio" name="event_type" id="{{ o.name }}" value="{{ o.name }}" class="radio" onchange="displaySelected()"/>{{ o.name }}
+                </label>
+                {% endfor %}
+              </div>
+            </div>
+            <button class="btn-submit" onclick="return checkEventTypeSelected()">SUBMIT</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+var expanded = false;
+
+function showCheckboxes() {
+  var checkboxes = document.getElementById("checkboxes");
+  if (!expanded) {
+    checkboxes.style.display = "block";
+    expanded = true;
+  } else {
+    checkboxes.style.display = "none";
+    expanded = false;
+  }
+}
+
+var radios = document.querySelectorAll('input[type="radio"]');
+
+function displaySelected() {
+  var disp_btn=document.getElementById('toggle-btn');
+  var selected_item = '';
+  radios.forEach((radio) => {
+    if (radio.checked) {
+      selected_item = radio.value;
+    }
+    var html_txt = selected_item !== '' 
+          ? '#' + selected_item : 'Select an event type';
+    html_txt += '<svg class="dropdown-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="18 20 12 7.25"><path d="m29 21-5 5.25-5-5.25" stroke="#222" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>';
+    disp_btn.innerHTML = html_txt;
+  })
+}
+
+function isChecked() {
+  for (var i = 0; i < radios.length; i++) {
+    if (radios[i].checked) return true;
+  }
+  return false;
+}
+
+function checkEventTypeSelected() {
+  if (!isChecked()) {
+    const error_msg= 'A type of event must be selected.';
+    return false;
+  }
+  return true; 
+}
+
+
+function checkEventTypeSelected() {
+  const error_msg = !isChecked() ? 'A type of event must be selected.' : '';
+  radios[0].setCustomValidity(error_msg);
+}
+</script>
+{% include "base_input.html" %}
+<style>
+.dashboard {
+  padding: 0px 25px 0px 25px;
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+.frame {
+  background: #786554;
+  position: relative;
+  padding: 20px 20px 20px 20px;
+  width: 1007px;
+  overflow: visible;
+}
+.board {
+  background: #d9d9d9;
+  position: relative;
+  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+.event-details {
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+}
+.event-post-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.top {
+  display: flex;
+  flex-direction: row;
+  gap: 18px;
+  align-items: flex-end;
+  justify-content: center;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
+}
+.left {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: flex-end;
+  justify-content: center;
+  flex: 1;
+  position: relative;
+}
+.left h1 {
+  font-size: 50px;
+}
+.image-1 {
+  flex-shrink: 0;
+  width: 365px;
+  height: 189px;
+  position: relative;
+  max-width: 95%;
+  max-height: 95%;
+  display: block;
+}
+.btn-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+  justify-content: flex-end;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
+}
+.icon-pencil {
+  flex-shrink: 0;
+  position: relative;
+  overflow: visible;
+}
+.bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
+}
+#input-name {
+  background: #ffffff;
+  border-radius: 5px;
+  width: 100%;
+  position: relative;
+  font: 400 20px "Ubuntu Condensed", sans-serif;
+  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+#input-date {
+  background: #ffffff;
+  border-radius: 5px;
+  width: 100%;
+  position: relative;
+  font: 400 20px "Ubuntu Condensed", sans-serif;
+  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+#input-time {
+  background: #ffffff;
+  border-radius: 5px;
+  width: 100%;
+  position: relative;
+  font: 400 20px "Ubuntu Condensed", sans-serif;
+  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+#input-loc {
+  background: #ffffff;
+  border-radius: 5px;
+  width: 100%;
+  position: relative;
+  font: 400 20px "Ubuntu Condensed", sans-serif;
+  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+#input-reg {
+  background: #ffffff;
+  border-radius: 5px;
+  width: 100%;
+  position: relative;
+  font: 400 20px "Ubuntu Condensed", sans-serif;
+  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+#input-desc {
+  background: #ffffff;
+  height: 150px;
+  width: 100%;
+  position: relative;
+  font: 400 20px "Ubuntu Condensed", sans-serif;
+  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+.toggle {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  font: 400 20px "Ubuntu Condensed", sans-serif;
+  border-radius: 5px;
+  background-color: white;
+  border: 2px solid #657895;
+  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  text-align: left;
+}
+.dropdown-svg {
+  width: 15px;
+  height: 15px;
+}
+#checkboxes {
+  display: none;
+  font: 400 20px "Ubuntu Condensed", sans-serif;
+  background-color: #ffffffb6;
+  border: 2px solid #657895;
+}
+#checkboxes label {
+  display: block;
+}
+#checkboxes label:hover {
+  background-color: #a2b7ca;
+}
+.checkbox {
+  accent-color: #657895;
+}
+.multi-select-event-type {
+  width: 100%;
+}
+.event-type {
+  position: relative;
+}
+.event-type select {
+  width: 100%;
+  font-weight: bold;
+}
+.over-select {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+.btn-frame {
+  width: 100%;
+  display: flex;
+  padding: 20px 20px 20px 20px;
+  align-items: center;
+  justify-content: center;
+  position: relative;  
+}
+.btn-submit {
+  background: #a2b7ca;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  padding: 10px;
+  position: relative;
+}
+.btn-txt {
+  color: #1e1e1e;
+  text-align: center;
+  font: 700 30px "Ubuntu Mono", sans-serif;
+  position: relative;
+}
+</style>
+{% endblock %}

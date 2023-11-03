@@ -1,0 +1,46 @@
+{% extends "bookmark_tab.html" %}
+{% block content %}
+<div class="dashboard">
+  <div class="frame">
+    <div class="board">
+      <div class="event-list">
+        {% for event in bookmarked_events %}
+          {% with event=event %}
+            {% include "bookmarked_event.html" %}
+          {% endwith %}
+        {% endfor %}         
+      </div>
+    </div>
+  </div>
+</div>
+{% include "base_event.html" %}
+<style>
+* {
+  box-sizing: border-box;
+}
+.dashboard {
+  padding: 0px 25px 0px 25px;
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+  align-items: stretch;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+}
+.frame {
+  background: #786554;
+  position: relative;
+  padding: 20px 20px 20px 20px;
+  overflow: visible;
+  width: 1080px;
+  height: fit-content;
+}
+.board {
+  background: #d9d9d9;
+  position: relative;
+  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  height: fit-content;
+}
+</style>  
+{% endblock %}

@@ -24,14 +24,6 @@
       <input type="checkbox" id="show-bookmarked" name="show-bookmarked" value="show-bookmarked" class="checkbox">
       <label for="show-bookmarked" class="show-bookmarked-events">Show bookmarked events</label><br>
     </div>
-    <div class = "show_filtered">
-      <label>Filter By:</label>
-      Club<input type = "checkbox" value = "Club" name = "search_filter" onchange="this.form.submit()" {{ 'checked' if bookmark_checked else '' }}>
-      Networking<input type = "checkbox" value = "Networking" name = "search_filter" onchange = ""><br>
-      Sports<input type = "checkbox" value = "Sports" name = "search_filter" onchange = "">
-      Tutoring<input type = "checkbox" value = "Tutoring" name = "search_filter" onchange = ""><br>
-      Other<input type = "checkbox" value = "Other" name = "search_filter">
-    </div>
     <div class="sort">
       <label for="sort-by" class="sort-by">Sort by:</label>
       <select id="sort-by" name="sort-by" class="dropdown">
@@ -57,10 +49,6 @@
     </svg>
   </div>
 </div>
-
-<script>
-  
-</script>
 
 {% include "base_event.html" %}
 <style>

@@ -209,7 +209,7 @@ def main_dashboard():
             result = user.bookmarked_events
         if request.form.getlist('filter') != None:
             chosen_filters = request.form.getlist('filter')
-            if chosen_filters == []:
+            if chosen_filters == []: # this prevents index errors when checkboxes are deselected
                 result = db.session.execute(sql)
                 return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg, 
                                        bookmark_checked=bookmark_checked, event_types_checked=event_types_checked)
@@ -221,6 +221,9 @@ def main_dashboard():
                     print(each)
                     event_types_checked[LIST_OF_EVENT_TYPES.index(each)] = each
                     result = result + Event.query.filter(Event.event_type.contains(each)).all()
+        
+        #sort results here
+        result.sort(key = lambda x: x.name)
 
     return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg, 
                            bookmark_checked=bookmark_checked, event_types_checked=event_types_checked)

@@ -22,6 +22,7 @@ from werkzeug.security import check_password_hash
 import re
 
 app.config["SECRET_KEY"] = os.urandom(24)
+LIST_OF_EVENT_TYPES = ["Tutoring", "Sports", "Club", "Networking", "Other"] 
 
 #Helper functions
 def get_user_interests():
@@ -170,6 +171,8 @@ def event_post():
 def main_dashboard():
     error_msg = ""
     bookmark_checked = False
+    event_types_checked = [False] * len(LIST_OF_EVENT_TYPES) # initializes event types' check marks; this imitates Ghamr's implementation of bookmark checks.
+
     username = session.get('username')
     user = User.query.filter_by(username=username).first()
     print(user)
@@ -204,8 +207,19 @@ def main_dashboard():
             bookmark_checked = request.form.get('show-bookmarked')
             print (request.form.get("show-bookmarked"))
             result = user.bookmarked_events
+        if request.form.getlist('filter') != None:
+            chosen_filters = request.form.getlist('filter')
+            #event_types_checked[LIST_OF_EVENT_TYPES.index(chosen_filters[0])] = chosen_filters[0]
+            result = Event.query.filter(Event.event_type.contains(chosen_filters[0])).all()
+            print(chosen_filters)
+            for each in chosen_filters:
+                if each != chosen_filters[0]:
+                    print(each)
+                    event_types_checked[LIST_OF_EVENT_TYPES.index(each)] = each
+                    result = result.union(Event.query.filter(Event.event_type.contains(each)).all())
 
-    return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg, bookmark_checked=bookmark_checked)
+    return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg, 
+                           bookmark_checked=bookmark_checked, event_types_checked=event_types_checked)
 
 @app.route("/search_dashboard/", methods=["POST"])
 def searchEvent():

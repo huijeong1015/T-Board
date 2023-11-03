@@ -25,6 +25,13 @@
         <input type="checkbox" id="show-bookmarked" name="show-bookmarked" value="show-bookmarked" class="checkbox" onchange="this.form.submit()" {{ 'checked' if bookmark_checked else '' }}>
         <label for="show-bookmarked" class="show-bookmarked-events">Show bookmarked events</label><br>
       </div>
+      <div class = "apply_filter">
+        <input type="checkbox" id="filter_club" name="filter" value="Club" onchange="this.form.submit()"  {{ 'checked' if event_types_checked[2] else '' }}><label for="filter">Club</label>
+        <input type="checkbox" name="filter" value="Networking" onchange="this.form.submit()"  {{ 'checked' if event_types_checked[3] else '' }}><label for="filter">Networking</label>
+        <input type="checkbox" name="filter" value="Sports" onchange="this.form.submit()"  {{ 'checked' if event_types_checked[1] else '' }}><label for="filter">Sports</label>
+        <input type="checkbox" name="filter" value="Tutoring" onchange="this.form.submit()"  {{ 'checked' if event_types_checked[0] else '' }}><label for="filter">Tutoring</label>
+        <input type="checkbox" name="filter" value="Other" onchange="this.form.submit()"  {{ 'checked' if event_types_checked[4] else '' }}><label for="filter">Other</label>
+      </div>
       <div class="sort">
         <label for="sort-by" class="sort-by">Sort by:</label>
         <select id="sort-by" name="sort-by" class="dropdown">

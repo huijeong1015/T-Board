@@ -114,11 +114,11 @@
               Event description: {{ event['description'] }}
           </div>
           <div class="review">Reviews:</div>
-          <form method="POST" action="{{ url_for('attend_event') }}">
+          <form method="POST" action="{{ url_for('attend_event', event_id=event['id']) }}">
             <div class="attend-button-container">
-              <button class="btn-submit" type="button" id="attend-btn">ATTEND</button>
+              <button class="btn-submit" type="submit" id="attend-btn">ATTEND</button>
             </div>
-          </form>
+          </form>          
       </div>
       </div>
     </div>

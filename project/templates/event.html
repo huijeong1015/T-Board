@@ -49,9 +49,10 @@
                 Location: {{ event['location'] }}
             </div>
         </div>
+
         <form method="POST" action="/main_dashboard">
             <div class="frame-event-btn">
-                <button class="btn-bookmark">
+                <button class="btn-bookmark" type="submit" name="bookmark" value="{{ event['id'] }}">
                     <svg
                         class="btn-bookmark"
                         width="27"

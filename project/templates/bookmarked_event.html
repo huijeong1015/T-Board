@@ -49,17 +49,19 @@
         <div class="event-details-txt">Location: {{ event['location'] }}</div>
       </div>
       <form method="POST" action="/bookmark">
-        <div class="frame-event-btn">
-          <svg
-            class="btn-bookmark"
-            width="23"
-            height="45"
-            viewBox="0 0 23 45"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M0.5 0V45L11.75 33.75L23 45V0H0.5Z" fill="#A34A4A" />
-          </svg>
+        <div class="frame-event-btn" >
+          <button class="btn-bookmark" type="submit" name="remove-from-bookmarks" value="{{ event['id'] }}">
+            <svg
+              class="btn-bookmark"
+              width="23"
+              height="45"
+              viewBox="0 0 23 45"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M0.5 0V45L11.75 33.75L23 45V0H0.5Z" fill="#A34A4A" />
+            </svg>
+          </button>
           <svg
             class="btn-alarm"
             width="45"

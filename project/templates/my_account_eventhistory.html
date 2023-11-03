@@ -81,20 +81,15 @@
     </div>
   </div>
   <div class="frame-content">
-    <div class="heading">EVENT HISTORY</div>
-    <div class="event">
-      <div class="date">Oct 12, 2023:</div>
-      <div class="name">&lt;name of the event&gt;</div>
-      <div class="name">&lt;name of the event&gt;</div>
-      <div class="name">&lt;name of the event&gt;</div>
-    </div>
-    <div class="event">
-      <div class="date">Oct 11, 2023:</div>
-      <div class="name">&lt;name of the event&gt;</div>
-      <div class="name">&lt;name of the event&gt;</div>
-    </div>
+    <div class="heading">EVENTS LOG</div>
+    {% for event in myevents %}
+      {% with event=event %}
+        {% include "myevent.html" %}
+      {% endwith %}
+    {% endfor %} 
   </div>
 </div>
+{% include "base_event.html" %}
 <style>
 .event-history-tab {
   width: 100%;

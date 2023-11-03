@@ -20,7 +20,7 @@
     </div>
   </div>
   <div class="sidetab">
-    <form action="/main_dashboard" method="POST">
+    <form action="/main_dashboard" method="POST" class="form-sidetab">
       <div class="show-bookmark">
         <input type="checkbox" id="show-bookmarked" name="show-bookmarked" value="show-bookmarked" class="checkbox" onchange="this.form.submit()" {{ 'checked' if bookmark_checked else '' }}>
         <label for="show-bookmarked" class="show-bookmarked-events">Show bookmarked events</label><br>
@@ -99,6 +99,7 @@
   width: 240px;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 30px;
 }
 .checkbox {
   background: #d9d9d9;
@@ -123,6 +124,7 @@
 .sort {
   display: flex;
   flex-direction: column;
+  margin-bottom: 30px;
   gap: 10px;
 }
 .dropdown {

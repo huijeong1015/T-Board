@@ -84,7 +84,7 @@
     <div class="heading">EVENTS LOG</div>
     {% for event in eventlog %}
       {% with event=event %}
-        {% include "myevent.html" %}
+        {% include "attended_event.html" %}
       {% endwith %}
     {% endfor %} 
   </div>
@@ -213,6 +213,43 @@
   text-align: left;
   font: 400 32px "Ubuntu Condensed", sans-serif;
   position: relative;
+}
+.frame-myevent {
+  background: transparent;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 15px;
+  width: 100%;
+  height: fit-content;
+  position: relative;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.sub-bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 350px;
+}
+.sub-right {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: column;
+  height: 239px;
+  position: relative;
+}
+.frame-info {
+  width: fit-content;
+}
+.btn-edit {
+  padding: 0%;
+}
+.icon-pencil {
+  width: 38px;
+  height: 38px;
 }
 </style>
 {% endblock %}

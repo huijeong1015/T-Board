@@ -209,14 +209,18 @@ def main_dashboard():
             result = user.bookmarked_events
         if request.form.getlist('filter') != None:
             chosen_filters = request.form.getlist('filter')
+            if chosen_filters == []:
+                result = db.session.execute(sql)
+                return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg, 
+                                       bookmark_checked=bookmark_checked, event_types_checked=event_types_checked)
             event_types_checked[LIST_OF_EVENT_TYPES.index(chosen_filters[0])] = chosen_filters[0]
             result = Event.query.filter(Event.event_type.contains(chosen_filters[0])).all()
             print(chosen_filters)
             for each in chosen_filters:
-                
-                print(each)
-                event_types_checked[LIST_OF_EVENT_TYPES.index(each)] = each
-                result = result + Event.query.filter(Event.event_type.contains(each)).all()
+                if each != chosen_filters[0]:
+                    print(each)
+                    event_types_checked[LIST_OF_EVENT_TYPES.index(each)] = each
+                    result = result + Event.query.filter(Event.event_type.contains(each)).all()
 
     return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg, 
                            bookmark_checked=bookmark_checked, event_types_checked=event_types_checked)

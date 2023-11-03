@@ -160,7 +160,7 @@ def bookmark():
                 db.session.commit()
             else:
                 error_msg = str(event_to_remove) + "is not associated with this user's bookmarked events"
-    return render_template('bookmark.html', bookmarked_events=bookmarked, profile_picture=get_user_profile_picture(), error_msg = error_msg)
+    return render_template('bookmark.html', bookmarked_events=bookmarked, profile_picture=get_user_profile_picture(), error_msg = error_msg, username = username)
 
 @app.route("/event_post/")
 def event_post():
@@ -259,7 +259,8 @@ def my_account_myevents():
     user = User.query.filter_by(username=username).first()
     
     if username == 'admin':
-        events_created_by_user = Event.query.all()
+        # events_created_by_user = Event.query.all()
+        events_created_by_user = Event.query.filter_by(created_by_id=user.id).all()
     else:
         events_created_by_user = Event.query.filter_by(created_by_id=user.id).all()
 

@@ -170,19 +170,24 @@ def main_dashboard():
     error_msg = ""
     sql = text("SELECT * FROM events;")
     result = db.session.execute(sql)
+    
+    username = session.get('username')
     user = User.query.filter_by(username=username).first()
-    bookmarked_events = bookmarked_events
+    bookmarked_events = user.bookmarked_events
+
     if request.method == "POST":
+        # Handles event details button
         if request.form.get("event-details") != None:
             event_id = int(request.form["event-details"])
             event = Event.query.filter_by(id=event_id).first()
             return render_template("event_details.html", event=event.__dict__, profile_picture=get_user_profile_picture())
+        
+        # Handles bookmark button
         if request.form.get('bookmark') != None:
             bookmark_id = int(request.form['bookmark'])
             event_to_bookmark = Event.query.filter_by(id=bookmark_id).first()
             print(bookmark_id)
             print(event_to_bookmark)
-            username = session.get('username')
             # current_user_id = session['user_id']
             # print(current_user_id)
             print(user)
@@ -199,8 +204,9 @@ def main_dashboard():
                 db.session.commit()
                 for event in bookmarked_events:
                     print(event)
-
-    return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg, bookmarked_events=bookmarked_events)
+    
+    bookmarked_events_ids = [event.id for event in bookmarked_events]
+    return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg, bookmarked_events=bookmarked_events_ids)
 
 @app.route("/search_dashboard/", methods=["POST"])
 def searchEvent():

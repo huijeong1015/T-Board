@@ -52,9 +52,26 @@
 
         <form method="POST" action="/main_dashboard">
             <div class="frame-event-btn">
-                <button class="btn-bookmark" type="submit" name="bookmark" value="{{ event['id'] }}" onclick='fillEmptyButton()'>
-                    <svg
-                        id="btn-bookmark"
+                <button class="btn-bookmark" type="submit" name="bookmark" id="btn-bookmark" value="{{ event['id'] }}">
+                    {% if event['id'] in bookmarked_events %}
+                        <svg
+                            id="btn-bookmark-svg"
+                            class="btn-bookmark"
+                            width="27"
+                            height="54"
+                            viewBox="0 0 27 54"
+                            fill="#A34A4A"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                            d="M12.7929 39.7929L1 51.5858V1H26V51.5858L14.2071 39.7929L13.5 39.0858L12.7929 39.7929Z"
+                            stroke="#A34A4A"
+                            stroke-width="2"
+                            />
+                        </svg>
+                    {% else %}
+                        <svg
+                        id="btn-bookmark-svg"
                         class="btn-bookmark"
                         width="27"
                         height="54"
@@ -67,7 +84,8 @@
                         stroke="#A34A4A"
                         stroke-width="2"
                         />
-                    </svg>
+                        </svg>
+                    {% endif %}
                 </button>
                 <button class="btn-calendar">
                     <svg
@@ -103,16 +121,5 @@
         </form>
     </div>
 </div>
-<script>   
-    function fillEmptyButton() {
-        var event_id = {{ event['id'] }};
-        var bookmarked_events = {{ bookmarked_events }};
-        var bookmark_btn = document.getElementById('btn-bookmark');
-
-        if  (bookmarked_events.include(event_id)) {
-            bookmark_btn.style.fill = 
-        }
-    }
-</script>
 {% include "base_event.html" %}
 {% endblock %}

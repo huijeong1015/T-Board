@@ -48,8 +48,8 @@
         <div class="event-details-txt">Time: {{ event['time'] }}</div>
         <div class="event-details-txt">Location: {{ event['location'] }}</div>
       </div>
-      <form method="POST" action="/bookmark">
-        <div class="frame-event-btn">
+      <div class="frame-event-btn">
+        <form method="POST" action="/bookmark">
           <svg
             class="btn-bookmark"
             width="23"
@@ -73,36 +73,42 @@
               fill="#FFC633"
             />
           </svg>
-          <svg
-            class="btn-calendar"
-            width="40"
-            height="45"
-            viewBox="0 0 40 45"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M0.05625 0V11.25H39.4313V0H0.05625ZM0.05625 16.875V44.4937C0.05625 44.775 0.28125 45 0.5625 45H38.8688C39.15 45 39.375 44.775 39.375 44.4937V16.875H0H0.05625ZM5.68125 22.5H11.3062V28.125H5.68125V22.5ZM16.9312 22.5H22.5563V28.125H16.9312V22.5ZM28.1813 22.5H33.8063V28.125H28.1813V22.5ZM5.68125 33.75H11.3062V39.375H5.68125V33.75ZM16.9312 33.75H22.5563V39.375H16.9312V33.75Z"
-              fill="#7CA34A"
-            />
-          </svg>
-          <button name="event-details" class="btn-event-details" value="{{ event['id'] }}">
+        </form>
+        <form method="POST" action="{{ url_for('download_ics_file') }}">
+          <button name="export-calendar" id="btn-calendar" class="btn-calendar" value="{{ event['id'] }}"> 
             <svg
-                class="btn-event-details"
-                width="68"
-                height="47"
-                viewBox="0 0 68 47"
+                class="btn-calendar"
+                width="48"
+                height="54"
+                viewBox="0 0 48 54"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
             >
                 <path
-                d="M42.5 0V15.6667H0V31.3333H42.5V47L68 23.265L42.5 0Z"
-                fill="#657895"
+                d="M0.0675 0V13.5H47.3175V0H0.0675ZM0.0675 20.25V53.3925C0.0675 53.73 0.3375 54 0.675 54H46.6425C46.98 54 47.25 53.73 47.25 53.3925V20.25H0H0.0675ZM6.8175 27H13.5675V33.75H6.8175V27ZM20.3175 27H27.0675V33.75H20.3175V27ZM33.8175 27H40.5675V33.75H33.8175V27ZM6.8175 40.5H13.5675V47.25H6.8175V40.5ZM20.3175 40.5H27.0675V47.25H20.3175V40.5Z"
+                fill="#7CA34A"
                 />
             </svg>
           </button>
-        </div>
-      </form>
+        </form>
+        <form method="POST" action="/bookmark">
+        <button name="event-details" class="btn-event-details" value="{{ event['id'] }}">
+          <svg
+              class="btn-event-details"
+              width="68"
+              height="47"
+              viewBox="0 0 68 47"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+          >
+              <path
+              d="M42.5 0V15.6667H0V31.3333H42.5V47L68 23.265L42.5 0Z"
+              fill="#657895"
+              />
+          </svg>
+        </button>
+        </form>
+      </div>
     </div>
   </div>
   {% endblock %}

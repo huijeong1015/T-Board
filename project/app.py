@@ -1,5 +1,7 @@
+import io
 from flask import (
     Flask,
+    after_this_request,
     render_template,
     request,
     redirect,
@@ -7,6 +9,7 @@ from flask import (
     session,
     flash,
     render_template_string,
+    send_file
 )
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
@@ -19,6 +22,7 @@ from sqlalchemy.sql import func
 from project.db import *
 from werkzeug.security import check_password_hash
 import re
+import ics
 
 app.config["SECRET_KEY"] = os.urandom(24)
 
@@ -175,6 +179,8 @@ def main_dashboard():
     user = User.query.filter_by(username=username).first()
     bookmarked_events = user.bookmarked_events
 
+    ics_text = ""
+
     if request.method == "POST":
         # Handles event details button
         if request.form.get("event-details") != None:
@@ -206,7 +212,37 @@ def main_dashboard():
                     print(event)
     
     bookmarked_events_ids = [event.id for event in bookmarked_events]
-    return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg, bookmarked_events=bookmarked_events_ids)
+    return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg, bookmarked_events=bookmarked_events_ids, ics=ics_text)
+
+@app.route('/download_ics_file', methods=['POST'])
+def download_ics_file():
+    event_id = int(request.form.get('export-calendar'))
+    event = Event.query.filter_by(id=event_id).first()
+    c = ics.Calendar()
+    e = ics.Event()
+    e.name = event.name
+    e.begin = event.date + ' ' + event.time
+    e.begin = e.begin.shift(hours=5) #EST
+    e.location = event.location
+    e.description = event.description
+    c.events.add(e)
+
+    filename = (event.name).strip().replace(' ','') + '.ics'
+
+    # Write the ics file
+    with open(os.path.join("project", filename), 'w') as f:
+        f.write(c.serialize())
+
+    # Lines to make sure the file gets deleted once the user finishes downloading    
+    return_data = io.BytesIO()
+    with open(os.path.join("project", filename), 'rb') as f:
+        return_data.write(f.read())
+
+    return_data.seek(0)
+    os.remove(os.path.join("project", filename))
+
+    # Ask user to download the file
+    return send_file(return_data, mimetype="application/ics", download_name=filename, as_attachment=True)
 
 @app.route("/search_dashboard/", methods=["POST"])
 def searchEvent():

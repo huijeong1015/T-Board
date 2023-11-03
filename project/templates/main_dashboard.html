@@ -12,7 +12,7 @@
           </div>
         {% endif %}
         {% for event in events %}
-          {% with event=event, bookmarked_events=bookmarked_events %}
+          {% with event=event, bookmarked_events=bookmarked_events, ics=ics %}
             {% include "event.html" %}
           {% endwith %}
         {% endfor %} 

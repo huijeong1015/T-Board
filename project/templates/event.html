@@ -49,9 +49,8 @@
                 Location: {{ event['location'] }}
             </div>
         </div>
-
-        <form method="POST" action="/main_dashboard">
-            <div class="frame-event-btn">
+        <div class="frame-event-btn">
+            <form method="POST" action="/main_dashboard">
                 <button class="btn-bookmark" type="submit" name="bookmark" id="btn-bookmark" value="{{ event['id'] }}">
                     {% if event['id'] in bookmarked_events %}
                         <svg
@@ -87,7 +86,9 @@
                         </svg>
                     {% endif %}
                 </button>
-                <button class="btn-calendar">
+            </form>
+            <form method="POST" action="{{ url_for('download_ics_file') }}">
+                <button name="export-calendar" id="btn-calendar" class="btn-calendar" value="{{ event['id'] }}"> 
                     <svg
                         class="btn-calendar"
                         width="48"
@@ -102,6 +103,8 @@
                         />
                     </svg>
                 </button>
+            </form>
+            <form method="POST" action="/main_dashboard">
                 <button name="event-details" class="btn-event-details" value="{{ event['id'] }}">
                     <svg
                         class="btn-event-details"
@@ -117,8 +120,8 @@
                         />
                     </svg>
                 </button>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
 {% include "base_event.html" %}

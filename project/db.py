@@ -88,7 +88,7 @@ class Event(db.Model):
     attendees = db.relationship(
         "User", 
         secondary=attendees, 
-        back_populates="events_attending",  # Corresponds to the User's relationship
+        back_populates="events_attending",  
     )
 
     created_by_id = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -126,11 +126,10 @@ class User(db.Model):
     created_events = db.relationship('Event', back_populates='created_by', lazy='dynamic')
     bookmarked_events = db.relationship('Event', secondary=saved_events,
                                              backref=db.backref('bookmarked_ref', lazy='dynamic'))  
-    
     events_attending = db.relationship(
         'Event', 
         secondary=attendees, 
-        back_populates='attendees',  # Use back_populates instead of backref
+        back_populates='attendees', 
         lazy='dynamic'
     )
 

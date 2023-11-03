@@ -185,7 +185,11 @@ def my_account_friends():
 def my_account_myevents():
     username=session.get('username')
     user = User.query.filter_by(username=username).first()
-    events_created_by_user = Event.query.filter_by(created_by_id=user.id).all()
+    
+    if username == 'admin':
+        events_created_by_user = Event.query.all()
+    else:
+        events_created_by_user = Event.query.filter_by(created_by_id=user.id).all()
 
     return render_template('my_account_myevents.html', 
                            username=session.get('username'), 

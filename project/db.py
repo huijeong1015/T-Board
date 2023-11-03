@@ -57,13 +57,21 @@ user_friends = db.Table(
     db.Column("user_id", db.Integer, db.ForeignKey("users.id"), primary_key=True),
     db.Column("friend_id", db.Integer, db.ForeignKey("users.id"), primary_key=True),
 )
-
 #Association table between users and events they want to save for later
 saved_events = db.Table(
     'saved_events',
     db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
     db.Column('event_id', db.Integer, db.ForeignKey('events.id'), primary_key=True),
 )
+
+# Types of events users can select
+event_types = [
+    {"name": "Networking"},
+    {"name": "Sports"},
+    {"name": "Tutoring"},
+    {"name": "Club"},
+    {"name": "Other"},
+]
 
 # Model for events
 #Current supported event types: ["Tutoring", "Sports", "Club", "Networking", "Other"] 
@@ -74,8 +82,14 @@ class Event(db.Model):
     date = db.Column(db.String(10), nullable=False)
     time = db.Column(db.String(5), nullable=False)
     location = db.Column(db.String(100), nullable=False)
+    reg_link = db.Column(db.String(200), nullable=True) 
     description = db.Column(db.Text, nullable=False)
     event_type = db.Column(db.String(100), nullable=False)
+    attendees = db.relationship(
+        "User", secondary=attendees, backref=db.backref("events", lazy="dynamic")
+    )
+    created_by_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    created_by = db.relationship('User', back_populates='created_events')
 
     def __repr__(self):
         return f"<Event {self.name}>"
@@ -106,6 +120,7 @@ class User(db.Model):
         secondaryjoin=(user_friends.c.friend_id == id),
         backref=db.backref("friends_ref", lazy="dynamic"),
     )
+    created_events = db.relationship('Event', back_populates='created_by', lazy='dynamic')
     bookmarked_events = db.relationship('Event', secondary=saved_events,
                                              backref=db.backref('bookmarked_ref', lazy='dynamic'))  
     
@@ -124,7 +139,7 @@ sample_events = [
     {"name": "Tech Conference 2023", "date": "2023-11-20", "time": "09:00", "location": "Silicon Valley Convention Center", "description": "Join industry leaders...", "event_type": "Networking"},
     {"name": "Music Festival", "date": "2023-08-15", "time": "12:00", "location": "Central Park, New York", "description": "A celebration of music...", "event_type": "Other"},
     {"name": "Concrete Canoe General Meeting", "date": "2023-05-01", "time": "07:00", "location": "Bahen Centre", "description": "General meeting open to the public", "event_type": "Club"},
-    {"name": "MAT188 Tutoring", "date": "2023-07-10", "time": "10:00", "location": "Zoom", "description": "Running through Mat188 homework problems", "event_type": "Tutoring"}
+    {"name": "MAT188 Tutoring", "date": "2023-07-10", "time": "10:00", "location": "Zoom", "description": "Running through Mat188 homework problems", "event_type": "Tutoring"}, 
 ]
 
 with app.app_context():

@@ -11,6 +11,7 @@ from flask import (
     render_template_string,
     send_file
 )
+from datetime import datetime
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
@@ -26,16 +27,7 @@ import ics
 
 app.config["SECRET_KEY"] = os.urandom(24)
 
-# def current_user(attribute='id'):
-#     if(attribute == 'id'):
-#        username=session.get('username')
-#        user = User.query.filter_by(username=username).first
-#        return user
-#     elif(attribute == 'name'):
-#        username=session.get('username')
-#        return username
-
-#Temp helper functions
+#Helper functions
 def get_user_interests():
     username=session.get('username')
     user = User.query.filter_by(username=username).first()
@@ -50,6 +42,11 @@ def get_user_profile_picture():
     username=session.get('username')
     user = User.query.filter_by(username=username).first()
     return user.profile_picture
+
+def get_user():
+    username = session.get('username')
+    user = User.query.filter_by(username=username).first()
+    return(user)  
 
 app.config['SECRET_KEY'] = os.urandom(24)
 @app.route("/", methods=["GET", "POST"])
@@ -77,7 +74,6 @@ def login():
                 return redirect(url_for("main_dashboard"))
 
     return render_template("login.html", error=error)
-
 
 @app.route("/register/", methods=["GET", "POST"])
 def register():
@@ -131,7 +127,6 @@ def register():
 
     return render_template("register.html")
 
-
 def check_password_strength(password):
     length = len(password)
     has_upper = any(char.isupper() for char in password)
@@ -145,25 +140,31 @@ def check_password_strength(password):
         return "medium"
     else:
         return "weak"
-def get_user():
-    username = session.get('username')
-    user = User.query.filter_by(username=username).first()
-    return(user)  
-
-
-
+    
 @app.route("/bookmark/", methods=["GET", "POST"])
 def bookmark():
+    error_msg = ""
     username = session.get('username')
     user = User.query.filter_by(username=username).first() 
+    print(user)
     bookmarked = user.bookmarked_events
+    
 
     if request.method == "POST":
         if request.form.get("event-details") != None:
             event_id = int(request.form["event-details"])
             event = Event.query.filter_by(id=event_id).first()
             return render_template("event_details.html", event=event.__dict__, profile_picture=get_user_profile_picture())   
-    return render_template('bookmark.html', bookmarked_events=bookmarked, profile_picture=get_user_profile_picture())
+        if request.form.get("remove-from-bookmarks") != None:
+            bookmark_id = int(request.form["remove-from-bookmarks"])
+            event_to_remove = Event.query.filter_by(id=bookmark_id).first() 
+            if event_to_remove in user.bookmarked_events:
+                user.bookmarked_events.remove(event_to_remove)
+                bookmarked = user.bookmarked_events
+                db.session.commit()
+            else:
+                error_msg = str(event_to_remove) + "is not associated with this user's bookmarked events"
+    return render_template('bookmark.html', bookmarked_events=bookmarked, profile_picture=get_user_profile_picture(), error_msg = error_msg)
 
 @app.route("/event_post/")
 def event_post():
@@ -172,6 +173,10 @@ def event_post():
 @app.route("/main_dashboard/", methods=["GET", "POST"])
 def main_dashboard():
     error_msg = ""
+    bookmark_checked = False
+    username = session.get('username')
+    user = User.query.filter_by(username=username).first()
+    print(user)
     sql = text("SELECT * FROM events;")
     result = db.session.execute(sql)
     
@@ -194,15 +199,14 @@ def main_dashboard():
             event_to_bookmark = Event.query.filter_by(id=bookmark_id).first()
             print(bookmark_id)
             print(event_to_bookmark)
-            # current_user_id = session['user_id']
-            # print(current_user_id)
-            print(user)
+            
 
             if event_to_bookmark not in bookmarked_events:
                 bookmarked_events.append(event_to_bookmark)
                 db.session.commit()
                 for event in bookmarked_events:
                     print(event)
+                    print("eventid" + str(event.id))
                 # current_user_id.bookmarked_events.append(bookmark_id)
                 # if no work try printing the events being queried in the db.py file
             else:
@@ -210,9 +214,14 @@ def main_dashboard():
                 db.session.commit()
                 for event in bookmarked_events:
                     print(event)
-    
+        
+        if request.form.get('show-bookmarked') != None:
+            bookmark_checked = request.form.get('show-bookmarked')
+            print (request.form.get("show-bookmarked"))
+            result = user.bookmarked_events
+
     bookmarked_events_ids = [event.id for event in bookmarked_events]
-    return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg, bookmarked_events=bookmarked_events_ids, ics=ics_text)
+    return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg, bookmark_checked=bookmark_checked, bookmarked_events=bookmarked_events_ids)
 
 @app.route('/download_ics_file', methods=['POST'])
 def download_ics_file():
@@ -261,17 +270,50 @@ def my_account_event_history():
     return render_template('my_account_eventhistory.html', username=session.get('username'), 
                            interests=get_user_interests(), profile_picture=get_user_profile_picture())
 
+def get_current_user_friends(username):
+    # Assuming 'db' is your database connection object and 'User' is your user model
+    current_user = User.query.filter_by(username=username).first()
+    if current_user:
+        return current_user.friends  # This depends on how your user's friends are stored/retrieved
+    else:
+        return []
+
 @app.route("/my_account/friends/")
 def my_account_friends():
-    return render_template('my_account_friends.html', username=session.get('username'), 
-                           interests=get_user_interests(), profile_picture=get_user_profile_picture())
+    username = session.get('username')
+    
+    # Ensure the user is logged in or handle appropriately if not
+    if not username:
+        # Redirect to login page or handle it however you prefer
+        return redirect(url_for('login'))
+
+    # Fetch user-specific data
+    interests = get_user_interests()
+    profile_picture = get_user_profile_picture()
+    friends_list = get_current_user_friends(username)  # This should be a function you create
+    
+    # Pass everything to the template
+    return render_template('my_account_friends.html', 
+                           username=username,
+                           interests=interests, 
+                           profile_picture=profile_picture,
+                           friends=friends_list)
 
 @app.route("/my_account/myevents/")
 def my_account_myevents():
-    sql = text("SELECT * FROM events;")
-    result = db.session.execute(sql)
-    return render_template('my_account_myevents.html', username=session.get('username'), interests=get_user_interests(), 
-                           myevents=result, profile_picture=get_user_profile_picture())
+    username=session.get('username')
+    user = User.query.filter_by(username=username).first()
+    
+    if username == 'admin':
+        events_created_by_user = Event.query.all()
+    else:
+        events_created_by_user = Event.query.filter_by(created_by_id=user.id).all()
+
+    return render_template('my_account_myevents.html', 
+                           username=session.get('username'), 
+                           interests=get_user_interests(), 
+                           myevents=events_created_by_user, 
+                           profile_picture=get_user_profile_picture())
 
 @app.route("/my_account/notification/")
 def my_account_notification():
@@ -317,28 +359,71 @@ def show_events():
 
 @app.route("/event_post", methods=["POST"])
 def add_event():
+    username = session.get('username')
+    user = User.query.filter_by(username=username).first()
+    
     event_name= request.form["input-name"]
     event_date= request.form["input-date"]
     event_time= request.form["input-time"]
     event_location= request.form["input-loc"]
+    reg_link= request.form["input-reg"]
     event_description= request.form["input-desc"]
     event_type = request.form.get("event_type")
 
-    new_event = Event(name=event_name, date=event_date, time=event_time, location=event_location, description=event_description, event_type=event_type)
-    db.session.add(new_event)
-    db.session.commit()
-    render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_type)
-    return redirect(url_for("main_dashboard"))
+    event_datetime = f"{event_date} {event_time}"
+    event_datetime_dt = datetime.strptime(event_datetime, "%Y-%m-%d %H:%M")
+
+    current_datetime = datetime.now()
+    if event_datetime_dt > current_datetime:
+        new_event = Event(name=event_name, date=event_date, time=event_time, location=event_location, reg_link=reg_link,
+                      description=event_description, event_type=event_type, created_by=user)
+        db.session.add(new_event)
+        db.session.commit()
+        render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_type)
+        return redirect(url_for("main_dashboard"))
+    else:
+        print("invalid date or time. should b ") #TODO: Give useful message to user
+        return (render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_type))
+
+@app.route('/edit_event/<int:event_id>', methods=["GET", "POST"])
+def edit_event(event_id):
+    event = Event.query.get(event_id)
+    if request.method == 'POST':
+        if 'finish_edit' in request.form:
+            event = Event.query.filter_by(id=event_id).first()
+            event.name= request.form["input-name"]
+
+            event.location= request.form["input-loc"]
+            event.reg_link= request.form["input-reg"]
+            event.description= request.form["input-desc"]
+            event.event_type = request.form.get("event_type")
+
+            event_date= request.form["input-date"]
+            event_time= request.form["input-time"]
+            event_datetime = f"{event_date} {event_time}"
+            event_datetime_dt = datetime.strptime(event_datetime, "%Y-%m-%d %H:%M")
+            current_datetime = datetime.now()
+            if event_datetime_dt > current_datetime:
+                event.time= event_time
+                event.date= event_date
+                db.session.commit()
+                return redirect(url_for("my_account_myevents"))
+            else:
+                #TODO: Give useful message to user
+                pass
+
+        elif 'delete_event' in request.form:
+            return redirect(url_for("are_you_sure", event_id=event_id))
+
+    return render_template('event_edit.html', profile_picture=get_user_profile_picture(), event=event, event_types=event_types)
 
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("404.html"), 404
 
-
 @app.errorhandler(500)
 def internal_server_error(e):
     return render_template("500.html"), 500
-
 
 # DFS Function for Friend Recommendations
 def dfs(graph, start, k):
@@ -354,7 +439,6 @@ def dfs(graph, start, k):
                 recommendations.add(vertex)
             stack.extend((friend, depth + 1) for friend in graph[vertex] - visited)
     return recommendations
-
 
 @app.route("/users")
 def show_users():
@@ -375,7 +459,6 @@ def show_users():
     return render_template_string(
         f"<h1>Users, Their Friends, and Events</h1>{user_list_html}"
     )
-
 
 @app.route("/recommendations")
 def friend_recommendations():
@@ -400,7 +483,6 @@ def friend_recommendations():
         f"<h1>Friend Recommendations</h1>{recommendations_html}"
     )
 
-
 @app.route("/events")
 def new_events():
     events = Event.query.all()
@@ -415,3 +497,18 @@ def new_events():
     return render_template_string(
         f"<h1>Events and Their Attendees</h1>{event_list_html}"
     )
+
+@app.route('/are_you_sure/<int:event_id>', methods=['GET', 'POST'])
+def are_you_sure(event_id):
+    event = Event.query.filter_by(id=event_id).first()
+    if request.method == 'POST':
+        if 'yes' in request.form:
+            db.session.delete(event)
+            db.session.commit()
+            flash('Event has been deleted!', 'success')
+            return redirect(url_for('my_account_myevents'))
+        elif 'no' in request.form:
+            flash('Event deletion cancelled.', 'info')
+            return redirect(url_for('edit_event', event_id=event_id))
+    return render_template('are_you_sure.html', event_id=event_id, event=event, profile_picture=get_user_profile_picture())
+

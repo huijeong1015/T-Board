@@ -101,16 +101,16 @@
           </div>
         </div>
         <div class="bottom">
-          {% if event.get('register') != none %}
-            <div class="registration">
-              Register here: {{ event['register'] }}
-            </div>
+          {% if event.get('reg_link') %}
+              <div class="registration">
+                  Register here: {{ event['reg_link'] }}
+              </div>
           {% endif %}
           <div class="description">
-            Event description: {{ event['description'] }}
+              Event description: {{ event['description'] }}
           </div>
           <div class="review">Reviews:</div>
-        </div>
+      </div>
       </div>
     </div>
 </div>

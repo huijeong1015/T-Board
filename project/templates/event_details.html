@@ -117,12 +117,14 @@
           <form method="POST" action="{{ url_for('attend_event', event_id=event.id) }}">
             <div class="attend-button-container">
               {% if flag == 'attending' %}
-                <button class="btn-submit" type="submit" id="attend-btn">ALREADY ATTENDING</button>
+                <input type="hidden" name="action" value="unattend">
+                <button class="btn-submit" type="submit" id="already-attend-btn">ALREADY ATTENDING</button>
               {% else %}
+                <input type="hidden" name="action" value="attend">
                 <button class="btn-submit" type="submit" id="attend-btn">ATTEND</button>
               {% endif %}
             </div>
-          </form>          
+          </form>                    
       </div>
       </div>
     </div>

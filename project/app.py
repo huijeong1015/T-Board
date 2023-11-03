@@ -261,22 +261,31 @@ def download_ics_file():
     return send_file(return_data, mimetype="application/ics", download_name=filename, as_attachment=True)
 
 
+from flask import request
+
 @app.route('/attend_event/<int:event_id>', methods=['POST'])
 def attend_event(event_id):
     username = session.get('username')
     user = User.query.filter_by(username=username).first()
     event = Event.query.filter_by(id=event_id).first()
-    flag = 'not attending'
+    action = request.form.get('action')
+    flag = 'not attending' #base case
 
-    if user in event.attendees:
+    if action == 'attend':
+        # If the user is not attending, add them to the attendees list
+        if user not in event.attendees:
+            event.attendees.append(user)
+            db.session.commit()
         flag = 'attending'
-    else:
-        # Add the user to the attendees list if they are not attending
-        event.attendees.append(user)
-        db.session.commit()
-        flag = 'attending'
+    elif action == 'unattend':
+        # If the user is attending, remove them from the attendees list
+        if user in event.attendees:
+            event.attendees.remove(user)
+            db.session.commit()
+        flag = 'not attending'
 
     return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag)
+
 
 @app.route("/search_dashboard/", methods=["POST"])
 def searchEvent():

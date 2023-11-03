@@ -255,21 +255,22 @@ def add_event():
     render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_type)
     return redirect(url_for("main_dashboard"))
 
-@app.route('/edit_event/<int:event_id>', methods=['GET'])
+@app.route('/edit_event/<int:event_id>', methods=["GET", "POST"])
 def edit_event(event_id):
     event = Event.query.get(event_id)
-    return render_template('event_edit.html', profile_picture=get_user_profile_picture(), event=event, event_types=event_types)
+    if request.method == 'POST':
+        #User clicks finish edits or delete event
+        return redirect(url_for("are_you_sure"))
 
+    return render_template('event_edit.html', profile_picture=get_user_profile_picture(), event=event, event_types=event_types)
 
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("404.html"), 404
 
-
 @app.errorhandler(500)
 def internal_server_error(e):
     return render_template("500.html"), 500
-
 
 # DFS Function for Friend Recommendations
 def dfs(graph, start, k):
@@ -285,7 +286,6 @@ def dfs(graph, start, k):
                 recommendations.add(vertex)
             stack.extend((friend, depth + 1) for friend in graph[vertex] - visited)
     return recommendations
-
 
 @app.route("/users")
 def show_users():
@@ -306,7 +306,6 @@ def show_users():
     return render_template_string(
         f"<h1>Users, Their Friends, and Events</h1>{user_list_html}"
     )
-
 
 @app.route("/recommendations")
 def friend_recommendations():
@@ -331,7 +330,6 @@ def friend_recommendations():
         f"<h1>Friend Recommendations</h1>{recommendations_html}"
     )
 
-
 @app.route("/events")
 def new_events():
     events = Event.query.all()
@@ -346,3 +344,11 @@ def new_events():
     return render_template_string(
         f"<h1>Events and Their Attendees</h1>{event_list_html}"
     )
+
+@app.route('/are_you_sure', methods=['GET', 'POST'])
+def are_you_sure():
+    if request.method == 'POST':
+        # Handle the POST request here (e.g. if the user clicks YES or NO)
+        pass
+
+    return render_template('are_you_sure.html', profile_picture=get_user_profile_picture())

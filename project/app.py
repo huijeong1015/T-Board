@@ -253,6 +253,12 @@ def download_ics_file():
     # Ask user to download the file
     return send_file(return_data, mimetype="application/ics", download_name=filename, as_attachment=True)
 
+@app.route('/attend_event', methods=['POST'])
+def attend_event():
+    pass
+    #return render_template("event_details.html", event=event.__dict__, profile_picture=get_user_profile_picture())
+
+
 @app.route("/search_dashboard/", methods=["POST"])
 def searchEvent():
     error_msg = ""

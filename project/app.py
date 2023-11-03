@@ -259,7 +259,7 @@ def attend_event(event_id):
     username = session.get('username')
     user = User.query.filter_by(username=username).first()
     event = Event.query.filter_by(id=event_id).first()
-
+    event.attendees.append(user)
     
 
     return render_template("event_details.html", event=event.__dict__, profile_picture=get_user_profile_picture())
@@ -279,8 +279,18 @@ def searchEvent():
 
 @app.route("/my_account/event_history/")
 def my_account_event_history():
+    username=session.get('username')
+    user = User.query.filter_by(username=username).first()
+    events_attending = user.events_attending
+
+    if username == 'admin':
+        events_created_by_user = Event.query.all()
+    else:
+        events_created_by_user = Event.query.filter_by(created_by_id=user.id).all()
+
     return render_template('my_account_eventhistory.html', username=session.get('username'), 
-                           interests=get_user_interests(), profile_picture=get_user_profile_picture())
+                           interests=get_user_interests(), profile_picture=get_user_profile_picture(),
+                           events_attending=events_attending, myevents=events_created_by_user, )
 
 def get_current_user_friends(username):
     # Assuming 'db' is your database connection object and 'User' is your user model

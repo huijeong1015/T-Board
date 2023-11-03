@@ -18,7 +18,7 @@
           stroke-width="2"
       />
       <path
-          d="M65 0L69.4903 13.8197H84.0211L72.2654 22.3607L76.7557 36.1803L65 27.6393L53.2443 36.1803L57.7346 22.3607L45.9789 13.8197H60.5097L65 0Z"
+          d="M65 0L69.4903 13.8197H84.0211L72.2654 22.3607L76.7557 36.1803L65 27.6393L53.2443 36.1803L57.7346 22.3607L50.9789 13.8197H60.5097L65 0Z"
           fill="#FF9900"
           stroke="#838383"
           stroke-width="2"
@@ -52,29 +52,21 @@
         <form method="POST" action="/bookmark">
           <button class="btn-bookmark" type="submit" name="remove-from-bookmarks" value="{{ event['id'] }}">
             <svg
+              id="btn-bookmark-svg"
               class="btn-bookmark"
-              width="23"
-              height="45"
-              viewBox="0 0 23 45"
-              fill="none"
+              width="27"
+              height="54"
+              viewBox="0 0 27 54"
+              fill="#A34A4A"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <path d="M0.5 0V45L11.75 33.75L23 45V0H0.5Z" fill="#A34A4A" />
+              <path
+              d="M12.7929 39.7929L1 51.5858V1H26V51.5858L14.2071 39.7929L13.5 39.0858L12.7929 39.7929Z"
+              stroke="#A34A4A"
+              stroke-width="2"
+              />
             </svg>
           </button>
-          <svg
-            class="btn-alarm"
-            width="45"
-            height="45"
-            viewBox="0 0 45 45"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M22.5 0C16.3125 0 11.25 5.0625 11.25 11.25C11.25 17.1 8.325 22.3875 3.7125 26.2125C1.40625 28.125 0 30.825 0 33.75H45C45 30.825 43.65 28.125 41.2875 26.2125C36.675 22.3875 33.75 17.1 33.75 11.25C33.75 5.0625 28.7437 0 22.5 0ZM16.875 39.375C16.875 42.4688 19.4062 45 22.5 45C25.5938 45 28.125 42.4688 28.125 39.375H16.875Z"
-              fill="#FFC633"
-            />
-          </svg>
         </form>
         <form method="POST" action="{{ url_for('download_ics_file') }}">
           <button name="export-calendar" id="btn-calendar" class="btn-calendar" value="{{ event['id'] }}"> 

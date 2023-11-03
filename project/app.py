@@ -8,6 +8,7 @@ from flask import (
     flash,
     render_template_string,
 )
+from datetime import datetime
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
@@ -203,6 +204,7 @@ def main_dashboard():
                 db.session.commit()
                 for event in user.bookmarked_events:
                     print(event)
+                    print("eventid" + str(event.id))
                 # current_user_id.bookmarked_events.append(bookmark_id)
                 # if no work try printing the events being queried in the db.py file
             else:
@@ -297,11 +299,19 @@ def add_event():
     event_description= request.form["input-desc"]
     event_type = request.form.get("event_type")
 
-    new_event = Event(name=event_name, date=event_date, time=event_time, location=event_location, description=event_description, event_type=event_type)
-    db.session.add(new_event)
-    db.session.commit()
-    render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_type)
-    return redirect(url_for("main_dashboard"))
+    event_datetime = f"{event_date} {event_time}"
+    event_datetime_dt = datetime.strptime(event_datetime, "%Y-%m-%d %H:%M")
+
+    current_datetime = datetime.now()
+    if event_datetime_dt > current_datetime:
+        new_event = Event(name=event_name, date=event_date, time=event_time, location=event_location, description=event_description, event_type=event_type)
+        db.session.add(new_event)
+        db.session.commit()
+        render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_type)
+        return redirect(url_for("main_dashboard"))
+    else:
+        print("invalid date or time. should b ")
+        return (render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_type))
 
 @app.errorhandler(404)
 def page_not_found(e):

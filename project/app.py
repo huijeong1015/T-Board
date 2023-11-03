@@ -271,7 +271,7 @@ def edit_event(event_id):
             event.location= request.form["input-loc"]
             event.reg_link= request.form["input-reg"]
             event.description= request.form["input-desc"]
-            event.type = request.form.get("event_type")
+            event.event_type = request.form.get("event_type")
             db.session.commit()
             return redirect(url_for("my_account_myevents"))
 

@@ -260,12 +260,16 @@ def edit_event(event_id):
     event = Event.query.get(event_id)
     if request.method == 'POST':
         if 'finish_edit' in request.form:
-            # Logic to update the event details. This can be pseudo-code, as I don't have the details of your data model.
-            # event.field = request.form['field_name']
-            # ...
-            # db.session.commit()
-
-            return redirect(url_for("my_account_myevents"))  # Assuming "my_account_myevents" is the function name that handles "/my_account/myevents/"
+            event = Event.query.filter_by(id=event_id).first()
+            event.name= request.form["input-name"]
+            event.date= request.form["input-date"]
+            event.time= request.form["input-time"]
+            event.location= request.form["input-loc"]
+            event.reg_link= request.form["input-reg"]
+            event.description= request.form["input-desc"]
+            event.type = request.form.get("event_type")
+            db.session.commit()
+            return redirect(url_for("my_account_myevents"))
 
         elif 'delete_event' in request.form:
             return redirect(url_for("are_you_sure"))

@@ -114,9 +114,13 @@
               Event description: {{ event.description }}
           </div>
           <div class="review">Reviews:</div>
-          <form method="POST" action="{{ url_for('attend_event', event_id=event['id']) }}">
+          <form method="POST" action="{{ url_for('attend_event', event_id=event.id) }}">
             <div class="attend-button-container">
-              <button class="btn-submit" type="submit" id="attend-btn">ATTEND</button>
+              {% if flag == 'attending' %}
+                <button class="btn-submit" type="submit" id="attend-btn">ALREADY ATTENDING</button>
+              {% else %}
+                <button class="btn-submit" type="submit" id="attend-btn">ATTEND</button>
+              {% endif %}
             </div>
           </form>          
       </div>

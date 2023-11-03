@@ -259,10 +259,17 @@ def attend_event(event_id):
     username = session.get('username')
     user = User.query.filter_by(username=username).first()
     event = Event.query.filter_by(id=event_id).first()
-    event.attendees.append(user)
-    db.session.commit() 
+    flag = 'not attending'
 
-    return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture())
+    if user in event.attendees:
+        flag = 'attending'
+    else:
+        # Add the user to the attendees list if they are not attending
+        event.attendees.append(user)
+        db.session.commit()
+        flag = 'attending'
+
+    return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag)
 
 @app.route("/search_dashboard/", methods=["POST"])
 def searchEvent():

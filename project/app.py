@@ -191,7 +191,14 @@ def main_dashboard():
         if request.form.get("event-details") != None:
             event_id = int(request.form["event-details"])
             event = Event.query.filter_by(id=event_id).first()
-            return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture())
+            username = session.get('username')
+            user = User.query.filter_by(username=username).first()
+            flag = 'not attending'
+
+            if user in event.attendees:
+                flag = 'attending'
+            
+            return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag)
         
         # Handles bookmark button
         if request.form.get('bookmark') != None:

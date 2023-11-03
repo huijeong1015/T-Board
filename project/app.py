@@ -148,13 +148,13 @@ def bookmark():
     user = User.query.filter_by(username=username).first() 
     print(user)
     bookmarked = user.bookmarked_events
-    
 
     if request.method == "POST":
         if request.form.get("event-details") != None:
             event_id = int(request.form["event-details"])
             event = Event.query.filter_by(id=event_id).first()
-            return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture())   
+            bookmarked_events_ids = [event.id for event in bookmarked]
+            return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), bookmarked_events=bookmarked_events_ids)   
         if request.form.get("remove-from-bookmarks") != None:
             bookmark_id = int(request.form["remove-from-bookmarks"])
             event_to_remove = Event.query.filter_by(id=bookmark_id).first() 
@@ -164,7 +164,7 @@ def bookmark():
                 db.session.commit()
             else:
                 error_msg = str(event_to_remove) + "is not associated with this user's bookmarked events"
-    return render_template('bookmark.html', bookmarked_events=bookmarked, profile_picture=get_user_profile_picture(), error_msg = error_msg)
+    return render_template('bookmark.html', bookmarked_events=bookmarked, profile_picture=get_user_profile_picture(), error_msg = error_msg, user=username)
 
 @app.route("/event_post/")
 def event_post():
@@ -197,8 +197,9 @@ def main_dashboard():
 
             if user in event.attendees:
                 flag = 'attending'
-            
-            return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag)
+
+            bookmarked_events_ids = [event.id for event in bookmarked_events]
+            return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, bookmarked_events=bookmarked_events_ids)
         
         # Handles bookmark button
         if request.form.get('bookmark') != None:
@@ -267,6 +268,7 @@ from flask import request
 def attend_event(event_id):
     username = session.get('username')
     user = User.query.filter_by(username=username).first()
+    bookmarked_events_ids = [event.id for event in user.bookmarked_events]
     event = Event.query.filter_by(id=event_id).first()
     action = request.form.get('action')
     flag = 'not attending' #base case
@@ -284,7 +286,7 @@ def attend_event(event_id):
             db.session.commit()
         flag = 'not attending'
 
-    return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag)
+    return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, bookmarked_events=bookmarked_events_ids)
 
 
 @app.route("/search_dashboard/", methods=["POST"])

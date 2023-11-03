@@ -146,8 +146,6 @@ def get_user():
     user = User.query.filter_by(username=username).first()
     return(user)  
 
-
-
 @app.route("/bookmark/", methods=["GET", "POST"])
 def bookmark():
     error_msg = ""

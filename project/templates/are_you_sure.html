@@ -6,115 +6,23 @@
       <div class="event-details">
         <div class="top">
           <div class="left">
-            <h1>Create your event</h1>
+            <h1>Are you sure you want to delete your event?</h1>
           </div>
         </div>
-        <div class="bottom">      
-          <form action="{{url_for('add_event')}}" method="POST" class="event-post-form">
-            <div class="input">
-              <!-- <div class="input-name"></div> -->
-              <label for="input-name" class="input-txt required">Name</label>
-              <input type = "text" id="input-name" name="input-name" placeholder="Enter name of the event" required>
+        <!-- Start of the form -->
+        <form action="{{ url_for('are_you_sure', event_id=event_id) }}" method="post">
+          <div class="middle">      
+            <div class="buttons-container">
+              <button type="submit" class="btn-submit btn-yes" name="yes" value="yes">YES</button>
+              <button type="button" class="btn-submit btn-no" onclick="window.history.back();">NO</button>
             </div>
-            <div class="input">
-              <!-- <div class="input-date"></div> -->
-              <label for="input-date" class="input-txt required">Date of the event</label>
-              <input type = "date" id="input-date" name="input-date" placeholder="Specify date of the event" required>
-            </div>
-            <div class="input">
-              <!-- <div class="input-time"></div> -->
-              <label for="input-time" class="input-txt required">Time of the event</label>
-              <input type = "time" id="input-time" name="input-time" placeholder="Specify time of the event" required>
-            </div>
-            <div class="input">
-              <!-- <div class="input-loc"></div> -->
-              <label for="input-loc" class="input-txt required">Location of the event</label>
-              <input type = "text" id="input-loc" name="input-loc" placeholder="Specify location of the event" required>
-            </div>
-            <div class="input">
-              <!-- <div class="input-reg"></div> -->
-              <label for="input-reg" class="input-txt">Registration Link (optional)</label>
-              <input type = "url" id="input-reg" name="input-reg" placeholder="Add registration link (optional)">
-            </div>
-            <div class="input">
-              <!-- <div class="input-desc"></div> -->
-              <label for="input-desc" class="input-txt required">Description</label>
-              <textarea id="input-desc" name="input-desc" placeholder="Add description of the event" required></textarea>
-            </div>
-            <div class="multi-select-event-type">
-              <label for="event-type" class="input-txt required">Event Type</label>
-              <div class="event-type" onclick="showCheckboxes()">
-                <button class="toggle" id="toggle-btn" type="button">
-                  Select an event type
-                  <svg class="dropdown-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="18 20 12 7.25"><path d="m29 21-5 5.25-5-5.25" stroke="#222" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
-                </button>
-              </div>
-              <div id="checkboxes">
-                {% for o in event_types %}
-                <label for="{{ o.name }}">
-                  <input type="radio" name="event_type" id="{{ o.name }}" value="{{ o.name }}" class="radio" onchange="displaySelected()"/>{{ o.name }}
-                </label>
-                {% endfor %}
-              </div>
-            </div>
-            <button class="btn-submit" onclick="return checkEventTypeSelected()">SUBMIT</button>
-          </form>
-        </div>
+          </div>
+        </form>
+        <!-- End of the form -->
       </div>
     </div>
   </div>
 </div>
-<script>
-var expanded = false;
-
-function showCheckboxes() {
-  var checkboxes = document.getElementById("checkboxes");
-  if (!expanded) {
-    checkboxes.style.display = "block";
-    expanded = true;
-  } else {
-    checkboxes.style.display = "none";
-    expanded = false;
-  }
-}
-
-var radios = document.querySelectorAll('input[type="radio"]');
-
-function displaySelected() {
-  var disp_btn=document.getElementById('toggle-btn');
-  var selected_item = '';
-  radios.forEach((radio) => {
-    if (radio.checked) {
-      selected_item = radio.value;
-    }
-    var html_txt = selected_item !== '' 
-          ? '#' + selected_item : 'Select an event type';
-    html_txt += '<svg class="dropdown-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="18 20 12 7.25"><path d="m29 21-5 5.25-5-5.25" stroke="#222" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>';
-    disp_btn.innerHTML = html_txt;
-  })
-}
-
-function isChecked() {
-  for (var i = 0; i < radios.length; i++) {
-    if (radios[i].checked) return true;
-  }
-  return false;
-}
-
-function checkEventTypeSelected() {
-  if (!isChecked()) {
-    const error_msg= 'A type of event must be selected.';
-    return false;
-  }
-  return true; 
-}
-
-
-function checkEventTypeSelected() {
-  const error_msg = !isChecked() ? 'A type of event must be selected.' : '';
-  radios[0].setCustomValidity(error_msg);
-}
-</script>
 {% include "base_input.html" %}
 <style>
 .dashboard {
@@ -161,7 +69,7 @@ function checkEventTypeSelected() {
   flex-direction: row;
   gap: 18px;
   align-items: flex-end;
-  justify-content: center;
+  justify-content: left;
   align-self: stretch;
   flex-shrink: 0;
   position: relative;
@@ -174,9 +82,6 @@ function checkEventTypeSelected() {
   justify-content: center;
   flex: 1;
   position: relative;
-}
-.left h1 {
-  font-size: 50px;
 }
 .image-1 {
   flex-shrink: 0;
@@ -333,6 +238,37 @@ function checkEventTypeSelected() {
   text-align: center;
   font: 700 30px "Ubuntu Mono", sans-serif;
   position: relative;
+}
+.buttons-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 50px;
+}
+
+.btn-no {
+  background: #cd6262;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  padding: 10px;
+  position: relative;
+}
+.btn-yes {
+  background: #91d48a;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  padding: 10px;
+  position: relative;
+}
+
+.left h1 {
+  font-size: 50px;
 }
 </style>
 {% endblock %}

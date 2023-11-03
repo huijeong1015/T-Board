@@ -154,7 +154,7 @@ def bookmark():
         if request.form.get("event-details") != None:
             event_id = int(request.form["event-details"])
             event = Event.query.filter_by(id=event_id).first()
-            return render_template("event_details.html", event=event.__dict__, profile_picture=get_user_profile_picture())   
+            return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture())   
         if request.form.get("remove-from-bookmarks") != None:
             bookmark_id = int(request.form["remove-from-bookmarks"])
             event_to_remove = Event.query.filter_by(id=bookmark_id).first() 
@@ -191,7 +191,7 @@ def main_dashboard():
         if request.form.get("event-details") != None:
             event_id = int(request.form["event-details"])
             event = Event.query.filter_by(id=event_id).first()
-            return render_template("event_details.html", event=event.__dict__, profile_picture=get_user_profile_picture())
+            return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture())
         
         # Handles bookmark button
         if request.form.get('bookmark') != None:
@@ -260,10 +260,9 @@ def attend_event(event_id):
     user = User.query.filter_by(username=username).first()
     event = Event.query.filter_by(id=event_id).first()
     event.attendees.append(user)
-    
+    db.session.commit() 
 
-    return render_template("event_details.html", event=event.__dict__, profile_picture=get_user_profile_picture())
-
+    return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture())
 
 @app.route("/search_dashboard/", methods=["POST"])
 def searchEvent():
@@ -290,7 +289,7 @@ def my_account_event_history():
 
     return render_template('my_account_eventhistory.html', username=session.get('username'), 
                            interests=get_user_interests(), profile_picture=get_user_profile_picture(),
-                           events_attending=events_attending, myevents=events_created_by_user, )
+                           eventlog=events_attending, myevents=events_created_by_user, )
 
 def get_current_user_friends(username):
     # Assuming 'db' is your database connection object and 'User' is your user model

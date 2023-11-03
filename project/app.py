@@ -259,8 +259,16 @@ def add_event():
 def edit_event(event_id):
     event = Event.query.get(event_id)
     if request.method == 'POST':
-        #User clicks finish edits or delete event
-        return redirect(url_for("are_you_sure"))
+        if 'finish_edit' in request.form:
+            # Logic to update the event details. This can be pseudo-code, as I don't have the details of your data model.
+            # event.field = request.form['field_name']
+            # ...
+            # db.session.commit()
+
+            return redirect(url_for("my_account_myevents"))  # Assuming "my_account_myevents" is the function name that handles "/my_account/myevents/"
+
+        elif 'delete_event' in request.form:
+            return redirect(url_for("are_you_sure"))
 
     return render_template('event_edit.html', profile_picture=get_user_profile_picture(), event=event, event_types=event_types)
 

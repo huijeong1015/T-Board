@@ -43,7 +43,7 @@
             />
           </svg>
 
-          <div class="name"><b>{{ event['name'] }}</b></div>
+          <div class="name"><b>{{ event.name }}</b></div>
         </div>
         <div class="middle">
           <div class="left">
@@ -98,20 +98,20 @@
           </div>
           <div class="right">
             <div class="frame-info">
-              <div class="date">Date: <b>{{ event['date'] }}</b></div>
-              <div class="time">Time: <b>{{ event['time'] }}</b></div>
-              <div class="location">Location: <b>{{ event['location'] }}</b></div>
+              <div class="date">Date: <b>{{ event.date }}</b></div>
+              <div class="time">Time: <b>{{ event.time }}</b></div>
+              <div class="location">Location: <b>{{ event.location }}</b></div>
             </div>
           </div>
         </div>
         <div class="bottom">
-          {% if event.get('reg_link') %}
+          {% if event.reg_link %}
               <div class="registration">
-                  Register here: {{ event['reg_link'] }}
+                  Register here: {{ event.reg_link }}
               </div>
           {% endif %}
           <div class="description">
-              Event description: {{ event['description'] }}
+              Event description: {{ event.description }}
           </div>
           <div class="review">Reviews:</div>
           <form method="POST" action="{{ url_for('attend_event', event_id=event['id']) }}">

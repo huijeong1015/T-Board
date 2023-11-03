@@ -82,7 +82,7 @@
   </div>
   <div class="frame-content">
     <div class="heading">EVENTS LOG</div>
-    {% for event in myevents %}
+    {% for event in eventlog %}
       {% with event=event %}
         {% include "myevent.html" %}
       {% endwith %}

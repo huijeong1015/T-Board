@@ -1,5 +1,7 @@
+import io
 from flask import (
     Flask,
+    after_this_request,
     render_template,
     request,
     redirect,
@@ -7,6 +9,7 @@ from flask import (
     session,
     flash,
     render_template_string,
+    send_file
 )
 from datetime import datetime
 from flask_bootstrap import Bootstrap
@@ -20,6 +23,7 @@ from sqlalchemy.sql import func
 from project.db import *
 from werkzeug.security import check_password_hash
 import re
+import ics
 
 app.config["SECRET_KEY"] = os.urandom(24)
 
@@ -175,11 +179,21 @@ def main_dashboard():
     print(user)
     sql = text("SELECT * FROM events;")
     result = db.session.execute(sql)
+    
+    username = session.get('username')
+    user = User.query.filter_by(username=username).first()
+    bookmarked_events = user.bookmarked_events
+
+    ics_text = ""
+
     if request.method == "POST":
+        # Handles event details button
         if request.form.get("event-details") != None:
             event_id = int(request.form["event-details"])
             event = Event.query.filter_by(id=event_id).first()
             return render_template("event_details.html", event=event.__dict__, profile_picture=get_user_profile_picture())
+        
+        # Handles bookmark button
         if request.form.get('bookmark') != None:
             bookmark_id = int(request.form['bookmark'])
             event_to_bookmark = Event.query.filter_by(id=bookmark_id).first()
@@ -187,25 +201,57 @@ def main_dashboard():
             print(event_to_bookmark)
             
 
-            if event_to_bookmark not in user.bookmarked_events:
-                user.bookmarked_events.append(event_to_bookmark)
+            if event_to_bookmark not in bookmarked_events:
+                bookmarked_events.append(event_to_bookmark)
                 db.session.commit()
-                for event in user.bookmarked_events:
+                for event in bookmarked_events:
                     print(event)
                     print("eventid" + str(event.id))
                 # current_user_id.bookmarked_events.append(bookmark_id)
                 # if no work try printing the events being queried in the db.py file
             else:
-                user.bookmarked_events.remove(event_to_bookmark)
+                bookmarked_events.remove(event_to_bookmark)
                 db.session.commit()
-                for event in user.bookmarked_events:
+                for event in bookmarked_events:
                     print(event)
+        
         if request.form.get('show-bookmarked') != None:
             bookmark_checked = request.form.get('show-bookmarked')
             print (request.form.get("show-bookmarked"))
             result = user.bookmarked_events
 
-    return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg, bookmark_checked=bookmark_checked)
+    bookmarked_events_ids = [event.id for event in bookmarked_events]
+    return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg, bookmark_checked=bookmark_checked, bookmarked_events=bookmarked_events_ids)
+
+@app.route('/download_ics_file', methods=['POST'])
+def download_ics_file():
+    event_id = int(request.form.get('export-calendar'))
+    event = Event.query.filter_by(id=event_id).first()
+    c = ics.Calendar()
+    e = ics.Event()
+    e.name = event.name
+    e.begin = event.date + ' ' + event.time
+    e.begin = e.begin.shift(hours=5) #EST
+    e.location = event.location
+    e.description = event.description
+    c.events.add(e)
+
+    filename = (event.name).strip().replace(' ','') + '.ics'
+
+    # Write the ics file
+    with open(os.path.join("project", filename), 'w') as f:
+        f.write(c.serialize())
+
+    # Lines to make sure the file gets deleted once the user finishes downloading    
+    return_data = io.BytesIO()
+    with open(os.path.join("project", filename), 'rb') as f:
+        return_data.write(f.read())
+
+    return_data.seek(0)
+    os.remove(os.path.join("project", filename))
+
+    # Ask user to download the file
+    return send_file(return_data, mimetype="application/ics", download_name=filename, as_attachment=True)
 
 @app.route("/search_dashboard/", methods=["POST"])
 def searchEvent():

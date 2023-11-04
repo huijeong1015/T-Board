@@ -91,7 +91,6 @@ class Event(db.Model):
     created_by_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_by = db.relationship('User', back_populates='created_events')
 
-
     def __repr__(self):
         return f"<Event {self.name}>"
 

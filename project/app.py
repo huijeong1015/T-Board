@@ -314,7 +314,7 @@ def my_account_event_history():
 
     return render_template('my_account_eventhistory.html', username=session.get('username'), 
                            interests=get_user_interests(), profile_picture=get_user_profile_picture(),
-                           eventlog=events_attending, myevents=events_created_by_user, )
+                           eventlog=events_attending, myevents=events_created_by_user)
 
 def get_current_user_friends(username):
     # Assuming 'db' is your database connection object and 'User' is your user model

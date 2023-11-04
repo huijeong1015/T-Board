@@ -82,11 +82,15 @@
   </div>
   <div class="frame-content">
     <div class="heading">EVENTS LOG</div>
-    {% for event in eventlog %}
-      {% with event=event %}
-        {% include "attended_event.html" %}
-      {% endwith %}
-    {% endfor %} 
+    {%if not eventlog%}
+      <div class="name">You have not attended any planed events </div>
+    {%else%}
+      {% for event in eventlog %}
+        {% with event=event %}
+          {% include "attended_event.html" %}
+        {% endwith %}
+      {% endfor %} 
+    {%endif%}
   </div>
 </div>
 {% include "base_event.html" %}

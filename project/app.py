@@ -1,5 +1,7 @@
+import io
 from flask import (
     Flask,
+    after_this_request,
     render_template,
     request,
     redirect,
@@ -7,6 +9,7 @@ from flask import (
     session,
     flash,
     render_template_string,
+    send_file
 )
 from datetime import datetime
 from flask_bootstrap import Bootstrap
@@ -20,6 +23,7 @@ from sqlalchemy.sql import func
 from project.db import *
 from werkzeug.security import check_password_hash
 import re
+import ics
 
 app.config["SECRET_KEY"] = os.urandom(24)
 
@@ -144,13 +148,13 @@ def bookmark():
     user = User.query.filter_by(username=username).first() 
     print(user)
     bookmarked = user.bookmarked_events
-    
 
     if request.method == "POST":
         if request.form.get("event-details") != None:
             event_id = int(request.form["event-details"])
             event = Event.query.filter_by(id=event_id).first()
-            return render_template("event_details.html", event=event.__dict__, profile_picture=get_user_profile_picture())   
+            bookmarked_events_ids = [event.id for event in bookmarked]
+            return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), bookmarked_events=bookmarked_events_ids)   
         if request.form.get("remove-from-bookmarks") != None:
             bookmark_id = int(request.form["remove-from-bookmarks"])
             event_to_remove = Event.query.filter_by(id=bookmark_id).first() 
@@ -160,7 +164,7 @@ def bookmark():
                 db.session.commit()
             else:
                 error_msg = str(event_to_remove) + "is not associated with this user's bookmarked events"
-    return render_template('bookmark.html', bookmarked_events=bookmarked, profile_picture=get_user_profile_picture(), error_msg = error_msg, username = username)
+    return render_template('bookmark.html', bookmarked_events=bookmarked, profile_picture=get_user_profile_picture(), error_msg = error_msg, user=username)
 
 @app.route("/event_post/")
 def event_post():
@@ -175,11 +179,29 @@ def main_dashboard():
     print(user)
     sql = text("SELECT * FROM events;")
     result = db.session.execute(sql)
+    
+    username = session.get('username')
+    user = User.query.filter_by(username=username).first()
+    bookmarked_events = user.bookmarked_events
+
+    ics_text = ""
+
     if request.method == "POST":
+        # Handles event details button
         if request.form.get("event-details") != None:
             event_id = int(request.form["event-details"])
             event = Event.query.filter_by(id=event_id).first()
-            return render_template("event_details.html", event=event.__dict__, profile_picture=get_user_profile_picture())
+            username = session.get('username')
+            user = User.query.filter_by(username=username).first()
+            flag = 'not attending'
+
+            if user in event.attendees:
+                flag = 'attending'
+
+            bookmarked_events_ids = [event.id for event in bookmarked_events]
+            return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, bookmarked_events=bookmarked_events_ids)
+        
+        # Handles bookmark button
         if request.form.get('bookmark') != None:
             bookmark_id = int(request.form['bookmark'])
             event_to_bookmark = Event.query.filter_by(id=bookmark_id).first()
@@ -187,25 +209,85 @@ def main_dashboard():
             print(event_to_bookmark)
             
 
-            if event_to_bookmark not in user.bookmarked_events:
-                user.bookmarked_events.append(event_to_bookmark)
+            if event_to_bookmark not in bookmarked_events:
+                bookmarked_events.append(event_to_bookmark)
                 db.session.commit()
-                for event in user.bookmarked_events:
+                for event in bookmarked_events:
                     print(event)
                     print("eventid" + str(event.id))
                 # current_user_id.bookmarked_events.append(bookmark_id)
                 # if no work try printing the events being queried in the db.py file
             else:
-                user.bookmarked_events.remove(event_to_bookmark)
+                bookmarked_events.remove(event_to_bookmark)
                 db.session.commit()
-                for event in user.bookmarked_events:
+                for event in bookmarked_events:
                     print(event)
+        
         if request.form.get('show-bookmarked') != None:
             bookmark_checked = request.form.get('show-bookmarked')
             print (request.form.get("show-bookmarked"))
             result = user.bookmarked_events
 
-    return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg, bookmark_checked=bookmark_checked)
+    bookmarked_events_ids = [event.id for event in bookmarked_events]
+    return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg, bookmark_checked=bookmark_checked, bookmarked_events=bookmarked_events_ids)
+
+@app.route('/download_ics_file', methods=['POST'])
+def download_ics_file():
+    event_id = int(request.form.get('export-calendar'))
+    event = Event.query.filter_by(id=event_id).first()
+    c = ics.Calendar()
+    e = ics.Event()
+    e.name = event.name
+    e.begin = event.date + ' ' + event.time
+    e.begin = e.begin.shift(hours=5) #EST
+    e.location = event.location
+    e.description = event.description
+    c.events.add(e)
+
+    filename = (event.name).strip().replace(' ','') + '.ics'
+
+    # Write the ics file
+    with open(os.path.join("project", filename), 'w') as f:
+        f.write(c.serialize())
+
+    # Lines to make sure the file gets deleted once the user finishes downloading    
+    return_data = io.BytesIO()
+    with open(os.path.join("project", filename), 'rb') as f:
+        return_data.write(f.read())
+
+    return_data.seek(0)
+    os.remove(os.path.join("project", filename))
+
+    # Ask user to download the file
+    return send_file(return_data, mimetype="application/ics", download_name=filename, as_attachment=True)
+
+
+from flask import request
+
+@app.route('/attend_event/<int:event_id>', methods=['POST'])
+def attend_event(event_id):
+    username = session.get('username')
+    user = User.query.filter_by(username=username).first()
+    bookmarked_events_ids = [event.id for event in user.bookmarked_events]
+    event = Event.query.filter_by(id=event_id).first()
+    action = request.form.get('action')
+    flag = 'not attending' #base case
+
+    if action == 'attend':
+        # If the user is not attending, add them to the attendees list
+        if user not in event.attendees:
+            event.attendees.append(user)
+            db.session.commit()
+        flag = 'attending'
+    elif action == 'unattend':
+        # If the user is attending, remove them from the attendees list
+        if user in event.attendees:
+            event.attendees.remove(user)
+            db.session.commit()
+        flag = 'not attending'
+
+    return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, bookmarked_events=bookmarked_events_ids)
+
 
 @app.route("/search_dashboard/", methods=["POST"])
 def searchEvent():
@@ -221,8 +303,18 @@ def searchEvent():
 
 @app.route("/my_account/event_history/")
 def my_account_event_history():
+    username=session.get('username')
+    user = User.query.filter_by(username=username).first()
+    events_attending = user.events_attending
+
+    if username == 'admin':
+        events_created_by_user = Event.query.all()
+    else:
+        events_created_by_user = Event.query.filter_by(created_by_id=user.id).all()
+
     return render_template('my_account_eventhistory.html', username=session.get('username'), 
-                           interests=get_user_interests(), profile_picture=get_user_profile_picture())
+                           interests=get_user_interests(), profile_picture=get_user_profile_picture(),
+                           eventlog=events_attending, myevents=events_created_by_user, )
 
 def get_current_user_friends(username):
     # Assuming 'db' is your database connection object and 'User' is your user model

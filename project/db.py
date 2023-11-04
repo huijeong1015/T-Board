@@ -86,11 +86,13 @@ class Event(db.Model):
     description = db.Column(db.Text, nullable=False)
     event_type = db.Column(db.String(100), nullable=False)
     attendees = db.relationship(
-        "User", secondary=attendees, backref=db.backref("events", lazy="dynamic")
+        "User", 
+        secondary=attendees, 
+        back_populates="events_attending",  
     )
+
     created_by_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_by = db.relationship('User', back_populates='created_events')
-
 
     def __repr__(self):
         return f"<Event {self.name}>"
@@ -124,11 +126,15 @@ class User(db.Model):
     created_events = db.relationship('Event', back_populates='created_by', lazy='dynamic')
     bookmarked_events = db.relationship('Event', secondary=saved_events,
                                              backref=db.backref('bookmarked_ref', lazy='dynamic'))  
-    
+    events_attending = db.relationship(
+        'Event', 
+        secondary=attendees, 
+        back_populates='attendees', 
+        lazy='dynamic'
+    )
+
     def set_password(self, password):
         self.password = generate_password_hash(password)
-
-        
 
     def __repr__(self):
         return '<User {}>'.format(self.username)

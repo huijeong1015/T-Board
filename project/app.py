@@ -305,11 +305,20 @@ def my_account_event_history():
     events_attending = user.events_attending
 
     current_datetime = datetime.now()
-    current_date = current_datetime.date()
+    future_events = []
+    past_events =[]
+
+    for event in events_attending:
+        event_datetime = f"{event.date} {event.time}"
+        event_datetime_dt = datetime.strptime(event_datetime, "%Y-%m-%d %H:%M")
+        if event_datetime_dt > current_datetime:
+            future_events.append(event)
+        else:
+            past_events.append(event)
 
     return render_template('my_account_eventhistory.html', username=session.get('username'), 
                            interests=get_user_interests(), profile_picture=get_user_profile_picture(),
-                           eventlog=events_attending, current_date=current_date)
+                           future_events=future_events, past_events=past_events )
 
 def get_current_user_friends(username):
     # Assuming 'db' is your database connection object and 'User' is your user model

@@ -82,15 +82,30 @@
   </div>
   <div class="frame-content">
     <div class="heading">EVENTS LOG</div>
-    {% if not eventlog.all() %}
+    {% if not future_events and not past_events %}
       <div class="name">You have not attended any events </div>
       <!-- <p> Not attending any events yet </p> -->
     {%else%}
-      {% for event in eventlog %}
-        {% with event=event %}
-          {% include "attended_event.html" %}
-        {% endwith %}
-      {% endfor %} 
+      <div class="name-top">Future Events: </div>
+      {% if not future_events %}
+        <div class="name">You have no future events </div>
+      {%else%}
+        {% for event in future_events %}
+          {% with event=event %}
+            {% include "attended_event.html" %}
+          {% endwith %}
+        {% endfor %}
+      {%endif%}
+      <div class="name-top">Past Events: </div>
+      {% if not past_events %}
+        <div class="name">You have no past events </div>
+      {%else%}
+        {% for event in past_events %}
+          {% with event=event %}
+            {% include "attended_event.html" %}
+          {% endwith %}
+        {% endfor %}
+      {%endif%}
     {%endif%}
   </div>
 </div>
@@ -218,6 +233,14 @@
   text-align: left;
   font: 400 32px "Ubuntu Condensed", sans-serif;
   position: relative;
+}
+.name-top {
+  color: #000000;
+  text-align: left;
+  font: 400 32px "Ubuntu Condensed", sans-serif; /
+  position: relative;
+  font-weight: bold; 
+  text-decoration: underline; 
 }
 .frame-myevent {
   background: transparent;

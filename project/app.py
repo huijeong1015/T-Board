@@ -304,14 +304,9 @@ def my_account_event_history():
     user = User.query.filter_by(username=username).first()
     events_attending = user.events_attending
 
-    if username == 'admin':
-        events_created_by_user = Event.query.all()
-    else:
-        events_created_by_user = Event.query.filter_by(created_by_id=user.id).all()
-
     return render_template('my_account_eventhistory.html', username=session.get('username'), 
                            interests=get_user_interests(), profile_picture=get_user_profile_picture(),
-                           eventlog=events_attending, myevents=events_created_by_user)
+                           eventlog=events_attending)
 
 def get_current_user_friends(username):
     # Assuming 'db' is your database connection object and 'User' is your user model

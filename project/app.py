@@ -304,9 +304,12 @@ def my_account_event_history():
     user = User.query.filter_by(username=username).first()
     events_attending = user.events_attending
 
+    current_datetime = datetime.now()
+    current_date = current_datetime.date()
+
     return render_template('my_account_eventhistory.html', username=session.get('username'), 
                            interests=get_user_interests(), profile_picture=get_user_profile_picture(),
-                           eventlog=events_attending)
+                           eventlog=events_attending, current_date=current_date)
 
 def get_current_user_friends(username):
     # Assuming 'db' is your database connection object and 'User' is your user model

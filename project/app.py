@@ -9,7 +9,8 @@ from flask import (
     session,
     flash,
     render_template_string,
-    send_file
+    send_file,
+    request
 )
 from datetime import datetime
 from flask_bootstrap import Bootstrap
@@ -48,7 +49,42 @@ def get_user():
     user = User.query.filter_by(username=username).first()
     return(user)  
 
-app.config['SECRET_KEY'] = os.urandom(24)
+def check_password_strength(password):
+    length = len(password)
+    has_upper = any(char.isupper() for char in password)
+    has_lower = any(char.islower() for char in password)
+    has_digit = any(char.isdigit() for char in password)
+    has_special = any(not char.isalnum() for char in password)
+
+    if length >= 8 and has_upper and has_lower and has_digit and has_special:
+        return "strong"
+    elif length >= 6 and has_upper and has_lower and has_digit:
+        return "medium"
+    else:
+        return "weak"
+
+def sort_events_by_date(events, order):
+    events_with_dt = [(event, datetime.strptime(f"{event.date} {event.time}", "%Y-%m-%d %H:%M")) for event in events]
+
+    # Sort the events based on the datetime objects
+    if order == 'Newest to Oldest':
+        sorted_events_with_dt = sorted(events_with_dt, key=lambda x: x[1], reverse=True)
+    elif order == 'Oldest to Newest':
+        sorted_events_with_dt = sorted(events_with_dt, key=lambda x: x[1])
+
+    sorted_events = [event_with_dt[0] for event_with_dt in sorted_events_with_dt]
+
+    return sorted_events
+
+def sort_events_by_name(events, order):
+    if order == 'A to Z':
+        sorted_events = sorted(events, key=lambda event: event.name)
+    elif order == 'Z to A':
+        sorted_events = sorted(events, key=lambda event: event.name, reverse=True)
+
+    return sorted_events
+
+#Main Functions
 @app.route("/", methods=["GET", "POST"])
 @app.route("/login/", methods=["GET", "POST"])
 def login():
@@ -64,9 +100,11 @@ def login():
         else:
             user = User.query.filter_by(username=username).first()
             if user is None:
-                error = f"No user found with username: {username}"
+                error = f"No \"{username}\" user found. Create a new account."
+                flash(error)
             elif not check_password_hash(user.password, password):
-                error = "Password does not match for the provided username."
+                error = "Wrong password. Try again."
+                flash(error)
             else:
                 # Start a user session
                 session["username"] = username
@@ -126,21 +164,7 @@ def register():
             return redirect(url_for("login"))
 
     return render_template("register.html")
-
-def check_password_strength(password):
-    length = len(password)
-    has_upper = any(char.isupper() for char in password)
-    has_lower = any(char.islower() for char in password)
-    has_digit = any(char.isdigit() for char in password)
-    has_special = any(not char.isalnum() for char in password)
-
-    if length >= 8 and has_upper and has_lower and has_digit and has_special:
-        return "strong"
-    elif length >= 6 and has_upper and has_lower and has_digit:
-        return "medium"
-    else:
-        return "weak"
-    
+  
 @app.route("/bookmark/", methods=["GET", "POST"])
 def bookmark():
     error_msg = ""
@@ -178,11 +202,12 @@ def main_dashboard():
     user = User.query.filter_by(username=username).first()
     print(user)
     sql = text("SELECT * FROM events;")
-    result = db.session.execute(sql)
+    events = db.session.execute(sql)
     
     username = session.get('username')
     user = User.query.filter_by(username=username).first()
     bookmarked_events = user.bookmarked_events
+    sort_by = request.form.get('sort-by')
 
     ics_text = ""
 
@@ -226,10 +251,27 @@ def main_dashboard():
         if request.form.get('show-bookmarked') != None:
             bookmark_checked = request.form.get('show-bookmarked')
             print (request.form.get("show-bookmarked"))
-            result = user.bookmarked_events
+            events = user.bookmarked_events
+        
+        #Sort the events based on what user selected
+        if sort_by == "None":
+            if request.form.get('show-bookmarked') != None:
+                events = events
+            else:
+                events = db.session.execute(sql) #simply reset it
+        elif sort_by == "asc-alphabetic":
+            events = sort_events_by_name(events, 'A to Z')
+        elif sort_by == "desc-alphabetic":
+            events = sort_events_by_name(events, 'Z to A')
+        elif sort_by == "asc-date":
+            events = sort_events_by_date(events, 'Oldest to Newest')
+        elif sort_by == "desc-date":  
+            events = sort_events_by_date(events, 'Newest to Oldest')
 
     bookmarked_events_ids = [event.id for event in bookmarked_events]
-    return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg, bookmark_checked=bookmark_checked, bookmarked_events=bookmarked_events_ids)
+    return render_template("main_dashboard.html", events=events, profile_picture=get_user_profile_picture(), 
+                           error_msg=error_msg, bookmark_checked=bookmark_checked, 
+                           bookmarked_events=bookmarked_events_ids, sort_by=sort_by)
 
 @app.route('/download_ics_file', methods=['POST'])
 def download_ics_file():
@@ -261,9 +303,6 @@ def download_ics_file():
     # Ask user to download the file
     return send_file(return_data, mimetype="application/ics", download_name=filename, as_attachment=True)
 
-
-from flask import request
-
 @app.route('/attend_event/<int:event_id>', methods=['POST'])
 def attend_event(event_id):
     username = session.get('username')
@@ -288,7 +327,6 @@ def attend_event(event_id):
 
     return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, bookmarked_events=bookmarked_events_ids)
 
-
 @app.route("/search_dashboard/", methods=["POST"])
 def searchEvent():
     error_msg = ""
@@ -307,14 +345,24 @@ def my_account_event_history():
     user = User.query.filter_by(username=username).first()
     events_attending = user.events_attending
 
-    if username == 'admin':
-        events_created_by_user = Event.query.all()
-    else:
-        events_created_by_user = Event.query.filter_by(created_by_id=user.id).all()
+    current_datetime = datetime.now()
+    future_events = []
+    past_events =[]
+
+    for event in events_attending:
+        event_datetime = f"{event.date} {event.time}"
+        event_datetime_dt = datetime.strptime(event_datetime, "%Y-%m-%d %H:%M")
+        if event_datetime_dt > current_datetime:
+            future_events.append(event)
+        else:
+            past_events.append(event)
+    
+    past_events = sort_events_by_date(past_events, 'Newest to Oldest')
+    future_events = sort_events_by_date(future_events, 'Newest to Oldest')
 
     return render_template('my_account_eventhistory.html', username=session.get('username'), 
                            interests=get_user_interests(), profile_picture=get_user_profile_picture(),
-                           eventlog=events_attending, myevents=events_created_by_user)
+                           future_events=future_events, past_events=past_events)
 
 def get_current_user_friends(username):
     # Assuming 'db' is your database connection object and 'User' is your user model

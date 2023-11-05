@@ -128,25 +128,31 @@
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <defs>
+        <clipPath id="circleView">
+          <circle cx="40" cy="40" r="38"/>
+        </clipPath>
+      </defs>
+      <image
+        href="{{ friend.profile_picture }}"
+        width="80"
+        height="80"
+        clip-path="url(#circleView)"
+      />
       <circle
         cx="40"
         cy="40"
-        r="41.5"
-        fill="#7CA34A"
+        r="38"
+        fill="none"
         stroke="#7CA34A"
         stroke-width="3"
       />
-      <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
-        d="M71.0484 65.221C76.6452 58.3395 80 49.5615 80 40C80 17.9086 62.0914 0 40 0C17.9086 0 0 17.9086 0 40C0 49.96 3.6403 59.0698 9.66299 66.0715C11.9353 60.3659 17.3926 56.3028 23.8128 56C28.1328 60.88 34.0528 64 40.5328 64C47.0128 64 52.9328 60.88 57.2528 56C63.4068 56.2876 68.6097 59.9657 71.0484 65.221ZM24.5328 36C24.5328 24.96 31.7328 16 40.5328 16C49.3328 16 56.5328 24.96 56.5328 36C56.5328 47.04 49.3328 56 40.5328 56C31.7328 56 24.5328 47.04 24.5328 36Z"
-        fill="#D9D9D9"
-      />
     </svg>
 
-    <div class="name">{{ friend.username }}</div> <!-- Replace 'friend.username' with the appropriate attribute that represents the friend's username -->
+    <div class="name">{{ friend.username }}</div>
   </div>
 {% endfor %}
+
 
     </div>
   </div>

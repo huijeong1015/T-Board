@@ -41,21 +41,21 @@
                 stroke-width="2"
             />
             </svg> 
-            <button name="event-details" class="btn-event-details" value="{{ event['id'] }}">
+            <a href="{{ url_for('main_dashboard') }}" class="btn-event-details" name="event-details">
                 <svg
-                    class="btn-event-details"
                     width="68"
                     height="47"
                     viewBox="0 0 68 47"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
+                    style="vertical-align: middle;"  <!-- Align SVG icon with text if there's any -->
                 >
                     <path
                     d="M42.5 0V15.6667H0V31.3333H42.5V47L68 23.265L42.5 0Z"
                     fill="#657895"
                     />
                 </svg>
-            </button>           
+            </a>          
         </div>
     </div>
     <div class="sub-right">

@@ -9,7 +9,8 @@ from flask import (
     session,
     flash,
     render_template_string,
-    send_file
+    send_file,
+    request
 )
 from datetime import datetime
 from flask_bootstrap import Bootstrap
@@ -48,7 +49,21 @@ def get_user():
     user = User.query.filter_by(username=username).first()
     return(user)  
 
-app.config['SECRET_KEY'] = os.urandom(24)
+def check_password_strength(password):
+    length = len(password)
+    has_upper = any(char.isupper() for char in password)
+    has_lower = any(char.islower() for char in password)
+    has_digit = any(char.isdigit() for char in password)
+    has_special = any(not char.isalnum() for char in password)
+
+    if length >= 8 and has_upper and has_lower and has_digit and has_special:
+        return "strong"
+    elif length >= 6 and has_upper and has_lower and has_digit:
+        return "medium"
+    else:
+        return "weak"
+
+#Main Functions
 @app.route("/", methods=["GET", "POST"])
 @app.route("/login/", methods=["GET", "POST"])
 def login():
@@ -126,21 +141,7 @@ def register():
             return redirect(url_for("login"))
 
     return render_template("register.html")
-
-def check_password_strength(password):
-    length = len(password)
-    has_upper = any(char.isupper() for char in password)
-    has_lower = any(char.islower() for char in password)
-    has_digit = any(char.isdigit() for char in password)
-    has_special = any(not char.isalnum() for char in password)
-
-    if length >= 8 and has_upper and has_lower and has_digit and has_special:
-        return "strong"
-    elif length >= 6 and has_upper and has_lower and has_digit:
-        return "medium"
-    else:
-        return "weak"
-    
+  
 @app.route("/bookmark/", methods=["GET", "POST"])
 def bookmark():
     error_msg = ""
@@ -261,9 +262,6 @@ def download_ics_file():
     # Ask user to download the file
     return send_file(return_data, mimetype="application/ics", download_name=filename, as_attachment=True)
 
-
-from flask import request
-
 @app.route('/attend_event/<int:event_id>', methods=['POST'])
 def attend_event(event_id):
     username = session.get('username')
@@ -287,7 +285,6 @@ def attend_event(event_id):
         flag = 'not attending'
 
     return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, bookmarked_events=bookmarked_events_ids)
-
 
 @app.route("/search_dashboard/", methods=["POST"])
 def searchEvent():

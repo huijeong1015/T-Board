@@ -117,44 +117,63 @@
         />
       </svg>    
     </div>
-    <div class="friend">
-      {% for friend in friends %}
-  <div class="friend">
-    <svg
-      class="account"
-      width="80"
-      height="80"
-      viewBox="0 0 80 80"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <defs>
-        <clipPath id="circleView">
-          <circle cx="40" cy="40" r="38"/>
-        </clipPath>
-      </defs>
-      <image
-        href="{{ friend.profile_picture }}"
-        width="80"
-        height="80"
-        clip-path="url(#circleView)"
-      />
-      <circle
-        cx="40"
-        cy="40"
-        r="38"
-        fill="none"
-        stroke="#7CA34A"
-        stroke-width="3"
-      />
-    </svg>
+    <div class="friends-list">
+      {% if friends %}  
+        {% for friend in friends %}
+          <div class="friend-item">
+            <div class="account-wrapper">
+              {% if friend.profile_picture.lower() == "default" %}
+                <svg
+                  class="account"
+                  width="80"
+                  height="80"
+                  viewBox="0 0 80 80"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle cx="40" cy="40" r="38" fill="#657895" />
+                  <!-- Add your SVG path for the default image here -->
+                </svg>
+              {% else %}
+                <svg
+                  class="account"
+                  width="80"
+                  height="80"
+                  viewBox="0 0 80 80"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <defs>
+                    <clipPath id="circleView{{ loop.index }}">
+                      <circle cx="40" cy="40" r="38"/>
+                    </clipPath>
+                  </defs>
+                  <image
+                    href="{{ url_for('static', filename='profile_picture/' + friend.profile_picture.lower() + '.png') }}"
+                    width="80"
+                    height="80"
+                    clip-path="url(#circleView{{ loop.index }})"
+                  />
+                  <circle
+                    cx="40"
+                    cy="40"
+                    r="38"
+                    fill="none"
+                    stroke="#7CA34A"
+                    stroke-width="3"
+                  />
+                </svg>
+              {% endif %}
 
-    <div class="name">{{ friend.username }}</div>
-  </div>
-{% endfor %}
-
-
-    </div>
+            </div>
+            <div class="name">{{ friend.username }}</div>
+          </div>
+        {% endfor %}
+      {% else %}
+      <div class="no-friends">
+        No Friends Added
+      </div>
+      {% endif %}
   </div>
 </div>
 <style>
@@ -332,6 +351,30 @@
   flex-shrink: 0;
   position: relative;
   overflow: visible;
-}   
+}
+.friend-item {
+  display: flex; /* Enables flexbox */
+  align-items: center; /* Centers the items vertically */
+  margin-bottom: 10px; /* Adds space between each friend entry */
+}
+
+.friend-item .account-wrapper {
+  margin-right: 10px; /* Adds some space between the picture and the username */
+}
+
+.friends-list {
+  display: flex;
+  flex-direction: column; 
+  align-items: flex-start; /* Aligns items to the start of the flex container (left side) */
+}
+
+.no-friends {
+  color: #1e1e1e;
+  text-align: left;
+  font: 400 32px "Ubuntu Condensed", sans-serif;
+  position: relative;
+  width: 100%;
+}
+
 </style>
 {% endblock %}

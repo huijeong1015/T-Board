@@ -76,6 +76,14 @@ def sort_events_by_date(events, order):
 
     return sorted_events
 
+def sort_events_by_name(events, order):
+    if order == 'A to Z':
+        sorted_events = sorted(events, key=lambda event: event.name)
+    elif order == 'Z to A':
+        sorted_events = sorted(events, key=lambda event: event.name, reverse=True)
+
+    return sorted_events
+
 #Main Functions
 @app.route("/", methods=["GET", "POST"])
 @app.route("/login/", methods=["GET", "POST"])

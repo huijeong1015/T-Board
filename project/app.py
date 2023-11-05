@@ -100,9 +100,11 @@ def login():
         else:
             user = User.query.filter_by(username=username).first()
             if user is None:
-                error = f"No user found with username: {username}"
+                error = f"No \"{username}\" user found. Create a new account."
+                flash(error)
             elif not check_password_hash(user.password, password):
-                error = "Password does not match for the provided username."
+                error = "Wrong password. Try again."
+                flash(error)
             else:
                 # Start a user session
                 session["username"] = username

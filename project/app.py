@@ -253,7 +253,10 @@ def main_dashboard():
         
         #Sort the events based on what user selected
         if sort_by == "None":
-            events = db.session.execute(sql) #simply reset it
+            if request.form.get('show-bookmarked') != None:
+                events = events
+            else:
+                events = db.session.execute(sql) #simply reset it
         elif sort_by == "asc-alphabetic":
             events = sort_events_by_name(events, 'A to Z')
         elif sort_by == "desc-alphabetic":

@@ -25,6 +25,7 @@ from project.db import *
 from werkzeug.security import check_password_hash
 import re
 import ics
+from .ai import get_events
 
 app.config["SECRET_KEY"] = os.urandom(24)
 
@@ -327,16 +328,28 @@ def attend_event(event_id):
 
     return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, bookmarked_events=bookmarked_events_ids)
 
+from sqlalchemy.sql import text
+
 @app.route("/search_dashboard/", methods=["POST"])
 def searchEvent():
     error_msg = ""
     keyword = request.form["input-search"]
-    # some error handling before results are used
+    toggle = "toggle-search" in request.form  # Checks if the toggle is checked
+    
+    # Depending on the state of the toggle, call different search function
     results = []
-    if keyword:
+    if toggle:
+        # Execute raw SQL using the text() function to wrap the SQL statement
+        query = get_events(keyword)
+        if query != "No":
+            results = db.session.execute(text(get_events(keyword))).fetchall()
+    else: 
         results = Event.query.filter(Event.name.contains(keyword)).all()
-    if len(results) == 0:
+    
+    # Handle the case where no results are found
+    if not results:
         error_msg = "We couldn't find any matches for \"" + keyword + '".'
+    
     return render_template("main_dashboard.html", events=results, error_msg=error_msg, profile_picture=get_user_profile_picture())
 
 @app.route("/my_account/event_history/")

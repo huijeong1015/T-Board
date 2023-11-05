@@ -351,8 +351,7 @@ def my_account_myevents():
     user = User.query.filter_by(username=username).first()
     
     if username == 'admin':
-        # events_created_by_user = Event.query.all()
-        events_created_by_user = Event.query.filter_by(created_by_id=user.id).all()
+        events_created_by_user = Event.query.all()
     else:
         events_created_by_user = Event.query.filter_by(created_by_id=user.id).all()
 

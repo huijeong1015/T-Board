@@ -63,6 +63,19 @@ def check_password_strength(password):
     else:
         return "weak"
 
+def sort_events_by_date(events, order):
+    events_with_dt = [(event, datetime.strptime(f"{event.date} {event.time}", "%Y-%m-%d %H:%M")) for event in events]
+
+    # Sort the events based on the datetime objects
+    if order == 'Newest to Oldest':
+        sorted_events_with_dt = sorted(events_with_dt, key=lambda x: x[1], reverse=True)
+    elif order == 'Oldest to Newest':
+        sorted_events_with_dt = sorted(events_with_dt, key=lambda x: x[1])
+
+    sorted_events = [event_with_dt[0] for event_with_dt in sorted_events_with_dt]
+
+    return sorted_events
+
 #Main Functions
 @app.route("/", methods=["GET", "POST"])
 @app.route("/login/", methods=["GET", "POST"])
@@ -315,10 +328,13 @@ def my_account_event_history():
             future_events.append(event)
         else:
             past_events.append(event)
+    
+    past_events = sort_events_by_date(past_events, 'Newest to Oldest')
+    future_events = sort_events_by_date(future_events, 'Newest to Oldest')
 
     return render_template('my_account_eventhistory.html', username=session.get('username'), 
                            interests=get_user_interests(), profile_picture=get_user_profile_picture(),
-                           future_events=future_events, past_events=past_events )
+                           future_events=future_events, past_events=past_events)
 
 def get_current_user_friends(username):
     # Assuming 'db' is your database connection object and 'User' is your user model

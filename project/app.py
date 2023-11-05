@@ -205,6 +205,7 @@ def main_dashboard():
     username = session.get('username')
     user = User.query.filter_by(username=username).first()
     bookmarked_events = user.bookmarked_events
+    sort_by = request.form.get('sort-by')
 
     ics_text = ""
 
@@ -251,7 +252,9 @@ def main_dashboard():
             result = user.bookmarked_events
 
     bookmarked_events_ids = [event.id for event in bookmarked_events]
-    return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg, bookmark_checked=bookmark_checked, bookmarked_events=bookmarked_events_ids)
+    return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), 
+                           error_msg=error_msg, bookmark_checked=bookmark_checked, 
+                           bookmarked_events=bookmarked_events_ids, sort_by=sort_by)
 
 @app.route('/download_ics_file', methods=['POST'])
 def download_ics_file():

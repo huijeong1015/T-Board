@@ -166,3 +166,78 @@ def test_event_post(client):
     assert "02:20" in rv.data
     assert "test location" in rv.data
     assert "test event description" in rv.data
+
+def test_login_valid_credentials(client):
+    # Test the login route with valid credentials
+    response = client.post('/login/', data={'username': 'valid_user', 'password': 'valid_password'})
+    assert response.status_code == 302  # Expecting a redirect
+    assert 'username' in client.session  # Check if the session is set
+def test_login_invalid_username(client):
+    # Test the login route with an invalid username
+    response = client.post('/login/', data={'username': 'invalid_user', 'password': 'valid_password'})
+    assert b'No user found with username: invalid_user' in response.data  # Expecting an error message
+def test_login_invalid_password(client):
+    # Test the login route with an invalid password
+    response = client.post('/login/', data={'username': 'valid_user', 'password': 'invalid_password'})
+    assert b'Password does not match for the provided username.' in response.data  # Expecting an error message
+
+def test_register_valid(client):
+    # Test the registration route with valid input
+    data = {
+        "input-id": "new_user",
+        "input-email": "new_user@example.com",
+        "input-confirm-email": "new_user@example.com",
+        "input-pwd": "Password123!",
+        "input-confirm-pwd": "Password123!",
+        "input-interests": "Testing, Flask",
+    }
+    response = client.post('/register/', data=data, follow_redirects=True)
+    assert b"Successfully registered! Please log in." in response.data
+def test_register_missing_fields(client):
+    # Test the registration route with missing required fields
+    data = {
+        "input-id": "",
+        "input-email": "new_user@example.com",
+        "input-confirm-email": "new_user@example.com",
+        "input-pwd": "Password123!",
+        "input-confirm-pwd": "Password123!",
+        "input-interests": "Testing, Flask",
+    }
+    response = client.post('/register/', data=data)
+    assert b"All fields are required." in response.data
+def test_register_password_strength(client):
+    # Test the registration route with a weak password
+    data = {
+        "input-id": "new_user",
+        "input-email": "new_user@example.com",
+        "input-confirm-email": "new_user@example.com",
+        "input-pwd": "weakpwd",
+        "input-confirm-pwd": "weakpwd",
+        "input-interests": "Testing, Flask",
+    }
+    response = client.post('/register/', data=data)
+    assert b"Password strength is weak" in response.data
+def test_register_existing_user(client):
+    # Test the registration route with an existing username
+    data = {
+        "input-id": "existing_user",
+        "input-email": "new_user@example.com",
+        "input-confirm-email": "new_user@example.com",
+        "input-pwd": "Password123!",
+        "input-confirm-pwd": "Password123!",
+        "input-interests": "Testing, Flask",
+    }
+    response = client.post('/register/', data=data)
+    assert b"This Username is taken, please try a different one." in response.data
+def test_register_existing_email(client):
+    # Test the registration route with an existing email
+    data = {
+        "input-id": "new_user",
+        "input-email": "existing_user@example.com",
+        "input-confirm-email": "existing_user@example.com",
+        "input-pwd": "Password123!",
+        "input-confirm-pwd": "Password123!",
+        "input-interests": "Testing, Flask",
+    }
+    response = client.post('/register/', data=data)
+    assert b"This email has already been used." in response.data

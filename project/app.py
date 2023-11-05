@@ -323,8 +323,19 @@ def get_current_user_friends(username):
         return current_user.friends  # This depends on how your user's friends are stored/retrieved
     else:
         return []
+    
+def filter_friends_by_search_term(friends_list, search_term):
+    # Convert the search term to lowercase for a case-insensitive search
+    search_term = search_term.lower()
+    filtered_list = [
+        friend for friend in friends_list
+        if search_term in friend.username.lower()  # Use attribute access here
+    ]
+    return filtered_list
 
-@app.route("/my_account/friends/")
+
+
+@app.route("/my_account/friends/", methods=['GET'])
 def my_account_friends():
     username = session.get('username')
     
@@ -338,12 +349,22 @@ def my_account_friends():
     profile_picture = get_user_profile_picture()
     friends_list = get_current_user_friends(username)  # This should be a function you create
     
+    # Retrieve search term from URL query parameters
+    search_term = request.args.get('search', '')  # Default to empty string if 'search' parameter is not in URL
+
+    # If there is a search term, filter the friends list accordingly
+    if search_term:
+        # This is a placeholder for how you might filter your friends list.
+        # You'll need to implement 'filter_friends_by_search_term' to return a filtered list.
+        friends_list = filter_friends_by_search_term(friends_list, search_term)
+
     # Pass everything to the template
     return render_template('my_account_friends.html', 
                            username=username,
                            interests=interests, 
                            profile_picture=profile_picture,
                            friends=friends_list)
+
 
 @app.route("/my_account/myevents/")
 def my_account_myevents():

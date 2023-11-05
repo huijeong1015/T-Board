@@ -200,7 +200,7 @@ def main_dashboard():
     user = User.query.filter_by(username=username).first()
     print(user)
     sql = text("SELECT * FROM events;")
-    result = db.session.execute(sql)
+    events = db.session.execute(sql)
     
     username = session.get('username')
     user = User.query.filter_by(username=username).first()
@@ -249,10 +249,22 @@ def main_dashboard():
         if request.form.get('show-bookmarked') != None:
             bookmark_checked = request.form.get('show-bookmarked')
             print (request.form.get("show-bookmarked"))
-            result = user.bookmarked_events
+            events = user.bookmarked_events
+        
+        #Sort the events based on what user selected
+        if sort_by == "None":
+            events = db.session.execute(sql) #simply reset it
+        elif sort_by == "asc-alphabetic":
+            events = sort_events_by_name(events, 'A to Z')
+        elif sort_by == "desc-alphabetic":
+            events = sort_events_by_name(events, 'Z to A')
+        elif sort_by == "asc-date":
+            events = sort_events_by_date(events, 'Oldest to Newest')
+        elif sort_by == "desc-date":  
+            events = sort_events_by_date(events, 'Newest to Oldest')
 
     bookmarked_events_ids = [event.id for event in bookmarked_events]
-    return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), 
+    return render_template("main_dashboard.html", events=events, profile_picture=get_user_profile_picture(), 
                            error_msg=error_msg, bookmark_checked=bookmark_checked, 
                            bookmarked_events=bookmarked_events_ids, sort_by=sort_by)
 

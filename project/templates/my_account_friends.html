@@ -82,12 +82,11 @@
   </div>
   <div class="frame-content">
     <div class="frame-top">
-      <form method="get" action="{{ url_for('my_account_friends') }}">
-        <input type="text" name="search" placeholder="Search friends...">
-        <input type="submit" value="Search">
-    </form>
-    
-    
+      <div class="search-friend">
+        <form method="get" action="{{ url_for('my_account_friends') }}">
+          <input type = "text" id="input-search-friend" name="search" placeholder="Search username">
+        </form>
+      </div>
       <svg
         class="add-friend"
         width="75"

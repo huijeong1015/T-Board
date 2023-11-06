@@ -125,7 +125,7 @@
                     </clipPath>
                   </defs>
                   <image
-                    href="{{ url_for('static', filename='profile_picture/' + friend.profile_picture.lower() + '.png') }}"
+                    href="{{ url_for('static', filename='profile_pictures/' + friend.profile_picture) }}"
                     width="80"
                     height="80"
                     clip-path="url(#circleView{{ loop.index }})"
@@ -140,17 +140,21 @@
                   />
                 </svg>
               {% endif %}
-
             </div>
-            <div class="name">{{ friend.username }}</div>
+            <div class="friend-details">
+              <div class="name">{{ friend.username }}</div>
+              <a href="{{ url_for('my_account_myevents', username=friend.username) }}" class="profile-link">View Profile</a>
+            </div>
           </div>
         {% endfor %}
       {% else %}
-      <div class="no-friends">
-        You have no friends added
-      </div>
+        <div class="no-friends">
+          You have no friends added.
+        </div>
       {% endif %}
-  </div>
+    </div>
+    
+    
   <div class="recommended-friends">
     <h2>Recommended Friends</h2>
     {% if recommended_friends %}  

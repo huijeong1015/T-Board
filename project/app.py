@@ -515,6 +515,26 @@ def add_friend(username):
     # Redirect back to the friend recommendations page or a success page
     return redirect(url_for('my_account_friends', username=session['username']))
 
+@app.route('/remove_friend/<username>', methods=['POST'])
+def remove_friend(username):
+    if 'username' not in session:
+        return redirect(url_for('login'))  # Redirect to login if the user is not logged in
+
+    current_user = User.query.filter_by(username=session['username']).first()
+    friend_to_remove = User.query.filter_by(username=username).first()
+    
+    if not friend_to_remove:
+        return "User not found", 404  # Or handle it with a flash message and redirect
+
+    # Assuming 'friends' is a many-to-many relationship attribute of the 'User' model
+    current_user.friends.remove(friend_to_remove)
+    
+    db.session.commit()
+
+    # Redirect to the friends list or a confirmation page
+    return redirect(url_for('my_account_friends', username=session['username']))
+
+
 @app.route('/add_friend_via_form', methods=['POST'])
 def add_friend_via_form():
     if 'username' not in session:

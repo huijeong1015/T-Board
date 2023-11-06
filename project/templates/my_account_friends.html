@@ -100,49 +100,30 @@
         <div class="friend-item">
           <div class="account-wrapper">
             {% if friend.profile_picture.lower() == "default" %}
-            <svg
-              class="account"
-              width="80"
-              height="80"
-              viewBox="0 0 80 80"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+            <!-- Default profile picture -->
+            <svg class="account" width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="40" cy="40" r="38" fill="#657895" />
             </svg>
             {% else %}
-            <svg
-              class="account"
-              width="80"
-              height="80"
-              viewBox="0 0 80 80"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+            <!-- Custom profile picture -->
+            <svg class="account" width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <clipPath id="circleView{{ loop.index }}">
                   <circle cx="40" cy="40" r="38"/>
                 </clipPath>
               </defs>
-              <image
-                href="{{ url_for('static', filename='profile_picture/' + friend.profile_picture.lower() + '.png') }}"
-                width="80"
-                height="80"
-                clip-path="url(#circleView{{ loop.index }})"
-              />
-              <circle
-                cx="40"
-                cy="40"
-                r="38"
-                fill="none"
-                stroke="#7CA34A"
-                stroke-width="3"
-              />
+              <image href="{{ url_for('static', filename='profile_pictures/' + friend.profile_picture.lower() + '.png') }}" width="80" height="80" clip-path="url(#circleView{{ loop.index }})" />
+              <circle cx="40" cy="40" r="38" fill="none" stroke="#7CA34A" stroke-width="3"/>
             </svg>
             {% endif %}
           </div>
           <div class="friend-details">
             <a href="{{ url_for('my_account_myevents', username=friend.username) }}" class="profile-link">{{ friend.username }}</a>
+            <!-- Delete friend button -->
+            <form action="{{ url_for('remove_friend', username=friend.username) }}" method="post" class="delete-friend-form">
+              <button type="submit" class="delete-friend-button">Delete Friend</button>
+            </form>
+            
           </div>
         </div>
         {% endfor %}
@@ -151,7 +132,8 @@
         You have no friends added.
       </div>
       {% endif %}
-    </div>
+  </div>
+  
     <div class="name-top">
       <h2 class="heading">Recommended Friends</h2>
       {% if recommended_friends %}  

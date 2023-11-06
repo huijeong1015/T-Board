@@ -194,7 +194,6 @@ with app.app_context():
 
         # Setting up friendships
         user_a.friends.append(user_b)  # a and b are friends
-        user_a.friends.append(user_c)  # a and b are friends
         user_b.friends.append(user_a)  # a and b are friends
         user_b.friends.append(user_c)  # b and c are friends
 

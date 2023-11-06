@@ -88,7 +88,7 @@
       <div class="search-friend">
         <form method="POST" action="{{ url_for('add_friend_via_form') }}" class="search-friend-form">
           <input type="text" name="friend_username" id="input-search-friend" placeholder="Enter username to add a friend" required>
-          <button type="submit" class="btn-search-friend">
+          <button type="submit" class="btn-add-friend">
             <svg class="svg-add-friend" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="#141b34" stroke-width="1.5"><path d="m12.5 22h-5.90913c-1.54538 0-2.77456-.752-3.87821-1.8034-2.259295-2.1525 1.45014-3.8726 2.86491-4.715 2.1008-1.2509 4.55923-1.7097 6.92243-1.3764.8575.1209 1.6926.3462 2.5.6757" stroke-linecap="round" stroke-linejoin="round"/><path d="m16.5 6.5c0 2.48528-2.0147 4.5-4.5 4.5-2.48528 0-4.5-2.01472-4.5-4.5s2.01472-4.5 4.5-4.5c2.4853 0 4.5 2.01472 4.5 4.5z"/><path d="m18.5 22v-7m-3.5 3.5h7" stroke-linecap="round"/></g></svg>
           </button>
         </form>
@@ -203,9 +203,11 @@
             </div>
             <div class="friend-details">
               <div class="name">{{ friend.username }}</div>
-              <form action="{{ url_for('add_friend', username=friend.username) }}" method="post">
+              <form action="{{ url_for('add_friend', username=friend.username) }}" method="post" class="add-friend-form">
                 <input type="hidden" name="friend_username" value="{{ friend.username }}">
-                <button type="submit" class="add-friend-button">Add Friend</button>
+                <button type="submit" class="btn-add-friend">
+                  <svg class="svg-add-friend" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="#141b34" stroke-width="1.5"><path d="m12.5 22h-5.90913c-1.54538 0-2.77456-.752-3.87821-1.8034-2.259295-2.1525 1.45014-3.8726 2.86491-4.715 2.1008-1.2509 4.55923-1.7097 6.92243-1.3764.8575.1209 1.6926.3462 2.5.6757" stroke-linecap="round" stroke-linejoin="round"/><path d="m16.5 6.5c0 2.48528-2.0147 4.5-4.5 4.5-2.48528 0-4.5-2.01472-4.5-4.5s2.01472-4.5 4.5-4.5c2.4853 0 4.5 2.01472 4.5 4.5z"/><path d="m18.5 22v-7m-3.5 3.5h7" stroke-linecap="round"/></g></svg>
+                </button>
               </form>
             </div>
           </div>
@@ -342,6 +344,21 @@
   gap: 10px;
   padding: 5px 10px 5px 10px;
 }
+.friend-details {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  align-items: center;
+}
+.add-friend-form {
+  display: flex;
+  flex-direction: row;
+  width: fit-content;
+  height: fit-content;
+  margin: 0%;
+  align-items: center;
+  justify-content: center;
+} 
 .search-friend-form {
   display: flex;
   flex-direction: row;
@@ -350,8 +367,8 @@
   margin: 0%;
   align-items: center;
   justify-content: center;
-}
-.btn-search-friend {
+} 
+.btn-add-friend {
   background-color: transparent;
   border: transparent;
   width: fit-content;

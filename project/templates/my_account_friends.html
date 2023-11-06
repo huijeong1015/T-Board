@@ -157,7 +157,7 @@
       </div>
       {% endif %}
   </div>
-  <div class="recommended-friends">
+  <div class="name-top">
     <h2>Recommended Friends</h2>
     {% if recommended_friends %}  
       <div class="friends-list">
@@ -219,7 +219,7 @@
       </div>
     {% else %}
       <div class="no-recommendations">
-        No friend recommendations available.
+        No friend recommendations available
       </div>
     {% endif %}
   </div>
@@ -436,11 +436,30 @@
   align-items: flex-start; /* Aligns items to the start of the flex container (left side) */
 }
 .no-friends {
-  color: #1e1e1e;
+  color: #000000;
   text-align: left;
-  font: 400 25px "Ubuntu Condensed", sans-serif;
+  font: 400 32px "Ubuntu Condensed", sans-serif;
   position: relative;
-  width: 100%;
+}
+
+.no-recommendations {
+  color: #000000;
+  text-align: left;
+  font: 400 32px "Ubuntu Condensed", sans-serif;
+  position: relative;
+}
+
+.name-top {
+  color: #000000;
+  text-align: left;
+  font: 400 32px "Ubuntu Condensed", sans-serif;
+  position: relative;
+  /* Remove font-weight and text-decoration properties if you do not want them to apply to child elements */
+}
+
+.name-top h2 {
+  font-weight: bold;
+  text-decoration: underline; /* Apply underline specifically to h2 within .name-top */
 }
 
 </style>

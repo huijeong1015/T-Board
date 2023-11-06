@@ -4,11 +4,17 @@
   <div class="frame">
     <div class="board">
       <div class="event-list">
-        {% for event in bookmarked_events %}
-          {% with event=event %}
-            {% include "bookmarked_event.html" %}
-          {% endwith %}
-        {% endfor %}         
+        {%if not bookmarked_events%}
+        <div class="no-bookmark">
+          You have no bookmarked events
+        </div>
+        {%else %}
+          {% for event in bookmarked_events %}
+            {% with event=event %}
+              {% include "bookmarked_event.html" %}
+            {% endwith %}
+          {% endfor %}
+        {%endif%}         
       </div>
     </div>
   </div>
@@ -41,6 +47,13 @@
   position: relative;
   box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   height: fit-content;
+}
+.no-bookmark {
+  color: #1e1e1e;
+  text-align: left;
+  font: 400 32px "Ubuntu Condensed", sans-serif;
+  position: relative;
+  width: 100%;
 }
 </style>  
 {% endblock %}

@@ -86,8 +86,11 @@ class Event(db.Model):
     description = db.Column(db.Text, nullable=False)
     event_type = db.Column(db.String(100), nullable=False)
     attendees = db.relationship(
-        "User", secondary=attendees, backref=db.backref("events", lazy="dynamic")
+        "User", 
+        secondary=attendees, 
+        back_populates="events_attending",  
     )
+
     created_by_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_by = db.relationship('User', back_populates='created_events')
 
@@ -108,11 +111,12 @@ profile_pic_types = [
 class User(db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
+    is_first_login = db.Column(db.Boolean, nullable=False, default=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), unique=True, nullable=False)
-    interests = db.Column(db.String(255), nullable=True)
-    profile_picture = db.Column(db.String(100), nullable=False)
+    interests = db.Column(db.String(255), nullable=False, default="")
+    profile_picture = db.Column(db.String(100), nullable=False, default="default")
     friends = db.relationship(
         "User",
         secondary=user_friends,
@@ -123,11 +127,15 @@ class User(db.Model):
     created_events = db.relationship('Event', back_populates='created_by', lazy='dynamic')
     bookmarked_events = db.relationship('Event', secondary=saved_events,
                                              backref=db.backref('bookmarked_ref', lazy='dynamic'))  
-    
+    events_attending = db.relationship(
+        'Event', 
+        secondary=attendees, 
+        back_populates='attendees', 
+        lazy='dynamic'
+    )
+
     def set_password(self, password):
         self.password = generate_password_hash(password)
-
-        
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -160,28 +168,32 @@ with app.app_context():
             password=generate_password_hash("adminpass"),
             email="admin@mail.utoronto.ca",
             interests="Being an administrator",
-            profile_picture="Admin"
+            profile_picture="Admin",
+            is_first_login=False
         )
         user_a = User(
             username="user_a",
             password=generate_password_hash("password_a"),
             email="a@mail.com",
             interests="Interests A",
-            profile_picture="Default"
+            profile_picture="Default",
+            is_first_login=False
         )
         user_b = User(
             username="user_b",
             password=generate_password_hash("password_b"),
             email="b@mail.com",
             interests="Interests B",
-            profile_picture="Happy"
+            profile_picture="Happy",
+            is_first_login=False
         )
         user_c = User(
             username="user_c",
             password=generate_password_hash("password_c"),
             email="c@mail.com",
             interests="Interests C",
-            profile_picture="Cool"
+            profile_picture="Cool",
+            is_first_login=False
         )
 
         # Setting up friendships

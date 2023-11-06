@@ -82,10 +82,14 @@
   </div>
   <div class="frame-content">
     <div class="frame-top">
-        <form method="POST" action="{{ url_for('add_friend_via_form') }}" class="add-friend-form">
-          <input type="text" name="friend_username" placeholder="Enter username to add" required>
-          <button type="submit" class="btn-add-friend">Add Friend</button>
+      <div class="search-friend">
+        <form method="POST" action="{{ url_for('add_friend_via_form') }}" class="search-friend-form">
+          <input type="text" name="friend_username" id="input-search-friend" placeholder="Enter username to add a friend" required>
+          <button type="submit" class="btn-search-friend">
+            <svg class="svg-add-friend" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="#141b34" stroke-width="1.5"><path d="m12.5 22h-5.90913c-1.54538 0-2.77456-.752-3.87821-1.8034-2.259295-2.1525 1.45014-3.8726 2.86491-4.715 2.1008-1.2509 4.55923-1.7097 6.92243-1.3764.8575.1209 1.6926.3462 2.5.6757" stroke-linecap="round" stroke-linejoin="round"/><path d="m16.5 6.5c0 2.48528-2.0147 4.5-4.5 4.5-2.48528 0-4.5-2.01472-4.5-4.5s2.01472-4.5 4.5-4.5c2.4853 0 4.5 2.01472 4.5 4.5z"/><path d="m18.5 22v-7m-3.5 3.5h7" stroke-linecap="round"/></g></svg>
+          </button>
         </form>
+      </div>
     </div>
     <div class="friends-list">
       {% if friends %}  
@@ -145,7 +149,7 @@
       {% endif %}
   </div>
   <div class="name-top">
-    <h2>Recommended Friends</h2>
+    <h2 class="heading">Recommended Friends</h2>
     {% if recommended_friends %}  
       <div class="friends-list">
         {% for friend in recommended_friends %}
@@ -307,6 +311,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   top: -15px;
+  padding: 30px;
   position: relative;
 }
 .frame-top {
@@ -321,13 +326,13 @@
 }
 .search-friend {
   background: #ebebeb;
-  border-radius: 10px;
+  border-radius: 15px;
   display: flex;
-  flex-direction: reverse;
+  flex-direction: row;
   align-items: center;
   flex-shrink: 1;
-  width: 750px;
-  height: 45px;
+  width: 100%;
+  height: fit-content;
   position: relative;
   box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.15);
   gap: 10px;
@@ -336,7 +341,7 @@
 .search-friend-form {
   display: flex;
   flex-direction: row;
-  width: 750px;
+  width: 100%;
   height: 45px;
   margin: 0%;
   align-items: center;
@@ -349,6 +354,10 @@
   height: fit-content;
   padding: 0%;
 }    
+.svg-add-friend {
+  width: 35px;
+  height: 35px;
+}
 #input-search-friend {
   background-color: transparent;
   border: transparent;
@@ -357,18 +366,6 @@
   height: 100%;
   position: relative;
   font: 400 25px "Ubuntu Condensed", sans-serif;    
-}
-.txt2 {
-  color: rgba(0, 0, 0, 0.7);
-  text-align: left;
-  font: 400 32px "Ubuntu Mono", sans-serif;
-  position: relative;
-}
-.icon-magnifying-glass2 {
-  position: relative;
-  overflow: visible;
-  width: 30px;
-  height: 30px;
 }
 .friend {
   padding: 0px 30px 0px 30px;
@@ -381,31 +378,11 @@
   flex-shrink: 0;
   position: relative;
 }
-.account3 {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
 .name {
   color: #000000;
   text-align: left;
-  font: 400 36px "Ubuntu Condensed", sans-serif;
+  font: 400 30px "Ubuntu Condensed", sans-serif;
   position: relative;
-}
-.account4 {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.account5 {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.account6 {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
 }
 .friend-item {
   display: flex; /* Enables flexbox */
@@ -423,28 +400,28 @@
 .no-friends {
   color: #000000;
   text-align: left;
-  font: 400 32px "Ubuntu Condensed", sans-serif;
+  font: 400 28px "Ubuntu Condensed", sans-serif;
   position: relative;
 }
-
 .no-recommendations {
   color: #000000;
   text-align: left;
-  font: 400 32px "Ubuntu Condensed", sans-serif;
+  font: 400 28px "Ubuntu Condensed", sans-serif;
   position: relative;
 }
-
 .name-top {
   color: #000000;
   text-align: left;
-  font: 400 32px "Ubuntu Condensed", sans-serif;
+  font: 400 30px "Ubuntu Condensed", sans-serif;
   position: relative;
-  /* Remove font-weight and text-decoration properties if you do not want them to apply to child elements */
+  width: 100%; 
+  border-top: 2px solid #657895; 
 }
-
-.name-top h2 {
-  font-weight: bold;
-  text-decoration: underline; /* Apply underline specifically to h2 within .name-top */
+.heading {
+  color: #000000;
+  text-align: left;
+  font: 700 35px "Ubuntu Mono", sans-serif;
+  position: relative;
 }
 
 </style>

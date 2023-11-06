@@ -6,8 +6,8 @@ import os
 
 PWD_LEN = 10
 TBOARD_URL = "http://localhost:5000/"
-TBOARD_EMAIL = "tboard.utoronto@outlook.com"
-TBOARD_PWD = os.environ['TBOARD_PWD']
+TBOARD_EMAIL = "ece444tboard@gmail.com"
+TBOARD_PWD = "vjau nxth hark wjgo"
 
 # Helper functions
 # Generate a temporary password
@@ -43,7 +43,7 @@ def email_temporary_pwd(receiver, pwd):
     message.attach(text)
     message.attach(html)
 
-    server = smtplib.SMTP("smtp.office365.com", 587)
+    server = smtplib.SMTP("smtp.gmail.com", 587)
     server.ehlo()
     server.starttls()
     server.login(sender, TBOARD_PWD)

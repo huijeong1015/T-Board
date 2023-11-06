@@ -48,6 +48,16 @@ def get_user():
     user = User.query.filter_by(username=username).first()
     return(user)  
 
+# #helper function to add to the filtered list
+# #this could/should probably be added to the User class
+# def append_to_filtered(event):
+#     user = get_user()
+#     # a check for the type of input to this function is probably good to add
+#     if event in user.filtered:
+#         pass
+#     else:
+#         user.filtered.append(event)
+
 app.config['SECRET_KEY'] = os.urandom(24)
 @app.route("/", methods=["GET", "POST"])
 @app.route("/login/", methods=["GET", "POST"])
@@ -148,7 +158,6 @@ def bookmark():
     user = User.query.filter_by(username=username).first() 
     print(user)
     bookmarked = user.bookmarked_events
-    
 
     if request.method == "POST":
         if request.form.get("event-details") != None:
@@ -200,10 +209,13 @@ def main_dashboard():
             print(bookmark_id)
             print(event_to_bookmark)
             
-
+            
             if event_to_bookmark not in bookmarked_events:
                 bookmarked_events.append(event_to_bookmark)
+                # append_to_filtered(event_to_bookmark)
+
                 db.session.commit()
+                
                 for event in bookmarked_events:
                     print(event)
                     print("eventid" + str(event.id))
@@ -214,13 +226,17 @@ def main_dashboard():
                 db.session.commit()
                 for event in bookmarked_events:
                     print(event)
+                
         
         if request.form.get('show-bookmarked') != None:
             bookmark_checked = request.form.get('show-bookmarked')
             print (request.form.get("show-bookmarked"))
-            result = user.bookmarked_events
-
+            
+            non_bookmarked = Event.query.filter_by(id not in user.bookmarked_events)
+            result=non_bookmarked
+        
     bookmarked_events_ids = [event.id for event in bookmarked_events]
+
     return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg, bookmark_checked=bookmark_checked, bookmarked_events=bookmarked_events_ids)
 
 @app.route('/download_ics_file', methods=['POST'])
@@ -264,6 +280,7 @@ def searchEvent():
     if len(results) == 0:
         error_msg = "We couldn't find any matches for \"" + keyword + '".'
     return render_template("main_dashboard.html", events=results, error_msg=error_msg, profile_picture=get_user_profile_picture())
+
 
 @app.route("/my_account/event_history/")
 def my_account_event_history():

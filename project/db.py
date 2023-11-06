@@ -2,7 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from pathlib import Path
 from werkzeug.security import generate_password_hash
-
+import json
 
 # Configuration
 USERS_DATABASE = "users.db"
@@ -122,6 +122,9 @@ class User(db.Model):
     email = db.Column(db.String(128), unique=True, nullable=False)
     interests = db.Column(db.String(255), nullable=True)
     profile_picture = db.Column(db.String(100), nullable=False)
+
+    active_filters = db.Column(db.String(100), nullable=False)
+
     friends = db.relationship(
         "User",
         secondary=user_friends,
@@ -137,8 +140,14 @@ class User(db.Model):
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
-        
+    def set_active_filters(self, active_filters):
+        self.active_filters = json.dumps(active_filters)   
 
+    def get_active_filters(self):
+        if self.active_filters:
+            return json.loads(self.active_filters)
+        return []
+        
     def __repr__(self):
         return '<User {}>'.format(self.username)
 

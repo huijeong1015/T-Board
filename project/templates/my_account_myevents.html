@@ -82,11 +82,15 @@
   </div>
   <div class="frame-content">
     <div class="heading">MY EVENTS</div>
-    {% for event in myevents %}
-      {% with event=event %}
-        {% include "myevent.html" %}
-      {% endwith %}
-    {% endfor %} 
+    {%if not myevents%}
+      <div class="message">You have not created any events </div>
+    {%else%}
+      {% for event in myevents %}
+        {% with event=event %}
+          {% include "myevent.html" %}
+        {% endwith %}
+      {% endfor %} 
+    {%endif%}
   </div>
 </div>
 {% include "base_event.html" %}
@@ -229,6 +233,12 @@
 .icon-pencil {
   width: 38px;
   height: 38px;
+}
+.message {
+  color: #000000;
+  text-align: left;
+  font: 400 32px "Ubuntu Condensed", sans-serif;
+  position: relative;
 }
 </style>
 {% endblock %}

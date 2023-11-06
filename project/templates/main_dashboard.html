@@ -20,19 +20,19 @@
     </div>
   </div>
   <div class="sidetab">
-    <form action="/main_dashboard" method="POST">
+    <form action="/main_dashboard" method="POST" class="form-sidetab">
       <div class="show-bookmark">
         <input type="checkbox" id="show-bookmarked" name="show-bookmarked" value="show-bookmarked" class="checkbox" onchange="this.form.submit()" {{ 'checked' if bookmark_checked else '' }}>
         <label for="show-bookmarked" class="show-bookmarked-events">Show bookmarked events</label><br>
       </div>
       <div class="sort">
         <label for="sort-by" class="sort-by">Sort by:</label>
-        <select id="sort-by" name="sort-by" class="dropdown">
-          <option value="asc-alphabetic">A to Z</option>
-          <option value="desc-alphabetic">Z to A</option>
-          <option value="asc-date">Oldest to Newest</option>
-          <option value="desc-date">Newest to Oldest</option>
-          <option value="relevant">Relevancy</option>
+        <select id="sort-by" name="sort-by" class="dropdown" onchange="this.form.submit()">
+          <option value="None" {% if sort_by == 'None' %}selected{% endif %}>None</option>
+          <option value="asc-alphabetic" {% if sort_by == 'asc-alphabetic' %}selected{% endif %}>A to Z</option>
+          <option value="desc-alphabetic" {% if sort_by == 'desc-alphabetic' %}selected{% endif %}>Z to A</option>
+          <option value="asc-date" {% if sort_by == 'asc-date' %}selected{% endif %}>Oldest to Newest</option>
+          <option value="desc-date" {% if sort_by == 'desc-date' %}selected{% endif %}>Newest to Oldest</option>
         </select>
       </div>
       <svg
@@ -99,6 +99,7 @@
   width: 240px;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 30px;
 }
 .checkbox {
   background: #d9d9d9;
@@ -123,6 +124,7 @@
 .sort {
   display: flex;
   flex-direction: column;
+  margin-bottom: 30px;
   gap: 10px;
 }
 .dropdown {

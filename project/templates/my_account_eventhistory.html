@@ -81,20 +81,35 @@
     </div>
   </div>
   <div class="frame-content">
-    <div class="heading">EVENT HISTORY</div>
-    <div class="event">
-      <div class="date">Oct 12, 2023:</div>
-      <div class="name">&lt;name of the event&gt;</div>
-      <div class="name">&lt;name of the event&gt;</div>
-      <div class="name">&lt;name of the event&gt;</div>
-    </div>
-    <div class="event">
-      <div class="date">Oct 11, 2023:</div>
-      <div class="name">&lt;name of the event&gt;</div>
-      <div class="name">&lt;name of the event&gt;</div>
-    </div>
+    <div class="heading">EVENTS LOG</div>
+    {% if not future_events and not past_events %}
+      <div class="name">You have not attended any events </div>
+      <!-- <p> Not attending any events yet </p> -->
+    {%else%}
+      <div class="name-top">Future Events: </div>
+      {% if not future_events %}
+        <div class="name">You have no future events </div>
+      {%else%}
+        {% for event in future_events %}
+          {% with event=event %}
+            {% include "attended_event.html" %}
+          {% endwith %}
+        {% endfor %}
+      {%endif%}
+      <div class="name-top">Past Events: </div>
+      {% if not past_events %}
+        <div class="name">You have no past events </div>
+      {%else%}
+        {% for event in past_events %}
+          {% with event=event %}
+            {% include "attended_event.html" %}
+          {% endwith %}
+        {% endfor %}
+      {%endif%}
+    {%endif%}
   </div>
 </div>
+{% include "base_event.html" %}
 <style>
 .event-history-tab {
   width: 100%;
@@ -219,5 +234,56 @@
   font: 400 32px "Ubuntu Condensed", sans-serif;
   position: relative;
 }
+.name-top {
+  color: #000000;
+  text-align: left;
+  font: 400 32px "Ubuntu Condensed", sans-serif;
+  position: relative;
+  font-weight: bold; 
+  text-decoration: underline; 
+}
+.frame-myevent {
+  background: transparent;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 15px;
+  width: 100%;
+  height: fit-content;
+  position: relative;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.sub-bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 350px;
+}
+.sub-right {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: column;
+  height: 239px;
+  position: relative;
+}
+.frame-info {
+  width: fit-content;
+}
+.btn-edit {
+  padding: 0%;
+}
+.icon-pencil {
+  width: 38px;
+  height: 38px;
+}
+.btn-event-details {
+    position: relative;
+    overflow: visible;
+    background: transparent;
+    border: none;
+    }
 </style>
 {% endblock %}

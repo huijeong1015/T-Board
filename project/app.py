@@ -429,21 +429,35 @@ def add_friend(username):
 
 
 
-@app.route("/my_account/myevents/")
-def my_account_myevents():
-    username=session.get('username')
+@app.route("/<username>/myevents/")
+def user_account_myevents(username):
+    # It's a good practice to not assume the session username is the same as the one in the URL
+    # You can check if the logged-in user is the same as the username in the URL or if the user has special privileges
+    logged_in_username = session.get('username')
+
+    # Redirect to the login page if the user is not logged in
+    if not logged_in_username:
+        return redirect(url_for('login'))
+
+    # If the logged-in user is not the same as the username in the URL and is not an admin, handle accordingly
+    if logged_in_username != username and logged_in_username != 'admin':
+        return "Unauthorized", 401  # Or handle however you see fit
+
     user = User.query.filter_by(username=username).first()
-    
+    if not user:
+        return "User not found", 404  # Or handle it however you prefer
+
     if username == 'admin':
         events_created_by_user = Event.query.all()
     else:
         events_created_by_user = Event.query.filter_by(created_by_id=user.id).all()
 
     return render_template('my_account_myevents.html', 
-                           username=session.get('username'), 
+                           username=username, 
                            interests=get_user_interests(), 
                            myevents=events_created_by_user, 
                            profile_picture=get_user_profile_picture())
+
 
 @app.route("/my_account/notification/")
 def my_account_notification():
@@ -537,7 +551,7 @@ def edit_event(event_id):
                 event.time= event_time
                 event.date= event_date
                 db.session.commit()
-                return redirect(url_for("my_account_myevents"))
+                return redirect(url_for("user_account_myevents"))
             else:
                 #TODO: Give useful message to user
                 pass
@@ -669,7 +683,7 @@ def are_you_sure(event_id):
             db.session.delete(event)
             db.session.commit()
             flash('Event has been deleted!', 'success')
-            return redirect(url_for('my_account_myevents'))
+            return redirect(url_for('user_account_myevents'))
         elif 'no' in request.form:
             flash('Event deletion cancelled.', 'info')
             return redirect(url_for('edit_event', event_id=event_id))

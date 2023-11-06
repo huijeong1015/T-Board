@@ -3,7 +3,7 @@
 <div class="friends-tab">
   <div class="frame-tab">
     <div class="my-events-tab">
-        <a href="{{ url_for('my_account_myevents') }}"> 
+      <a href="{{ url_for('user_account_myevents', username=session['username']) }}"> 
           <svg class="events" width="58" height="50" viewBox="0 0 58 50" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M0 0V21.4286H21.4286V0H0ZM28.5714 0V7.14286H57.1429V0H28.5714ZM28.5714 14.2857V21.4286H50V14.2857H28.5714ZM0 28.5714V50H21.4286V28.5714H0ZM28.5714 28.5714V35.7143H57.1429V28.5714H28.5714ZM28.5714 42.8571V50H50V42.8571H28.5714Z"

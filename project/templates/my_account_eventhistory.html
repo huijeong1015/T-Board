@@ -3,7 +3,7 @@
 <div class="event-history-tab">
   <div class="frame-tab">
     <div class="my-events-tab">
-      <a href="{{ url_for('my_account_myevents', username=session['username']) }}">
+      <a href="{{ url_for('my_account_myevents', username=username) }}">
           <svg class="events" width="58" height="50" viewBox="0 0 58 50" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M0 0V21.4286H21.4286V0H0ZM28.5714 0V7.14286H57.1429V0H28.5714ZM28.5714 14.2857V21.4286H50V14.2857H28.5714ZM0 28.5714V50H21.4286V28.5714H0ZM28.5714 28.5714V35.7143H57.1429V28.5714H28.5714ZM28.5714 42.8571V50H50V42.8571H28.5714Z"
@@ -43,7 +43,7 @@
       </svg>
     </div>
     <div class="friends-tab">
-      <a href="{{ url_for('my_account_friends', username=session['username']) }}">
+      <a href="{{ url_for('my_account_friends', username=username) }}">
           <svg class="add-friend" width="75" height="50" viewBox="0 0 75 50" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M25 0C18.125 0 12.5 7 12.5 15.625C12.5 24.25 18.125 31.25 25 31.25C31.875 31.25 37.5 24.25 37.5 15.625C37.5 7 31.875 0 25 0ZM11.9375 31.25C5.3125 31.5625 0 37 0 43.75V50H50V43.75C50 37 44.75 31.5625 38.0625 31.25C34.6875 35.0625 30.0625 37.5 25 37.5C19.9375 37.5 15.3125 35.0625 11.9375 31.25Z"
@@ -53,6 +53,7 @@
           </svg>
         </a>
     </div>
+    {% if session['username'] == username %}
     <div class="notification-tab">
       <a href="{{ url_for('my_account_notification') }}"> 
         <svg class="alarm" width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -79,6 +80,7 @@
         </svg>
       </a>
     </div>
+    {% endif %}
   </div>
   <div class="frame-content">
     <div class="heading">EVENTS LOG</div>

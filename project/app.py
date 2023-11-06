@@ -29,23 +29,27 @@ import ics
 app.config["SECRET_KEY"] = os.urandom(24)
 
 #Helper functions
-def get_user_interests():
-    username=session.get('username')
+def get_user_interests(username=None):
+    if not username:
+        username=session.get('username')
     user = User.query.filter_by(username=username).first()
     return user.interests
 
-def get_user_email():
-    username=session.get('username')
+def get_user_email(username=None):
+    if not username:
+        username=session.get('username')
     user = User.query.filter_by(username=username).first()
     return user.email
 
-def get_user_profile_picture():
-    username=session.get('username')
+def get_user_profile_picture(username = None):
+    if not username:
+        username = session.get('username')
     user = User.query.filter_by(username=username).first()
     return user.profile_picture
 
-def get_user():
-    username = session.get('username')
+def get_user(username = None):
+    if not username:
+        username = session.get('username')
     user = User.query.filter_by(username=username).first()
     return(user)  
 
@@ -339,15 +343,22 @@ def searchEvent():
         error_msg = "We couldn't find any matches for \"" + keyword + '".'
     return render_template("main_dashboard.html", events=results, error_msg=error_msg, profile_picture=get_user_profile_picture())
 
-@app.route("/my_account/event_history/")
-def my_account_event_history():
-    username=session.get('username')
+
+@app.route("/<username>/event_history/")
+def my_account_event_history(username):
+    # Security check: Make sure the logged-in user is accessing their own event history or the user is an admin.
+    logged_in_username = session.get('username')
+    if not logged_in_username:
+        return redirect(url_for('login'))
     user = User.query.filter_by(username=username).first()
+    if not user:
+        return "User not found", 404
+
     events_attending = user.events_attending
 
     current_datetime = datetime.now()
     future_events = []
-    past_events =[]
+    past_events = []
 
     for event in events_attending:
         event_datetime = f"{event.date} {event.time}"
@@ -356,13 +367,15 @@ def my_account_event_history():
             future_events.append(event)
         else:
             past_events.append(event)
-    
+
     past_events = sort_events_by_date(past_events, 'Newest to Oldest')
     future_events = sort_events_by_date(future_events, 'Newest to Oldest')
 
-    return render_template('my_account_eventhistory.html', username=session.get('username'), 
-                           interests=get_user_interests(), profile_picture=get_user_profile_picture(),
+    return render_template('my_account_eventhistory.html', username=username, 
+                           interests=get_user_interests(username), 
+                           profile_picture=get_user_profile_picture(username),
                            future_events=future_events, past_events=past_events)
+
 
 def get_current_user_friends(username):
     # Assuming 'db' is your database connection object and 'User' is your user model
@@ -390,14 +403,10 @@ def my_account_friends(username):
         # Redirect to login page or handle it however you prefer
         return redirect(url_for('login'))
     
-    # Check if the logged-in user is allowed to view the given username's friend list
-    if logged_in_username != username:
-        # You can decide if you want to show an error, redirect, or simply show the logged-in user's friends instead
-        return "Unauthorized", 401  # Or redirect to the logged-in user's friend list
 
     # Fetch user-specific data
-    interests = get_user_interests()
-    profile_picture = get_user_profile_picture()
+    interests = get_user_interests(username)
+    profile_picture = get_user_profile_picture(username)
     friends_list = get_current_user_friends(username)
     
     # Get the list of friend recommendations
@@ -447,10 +456,6 @@ def my_account_myevents(username):
     if not logged_in_username:
         return redirect(url_for('login'))
 
-    # If the logged-in user is not the same as the username in the URL and is not an admin, handle accordingly
-    if logged_in_username != username and logged_in_username != 'admin':
-        return "Unauthorized", 401  # Or handle however you see fit
-
     user = User.query.filter_by(username=username).first()
     if not user:
         return "User not found", 404  # Or handle it however you prefer
@@ -462,9 +467,9 @@ def my_account_myevents(username):
 
     return render_template('my_account_myevents.html', 
                            username=username, 
-                           interests=get_user_interests(), 
+                           interests=get_user_interests(username), 
                            myevents=events_created_by_user, 
-                           profile_picture=get_user_profile_picture())
+                           profile_picture=get_user_profile_picture(username))
 
 
 @app.route("/my_account/notification/")

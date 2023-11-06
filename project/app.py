@@ -22,6 +22,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 from sqlalchemy.sql import func
 from project.db import *
+from project.register import *
 from werkzeug.security import check_password_hash
 import re
 import ics
@@ -105,6 +106,12 @@ def login():
             elif not check_password_hash(user.password, password):
                 error = "Wrong password. Try again."
                 flash(error)
+            elif user.is_first_login:
+                # Start a user session
+                session["username"] = username
+                session['user_id'] = user.id
+                # User should finish setting up the account
+                return redirect(url_for("finish_account_setup"))
             else:
                 # Start a user session
                 session["username"] = username
@@ -113,6 +120,35 @@ def login():
 
     return render_template("login.html", error=error)
 
+@app.route("/finish_setup/", methods=["GET", "POST"])
+def finish_account_setup():
+    username = session.get('username')
+    user = User.query.filter_by(username=username).first() 
+    error = None
+    if request.method == "POST":
+        password = request.form["input-pwd"]
+        confirm_password = request.form["input-confirm-pwd"]
+        interests = request.form["input-interests"]
+
+        # Password strength check
+        password_strength = check_password_strength(password)
+
+        # Perform validation checks on the form data
+        if password != confirm_password:
+            error = "Passwords do not match."
+            flash(error)
+        elif password_strength != "strong":
+            error = f"Password strength is {password_strength}. Please use a stronger password."
+            flash(error)
+        else:
+            user.set_password(password)  # Hash the password
+            user.interests = interests
+            user.is_first_login = False
+            db.session.commit()
+            return redirect(url_for("login"))
+
+    return render_template("login_firsttime.html", error=error, user=username)
+
 @app.route("/register/", methods=["GET", "POST"])
 def register():
     error = None
@@ -120,35 +156,17 @@ def register():
         username = request.form["input-id"]
         email = request.form["input-email"]
         confirm_email = request.form["input-confirm-email"]
-        password = request.form["input-pwd"]
-        confirm_password = request.form["input-confirm-pwd"]
-        interests = request.form["input-interests"]
 
         # Check if username or email is already taken
         username_check = User.query.filter_by(username=username).first()
         email_check = User.query.filter_by(email=email).first()
 
-        # Password strength check
-        password_strength = check_password_strength(password)
-
         # Perform validation checks on the form data
-        if (
-            not username
-            or not email
-            or not confirm_email
-            or not password
-            or not confirm_password
-        ):
-            error = "All fields are required."
+        if 'utoronto' not in email:
+            error = "Enter University of Toronto email."
             flash(error)
         elif email != confirm_email:
             error = "Emails do not match."
-            flash(error)
-        elif password != confirm_password:
-            error = "Passwords do not match."
-            flash(error)
-        elif password_strength != "strong":
-            error = f"Password strength is {password_strength}. Please use a stronger password at least 8 characters long with one upper case, lower case, digit, and special character."
             flash(error)
         elif username_check is not None:
             error = "This Username is taken, please try a different one."
@@ -157,13 +175,66 @@ def register():
             error = "This email has already been used. Please return to the login page or use a different email."
             flash(error)
         else:
-            new_user = User(username=username, email=email, interests=interests, profile_picture = "default")
-            new_user.set_password(password)  # Hash the password
+            temp_pwd = generate_temporary_pwd()
+            new_user = User(username=username, email=email)
+            new_user.set_password(temp_pwd)  # Hash the password
             db.session.add(new_user)
             db.session.commit()
+            email_temporary_pwd(email, temp_pwd)
             return redirect(url_for("login"))
 
     return render_template("register.html")
+
+# def register():
+#     error = None
+#     if request.method == "POST":
+#         username = request.form["input-id"]
+#         email = request.form["input-email"]
+#         confirm_email = request.form["input-confirm-email"]
+#         password = request.form["input-pwd"]
+#         confirm_password = request.form["input-confirm-pwd"]
+#         interests = request.form["input-interests"]
+
+#         # Check if username or email is already taken
+#         username_check = User.query.filter_by(username=username).first()
+#         email_check = User.query.filter_by(email=email).first()
+
+#         # Password strength check
+#         password_strength = check_password_strength(password)
+
+#         # Perform validation checks on the form data
+#         if (
+#             not username
+#             or not email
+#             or not confirm_email
+#             or not password
+#             or not confirm_password
+#         ):
+#             error = "All fields are required."
+#             flash(error)
+#         elif email != confirm_email:
+#             error = "Emails do not match."
+#             flash(error)
+#         elif password != confirm_password:
+#             error = "Passwords do not match."
+#             flash(error)
+#         elif password_strength != "strong":
+#             error = f"Password strength is {password_strength}. Please use a stronger password at least 8 characters long with one upper case, lower case, digit, and special character."
+#             flash(error)
+#         elif username_check is not None:
+#             error = "This Username is taken, please try a different one."
+#             flash(error)
+#         elif email_check is not None:
+#             error = "This email has already been used. Please return to the login page or use a different email."
+#             flash(error)
+#         else:
+#             new_user = User(username=username, email=email, interests=interests, profile_picture = "default")
+#             new_user.set_password(password)  # Hash the password
+#             db.session.add(new_user)
+#             db.session.commit()
+#             return redirect(url_for("login"))
+
+#     return render_template("register.html")
   
 @app.route("/bookmark/", methods=["GET", "POST"])
 def bookmark():

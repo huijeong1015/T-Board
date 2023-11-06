@@ -82,12 +82,10 @@
   </div>
   <div class="frame-content">
     <div class="frame-top">
-      <div class="search-friend">
         <form method="POST" action="{{ url_for('add_friend_via_form') }}" class="add-friend-form">
-          <input type="text" name="friend_username" placeholder="Enter username to add" required>
+          <input type="text" class="search-friend" name="friend_username" placeholder="Enter username to add" required>
           <button type="submit" class="btn-add-friend">Add Friend</button>
         </form>
-      </div>
     </div>
     <div class="friends-list">
       {% if friends %}  

@@ -111,6 +111,15 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="sidetab">
+    <div class="show-notifications">
+      {% if flag == 'attending' %}
+      <input type="checkbox" id="show-notifications" name="show-notification" value="show-notification" class="checkbox" onchange="this.form.submit()" {{ 'checked' if notification_checked else '' }}>
+      <label for="show-notification" class="show-notification-message">Receive Notifications</label><br>
+      {% endif %}
+    </div>
+  </div>
 </div>
 <style>
 .dashboard {
@@ -331,6 +340,41 @@ object-fit: cover;
   border: none; 
   color: #1e1e1e; 
   font: 700 30px "Ubuntu Mono", sans-serif; 
+}
+.show-notifications {
+  display: flex;
+  flex-direction: row;
+  width: 240px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.checkbox {
+  background: #d9d9d9;
+  width: 30px;
+  height: 30px;
+  position: relative;
+}
+
+.show-notification-message {
+  color: #ffffff;
+  text-align: left;
+  font: 400 24px "Ubuntu Mono", sans-serif;
+  position: relative;
+  width: 190px;
+  display: inline-flex;
+}
+.sidetab {
+  padding: 60px 0px 60px 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 43px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
 }
 </style>  
 {% endblock %}

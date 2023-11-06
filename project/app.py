@@ -184,57 +184,6 @@ def register():
             return redirect(url_for("login"))
 
     return render_template("register.html")
-
-# def register():
-#     error = None
-#     if request.method == "POST":
-#         username = request.form["input-id"]
-#         email = request.form["input-email"]
-#         confirm_email = request.form["input-confirm-email"]
-#         password = request.form["input-pwd"]
-#         confirm_password = request.form["input-confirm-pwd"]
-#         interests = request.form["input-interests"]
-
-#         # Check if username or email is already taken
-#         username_check = User.query.filter_by(username=username).first()
-#         email_check = User.query.filter_by(email=email).first()
-
-#         # Password strength check
-#         password_strength = check_password_strength(password)
-
-#         # Perform validation checks on the form data
-#         if (
-#             not username
-#             or not email
-#             or not confirm_email
-#             or not password
-#             or not confirm_password
-#         ):
-#             error = "All fields are required."
-#             flash(error)
-#         elif email != confirm_email:
-#             error = "Emails do not match."
-#             flash(error)
-#         elif password != confirm_password:
-#             error = "Passwords do not match."
-#             flash(error)
-#         elif password_strength != "strong":
-#             error = f"Password strength is {password_strength}. Please use a stronger password at least 8 characters long with one upper case, lower case, digit, and special character."
-#             flash(error)
-#         elif username_check is not None:
-#             error = "This Username is taken, please try a different one."
-#             flash(error)
-#         elif email_check is not None:
-#             error = "This email has already been used. Please return to the login page or use a different email."
-#             flash(error)
-#         else:
-#             new_user = User(username=username, email=email, interests=interests, profile_picture = "default")
-#             new_user.set_password(password)  # Hash the password
-#             db.session.add(new_user)
-#             db.session.commit()
-#             return redirect(url_for("login"))
-
-#     return render_template("register.html")
   
 @app.route("/bookmark/", methods=["GET", "POST"])
 def bookmark():

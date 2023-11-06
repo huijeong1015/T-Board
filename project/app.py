@@ -383,7 +383,7 @@ def filter_friends_by_search_term(friends_list, search_term):
 
 
 
-@app.route("/my_account/friends/", methods=['GET'])
+@app.route("/my_account/friends/")
 def my_account_friends():
     username = session.get('username')
     
@@ -395,23 +395,19 @@ def my_account_friends():
     # Fetch user-specific data
     interests = get_user_interests()
     profile_picture = get_user_profile_picture()
-    friends_list = get_current_user_friends(username)  # This should be a function you create
+    friends_list = get_current_user_friends(username)
     
-    # Retrieve search term from URL query parameters
-    search_term = request.args.get('search', '')  # Default to empty string if 'search' parameter is not in URL
-
-    # If there is a search term, filter the friends list accordingly
-    if search_term:
-        # This is a placeholder for how you might filter your friends list.
-        # You'll need to implement 'filter_friends_by_search_term' to return a filtered list.
-        friends_list = filter_friends_by_search_term(friends_list, search_term)
+    # Get the list of friend recommendations
+    recommendations = get_friend_recommendations(username)
 
     # Pass everything to the template
     return render_template('my_account_friends.html', 
                            username=username,
                            interests=interests, 
                            profile_picture=profile_picture,
-                           friends=friends_list)
+                           friends=friends_list,
+                           recommended_friends=recommendations)
+
 
 
 @app.route("/my_account/myevents/")
@@ -555,25 +551,37 @@ def dfs(graph, start, k):
             stack.extend((friend, depth + 1) for friend in graph[vertex] - visited)
     return recommendations
 
-@app.route("/users")
-def show_users():
-    users = User.query.all()
+def get_friend_recommendations(username, depth=2):
+    # Fetch the current user and their friends
+    current_user = User.query.filter_by(username=username).first()
+    if not current_user:
+        return []
+
+    # Initialize the graph with the current user's friends
     user_data = {
-        user.username: {
-            "friends": [friend.username for friend in user.friends],
-            "events": [event.name for event in user.events],
-        }
-        for user in users
+        current_user.username: set(friend.username for friend in current_user.friends)
     }
-    user_list_html = "<ul>"
-    for username, data in user_data.items():
-        friends = ", ".join(data["friends"]) if data["friends"] else "None"
-        events = ", ".join(data["events"]) if data["events"] else "None"
-        user_list_html += f"<li>{username}: Friends - {friends}, Events - {events}</li>"
-    user_list_html += "</ul>"
-    return render_template_string(
-        f"<h1>Users, Their Friends, and Events</h1>{user_list_html}"
-    )
+
+    # Create a list of all users' usernames to initialize the rest of the graph
+    all_usernames = [user.username for user in User.query.all()]
+    for uname in all_usernames:
+        if uname not in user_data:
+            user = User.query.filter_by(username=uname).first()
+            user_data[uname] = set(friend.username for friend in user.friends)
+
+    # Now you have a graph of all users and their friends, you can run dfs
+    recommendations = dfs(user_data, username, depth)
+
+    # Filter out the current user's direct friends from the recommendations
+    recommendations.difference_update(user_data[username])
+
+    # Fetch full User objects for each recommendation
+    recommended_users = User.query.filter(User.username.in_(recommendations)).all()
+
+    return recommended_users
+
+
+
 
 @app.route("/recommendations")
 def friend_recommendations():
@@ -597,6 +605,27 @@ def friend_recommendations():
     return render_template_string(
         f"<h1>Friend Recommendations</h1>{recommendations_html}"
     )
+
+@app.route("/users")
+def show_users():
+    users = User.query.all()
+    user_data = {
+        user.username: {
+            "friends": [friend.username for friend in user.friends],
+            "events": [event.name for event in user.events],
+        }
+        for user in users
+    }
+    user_list_html = "<ul>"
+    for username, data in user_data.items():
+        friends = ", ".join(data["friends"]) if data["friends"] else "None"
+        events = ", ".join(data["events"]) if data["events"] else "None"
+        user_list_html += f"<li>{username}: Friends - {friends}, Events - {events}</li>"
+    user_list_html += "</ul>"
+    return render_template_string(
+        f"<h1>Users, Their Friends, and Events</h1>{user_list_html}"
+    )
+
 
 @app.route("/events")
 def new_events():

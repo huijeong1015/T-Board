@@ -150,6 +150,66 @@
       </div>
       {% endif %}
   </div>
+  <div class="recommended-friends">
+    <h2>Recommended Friends</h2>
+    {% if recommended_friends %}  
+      <div class="friends-list">
+        {% for friend in recommended_friends %}
+          <div class="friend-item">
+            <div class="account-wrapper">
+              {% if friend.profile_picture.lower() == "default" %}
+                <svg
+                  class="account"
+                  width="80"
+                  height="80"
+                  viewBox="0 0 80 80"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle cx="40" cy="40" r="38" fill="#657895" />
+                  <!-- Add your SVG path for the default image here -->
+                </svg>
+              {% else %}
+                <svg
+                  class="account"
+                  width="80"
+                  height="80"
+                  viewBox="0 0 80 80"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <defs>
+                    <clipPath id="circleViewRecommended{{ loop.index }}">
+                      <circle cx="40" cy="40" r="38"/>
+                    </clipPath>
+                  </defs>
+                  <image
+                    href="{{ url_for('static', filename='profile_pictures/' + friend.profile_picture.lower() + '.png') }}"
+                    width="80"
+                    height="80"
+                    clip-path="url(#circleViewRecommended{{ loop.index }})"
+                  />
+                  <circle
+                    cx="40"
+                    cy="40"
+                    r="38"
+                    fill="none"
+                    stroke="#7CA34A"
+                    stroke-width="3"
+                  />
+                </svg>
+              {% endif %}
+            </div>
+            <div class="name">{{ friend.username }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="no-recommendations">
+        No friend recommendations available.
+      </div>
+    {% endif %}
+  </div>
 </div>
 <style>
 .friends-tab {

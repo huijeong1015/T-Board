@@ -532,10 +532,7 @@ def add_friend_via_form():
     db.session.commit()
 
     # Redirect back to the friend recommendations page or a success page
-    return redirect(url_for('my_account_friends'))
-
-
-
+    return redirect(url_for('my_account_friends', username=session['username']))
 
 @app.route("/<username>/myevents/")
 def my_account_myevents(username):

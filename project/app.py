@@ -360,6 +360,7 @@ def my_account_event_history():
     past_events = sort_events_by_date(past_events, 'Newest to Oldest')
     future_events = sort_events_by_date(future_events, 'Newest to Oldest')
 
+
     return render_template('my_account_eventhistory.html', username=session.get('username'), 
                            interests=get_user_interests(), profile_picture=get_user_profile_picture(),
                            future_events=future_events, past_events=past_events)
@@ -400,6 +401,13 @@ def my_account_friends():
     # Get the list of friend recommendations
     recommendations = get_friend_recommendations(username)
 
+    search_term = request.args.get('search', '')  # Default to empty string if 'search' parameter is not in URL
+    # If there is a search term, filter the friends list accordingly
+    if search_term:
+        # This is a placeholder for how you might filter your friends list.
+        # You'll need to implement 'filter_friends_by_search_term' to return a filtered list.
+        friends_list = filter_friends_by_search_term(friends_list, search_term)
+
     # Pass everything to the template
     return render_template('my_account_friends.html', 
                            username=username,
@@ -426,6 +434,26 @@ def add_friend(username):
 
     # Redirect back to the friend recommendations page or a success page
     return redirect(url_for('my_account_friends'))
+
+@app.route('/add_friend_via_form', methods=['POST'])
+def add_friend_via_form():
+    if 'username' not in session:
+        return redirect(url_for('login'))  # Redirect to login if the user is not logged in
+
+    friend_username = request.form['friend_username']  # Get the username from the form data
+    current_user = User.query.filter_by(username=session['username']).first()
+    friend_to_add = User.query.filter_by(username=friend_username).first()
+
+    if not friend_to_add:
+        return "User not found", 404  # Or handle appropriately
+
+    # Add the logic to create a friendship relationship here
+    current_user.friends.append(friend_to_add)
+    db.session.commit()
+
+    # Redirect back to the friend recommendations page or a success page
+    return redirect(url_for('my_account_friends'))
+
 
 
 

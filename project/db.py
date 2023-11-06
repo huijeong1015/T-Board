@@ -168,28 +168,32 @@ with app.app_context():
             password=generate_password_hash("adminpass"),
             email="admin@mail.utoronto.ca",
             interests="Being an administrator",
-            profile_picture="Admin"
+            profile_picture="Admin",
+            is_first_login=False
         )
         user_a = User(
             username="user_a",
             password=generate_password_hash("password_a"),
             email="a@mail.com",
             interests="Interests A",
-            profile_picture="Default"
+            profile_picture="Default",
+            is_first_login=False
         )
         user_b = User(
             username="user_b",
             password=generate_password_hash("password_b"),
             email="b@mail.com",
             interests="Interests B",
-            profile_picture="Happy"
+            profile_picture="Happy",
+            is_first_login=False
         )
         user_c = User(
             username="user_c",
             password=generate_password_hash("password_c"),
             email="c@mail.com",
             interests="Interests C",
-            profile_picture="Cool"
+            profile_picture="Cool",
+            is_first_login=False
         )
 
         # Setting up friendships

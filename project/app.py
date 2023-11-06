@@ -382,15 +382,18 @@ def filter_friends_by_search_term(friends_list, search_term):
     return filtered_list
 
 
-
-@app.route("/my_account/friends/")
-def my_account_friends():
-    username = session.get('username')
-    
+@app.route("/<username>/friends/")
+def my_account_friends(username):
     # Ensure the user is logged in or handle appropriately if not
-    if not username:
+    logged_in_username = session.get('username')
+    if not logged_in_username:
         # Redirect to login page or handle it however you prefer
         return redirect(url_for('login'))
+    
+    # Check if the logged-in user is allowed to view the given username's friend list
+    if logged_in_username != username:
+        # You can decide if you want to show an error, redirect, or simply show the logged-in user's friends instead
+        return "Unauthorized", 401  # Or redirect to the logged-in user's friend list
 
     # Fetch user-specific data
     interests = get_user_interests()
@@ -400,13 +403,18 @@ def my_account_friends():
     # Get the list of friend recommendations
     recommendations = get_friend_recommendations(username)
 
+    search_term = request.args.get('search', '')
+    if search_term:
+        friends_list = filter_friends_by_search_term(friends_list, search_term)
+
     # Pass everything to the template
-    return render_template('my_account_friends.html', 
+    return render_template('my_account_friends.html',  # Make sure the template name matches your setup
                            username=username,
                            interests=interests, 
                            profile_picture=profile_picture,
                            friends=friends_list,
                            recommended_friends=recommendations)
+
 
 @app.route('/add_friend/<username>', methods=['POST'])
 def add_friend(username):
@@ -425,7 +433,7 @@ def add_friend(username):
     db.session.commit()
 
     # Redirect back to the friend recommendations page or a success page
-    return redirect(url_for('my_account_friends'))
+    return redirect(url_for('my_account_friends', username=session['username']))
 
 
 
@@ -551,7 +559,7 @@ def edit_event(event_id):
                 event.time= event_time
                 event.date= event_date
                 db.session.commit()
-                return redirect(url_for("user_account_myevents"))
+                return redirect(url_for("my_account_myevents"))
             else:
                 #TODO: Give useful message to user
                 pass

@@ -43,7 +43,7 @@
       </svg>
     </div>
     <div class="friends-tab">
-        <a href="{{ url_for('my_account_friends') }}">
+      <a href="{{ url_for('my_account_friends', username=session['username']) }}">
           <svg class="add-friend" width="75" height="50" viewBox="0 0 75 50" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M25 0C18.125 0 12.5 7 12.5 15.625C12.5 24.25 18.125 31.25 25 31.25C31.875 31.25 37.5 24.25 37.5 15.625C37.5 7 31.875 0 25 0ZM11.9375 31.25C5.3125 31.5625 0 37 0 43.75V50H50V43.75C50 37 44.75 31.5625 38.0625 31.25C34.6875 35.0625 30.0625 37.5 25 37.5C19.9375 37.5 15.3125 35.0625 11.9375 31.25Z"

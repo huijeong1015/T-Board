@@ -36,7 +36,7 @@
         </svg>
       </a>
       <div class="divider"> | </div>
-      <div class="create-your-account">Create your account</div>
+      <div class="create-your-account">Finish account setup</div>
     </div>
     <div class="container">
       {% for message in get_flashed_messages() %}
@@ -45,35 +45,22 @@
         </div>
       {% endfor %}
     </div>
-    <form action="/register" method="POST" class="register-form">
+    <form action="/finish_setup" method="POST" class="register-form">
       <div class="input">
-        <!-- <div class="input-id"></div> -->
-        <label for="input-id" class="input-txt-white">Username</label>
-        <input type = "text" id="input-id" name="input-id" placeholder="Enter your username">
+        <label for="input-pwd" class="input-txt-white">New Password</label>
+        <input type = "password" id="input-pwd" name="input-pwd" placeholder="Enter new password">
       </div>
-      <div class="input" style="padding-top: 10%;">
-        <!-- <div class="input-email"></div> -->
-        <label for="input-email" class="input-txt-white">U of T Email</label>
-        <input type = "email" id="input-email" name="input-email" placeholder="Enter your U of T email">
+      <div class="input" style="padding-top: 5%">
+        <label for="input-confirm-pwd" class="input-txt-white">Confirm New Password</label>
+        <input type = "password" id="input-confirm-pwd" name="input-confirm-pwd" placeholder="Re-enter new password">
+        <p style='font: 400 20px "Ubuntu Condensed", sans-serif;color:#d9d9d9'>Password must be at least 8 characters long.<br><br>
+          Password must contain at least one upper case, lower case, digit, and special character</p>
       </div>
-      <div class="input" style="padding-top: 5%;padding-bottom: 10%;">
-        <!-- <div class="input-email-confirm"></div> -->
-        <label for="input-confirm-email" class="input-txt-white">Confirm U of T Email</label>
-        <input type = "email" id="input-confirm-email" name="input-confirm-email" placeholder="Re-enter your U of T email">
-      </div>
-      <!-- <div class="input" style="padding-top: 10%;">
-        <label for="input-pwd" class="input-txt-white">Password</label>
-        <input type = "password" id="input-pwd" name="input-pwd" placeholder="Enter your password">
-      </div>
-      <div class="input">
-        <label for="input-confirm-pwd" class="input-txt-white">Confirm Password</label>
-        <input type = "password" id="input-confirm-pwd" name="input-confirm-pwd" placeholder="Re-enter your password">
-      </div>
-      <div class="input" style="padding-top: 10%; padding-bottom: 10%;">
+      <div class="input" style="padding-bottom: 10%;">
         <label for="input-interests" class="input-txt-white">Interests</label>
         <input type = "text" id="input-interests" name="input-interests" placeholder="Enter your interests">
-      </div> -->
-      <button class="btn-register">CREATE ACCOUNT</button>
+      </div>
+      <button class="btn-register">SUBMIT</button>
     </form>
 </div>
 {% include "base_input.html" %}
@@ -149,31 +136,7 @@ body {
   font: 400 25px "Ubuntu Condensed", sans-serif;
   position: relative;
 }
-#input-id {
-  background: #ffffff;
-  border-radius: 5px;
-  width: 100%;
-  position: relative;
-  font: 400 20px "Ubuntu Condensed", sans-serif;
-  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-}
-#input-confirm-email {
-  background: #ffffff;
-  border-radius: 5px;
-  width: 100%;
-  position: relative;
-  font: 400 20px "Ubuntu Condensed", sans-serif;
-  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-}
-#input-email {
-  background: #ffffff;
-  border-radius: 5px;
-  width: 100%;
-  position: relative;
-  font: 400 20px "Ubuntu Condensed", sans-serif;
-  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-}
-/* #input-confirm-pwd {
+#input-confirm-pwd {
   background: #ffffff;
   border-radius: 5px;
   width: 100%;
@@ -196,6 +159,6 @@ body {
   position: relative;
   font: 400 20px "Ubuntu Condensed", sans-serif;
   box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-} */
+}
 </style>
 {% endblock %}

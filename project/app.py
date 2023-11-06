@@ -430,7 +430,7 @@ def add_friend(username):
 
 
 @app.route("/<username>/myevents/")
-def user_account_myevents(username):
+def my_account_myevents(username):
     # It's a good practice to not assume the session username is the same as the one in the URL
     # You can check if the logged-in user is the same as the username in the URL or if the user has special privileges
     logged_in_username = session.get('username')
@@ -683,7 +683,7 @@ def are_you_sure(event_id):
             db.session.delete(event)
             db.session.commit()
             flash('Event has been deleted!', 'success')
-            return redirect(url_for('user_account_myevents'))
+            return redirect(url_for('my_account_myevents', username=session['username']))
         elif 'no' in request.form:
             flash('Event deletion cancelled.', 'info')
             return redirect(url_for('edit_event', event_id=event_id))

@@ -91,7 +91,7 @@
                         />
                     </svg>
                 </a>
-                <a href="{{ url_for('user_account_myevents', username=session['username']) }}">
+                <a href="{{ url_for('my_account_myevents', username=session['username']) }}">
                     {% if profile_picture.lower() == "default" %}
                         <svg
                             class="account"

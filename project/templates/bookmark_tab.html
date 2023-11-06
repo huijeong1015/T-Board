@@ -70,7 +70,8 @@
               />
             </svg>
           </a>
-          <a href="{{ url_for('my_account_event_history') }}">
+          <a href="{{ url_for('my_account_event_history', username=session['username']) }}"></a>
+
             {% if profile_picture.lower() == "default" %}
               <svg
                 class="btn-account"

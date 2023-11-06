@@ -3,7 +3,7 @@
 <div class="friends-tab">
   <div class="frame-tab">
     <div class="my-events-tab">
-        <a href="{{ url_for('my_account_myevents') }}"> 
+      <a href="{{ url_for('my_account_myevents', username=username) }}"> 
           <svg class="events" width="58" height="50" viewBox="0 0 58 50" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M0 0V21.4286H21.4286V0H0ZM28.5714 0V7.14286H57.1429V0H28.5714ZM28.5714 14.2857V21.4286H50V14.2857H28.5714ZM0 28.5714V50H21.4286V28.5714H0ZM28.5714 28.5714V35.7143H57.1429V28.5714H28.5714ZM28.5714 42.8571V50H50V42.8571H28.5714Z"
@@ -12,7 +12,8 @@
         </a>
     </div>
     <div class="event-history-tab">
-      <a href="{{ url_for('my_account_event_history') }}">
+      <a href="{{ url_for('my_account_event_history', username=username) }}">
+
         <svg
           class="history"
           width="50"
@@ -53,6 +54,7 @@
           fill="#202E44" />
       </svg>
     </div>
+    {% if session['username'] == username %}
     <div class="notification-tab">
       <a href="{{ url_for('my_account_notification') }}"> 
         <svg class="alarm" width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -79,13 +81,14 @@
         </svg>
       </a>
     </div>    
+    {% endif %}
   </div>
   <div class="frame-content">
     <div class="frame-top">
       <div class="search-friend">
-        <form method="POST" action="{{ url_for('add_friend_via_form') }}" class="search-friend-form">
-          <input type="text" name="friend_username" id="input-search-friend" placeholder="Enter username to add a friend" required>
-          <button type="submit" class="btn-search-friend">
+        <form method="GET" action="{{ url_for('my_account_friends', username=session['username'])}}" class="search-friend-form">
+          <input type="text" class="input-search-friend" id="input-search-friend" name="search" placeholder="Search friend by username" required>
+          <button class="btn-search-friend">
             <svg class="svg-add-friend" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="#141b34" stroke-width="1.5"><path d="m12.5 22h-5.90913c-1.54538 0-2.77456-.752-3.87821-1.8034-2.259295-2.1525 1.45014-3.8726 2.86491-4.715 2.1008-1.2509 4.55923-1.7097 6.92243-1.3764.8575.1209 1.6926.3462 2.5.6757" stroke-linecap="round" stroke-linejoin="round"/><path d="m16.5 6.5c0 2.48528-2.0147 4.5-4.5 4.5-2.48528 0-4.5-2.01472-4.5-4.5s2.01472-4.5 4.5-4.5c2.4853 0 4.5 2.01472 4.5 4.5z"/><path d="m18.5 22v-7m-3.5 3.5h7" stroke-linecap="round"/></g></svg>
           </button>
         </form>
@@ -122,7 +125,7 @@
                     </clipPath>
                   </defs>
                   <image
-                    href="{{ url_for('static', filename='profile_picture/' + friend.profile_picture.lower() + '.png') }}"
+                    href="{{ url_for('static', filename='profile_pictures/' + friend.profile_picture) }}"
                     width="80"
                     height="80"
                     clip-path="url(#circleView{{ loop.index }})"
@@ -137,15 +140,17 @@
                   />
                 </svg>
               {% endif %}
-
             </div>
-            <div class="name">{{ friend.username }}</div>
+            <div class="friend-details">
+              <div class="name">{{ friend.username }}</div>
+              <a href="{{ url_for('my_account_myevents', username=friend.username) }}" class="profile-link">View Profile</a>
+            </div>
           </div>
         {% endfor %}
       {% else %}
-      <div class="no-friends">
-        You have no friends added
-      </div>
+        <div class="no-friends">
+          You have no friends added.
+        </div>
       {% endif %}
   </div>
   <div class="name-top">

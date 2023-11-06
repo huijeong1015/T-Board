@@ -408,6 +408,25 @@ def my_account_friends():
                            friends=friends_list,
                            recommended_friends=recommendations)
 
+@app.route('/add_friend/<username>', methods=['POST'])
+def add_friend(username):
+    if 'username' not in session:
+        return redirect(url_for('login'))  # Redirect to login if the user is not logged in
+    current_user = User.query.filter_by(username=session['username']).first()
+    friend_to_add = User.query.filter_by(username=username).first()
+    
+    if not friend_to_add:
+        return "User not found", 404  # Or handle appropriately
+
+    # Add the logic to create a friendship relationship here
+    # This will depend on how your database relationships are set up
+    current_user.friends.append(friend_to_add)
+
+    db.session.commit()
+
+    # Redirect back to the friend recommendations page or a success page
+    return redirect(url_for('my_account_friends'))
+
 
 
 @app.route("/my_account/myevents/")

@@ -200,7 +200,13 @@
                 </svg>
               {% endif %}
             </div>
-            <div class="name">{{ friend.username }}</div>
+            <div class="friend-details">
+              <div class="name">{{ friend.username }}</div>
+              <form action="{{ url_for('add_friend', username=friend.username) }}" method="post">
+                <input type="hidden" name="friend_username" value="{{ friend.username }}">
+                <button type="submit" class="add-friend-button">Add Friend</button>
+              </form>
+            </div>
           </div>
         {% endfor %}
       </div>
@@ -210,6 +216,7 @@
       </div>
     {% endif %}
   </div>
+
 </div>
 <style>
 .friends-tab {

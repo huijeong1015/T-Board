@@ -111,11 +111,12 @@ profile_pic_types = [
 class User(db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
+    is_first_login = db.Column(db.Boolean, nullable=False, default=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), unique=True, nullable=False)
-    interests = db.Column(db.String(255), nullable=True)
-    profile_picture = db.Column(db.String(100), nullable=False)
+    interests = db.Column(db.String(255), nullable=False, default="")
+    profile_picture = db.Column(db.String(100), nullable=False, default="default")
     friends = db.relationship(
         "User",
         secondary=user_friends,

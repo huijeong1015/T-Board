@@ -114,7 +114,7 @@
                   <circle cx="40" cy="40" r="38"/>
                 </clipPath>
               </defs>
-              <image href="{{ url_for('static', filename='profile_pictures/' + friend.profile_picture.lower() + '.png') }}" width="80" height="80" clip-path="url(#circleView{{ loop.index }})" />
+              <image href="{{ url_for('static', filename='profile_picture/' + friend.profile_picture.lower() + '.png') }}" width="80" height="80" clip-path="url(#circleView{{ loop.index }})" />
               <circle cx="40" cy="40" r="38" fill="none" stroke="#7CA34A" stroke-width="3"/>
             </svg>
             {% endif %}

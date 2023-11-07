@@ -242,10 +242,10 @@ def main_dashboard():
         flag = 'attending' if attendee_record else 'not attending'
         bookmarked_events_ids = [event.id for event in bookmarked_events]
         
-        if attendee_record.notification_preference == -1:
-            notification_checked=False
-        else:
+        if attendee_record.notification_preference != -1:
             notification_checked=True
+        else:
+            notification_checked=False
 
         # Directly render the event details template
         return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag,
@@ -363,7 +363,7 @@ def attend_event(event_id):
     if action == 'attend':
         # If the user is not attending, add them as an attendee
         if not attendee:
-            new_attendee = Attendee(user_id=user.id, event_id=event.id, notification_preference='30m')
+            new_attendee = Attendee(user_id=user.id, event_id=event.id, notification_preference='-1')
             db.session.add(new_attendee)
             db.session.commit()
             flag = 'attending'
@@ -570,19 +570,12 @@ def set_notification():
 @app.route("/my_account/notification/", methods=['GET', 'POST'])
 def my_account_notification():
     user = get_user()
-    attendees = Attendee.query.filter_by(user_id=user.id).all()
-    
-    # Extract just the event objects from attendees
-    events = [attendee.event for attendee in attendees]
-
-    # Sort the event objects by date
-    sorted_events = sort_events_by_date(events, 'Newest to Oldest')
-
-    # Now, create a list that combines the sorted events with their notification preferences
+    attendees = Attendee.query.filter_by(user_id=user.id).all()    
+ 
     notif_events_with_prefs = [{
-        'event': event,
-        'notification_preference': next((attendee.notification_preference for attendee in attendees if attendee.event_id == event.id), None)
-    } for event in sorted_events]
+        'event': attendee.event,
+        'notification_preference': attendee.notification_preference
+    } for attendee in attendees if attendee.notification_preference != -1]
 
     if request.method == "POST":
         updated_event_id = request.form.get('updated_event_id')  # Make sure this matches your form input name
@@ -604,6 +597,9 @@ def my_account_notification():
         
         # Redirect to refresh the page and see the changes
         return redirect(url_for('my_account_notification'))
+    
+    if notif_events_with_prefs:
+        print(notif_events_with_prefs[0])
 
     # Render the page with the sorted events and preferences
     return render_template('my_account_notification.html', 
@@ -611,7 +607,6 @@ def my_account_notification():
                            interests=get_user_interests(), 
                            profile_picture=get_user_profile_picture(),
                            notif_events=notif_events_with_prefs)
-
 
 @app.route("/my_account/settings/", methods=["GET", "POST"])
 def my_account_settings():

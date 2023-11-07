@@ -79,9 +79,9 @@ def sort_events_by_date(events, order):
 
 def sort_events_by_name(events, order):
     if order == 'A to Z':
-        sorted_events = sorted(events, key=lambda event: event.name)
+        sorted_events = sorted(events, key=lambda event: event.name.lower())
     elif order == 'Z to A':
-        sorted_events = sorted(events, key=lambda event: event.name, reverse=True)
+        sorted_events = sorted(events, key=lambda event: event.name.lower(), reverse=True)
 
     return sorted_events
 

@@ -2,7 +2,7 @@
 <div class="frame-myevent">
     <div class="left">
         <!-- <img class="event-image" src="image-1.png" /> -->
-        <img class="event-image" src="{{ url_for('static', filename='event_photos/' + event['event_type'].lower() + '.png') }}" alt="Event Image"/>
+        <img class="event-image" src="{{ url_for('static', filename='event_photos/' + event['event'].event_type.lower() + '.png') }}" alt="Event Image"/>
         <div class="sub-bottom">
             <svg
             class="rating"
@@ -44,19 +44,22 @@
         </div>
     </div>
     <div class="sub-right">
-        <div class="frame-info">
-            <div class="event-name-txt">Name: {{ event['name'] }}</div>
-            <div class="event-details-txt">Date: {{ event['date'] }}</div>
-            <div class="notif">
-                <label for="set-notif" class="set-notif">Set to:</label>
-                <select id="set-notif" name="set-notif" class="dropdown" onchange="this.form.submit()">
-                  <option value="30-mins" {% if sort_by == '30-mins' %}selected{% endif %}>30 minutes before</option>
-                  <option value="1-hour" {% if sort_by == '1-hour' %}selected{% endif %}>1 hour before</option>
-                  <option value="1-day" {% if sort_by == '1-day' %}selected{% endif %}>1 day before</option>
-                  <option value="1-week" {% if sort_by == '1-week' %}selected{% endif %}>1 week before</option>
-                </select>
+        <form action="{{ url_for('my_account_notification') }}" method="POST">
+            <div class="frame-info">
+                <div class="event-name-txt">Name: {{ event['event'].name }}</div>
+                <div class="event-details-txt">Date: {{ event['event'].date }}</div>
+                <input type="hidden" name="updated_event_id" value="{{ event['event'].id }}">
+                <div class="notif">
+                    <label for="set-notif-{{ event.id }}" class="set-notif">Set to:</label>
+                    <select id="set-notif-{{ event.id }}" name="updated_notification" class="dropdown" onchange="this.form.submit()">
+                      <option value="30-mins" {% if event.notification_preference == 30 %}selected{% endif %}>30 minutes before</option>
+                      <option value="1-hour" {% if event.notification_preference == 60 %}selected{% endif %}>1 hour before</option>
+                      <option value="1-day" {% if event.notification_preference == 1440 %}selected{% endif %}>1 day before</option>
+                      <option value="1-week" {% if event.notification_preference == 10080 %}selected{% endif %}>1 week before</option>
+                    </select>
+                </div>
             </div>
-        </div>
+        </form>
     </div>
 </div>
 {% endblock %}

@@ -388,7 +388,6 @@ def searchEvent():
         error_msg = "We couldn't find any matches for \"" + keyword + '".'
     return render_template("main_dashboard.html", events=results, error_msg=error_msg, profile_picture=get_user_profile_picture())
 
-
 @app.route("/<username>/event_history/")
 def my_account_event_history(username):
     # Security check: Make sure the logged-in user is accessing their own event history or the user is an admin.
@@ -423,7 +422,6 @@ def my_account_event_history(username):
                            profile_picture=get_user_profile_picture(username),
                            future_events=future_events, past_events=past_events)
 
-
 def get_current_user_friends(username):
     # Assuming 'db' is your database connection object and 'User' is your user model
     current_user = User.query.filter_by(username=username).first()
@@ -440,7 +438,6 @@ def filter_friends_by_search_term(friends_list, search_term):
         if search_term in friend.username.lower()  # Use attribute access here
     ]
     return filtered_list
-
 
 @app.route("/<username>/friends/")
 def my_account_friends(username):
@@ -470,7 +467,6 @@ def my_account_friends(username):
                            profile_picture=profile_picture,
                            friends=friends_list,
                            recommended_friends=recommendations)
-
 
 @app.route('/add_friend/<username>', methods=['POST'])
 def add_friend(username):
@@ -509,7 +505,6 @@ def remove_friend(username):
 
     # Redirect to the friends list or a confirmation page
     return redirect(url_for('my_account_friends', username=session['username']))
-
 
 @app.route('/add_friend_via_form', methods=['POST'])
 def add_friend_via_form():
@@ -554,23 +549,6 @@ def my_account_myevents(username):
                            interests=get_user_interests(username), 
                            myevents=events_created_by_user, 
                            profile_picture=get_user_profile_picture(username))
-
-@app.route('/set_notification', methods=['POST'])
-def set_notification():
-    username = session.get('username')
-    user = User.query.filter_by(username=username).first()
-    event_id = request.form.get('event_id')
-    attendee_record = Attendee.query.filter_by(user_id=user.id, event_id=event_id).first()
-
-    if 'show-notification' in request.form:
-        attendee_record.notification_preference = 30
-    else:
-        attendee_record.notification_preference = -1
-
-    db.session.commit()
-    session['view_event_details'] = event_id
-
-    return redirect(url_for('main_dashboard'))
 
 @app.route('/set_notification', methods=['POST'])
 def set_notification():

@@ -54,37 +54,8 @@
                   <option value="1-day" {% if sort_by == '1-day' %}selected{% endif %}>1 day before</option>
                   <option value="1-week" {% if sort_by == '1-week' %}selected{% endif %}>1 week before</option>
                 </select>
-              </div>
+            </div>
         </div>
     </div>
 </div>
-<style> 
-.set-notif {
-    color: #ffffff;
-    text-align: left;
-    font: 400 24px "Ubuntu Mono", sans-serif;
-    position: relative;
-  }
-.event-name-txt {
-    color: #000000;
-    text-align: left;
-    font: 400 30px "Ubuntu Condensed", sans-serif;
-    position: relative;
-}
-.event-details-txt {
-    color: #000000;
-    text-align: left;
-    font: 400 25px "Ubuntu Condensed", sans-serif;
-    position: relative;
-}
-.sub-right {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-between;
-    flex-wrap: column;
-    height: 239px;
-    position: relative;
-  }
-</style>
 {% endblock %}

@@ -83,9 +83,9 @@ def sort_events_by_date(events, order):
 
 def sort_events_by_name(events, order):
     if order == 'A to Z':
-        sorted_events = sorted(events, key=lambda event: event.name)
+        sorted_events = sorted(events, key=lambda event: event.name.lower())
     elif order == 'Z to A':
-        sorted_events = sorted(events, key=lambda event: event.name, reverse=True)
+        sorted_events = sorted(events, key=lambda event: event.name.lower(), reverse=True)
 
     return sorted_events
 
@@ -644,11 +644,11 @@ def add_event():
                       description=event_description, event_type=event_type, created_by=user)
         db.session.add(new_event)
         db.session.commit()
-        render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_type)
+        render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_types)
         return redirect(url_for("main_dashboard"))
     else:
         print("invalid date or time. should b ") #TODO: Give useful message to user
-        return (render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_type))
+        return (render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_types))
 
 @app.route('/edit_event/<int:event_id>', methods=["GET", "POST"])
 def edit_event(event_id):
@@ -809,4 +809,3 @@ def are_you_sure(event_id):
             flash('Event deletion cancelled.', 'info')
             return redirect(url_for('edit_event', event_id=event_id))
     return render_template('are_you_sure.html', event_id=event_id, event=event, profile_picture=get_user_profile_picture())
-

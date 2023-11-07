@@ -30,23 +30,27 @@ import ics
 app.config["SECRET_KEY"] = os.urandom(24)
 
 #Helper functions
-def get_user_interests():
-    username=session.get('username')
+def get_user_interests(username=None):
+    if not username:
+        username=session.get('username')
     user = User.query.filter_by(username=username).first()
     return user.interests
 
-def get_user_email():
-    username=session.get('username')
+def get_user_email(username=None):
+    if not username:
+        username=session.get('username')
     user = User.query.filter_by(username=username).first()
     return user.email
 
-def get_user_profile_picture():
-    username=session.get('username')
+def get_user_profile_picture(username = None):
+    if not username:
+        username = session.get('username')
     user = User.query.filter_by(username=username).first()
     return user.profile_picture
 
-def get_user():
-    username = session.get('username')
+def get_user(username = None):
+    if not username:
+        username = session.get('username')
     user = User.query.filter_by(username=username).first()
     return(user)  
 
@@ -79,9 +83,9 @@ def sort_events_by_date(events, order):
 
 def sort_events_by_name(events, order):
     if order == 'A to Z':
-        sorted_events = sorted(events, key=lambda event: event.name)
+        sorted_events = sorted(events, key=lambda event: event.name.lower())
     elif order == 'Z to A':
-        sorted_events = sorted(events, key=lambda event: event.name, reverse=True)
+        sorted_events = sorted(events, key=lambda event: event.name.lower(), reverse=True)
 
     return sorted_events
 
@@ -384,15 +388,22 @@ def searchEvent():
         error_msg = "We couldn't find any matches for \"" + keyword + '".'
     return render_template("main_dashboard.html", events=results, error_msg=error_msg, profile_picture=get_user_profile_picture())
 
-@app.route("/my_account/event_history/")
-def my_account_event_history():
-    username=session.get('username')
+
+@app.route("/<username>/event_history/")
+def my_account_event_history(username):
+    # Security check: Make sure the logged-in user is accessing their own event history or the user is an admin.
+    logged_in_username = session.get('username')
+    if not logged_in_username:
+        return redirect(url_for('login'))
     user = User.query.filter_by(username=username).first()
+    if not user:
+        return "User not found", 404
+
     attendee_records = Attendee.query.filter_by(user_id=user.id).all()
 
     current_datetime = datetime.now()
     future_events = []
-    past_events =[]
+    past_events = []
 
     for attendee in attendee_records:
         event = attendee.event
@@ -403,13 +414,15 @@ def my_account_event_history():
             future_events.append(event)
         else:
             past_events.append(event)
-    
+
     past_events = sort_events_by_date(past_events, 'Newest to Oldest')
     future_events = sort_events_by_date(future_events, 'Newest to Oldest')
 
-    return render_template('my_account_eventhistory.html', username=session.get('username'), 
-                           interests=get_user_interests(), profile_picture=get_user_profile_picture(),
+    return render_template('my_account_eventhistory.html', username=username, 
+                           interests=get_user_interests(username), 
+                           profile_picture=get_user_profile_picture(username),
                            future_events=future_events, past_events=past_events)
+
 
 def get_current_user_friends(username):
     # Assuming 'db' is your database connection object and 'User' is your user model
@@ -428,30 +441,36 @@ def filter_friends_by_search_term(friends_list, search_term):
     ]
     return filtered_list
 
-@app.route("/my_account/friends/")
-def my_account_friends():
-    username = session.get('username')
-    
+
+@app.route("/<username>/friends/")
+def my_account_friends(username):
     # Ensure the user is logged in or handle appropriately if not
-    if not username:
+    logged_in_username = session.get('username')
+    if not logged_in_username:
         # Redirect to login page or handle it however you prefer
         return redirect(url_for('login'))
+    
 
     # Fetch user-specific data
-    interests = get_user_interests()
-    profile_picture = get_user_profile_picture()
+    interests = get_user_interests(username)
+    profile_picture = get_user_profile_picture(username)
     friends_list = get_current_user_friends(username)
     
     # Get the list of friend recommendations
     recommendations = get_friend_recommendations(username)
 
+    search_term = request.args.get('search', '')
+    if search_term:
+        friends_list = filter_friends_by_search_term(friends_list, search_term)
+
     # Pass everything to the template
-    return render_template('my_account_friends.html', 
+    return render_template('my_account_friends.html',  # Make sure the template name matches your setup
                            username=username,
                            interests=interests, 
                            profile_picture=profile_picture,
                            friends=friends_list,
                            recommended_friends=recommendations)
+
 
 @app.route('/add_friend/<username>', methods=['POST'])
 def add_friend(username):
@@ -470,23 +489,88 @@ def add_friend(username):
     db.session.commit()
 
     # Redirect back to the friend recommendations page or a success page
-    return redirect(url_for('my_account_friends'))
+    return redirect(url_for('my_account_friends', username=session['username']))
 
-@app.route("/my_account/myevents/")
-def my_account_myevents():
-    username=session.get('username')
-    user = User.query.filter_by(username=username).first()
+@app.route('/remove_friend/<username>', methods=['POST'])
+def remove_friend(username):
+    if 'username' not in session:
+        return redirect(url_for('login'))  # Redirect to login if the user is not logged in
+
+    current_user = User.query.filter_by(username=session['username']).first()
+    friend_to_remove = User.query.filter_by(username=username).first()
     
+    if not friend_to_remove:
+        return "User not found", 404  # Or handle it with a flash message and redirect
+
+    # Assuming 'friends' is a many-to-many relationship attribute of the 'User' model
+    current_user.friends.remove(friend_to_remove)
+    
+    db.session.commit()
+
+    # Redirect to the friends list or a confirmation page
+    return redirect(url_for('my_account_friends', username=session['username']))
+
+
+@app.route('/add_friend_via_form', methods=['POST'])
+def add_friend_via_form():
+    if 'username' not in session:
+        return redirect(url_for('login'))  # Redirect to login if the user is not logged in
+
+    friend_username = request.form['friend_username']  # Get the username from the form data
+    current_user = User.query.filter_by(username=session['username']).first()
+    friend_to_add = User.query.filter_by(username=friend_username).first()
+
+    if not friend_to_add:
+        return "User not found", 404  # Or handle appropriately
+
+    # Add the logic to create a friendship relationship here
+    current_user.friends.append(friend_to_add)
+    db.session.commit()
+
+    # Redirect back to the friend recommendations page or a success page
+    return redirect(url_for('my_account_friends', username=session['username']))
+
+@app.route("/<username>/myevents/")
+def my_account_myevents(username):
+    # It's a good practice to not assume the session username is the same as the one in the URL
+    # You can check if the logged-in user is the same as the username in the URL or if the user has special privileges
+    logged_in_username = session.get('username')
+
+    # Redirect to the login page if the user is not logged in
+    if not logged_in_username:
+        return redirect(url_for('login'))
+
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        return "User not found", 404  # Or handle it however you prefer
+
     if username == 'admin':
         events_created_by_user = Event.query.all()
     else:
         events_created_by_user = Event.query.filter_by(created_by_id=user.id).all()
 
     return render_template('my_account_myevents.html', 
-                           username=session.get('username'), 
-                           interests=get_user_interests(), 
+                           username=username, 
+                           interests=get_user_interests(username), 
                            myevents=events_created_by_user, 
-                           profile_picture=get_user_profile_picture())
+                           profile_picture=get_user_profile_picture(username))
+
+@app.route('/set_notification', methods=['POST'])
+def set_notification():
+    username = session.get('username')
+    user = User.query.filter_by(username=username).first()
+    event_id = request.form.get('event_id')
+    attendee_record = Attendee.query.filter_by(user_id=user.id, event_id=event_id).first()
+
+    if 'show-notification' in request.form:
+        attendee_record.notification_preference = 30
+    else:
+        attendee_record.notification_preference = -1
+
+    db.session.commit()
+    session['view_event_details'] = event_id
+
+    return redirect(url_for('main_dashboard'))
 
 @app.route('/set_notification', methods=['POST'])
 def set_notification():
@@ -569,11 +653,11 @@ def add_event():
                       description=event_description, event_type=event_type, created_by=user)
         db.session.add(new_event)
         db.session.commit()
-        render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_type)
+        render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_types)
         return redirect(url_for("main_dashboard"))
     else:
         print("invalid date or time. should b ") #TODO: Give useful message to user
-        return (render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_type))
+        return (render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_types))
 
 @app.route('/edit_event/<int:event_id>', methods=["GET", "POST"])
 def edit_event(event_id):
@@ -725,7 +809,7 @@ def are_you_sure(event_id):
             db.session.delete(event)
             db.session.commit()
             flash('Event has been deleted!', 'success')
-            return redirect(url_for('my_account_myevents'))
+            return redirect(url_for('my_account_myevents', username=session['username']))
         elif 'no' in request.form:
             flash('Event deletion cancelled.', 'info')
             return redirect(url_for('edit_event', event_id=event_id))

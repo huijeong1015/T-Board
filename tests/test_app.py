@@ -368,7 +368,7 @@ def test_attend_event(client):
         response = client.post('/attend_event/1', data={'action': 'unattend'}, follow_redirects=True)
         assert response.status_code == 200
 
-from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
 def test_my_account_event_history(client):
     with client:
         test_user = User(username="test_user", password="test_password",

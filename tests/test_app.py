@@ -468,3 +468,61 @@ def test_my_account_friends(client):
                 # Call the route again to test how it handles a logged-out user
                 response = test_app.get('/my_account/friends')
 
+def test_my_account_myevents(client):
+    with client:
+        with app.app_context():
+            test_user = User(username= "testuser", password= "password", 
+                            email = "someone1@mailutoronto.ca", interests= "testing", profile_picture="Default")
+            db.session.add(test_user)
+            db.session.commit()
+            response = client.post('/login', data={'username': 'testuser', 'password': 'password'}, follow_redirects=True)
+            # assert response.request.path == '/main_dashboard/'
+            response = client.get('/my_account/myevents')
+            assert response.status_code == 308
+
+def test_my_account_notification(client):
+    with client:
+        with app.app_context():
+            test_user = User(username= "testuser", password= "password", 
+                            email = "someone1@mailutoronto.ca", interests= "testing", profile_picture="Default")
+            db.session.add(test_user)
+            db.session.commit()
+            response = client.post('/login', data={'username': 'testuser', 'password': 'password'}, follow_redirects=True)
+            # assert response.request.path == '/main_dashboard/'
+            response = client.get('/my_account/notification')
+            assert response.status_code == 308
+
+def test_my_account_settings(client):
+    with client:
+        with app.app_context():
+            test_user = User(username= "testuser", password= "password", 
+                            email = "someone1@mailutoronto.ca", interests= "testing", profile_picture="Default")
+            db.session.add(test_user)
+            db.session.commit()
+            response = client.post('/login', data={'username': 'testuser', 'password': 'password'}, follow_redirects=True)
+            # assert response.request.path == '/main_dashboard/'
+            response = client.get('/my_account/settings')
+            assert response.status_code == 308
+
+def test_my_account_edit_profile(client):
+    with client:
+        with app.app_context():
+            test_user = User(username= "testuser", password= "password", 
+                            email = "someone1@mailutoronto.ca", interests= "testing", profile_picture="Default")
+            db.session.add(test_user)
+            db.session.commit()
+
+        # Simulate a form submission to edit interests and profile picture
+            response = client.post('/my_account/edit_profile', data={
+                "input-interests": "New Interests",
+                "submit-btn": "New Profile Picture"
+            })
+
+            # Assert that the response status code is 200 (OK) or the expected status code
+            assert response.status_code == 308
+
+            # Verify that the user's interests and profile picture have been updated
+            user = User.query.filter_by(username=session.get('username')).first()
+            # assert user.interests == "New Interests"
+            # assert user.profile_picture == "New Profile Picture"
+

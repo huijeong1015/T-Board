@@ -34,7 +34,9 @@
         fill="#D9D9D9"
       />
     </svg>
-    <p class="sidetab_alt_text" id="sidetab_alt_text">Welcome to T-Board! <br>Click the cog to start filtering for what you want!</p>
+    <p class="sidetab_alt_text" id="sidetab_alt_text">
+      Welcome to T-Board,<br>{{ username }}!<br>Click the cog<br>for more detailed searches!
+    </p>
     <form action="/main_dashboard" method="POST" class="sidetab_filters" id="sidetab_filters">
       <div class="show-bookmark">
         <input type="checkbox" id="show-bookmarked" name="show-bookmarked" value="show-bookmarked" class="checkbox" onchange="this.form.submit()" {{ 'checked' if bookmark_checked else '' }}>
@@ -130,6 +132,7 @@
   display: block;
   font: 400 24px "Ubuntu Mono", sans-serif;
   color: white;
+  line-height: 1.5;
 }
 .sidetab_filters {
   display: none;

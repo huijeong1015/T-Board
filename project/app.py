@@ -272,8 +272,12 @@ def main_dashboard():
             else:
                 notification_checked=False
 
-            return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, 
-                                   bookmarked_events=bookmarked_events_ids, notification_checked=notification_checked)
+            return render_template("event_details.html", 
+                                   event=event, 
+                                   profile_picture=get_user_profile_picture(), 
+                                   flag=flag, 
+                                   bookmarked_events=bookmarked_events_ids, 
+                                   notification_checked=notification_checked)
         
         # Handles bookmark button
         if request.form.get('bookmark') != None:
@@ -301,8 +305,8 @@ def main_dashboard():
             print (request.form.get("show-bookmarked"))
             events = user.bookmarked_events
 
-        #events = user.bookmarked_events
 
+        # Handles filter checkboxes
         if request.form.getlist('filter') != None:
             chosen_filters = request.form.getlist('filter')
             if chosen_filters != []:
@@ -315,7 +319,7 @@ def main_dashboard():
                         event_types_checked[LIST_OF_EVENT_TYPES.index(each)] = each
                         events = events + Event.query.filter(Event.event_type.contains(each)).all()
         
-        #Sort the events based on what user selected
+        # Sort the events based on what user selected
         if sort_by == "asc-alphabetic":
             events = sort_events_by_name(events, 'A to Z')
         elif sort_by == "desc-alphabetic":
@@ -326,13 +330,16 @@ def main_dashboard():
             events = sort_events_by_date(events, 'Newest to Oldest')
 
     bookmarked_events_ids = [event.id for event in bookmarked_events]
-    return render_template("main_dashboard.html", events=events, profile_picture=get_user_profile_picture(), 
-                           error_msg=error_msg, bookmark_checked=bookmark_checked, 
-                           bookmarked_events=bookmarked_events_ids, sort_by=sort_by, event_types_checked=event_types_checked)
-
-
-    #return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg, 
-    #                       bookmark_checked=bookmark_checked, event_types_checked=event_types_checked)
+    username=session.get('username')
+    return render_template("main_dashboard.html", 
+                           events=events, 
+                           profile_picture=get_user_profile_picture(), 
+                           error_msg=error_msg, 
+                           bookmark_checked=bookmark_checked, 
+                           bookmarked_events=bookmarked_events_ids, 
+                           sort_by=sort_by, 
+                           event_types_checked=event_types_checked,
+                           username=username)
 
 @app.route('/download_ics_file', methods=['POST'])
 def download_ics_file():

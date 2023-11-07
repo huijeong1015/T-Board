@@ -50,32 +50,15 @@
             </div>
         </div>
         <div class="frame-event-btn">
-            <form method="POST" action="/main_dashboard">
-                <button class="btn-bookmark" type="submit" name="bookmark" id="btn-bookmark" value="{{ event['id'] }}">
-                    {% if event['id'] in bookmarked_events %}
-                        <svg
-                            id="btn-bookmark-svg"
-                            class="btn-bookmark"
-                            width="27"
-                            height="54"
-                            viewBox="0 0 27 54"
-                            fill="#A34A4A"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                            d="M12.7929 39.7929L1 51.5858V1H26V51.5858L14.2071 39.7929L13.5 39.0858L12.7929 39.7929Z"
-                            stroke="#A34A4A"
-                            stroke-width="2"
-                            />
-                        </svg>
-                    {% else %}
-                        <svg
-                        id="btn-bookmark-svg"
+            <button class="btn-bookmark" type="submit" name="bookmark" id="btn-bookmark" value="{{ event['id'] }}" onclick="fillEmptyBtn({{ event['id'] }})">
+                {% if event['id'] in bookmarked_events %}
+                    <svg
+                        id="btn-bookmark-svg{{ event['id'] }}"
                         class="btn-bookmark"
                         width="27"
                         height="54"
                         viewBox="0 0 27 54"
-                        fill="none"
+                        fill="#A34A4A"
                         xmlns="http://www.w3.org/2000/svg"
                     >
                         <path
@@ -83,10 +66,25 @@
                         stroke="#A34A4A"
                         stroke-width="2"
                         />
-                        </svg>
-                    {% endif %}
-                </button>
-            </form>
+                    </svg>
+                {% else %}
+                    <svg
+                    id="btn-bookmark-svg{{ event['id'] }}"
+                    class="btn-bookmark"
+                    width="27"
+                    height="54"
+                    viewBox="0 0 27 54"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                    d="M12.7929 39.7929L1 51.5858V1H26V51.5858L14.2071 39.7929L13.5 39.0858L12.7929 39.7929Z"
+                    stroke="#A34A4A"
+                    stroke-width="2"
+                    />
+                    </svg>
+                {% endif %}
+            </button>
             <form method="POST" action="{{ url_for('download_ics_file') }}">
                 <button name="export-calendar" id="btn-calendar" class="btn-calendar" value="{{ event['id'] }}"> 
                     <svg
@@ -124,5 +122,15 @@
         </div>
     </div>
 </div>
+<script>
+    function fillEmptyBtn(id) {
+        var bookmark_btn = document.getElementById("btn-bookmark-svg"+id);
+        if (bookmark_btn.style.fill == "none") {
+            bookmark_btn.style.fill = "#A34A4A"
+        } else {
+            bookmark_btn.style.fill = "none"
+        }
+    }
+</script>
 {% include "base_event.html" %}
 {% endblock %}

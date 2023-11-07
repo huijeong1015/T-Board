@@ -198,36 +198,20 @@ def test_register_existing_username(client):
     assert response.request.path == '/register/'
     # assert b"This Username is taken, please try a different one." in response.data
     # assert 'This Username is taken, please try a different one.' in get_flashed_messages()[0]  # Assert the flashed error message
-def test_register_missing_fields(client):
+def test_register_non_utoronto_email(client):
     # Test the registration route with missing required fields
-    data = {"input-id": "",
+    data = {"input-id": "newuser",
         "input-email": "new_user@example.com",
         "input-confirm-email": "new_user@example.com",
-        "input-pwd": "Password123!",
-        "input-confirm-pwd": "Password123!",
         "input-interests": "Testing, Flask"}
     response = client.post('/register/', data=data)
     assert response.request.path == '/register/'
-    assert b"All fields are required." in response.data
-def test_register_password_strength(client):
-    # Test the registration route with a weak password
-    data = {
-        "input-id": "new_user",
-        "input-email": "new_user@example.com",
-        "input-confirm-email": "new_user@example.com",
-        "input-pwd": "weakpwd",
-        "input-confirm-pwd": "weakpwd",
-        "input-interests": "Testing, Flask",
-    }
-    response = client.post('/register/', data=data)
-    assert b"Password strength is weak" in response.data
-def test_register_password_strong(client):
+    assert b"Enter University of Toronto email." in response.data
+def test_register_success(client):
     data = {
         "input-id": "new_user1",
-        "input-email": "new_user1@example.com",
-        "input-confirm-email": "new_user1@example.com",
-        "input-pwd": "1A2S3Df!",
-        "input-confirm-pwd": "1A2S3Df!",
+        "input-email": "new_user1@mail.utoronto.ca",
+        "input-confirm-email": "new_user1@mail.utoronto.ca",
         "input-interests": "Testing, Flask",
     }
     response = client.post('/register/', data=data)

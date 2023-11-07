@@ -329,17 +329,24 @@ def main_dashboard():
         if request.form.get('show-bookmarked') != None:
             bookmark_checked = request.form.get('show-bookmarked')
             print (request.form.get("show-bookmarked"))
-            result = user.bookmarked_events
+            events = user.bookmarked_events
 
-        events = user.bookmarked_events
+        #events = user.bookmarked_events
+
+        if request.form.getlist('filter') != None:
+            chosen_filters = request.form.getlist('filter')
+            if chosen_filters != []:
+                event_types_checked[LIST_OF_EVENT_TYPES.index(chosen_filters[0])] = chosen_filters[0]
+                events = Event.query.filter(Event.event_type.contains(chosen_filters[0])).all()
+                print(chosen_filters)
+                for each in chosen_filters:
+                    if each != chosen_filters[0]:
+                        print(each)
+                        event_types_checked[LIST_OF_EVENT_TYPES.index(each)] = each
+                        events = events + Event.query.filter(Event.event_type.contains(each)).all()
         
         #Sort the events based on what user selected
-        if sort_by == "None":
-            if request.form.get('show-bookmarked') != None:
-                events = events
-            else:
-                events = db.session.execute(sql) #simply reset it
-        elif sort_by == "asc-alphabetic":
+        if sort_by == "asc-alphabetic":
             events = sort_events_by_name(events, 'A to Z')
         elif sort_by == "desc-alphabetic":
             events = sort_events_by_name(events, 'Z to A')
@@ -348,25 +355,10 @@ def main_dashboard():
         elif sort_by == "desc-date":  
             events = sort_events_by_date(events, 'Newest to Oldest')
 
-        if request.form.getlist('filter') != None:
-            chosen_filters = request.form.getlist('filter')
-            if chosen_filters == []: # this prevents index errors when checkboxes are deselected
-                result = db.session.execute(sql)
-                return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg, 
-                                       bookmark_checked=bookmark_checked, event_types_checked=event_types_checked)
-            event_types_checked[LIST_OF_EVENT_TYPES.index(chosen_filters[0])] = chosen_filters[0]
-            result = Event.query.filter(Event.event_type.contains(chosen_filters[0])).all()
-            print(chosen_filters)
-            for each in chosen_filters:
-                if each != chosen_filters[0]:
-                    print(each)
-                    event_types_checked[LIST_OF_EVENT_TYPES.index(each)] = each
-                    result = result + Event.query.filter(Event.event_type.contains(each)).all()
-
     bookmarked_events_ids = [event.id for event in bookmarked_events]
     return render_template("main_dashboard.html", events=events, profile_picture=get_user_profile_picture(), 
                            error_msg=error_msg, bookmark_checked=bookmark_checked, 
-                           bookmarked_events=bookmarked_events_ids, sort_by=sort_by)
+                           bookmarked_events=bookmarked_events_ids, sort_by=sort_by, event_types_checked=event_types_checked)
 
 
     #return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg, 

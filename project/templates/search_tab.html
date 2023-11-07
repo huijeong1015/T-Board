@@ -1,6 +1,7 @@
 {% block top %}
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Ubuntu+Condensed" />
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Ubuntu+Mono" />
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Ubuntu" />
 <body style="background-color: #202e44;">
     <div class="outer-frame">
         <div class="tab">
@@ -90,7 +91,7 @@
                         />
                     </svg>
                 </a>
-                <a href="{{ url_for('my_account_myevents') }}">
+                <a href="{{ url_for('my_account_myevents', username=session['username']) }}">
                     {% if profile_picture.lower() == "default" %}
                         <svg
                             class="account"

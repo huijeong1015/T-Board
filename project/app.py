@@ -558,7 +558,7 @@ def set_notification():
     attendee_record = Attendee.query.filter_by(user_id=user.id, event_id=event_id).first()
 
     if 'show-notification' in request.form:
-        attendee_record.notification_preference = 30
+        attendee_record.notification_preference = 30 #Default will be 30 minutes
     else:
         attendee_record.notification_preference = -1
 
@@ -567,11 +567,31 @@ def set_notification():
 
     return redirect(url_for('main_dashboard'))
 
-@app.route("/my_account/notification/")
+@app.route("/my_account/notification/", methods=['POST'])
 def my_account_notification():
     user = get_user()
     attendees = Attendee.query.filter_by(user_id=user.id).all()
     notif_events = [attendee.event for attendee in attendees]
+
+    notif_events = sort_events_by_date(notif_events, 'Newest to Oldest')
+
+    if request.method == "POST":
+        updated_event_id = request.form.get('updated_event')
+        updated_notification = request.form.get('updated_notification')
+        attendee_record = Attendee.query.filter_by(user_id=user.id, event_id=updated_event_id).first()
+        
+        #Numbers below are in minutes
+        if updated_notification == '30-mins':
+            attendee_record.notification_preference = 30
+
+        elif updated_notification == '1-hour':
+            attendee_record.notification_preference = 60
+
+        elif updated_notification == '1-day':
+            attendee_record.notification_preference = 1440 
+
+        elif updated_notification == '1-week':
+            attendee_record.notification_preference = 10080
 
     return render_template('my_account_notification.html', 
                            username=session.get('username'), 

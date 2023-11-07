@@ -83,108 +83,19 @@
     </div>
   </div>
   <div class="frame-content">
-    <!-- <div class="notification">
-      <div class="heading">
-        <svg
-          class="account3"
-          width="50"
-          height="50"
-          viewBox="0 0 50 50"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <circle
-            cx="25"
-            cy="25"
-            r="26.5"
-            fill="#7CA34A"
-            stroke="#7CA34A"
-            stroke-width="3"
-          />
-          <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-            d="M44.4054 40.7629C47.9033 36.462 50 30.9759 50 25C50 11.1929 38.8071 0 25 0C11.1929 0 0 11.1929 0 25C0 31.2251 2.27526 36.9188 6.03954 41.2949C7.45967 37.7288 10.8705 35.1893 14.8833 35C17.5833 38.05 21.2833 40 25.3333 40C29.3833 40 33.0833 38.05 35.7833 35C39.6294 35.1797 42.8812 37.4784 44.4054 40.7629ZM15.3333 22.5C15.3333 15.6 19.8333 10 25.3333 10C30.8333 10 35.3333 15.6 35.3333 22.5C35.3333 29.4 30.8333 35 25.3333 35C19.8333 35 15.3333 29.4 15.3333 22.5Z"
-            fill="#D9D9D9"
-          />
-        </svg> -->
-
-        <!-- <div class="name">
-          &lt;username&gt; shared &lt;event name&gt;
-        </div>
-      </div>
-      <div class="frame-event">
-        <div class="left">
-          <img src="{{ url_for('static', filename='event_photos/club.png') }}" alt="Image" class="image-1">
-        </div>
-        <div class="right2">
-          <div class="frame-info">
-            <div class="date">Date: &lt;date of the event&gt;</div>
-            <div class="time">Time: &lt;time of the event&gt;</div>
-            <div class="location">
-              Location: &lt;location of the event&gt;
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="frame-btn2">
-        <button class="btn-going">GOING</button>
-        <button class="btn-unsure">UNSURE</button>
-        <button class="btn-notgoing">NOT GOING</button>
-      </div>
-    </div> -->
-    <!-- <div class="notification">
-      <div class="heading">
-        <svg
-          class="account4"
-          width="50"
-          height="50"
-          viewBox="0 0 50 50"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <circle
-            cx="25"
-            cy="25"
-            r="26.5"
-            fill="#7CA34A"
-            stroke="#7CA34A"
-            stroke-width="3"
-          />
-          <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-            d="M44.4054 40.7629C47.9033 36.462 50 30.9759 50 25C50 11.1929 38.8071 0 25 0C11.1929 0 0 11.1929 0 25C0 31.2251 2.27526 36.9188 6.03954 41.2949C7.45967 37.7288 10.8705 35.1893 14.8833 35C17.5833 38.05 21.2833 40 25.3333 40C29.3833 40 33.0833 38.05 35.7833 35C39.6294 35.1797 42.8812 37.4784 44.4054 40.7629ZM15.3333 22.5C15.3333 15.6 19.8333 10 25.3333 10C30.8333 10 35.3333 15.6 35.3333 22.5C35.3333 29.4 30.8333 35 25.3333 35C19.8333 35 15.3333 29.4 15.3333 22.5Z"
-            fill="#D9D9D9"
-          />
-        </svg>
-
-        <div class="name">
-          &lt;username&gt; shared &lt;event name&gt;
-        </div>
-      </div>
-      <div class="frame-event">
-        <div class="left">
-          <img src="{{ url_for('static', filename='event_photos/club.png') }}" alt="Image" class="image-1">
-        </div>
-        <div class="right2">
-          <div class="frame-info">
-            <div class="date">Date: &lt;date of the event&gt;</div>
-            <div class="time">Time: &lt;time of the event&gt;</div>
-            <div class="location">
-              Location: &lt;location of the event&gt;
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="frame-btn2">
-        <button class="btn-going">GOING</button>
-        <button class="btn-unsure">UNSURE</button>
-        <button class="btn-notgoing">NOT GOING</button>
-      </div>
-    </div> -->
-    <div class="name">You have no notifications </div>
+    <div class="heading">NOTIFICATION SETTINGS</div>
+    {%if not notif_events%}
+      <div class="message">No notifications to set </div>
+    {%else%}
+      {% for event in notif_events %}
+        {% with event=event %}
+          {% include "event_notification.html" %}
+        {% endwith %}
+      {% endfor %} 
+    {%endif%}
+  </div>
 </div>
+{% include 'base_event.html' %}
 <style>
 .notification-tab {
   width: 100%;
@@ -293,20 +204,10 @@
   position: relative;
 }
 .heading {
-  padding: 0px 30px 0px 30px;
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  align-items: center;
-  justify-content: flex-start;
-  align-self: stretch;
-  flex-shrink: 0;
+  color: #000000;
+  text-align: left;
+  font: 700 40px "Ubuntu Mono", sans-serif;
   position: relative;
-}
-.account3 {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
 }
 .name {
   color: #000000;
@@ -314,78 +215,17 @@
   font: 400 36px "Ubuntu Condensed", sans-serif;
   position: relative;
 }
-.frame-event {
-  padding: 20px 50px 20px 50px;
+.frame-myevent {
+  background: transparent;
   display: flex;
   flex-direction: row;
-  gap: 18px;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-shrink: 0;
+  align-items: center;
+  border-radius: 15px;
+  width: 100%;
+  height: fit-content;
   position: relative;
-}
-.image-1 {
-  flex-shrink: 0;
-  width: 365px;
-  height: 189px;
-  position: relative;
-  max-width: 95%;
-  max-height: 95%;
-  display: block;
-}
-.right2 {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  align-self: stretch;
-  flex-shrink: 0;
-  width: 340px;
-  position: relative;
-}
-.frame-info {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex: 1;
-  position: relative;
-}
-.date {
-  color: #000000;
-  text-align: left;
-  font: 400 28px "Ubuntu Condensed", sans-serif;
-  position: relative;
-}
-.time {
-  color: #000000;
-  text-align: left;
-  font: 400 28px "Ubuntu Condensed", sans-serif;
-  position: relative;
-}
-.location {
-  color: #000000;
-  text-align: left;
-  font: 400 28px "Ubuntu Condensed", sans-serif;
-  position: relative;
-}
-.frame-btn2 {
-  padding: 0px 50px 0px 50px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-  align-self: stretch;
-  flex-shrink: 0;
-  position: relative;
-}
-.account4 {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
+  gap: 20px;
+  margin-bottom: 20px;
 }
 button {
   flex-shrink: 0;
@@ -397,14 +237,41 @@ button {
   font: 700 30px "Ubuntu Mono", sans-serif;
   position: relative;  
 }
-.btn-going {
-  background: #639820;
+.message {
+  color: #000000;
+  text-align: left;
+  font: 400 32px "Ubuntu Condensed", sans-serif;
+  position: relative;
 }
-.btn-unsure {
-  background: #ffc336;
+.set-notif {
+    color: black;
+    text-align: left;
+    font: 400 25px "Ubuntu Mono", sans-serif;
+    position: relative;
 }
-.btn-notgoing {
-  background: #a34a4a;
+.event-name-txt {
+    color: #000000;
+    text-align: left;
+    font: 400 30px "Ubuntu Condensed", sans-serif;
+    position: relative;
 }
+.event-details-txt {
+    color: #000000;
+    text-align: left;
+    font: 400 25px "Ubuntu Condensed", sans-serif;
+    position: relative;
+}
+.dropdown {
+  font: 400 20px "Ubuntu Mono", sans-serif;
+}
+.sub-right {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: column;
+    height: 239px;
+    position: relative;
+  }
 </style>
 {% endblock %}

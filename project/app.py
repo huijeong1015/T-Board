@@ -9,7 +9,8 @@ from flask import (
     session,
     flash,
     render_template_string,
-    send_file
+    send_file,
+    request
 )
 from datetime import datetime
 from flask_bootstrap import Bootstrap
@@ -21,6 +22,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 from sqlalchemy.sql import func
 from project.db import *
+from project.register import *
 from werkzeug.security import check_password_hash
 import re
 import ics
@@ -28,29 +30,68 @@ import ics
 app.config["SECRET_KEY"] = os.urandom(24)
 
 #Helper functions
-def get_user_interests():
-    username=session.get('username')
+def get_user_interests(username=None):
+    if not username:
+        username=session.get('username')
     user = User.query.filter_by(username=username).first()
     return user.interests
 
-def get_user_email():
-    username=session.get('username')
+def get_user_email(username=None):
+    if not username:
+        username=session.get('username')
     user = User.query.filter_by(username=username).first()
     return user.email
 
-def get_user_profile_picture():
-    username=session.get('username')
+def get_user_profile_picture(username = None):
+    if not username:
+        username = session.get('username')
     user = User.query.filter_by(username=username).first()
     if user:
             return user.profile_picture
     return "default_profile_picture.jpg"
 
-def get_user():
-    username = session.get('username')
+def get_user(username = None):
+    if not username:
+        username = session.get('username')
     user = User.query.filter_by(username=username).first()
     return(user)  
 
-app.config['SECRET_KEY'] = os.urandom(24)
+def check_password_strength(password):
+    length = len(password)
+    has_upper = any(char.isupper() for char in password)
+    has_lower = any(char.islower() for char in password)
+    has_digit = any(char.isdigit() for char in password)
+    has_special = any(not char.isalnum() for char in password)
+
+    if length >= 8 and has_upper and has_lower and has_digit and has_special:
+        return "strong"
+    elif length >= 6 and has_upper and has_lower and has_digit:
+        return "medium"
+    else:
+        return "weak"
+
+def sort_events_by_date(events, order):
+    events_with_dt = [(event, datetime.strptime(f"{event.date} {event.time}", "%Y-%m-%d %H:%M")) for event in events]
+
+    # Sort the events based on the datetime objects
+    if order == 'Newest to Oldest':
+        sorted_events_with_dt = sorted(events_with_dt, key=lambda x: x[1], reverse=True)
+    elif order == 'Oldest to Newest':
+        sorted_events_with_dt = sorted(events_with_dt, key=lambda x: x[1])
+
+    sorted_events = [event_with_dt[0] for event_with_dt in sorted_events_with_dt]
+
+    return sorted_events
+
+def sort_events_by_name(events, order):
+    if order == 'A to Z':
+        sorted_events = sorted(events, key=lambda event: event.name.lower())
+    elif order == 'Z to A':
+        sorted_events = sorted(events, key=lambda event: event.name.lower(), reverse=True)
+
+    return sorted_events
+
+#Main Functions
 @app.route("/", methods=["GET", "POST"])
 @app.route("/login/", methods=["GET", "POST"])
 def login():
@@ -66,9 +107,17 @@ def login():
         else:
             user = User.query.filter_by(username=username).first()
             if user is None:
-                error = f"No user found with username: {username}"
+                error = f"No \"{username}\" user found. Create a new account."
+                flash(error)
             elif not check_password_hash(user.password, password):
-                error = "Password does not match for the provided username."
+                error = "Wrong password. Try again."
+                flash(error)
+            elif user.is_first_login:
+                # Start a user session
+                session["username"] = username
+                session['user_id'] = user.id
+                # User should finish setting up the account
+                return redirect(url_for("finish_account_setup"))
             else:
                 # Start a user session
                 session["username"] = username
@@ -77,6 +126,35 @@ def login():
 
     return render_template("login.html", error=error)
 
+@app.route("/finish_setup/", methods=["GET", "POST"])
+def finish_account_setup():
+    username = session.get('username')
+    user = User.query.filter_by(username=username).first() 
+    error = None
+    if request.method == "POST":
+        password = request.form["input-pwd"]
+        confirm_password = request.form["input-confirm-pwd"]
+        interests = request.form["input-interests"]
+
+        # Password strength check
+        password_strength = check_password_strength(password)
+
+        # Perform validation checks on the form data
+        if password != confirm_password:
+            error = "Passwords do not match."
+            flash(error)
+        elif password_strength != "strong":
+            error = f"Password strength is {password_strength}. Please use a stronger password."
+            flash(error)
+        else:
+            user.set_password(password)  # Hash the password
+            user.interests = interests
+            user.is_first_login = False
+            db.session.commit()
+            return redirect(url_for("login"))
+
+    return render_template("login_firsttime.html", error=error, user=username)
+
 @app.route("/register/", methods=["GET", "POST"])
 def register():
     error = None
@@ -84,35 +162,17 @@ def register():
         username = request.form["input-id"]
         email = request.form["input-email"]
         confirm_email = request.form["input-confirm-email"]
-        password = request.form["input-pwd"]
-        confirm_password = request.form["input-confirm-pwd"]
-        interests = request.form["input-interests"]
 
         # Check if username or email is already taken
         username_check = User.query.filter_by(username=username).first()
         email_check = User.query.filter_by(email=email).first()
 
-        # Password strength check
-        password_strength = check_password_strength(password)
-
         # Perform validation checks on the form data
-        if (
-            not username
-            or not email
-            or not confirm_email
-            or not password
-            or not confirm_password
-        ):
-            error = "All fields are required."
+        if 'utoronto' not in email:
+            error = "Enter University of Toronto email."
             flash(error)
         elif email != confirm_email:
             error = "Emails do not match."
-            flash(error)
-        elif password != confirm_password:
-            error = "Passwords do not match."
-            flash(error)
-        elif password_strength != "strong":
-            error = f"Password strength is {password_strength}. Please use a stronger password at least 8 characters long with one upper case, lower case, digit, and special character."
             flash(error)
         elif username_check is not None:
             error = "This Username is taken, please try a different one."
@@ -121,28 +181,67 @@ def register():
             error = "This email has already been used. Please return to the login page or use a different email."
             flash(error)
         else:
-            new_user = User(username=username, email=email, interests=interests, profile_picture = "default")
-            new_user.set_password(password)  # Hash the password
+            temp_pwd = generate_temporary_pwd()
+            new_user = User(username=username, email=email)
+            new_user.set_password(temp_pwd)  # Hash the password
             db.session.add(new_user)
             db.session.commit()
+            email_temporary_pwd(email, temp_pwd)
             return redirect(url_for("login"))
 
     return render_template("register.html")
 
-def check_password_strength(password):
-    length = len(password)
-    has_upper = any(char.isupper() for char in password)
-    has_lower = any(char.islower() for char in password)
-    has_digit = any(char.isdigit() for char in password)
-    has_special = any(not char.isalnum() for char in password)
+# def register():
+#     error = None
+#     if request.method == "POST":
+#         username = request.form["input-id"]
+#         email = request.form["input-email"]
+#         confirm_email = request.form["input-confirm-email"]
+#         password = request.form["input-pwd"]
+#         confirm_password = request.form["input-confirm-pwd"]
+#         interests = request.form["input-interests"]
 
-    if length >= 8 and has_upper and has_lower and has_digit and has_special:
-        return "strong"
-    elif length >= 6 and has_upper and has_lower and has_digit:
-        return "medium"
-    else:
-        return "weak"
-    
+#         # Check if username or email is already taken
+#         username_check = User.query.filter_by(username=username).first()
+#         email_check = User.query.filter_by(email=email).first()
+
+#         # Password strength check
+#         password_strength = check_password_strength(password)
+
+#         # Perform validation checks on the form data
+#         if (
+#             not username
+#             or not email
+#             or not confirm_email
+#             or not password
+#             or not confirm_password
+#         ):
+#             error = "All fields are required."
+#             flash(error)
+#         elif email != confirm_email:
+#             error = "Emails do not match."
+#             flash(error)
+#         elif password != confirm_password:
+#             error = "Passwords do not match."
+#             flash(error)
+#         elif password_strength != "strong":
+#             error = f"Password strength is {password_strength}. Please use a stronger password at least 8 characters long with one upper case, lower case, digit, and special character."
+#             flash(error)
+#         elif username_check is not None:
+#             error = "This Username is taken, please try a different one."
+#             flash(error)
+#         elif email_check is not None:
+#             error = "This email has already been used. Please return to the login page or use a different email."
+#             flash(error)
+#         else:
+#             new_user = User(username=username, email=email, interests=interests, profile_picture = "default")
+#             new_user.set_password(password)  # Hash the password
+#             db.session.add(new_user)
+#             db.session.commit()
+#             return redirect(url_for("login"))
+
+#     return render_template("register.html")
+  
 @app.route("/bookmark/", methods=["GET", "POST"])
 def bookmark():
     error_msg = ""
@@ -180,11 +279,12 @@ def main_dashboard():
     user = User.query.filter_by(username=username).first()
     print(user)
     sql = text("SELECT * FROM events;")
-    result = db.session.execute(sql)
+    events = db.session.execute(sql)
     
     username = session.get('username')
     user = User.query.filter_by(username=username).first()
     bookmarked_events = user.bookmarked_events
+    sort_by = request.form.get('sort-by')
 
     ics_text = ""
 
@@ -228,10 +328,27 @@ def main_dashboard():
         if request.form.get('show-bookmarked') != None:
             bookmark_checked = request.form.get('show-bookmarked')
             print (request.form.get("show-bookmarked"))
-            result = user.bookmarked_events
+            events = user.bookmarked_events
+        
+        #Sort the events based on what user selected
+        if sort_by == "None":
+            if request.form.get('show-bookmarked') != None:
+                events = events
+            else:
+                events = db.session.execute(sql) #simply reset it
+        elif sort_by == "asc-alphabetic":
+            events = sort_events_by_name(events, 'A to Z')
+        elif sort_by == "desc-alphabetic":
+            events = sort_events_by_name(events, 'Z to A')
+        elif sort_by == "asc-date":
+            events = sort_events_by_date(events, 'Oldest to Newest')
+        elif sort_by == "desc-date":  
+            events = sort_events_by_date(events, 'Newest to Oldest')
 
     bookmarked_events_ids = [event.id for event in bookmarked_events]
-    return render_template("main_dashboard.html", events=result, profile_picture=get_user_profile_picture(), error_msg=error_msg, bookmark_checked=bookmark_checked, bookmarked_events=bookmarked_events_ids)
+    return render_template("main_dashboard.html", events=events, profile_picture=get_user_profile_picture(), 
+                           error_msg=error_msg, bookmark_checked=bookmark_checked, 
+                           bookmarked_events=bookmarked_events_ids, sort_by=sort_by)
 
 @app.route('/download_ics_file', methods=['POST'])
 def download_ics_file():
@@ -263,9 +380,6 @@ def download_ics_file():
     # Ask user to download the file
     return send_file(return_data, mimetype="application/ics", download_name=filename, as_attachment=True)
 
-
-from flask import request
-
 @app.route('/attend_event/<int:event_id>', methods=['POST'])
 def attend_event(event_id):
     username = session.get('username')
@@ -290,7 +404,6 @@ def attend_event(event_id):
 
     return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, bookmarked_events=bookmarked_events_ids)
 
-
 @app.route("/search_dashboard/", methods=["POST"])
 def searchEvent():
     error_msg = ""
@@ -303,20 +416,39 @@ def searchEvent():
         error_msg = "We couldn't find any matches for \"" + keyword + '".'
     return render_template("main_dashboard.html", events=results, error_msg=error_msg, profile_picture=get_user_profile_picture())
 
-@app.route("/my_account/event_history/")
-def my_account_event_history():
-    username=session.get('username')
+
+@app.route("/<username>/event_history/")
+def my_account_event_history(username):
+    # Security check: Make sure the logged-in user is accessing their own event history or the user is an admin.
+    logged_in_username = session.get('username')
+    if not logged_in_username:
+        return redirect(url_for('login'))
     user = User.query.filter_by(username=username).first()
+    if not user:
+        return "User not found", 404
+
     events_attending = user.events_attending
 
-    if username == 'admin':
-        events_created_by_user = Event.query.all()
-    else:
-        events_created_by_user = Event.query.filter_by(created_by_id=user.id).all()
+    current_datetime = datetime.now()
+    future_events = []
+    past_events = []
 
-    return render_template('my_account_eventhistory.html', username=session.get('username'), 
-                           interests=get_user_interests(), profile_picture=get_user_profile_picture(),
-                           eventlog=events_attending, myevents=events_created_by_user)
+    for event in events_attending:
+        event_datetime = f"{event.date} {event.time}"
+        event_datetime_dt = datetime.strptime(event_datetime, "%Y-%m-%d %H:%M")
+        if event_datetime_dt > current_datetime:
+            future_events.append(event)
+        else:
+            past_events.append(event)
+
+    past_events = sort_events_by_date(past_events, 'Newest to Oldest')
+    future_events = sort_events_by_date(future_events, 'Newest to Oldest')
+
+    return render_template('my_account_eventhistory.html', username=username, 
+                           interests=get_user_interests(username), 
+                           profile_picture=get_user_profile_picture(username),
+                           future_events=future_events, past_events=past_events)
+
 
 def get_current_user_friends(username):
     # Assuming 'db' is your database connection object and 'User' is your user model
@@ -325,48 +457,130 @@ def get_current_user_friends(username):
         return current_user.friends  # This depends on how your user's friends are stored/retrieved
     else:
         return []
-
-@app.route("/my_account/friends/")
-def my_account_friends():
-    username = session.get('username')
     
+def filter_friends_by_search_term(friends_list, search_term):
+    # Convert the search term to lowercase for a case-insensitive search
+    search_term = search_term.lower()
+    filtered_list = [
+        friend for friend in friends_list
+        if search_term in friend.username.lower()  # Use attribute access here
+    ]
+    return filtered_list
+
+
+@app.route("/<username>/friends/")
+def my_account_friends(username):
     # Ensure the user is logged in or handle appropriately if not
-    if not username:
+    logged_in_username = session.get('username')
+    if not logged_in_username:
         # Redirect to login page or handle it however you prefer
         return redirect(url_for('login'))
+    
 
     # Fetch user-specific data
-    interests = get_user_interests()
-    profile_picture = get_user_profile_picture()
-    friends_list = get_current_user_friends(username)  # This should be a function you create
+    interests = get_user_interests(username)
+    profile_picture = get_user_profile_picture(username)
+    friends_list = get_current_user_friends(username)
     
+    # Get the list of friend recommendations
+    recommendations = get_friend_recommendations(username)
+
+    search_term = request.args.get('search', '')
+    if search_term:
+        friends_list = filter_friends_by_search_term(friends_list, search_term)
+
     # Pass everything to the template
-    return render_template('my_account_friends.html', 
+    return render_template('my_account_friends.html',  # Make sure the template name matches your setup
                            username=username,
                            interests=interests, 
                            profile_picture=profile_picture,
-                           friends=friends_list)
+                           friends=friends_list,
+                           recommended_friends=recommendations)
 
-@app.route("/my_account/myevents/")
-def my_account_myevents():
-    username=session.get('username')
-    if username is None:
-        # Redirect to login page or handle it as needed
+
+@app.route('/add_friend/<username>', methods=['POST'])
+def add_friend(username):
+    if 'username' not in session:
+        return redirect(url_for('login'))  # Redirect to login if the user is not logged in
+    current_user = User.query.filter_by(username=session['username']).first()
+    friend_to_add = User.query.filter_by(username=username).first()
+    
+    if not friend_to_add:
+        return "User not found", 404  # Or handle appropriately
+
+    # Add the logic to create a friendship relationship here
+    # This will depend on how your database relationships are set up
+    current_user.friends.append(friend_to_add)
+
+    db.session.commit()
+
+    # Redirect back to the friend recommendations page or a success page
+    return redirect(url_for('my_account_friends', username=session['username']))
+
+@app.route('/remove_friend/<username>', methods=['POST'])
+def remove_friend(username):
+    if 'username' not in session:
+        return redirect(url_for('login'))  # Redirect to login if the user is not logged in
+
+    current_user = User.query.filter_by(username=session['username']).first()
+    friend_to_remove = User.query.filter_by(username=username).first()
+    
+    if not friend_to_remove:
+        return "User not found", 404  # Or handle it with a flash message and redirect
+
+    # Assuming 'friends' is a many-to-many relationship attribute of the 'User' model
+    current_user.friends.remove(friend_to_remove)
+    
+    db.session.commit()
+
+    # Redirect to the friends list or a confirmation page
+    return redirect(url_for('my_account_friends', username=session['username']))
+
+
+@app.route('/add_friend_via_form', methods=['POST'])
+def add_friend_via_form():
+    if 'username' not in session:
+        return redirect(url_for('login'))  # Redirect to login if the user is not logged in
+
+    friend_username = request.form['friend_username']  # Get the username from the form data
+    current_user = User.query.filter_by(username=session['username']).first()
+    friend_to_add = User.query.filter_by(username=friend_username).first()
+
+    if not friend_to_add:
+        return "User not found", 404  # Or handle appropriately
+
+    # Add the logic to create a friendship relationship here
+    current_user.friends.append(friend_to_add)
+    db.session.commit()
+
+    # Redirect back to the friend recommendations page or a success page
+    return redirect(url_for('my_account_friends', username=session['username']))
+
+@app.route("/<username>/myevents/")
+def my_account_myevents(username):
+    # It's a good practice to not assume the session username is the same as the one in the URL
+    # You can check if the logged-in user is the same as the username in the URL or if the user has special privileges
+    logged_in_username = session.get('username')
+
+    # Redirect to the login page if the user is not logged in
+    if not logged_in_username:
         return redirect(url_for('login'))
+
     user = User.query.filter_by(username=username).first()
-    if user is None:
-        # Handle the case when the user doesn't exist
-        return render_template('error.html', error_message="User not found")
+    if not user:
+        return "User not found", 404  # Or handle it however you prefer
+
     if username == 'admin':
         events_created_by_user = Event.query.all()
     else:
         events_created_by_user = Event.query.filter_by(created_by_id=user.id).all()
 
     return render_template('my_account_myevents.html', 
-                           username=session.get('username'), 
-                           interests=get_user_interests(), 
+                           username=username, 
+                           interests=get_user_interests(username), 
                            myevents=events_created_by_user, 
-                           profile_picture=get_user_profile_picture())
+                           profile_picture=get_user_profile_picture(username))
+
 
 @app.route("/my_account/notification/")
 def my_account_notification():
@@ -432,11 +646,11 @@ def add_event():
                       description=event_description, event_type=event_type, created_by=user)
         db.session.add(new_event)
         db.session.commit()
-        render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_type)
+        render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_types)
         return redirect(url_for("main_dashboard"))
     else:
         print("invalid date or time. should b ") #TODO: Give useful message to user
-        return (render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_type))
+        return (render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_types))
 
 @app.route('/edit_event/<int:event_id>', methods=["GET", "POST"])
 def edit_event(event_id):
@@ -494,25 +708,37 @@ def dfs(graph, start, k):
             stack.extend((friend, depth + 1) for friend in graph[vertex] - visited)
     return recommendations
 
-@app.route("/users")
-def show_users():
-    users = User.query.all()
+def get_friend_recommendations(username, depth=2):
+    # Fetch the current user and their friends
+    current_user = User.query.filter_by(username=username).first()
+    if not current_user:
+        return []
+
+    # Initialize the graph with the current user's friends
     user_data = {
-        user.username: {
-            "friends": [friend.username for friend in user.friends],
-            "events": [event.name for event in user.events],
-        }
-        for user in users
+        current_user.username: set(friend.username for friend in current_user.friends)
     }
-    user_list_html = "<ul>"
-    for username, data in user_data.items():
-        friends = ", ".join(data["friends"]) if data["friends"] else "None"
-        events = ", ".join(data["events"]) if data["events"] else "None"
-        user_list_html += f"<li>{username}: Friends - {friends}, Events - {events}</li>"
-    user_list_html += "</ul>"
-    return render_template_string(
-        f"<h1>Users, Their Friends, and Events</h1>{user_list_html}"
-    )
+
+    # Create a list of all users' usernames to initialize the rest of the graph
+    all_usernames = [user.username for user in User.query.all()]
+    for uname in all_usernames:
+        if uname not in user_data:
+            user = User.query.filter_by(username=uname).first()
+            user_data[uname] = set(friend.username for friend in user.friends)
+
+    # Now you have a graph of all users and their friends, you can run dfs
+    recommendations = dfs(user_data, username, depth)
+
+    # Filter out the current user's direct friends from the recommendations
+    recommendations.difference_update(user_data[username])
+
+    # Fetch full User objects for each recommendation
+    recommended_users = User.query.filter(User.username.in_(recommendations)).all()
+
+    return recommended_users
+
+
+
 
 @app.route("/recommendations")
 def friend_recommendations():
@@ -536,6 +762,27 @@ def friend_recommendations():
     return render_template_string(
         f"<h1>Friend Recommendations</h1>{recommendations_html}"
     )
+
+@app.route("/users")
+def show_users():
+    users = User.query.all()
+    user_data = {
+        user.username: {
+            "friends": [friend.username for friend in user.friends],
+            "events": [event.name for event in user.events],
+        }
+        for user in users
+    }
+    user_list_html = "<ul>"
+    for username, data in user_data.items():
+        friends = ", ".join(data["friends"]) if data["friends"] else "None"
+        events = ", ".join(data["events"]) if data["events"] else "None"
+        user_list_html += f"<li>{username}: Friends - {friends}, Events - {events}</li>"
+    user_list_html += "</ul>"
+    return render_template_string(
+        f"<h1>Users, Their Friends, and Events</h1>{user_list_html}"
+    )
+
 
 @app.route("/events")
 def new_events():
@@ -566,4 +813,3 @@ def are_you_sure(event_id):
                 flash('Event deletion cancelled.', 'info')
                 return redirect(url_for('edit_event', event_id=event_id))
     return render_template('are_you_sure.html', event_id=event_id, event=event, profile_picture=get_user_profile_picture())
-

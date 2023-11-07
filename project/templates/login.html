@@ -19,6 +19,13 @@
       fill="#A2B7CA"
     />
   </svg>
+  <div class="container">
+    {% for message in get_flashed_messages() %}
+      <div class="alert alert-warning">
+          {{ message }}
+      </div>
+    {% endfor %}
+  </div>
   <form action="/login" method="post" class="form-group">
     <div class="input">
       <!-- <div class="input-id"></div> -->
@@ -66,6 +73,18 @@ body {
   flex-shrink: 0;
   position: relative;
   overflow: visible;
+}
+.alert-warning::before {
+  color: red;
+  font: 400 25px "Ubuntu Condensed", sans-serif;
+  content: "* ";  
+}
+.alert-warning {
+  color: #ffffff;
+  text-align: left;
+  width: 100%;
+  font: 400 25px "Ubuntu Condensed", sans-serif;
+  position: relative;
 }
 .form-group {
   display: flex;

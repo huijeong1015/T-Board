@@ -115,11 +115,11 @@
   <div class="sidetab">
     <div class="show-notifications">
       {% if flag == 'attending' %}
-      <form method="POST" action="{{ url_for('set_notification', event_id=event.id) }}" class="form-button">
+      <form method="POST" action="{{ url_for('set_notification', event_id=event.id) }}" class="form-show-notification">
         <!-- Hidden input to send the event_id to the backend -->
         <input type="hidden" name="event_id" value="{{ event.id }}">
-        <input type="checkbox" id="show-notifications" name="show-notification" value="show-notification" class="checkbox" onchange="this.form.submit()" {{ 'checked' if notification_checked else '' }}>
         <label for="show-notification" class="show-notification-message">Receive Notifications</label><br>
+        <input type="checkbox" id="show-notifications" name="show-notification" value="show-notification" class="checkbox" onchange="this.form.submit()" {{ 'checked' if notification_checked else '' }}>
       </form>
       {% endif %}
     </div>
@@ -233,6 +233,13 @@ object-fit: cover;
 }
 .form-button {
   margin-block-end: 0%;
+}
+.form-show-notification {
+  margin: 0%;
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 5px;
+  align-items: center;
 }
 .btn-bookmark {
   flex-shrink: 0;

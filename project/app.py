@@ -580,11 +580,11 @@ def add_event():
                       description=event_description, event_type=event_type, created_by=user)
         db.session.add(new_event)
         db.session.commit()
-        render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_type)
+        render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_types)
         return redirect(url_for("main_dashboard"))
     else:
         print("invalid date or time. should b ") #TODO: Give useful message to user
-        return (render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_type))
+        return (render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_types))
 
 @app.route('/edit_event/<int:event_id>', methods=["GET", "POST"])
 def edit_event(event_id):

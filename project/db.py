@@ -2,7 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from pathlib import Path
 from werkzeug.security import generate_password_hash
-import json
+
 
 # Configuration
 USERS_DATABASE = "users.db"
@@ -60,15 +60,6 @@ user_friends = db.Table(
 #Association table between users and events they want to save for later
 saved_events = db.Table(
     'saved_events',
-    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
-    db.Column('event_id', db.Integer, db.ForeignKey('events.id'), primary_key=True),
-)
-
-#Association table between users and the filtered events they want to see
-#this association should not be saved into the main db after user leaves the website
-#events in this association should be reset when user exists the main dashboard
-filtered_events = db.Table(
-    'filtered_events',
     db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
     db.Column('event_id', db.Integer, db.ForeignKey('events.id'), primary_key=True),
 )

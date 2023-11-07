@@ -41,7 +41,9 @@ def get_user_email():
 def get_user_profile_picture():
     username=session.get('username')
     user = User.query.filter_by(username=username).first()
-    return user.profile_picture
+    if user:
+            return user.profile_picture
+    return "default_profile_picture.jpg"
 
 def get_user():
     username = session.get('username')
@@ -348,8 +350,13 @@ def my_account_friends():
 @app.route("/my_account/myevents/")
 def my_account_myevents():
     username=session.get('username')
+    if username is None:
+        # Redirect to login page or handle it as needed
+        return redirect(url_for('login'))
     user = User.query.filter_by(username=username).first()
-    
+    if user is None:
+        # Handle the case when the user doesn't exist
+        return render_template('error.html', error_message="User not found")
     if username == 'admin':
         events_created_by_user = Event.query.all()
     else:
@@ -433,7 +440,8 @@ def add_event():
 
 @app.route('/edit_event/<int:event_id>', methods=["GET", "POST"])
 def edit_event(event_id):
-    event = Event.query.get(event_id)
+    # event = Event.query.get(event_id)
+    event = db.session.get(Event, event_id)
     if request.method == 'POST':
         if 'finish_edit' in request.form:
             event = Event.query.filter_by(id=event_id).first()
@@ -547,14 +555,15 @@ def new_events():
 @app.route('/are_you_sure/<int:event_id>', methods=['GET', 'POST'])
 def are_you_sure(event_id):
     event = Event.query.filter_by(id=event_id).first()
-    if request.method == 'POST':
-        if 'yes' in request.form:
-            db.session.delete(event)
-            db.session.commit()
-            flash('Event has been deleted!', 'success')
-            return redirect(url_for('my_account_myevents'))
-        elif 'no' in request.form:
-            flash('Event deletion cancelled.', 'info')
-            return redirect(url_for('edit_event', event_id=event_id))
+    if event: 
+        if request.method == 'POST':
+            if 'yes' in request.form:
+                db.session.delete(event)
+                db.session.commit()
+                flash('Event has been deleted!', 'success')
+                return redirect(url_for('my_account_myevents'))
+            elif 'no' in request.form:
+                flash('Event deletion cancelled.', 'info')
+                return redirect(url_for('edit_event', event_id=event_id))
     return render_template('are_you_sure.html', event_id=event_id, event=event, profile_picture=get_user_profile_picture())
 

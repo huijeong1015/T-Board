@@ -526,3 +526,82 @@ def test_my_account_edit_profile(client):
             # assert user.interests == "New Interests"
             # assert user.profile_picture == "New Profile Picture"
 
+def test_add_event(client):
+    with client:
+        # Log in or perform any necessary steps to mimic a user session
+        test_user = User(username= "testuser", password= "password", 
+                            email = "someone1@mailutoronto.ca", interests= "testing", profile_picture="Default")
+        db.session.add(test_user)
+        db.session.commit()
+        # Simulate a form submission to add a new event
+        response = client.post('/event_post', data={
+            "input-name": "New Event",
+            "input-date": "2024-01-01",
+            "input-time": "12:00",
+            "input-loc": "New Location",
+            "input-reg": "Registration Link",
+            "input-desc": "Event Description",
+            "event_type": "Networking"
+        })
+        assert response.status_code == 302
+
+        event = Event.query.filter_by(name="New Event").first()
+        assert event is not None
+
+def test_edit_event(client):
+    with client, app.app_context():
+        test_user = User(username= "testuser", password= "password", 
+                            email = "someone1@mailutoronto.ca", interests= "testing", profile_picture="Default")
+        db.session.add(test_user)
+        db.session.commit()
+        client.post('/login', data={'username': 'testuser', 'password': 'testuser'}, follow_redirects=True)
+
+        # Create a test event
+        test_event = Event(id=1, name="Test Event", date="2024-01-01",time="12:00",location="Test Location",
+            description="Test Description",event_type="Networking",created_by=test_user,)
+        db.session.add(test_event)
+        db.session.commit()
+         # Initial event details page
+        response = client.get('/edit_event/1')
+        assert response.status_code == 200
+        # Edit the event
+        response = client.post('/edit_event/1', data={'input-name': 'Updated Event Name'}, follow_redirects=True)
+        assert response.status_code == 200
+        # Delete the event
+        response = client.post('/edit_event/1', data={'delete_event': 'Delete Event'}, follow_redirects=True)
+        assert response.status_code == 200
+
+# def test_show_users(client):
+#     # Create sample users with friends and events
+#     user1 = User(username= "user1", password= "password", 
+#                             email = "someone1@mailutoronto.ca", interests= "testing", profile_picture="Default")
+#     user2 =  User(username= "user2", password= "password", 
+#                             email = "someone2@mailutoronto.ca", interests= "testing", profile_picture="Default")
+#     user3 =  User(username= "user3", password= "password", 
+#                             email = "someone3@mailutoronto.ca", interests= "testing", profile_picture="Default")
+#     user1.friends.append(user2)
+#     user2.friends.append(user1)
+#     user2.friends.append(user3)
+#     user3.friends.append(user2)
+#     with app.app_context():
+#         db.session.add(user1)
+#         db.session.add(user2)
+#         db.session.add(user3)
+#         db.session.commit()
+#     # Fetch the /users route
+#     response = client.get("/users")
+#     # Check if the response status code is 200 (OK)
+#     assert response.status_code == 200
+#     # Check if the rendered HTML contains user data
+#     assert b"<h1>Users, Their Friends, and Events</h1>" in response.data
+#     assert b"user1: Friends - user2, Events - Event 1, Event 2" in response.data
+#     assert b"user2: Friends - user1, user3, Events - Event 2" in response.data
+#     assert b"user3: Friends - user2, Events - Event 1, Event 2" in response.data
+
+def test_are_you_sure(client):
+    # Send a POST request to 'are_you_sure' route
+    response = client.post('/are_you_sure/1',  data={'yes': 'yes'}, follow_redirects=True)
+    assert response.status_code == 200
+    response1 = client.post('/are_you_sure/1',  data={'no': 'no'}, follow_redirects=True)
+    assert response1.status_code == 200
+

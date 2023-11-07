@@ -362,9 +362,6 @@ def main_dashboard():
                     print(each)
                     event_types_checked[LIST_OF_EVENT_TYPES.index(each)] = each
                     result = result + Event.query.filter(Event.event_type.contains(each)).all()
-        
-        #sort results here
-        result.sort(key = lambda x: x.name)
 
     bookmarked_events_ids = [event.id for event in bookmarked_events]
     return render_template("main_dashboard.html", events=events, profile_picture=get_user_profile_picture(), 

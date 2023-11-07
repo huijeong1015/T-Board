@@ -47,12 +47,12 @@ class Attendee(db.Model):
     __tablename__ = "attendees"
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'), primary_key=True)
-    notification_preference = db.Column(db.Integer, nullable=False, default=30)  # default is 30 minutes before the event
+    notification_preference = db.Column(db.Integer, nullable=False, default=-1)
 
     # Relationships
     user = db.relationship("User", back_populates="events_attending")
     event = db.relationship("Event", back_populates="attendees")
-    
+
 # Association table for self-referential many-to-many relationship (friends)
 user_friends = db.Table(
     "user_friends",

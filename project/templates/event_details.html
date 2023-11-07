@@ -115,10 +115,15 @@
   <div class="sidetab">
     <div class="show-notifications">
       {% if flag == 'attending' %}
-      <input type="checkbox" id="show-notifications" name="show-notification" value="show-notification" class="checkbox" onchange="this.form.submit()" {{ 'checked' if notification_checked else '' }}>
-      <label for="show-notification" class="show-notification-message">Receive Notifications</label><br>
+      <form method="POST" action="{{ url_for('set_notification', event_id=event.id) }}" class="form-button">
+        <!-- Hidden input to send the event_id to the backend -->
+        <input type="hidden" name="event_id" value="{{ event.id }}">
+        <input type="checkbox" id="show-notifications" name="show-notification" value="show-notification" class="checkbox" onchange="this.form.submit()" {{ 'checked' if notification_checked else '' }}>
+        <label for="show-notification" class="show-notification-message">Receive Notifications</label><br>
+      </form>
       {% endif %}
     </div>
+    
   </div>
 </div>
 <style>

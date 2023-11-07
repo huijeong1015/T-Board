@@ -230,6 +230,22 @@ def main_dashboard():
     sort_by = request.form.get('sort-by')
 
     ics_text = ""
+   
+    if 'view_event_details' in session:
+        event_id = session.pop('view_event_details', None)
+        event = Event.query.filter_by(id=event_id).first()
+        attendee_record = Attendee.query.filter_by(user_id=user.id, event_id=event_id).first()
+        flag = 'attending' if attendee_record else 'not attending'
+        bookmarked_events_ids = [event.id for event in bookmarked_events]
+        
+        if attendee_record.notification_preference == -1:
+            notification_checked=False
+        else:
+            notification_checked=True
+
+        # Directly render the event details template
+        return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag,
+                               bookmarked_events=bookmarked_events_ids, notification_checked=notification_checked)
 
     if request.method == "POST":
         # Handles event details button
@@ -238,13 +254,20 @@ def main_dashboard():
             event = Event.query.filter_by(id=event_id).first()
             username = session.get('username')
             user = User.query.filter_by(username=username).first()
-            flag = 'not attending'
-
-            if Attendee.query.filter_by(user_id=user.id, event_id=event.id).first():
-                flag = 'attending'
+            attendee_record = Attendee.query.filter_by(user_id=user.id, event_id=event_id).first()
+            flag = 'attending' if attendee_record else 'not attending'
 
             bookmarked_events_ids = [event.id for event in bookmarked_events]
-            return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, bookmarked_events=bookmarked_events_ids)
+
+            if attendee_record != None and attendee_record.notification_preference !=-1: 
+                notification_checked=True
+        
+            else:
+                notification_checked=False
+
+            
+            return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, 
+                                   bookmarked_events=bookmarked_events_ids, notification_checked=notification_checked)
         
         # Handles bookmark button
         if request.form.get('bookmark') != None:
@@ -260,8 +283,7 @@ def main_dashboard():
                 for event in bookmarked_events:
                     print(event)
                     print("eventid" + str(event.id))
-                # current_user_id.bookmarked_events.append(bookmark_id)
-                # if no work try printing the events being queried in the db.py file
+
             else:
                 bookmarked_events.remove(event_to_bookmark)
                 db.session.commit()
@@ -466,6 +488,23 @@ def my_account_myevents():
                            interests=get_user_interests(), 
                            myevents=events_created_by_user, 
                            profile_picture=get_user_profile_picture())
+
+@app.route('/set_notification', methods=['POST'])
+def set_notification():
+    username = session.get('username')
+    user = User.query.filter_by(username=username).first()
+    event_id = request.form.get('event_id')
+    attendee_record = Attendee.query.filter_by(user_id=user.id, event_id=event_id).first()
+
+    if 'show-notification' in request.form:
+        attendee_record.notification_preference = 30
+    else:
+        attendee_record.notification_preference = -1
+
+    db.session.commit()
+    session['view_event_details'] = event_id
+
+    return redirect(url_for('main_dashboard'))
 
 @app.route("/my_account/notification/")
 def my_account_notification():

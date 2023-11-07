@@ -83,7 +83,17 @@
     </div>
   </div>
   <div class="frame-content">
-    <div class="name">No notifications to set</div>
+    <div class="heading">NOTIFICATION SETTINGS</div>
+    {%if not notif_events%}
+      <div class="message">No notifications to set </div>
+    {%else%}
+      {% for event in notif_events %}
+        {% with event=event %}
+          {% include "event_notification.html" %}
+        {% endwith %}
+      {% endfor %} 
+    {%endif%}
+  </div>
 </div>
 <style>
 .notification-tab {
@@ -193,14 +203,9 @@
   position: relative;
 }
 .heading {
-  padding: 0px 30px 0px 30px;
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-  align-items: center;
-  justify-content: flex-start;
-  align-self: stretch;
-  flex-shrink: 0;
+  color: #000000;
+  text-align: left;
+  font: 700 40px "Ubuntu Mono", sans-serif;
   position: relative;
 }
 .account3 {
@@ -297,14 +302,11 @@ button {
   font: 700 30px "Ubuntu Mono", sans-serif;
   position: relative;  
 }
-.btn-going {
-  background: #639820;
-}
-.btn-unsure {
-  background: #ffc336;
-}
-.btn-notgoing {
-  background: #a34a4a;
+.message {
+  color: #000000;
+  text-align: left;
+  font: 400 32px "Ubuntu Condensed", sans-serif;
+  position: relative;
 }
 </style>
 {% endblock %}

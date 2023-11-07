@@ -265,7 +265,6 @@ def main_dashboard():
             else:
                 notification_checked=False
 
-            
             return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, 
                                    bookmarked_events=bookmarked_events_ids, notification_checked=notification_checked)
         

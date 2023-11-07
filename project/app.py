@@ -240,7 +240,7 @@ def main_dashboard():
             user = User.query.filter_by(username=username).first()
             flag = 'not attending'
 
-            if user in event.attendees:
+            if Attendee.query.filter_by(user_id=user.id, event_id=event.id).first():
                 flag = 'attending'
 
             bookmarked_events_ids = [event.id for event in bookmarked_events]
@@ -332,18 +332,22 @@ def attend_event(event_id):
     action = request.form.get('action')
     flag = 'not attending' #base case
 
+    # Find existing attendee record
+    attendee = Attendee.query.filter_by(user_id=user.id, event_id=event.id).first()
+
     if action == 'attend':
-        # If the user is not attending, add them to the attendees list
-        if user not in event.attendees:
-            event.attendees.append(user)
+        # If the user is not attending, add them as an attendee
+        if not attendee:
+            new_attendee = Attendee(user_id=user.id, event_id=event.id, notification_preference='30m')
+            db.session.add(new_attendee)
             db.session.commit()
-        flag = 'attending'
+            flag = 'attending'
     elif action == 'unattend':
-        # If the user is attending, remove them from the attendees list
-        if user in event.attendees:
-            event.attendees.remove(user)
+        # If the user is attending, remove them as an attendee
+        if attendee:
+            db.session.delete(attendee)
             db.session.commit()
-        flag = 'not attending'
+            flag = 'not attending'
 
     return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, bookmarked_events=bookmarked_events_ids)
 
@@ -363,15 +367,17 @@ def searchEvent():
 def my_account_event_history():
     username=session.get('username')
     user = User.query.filter_by(username=username).first()
-    events_attending = user.events_attending
+    attendee_records = Attendee.query.filter_by(user_id=user.id).all()
 
     current_datetime = datetime.now()
     future_events = []
     past_events =[]
 
-    for event in events_attending:
-        event_datetime = f"{event.date} {event.time}"
-        event_datetime_dt = datetime.strptime(event_datetime, "%Y-%m-%d %H:%M")
+    for attendee in attendee_records:
+        event = attendee.event
+        event_datetime_str = f"{event.date} {event.time}"
+        event_datetime_dt = datetime.strptime(event_datetime_str, "%Y-%m-%d %H:%M")
+
         if event_datetime_dt > current_datetime:
             future_events.append(event)
         else:
@@ -400,8 +406,6 @@ def filter_friends_by_search_term(friends_list, search_term):
         if search_term in friend.username.lower()  # Use attribute access here
     ]
     return filtered_list
-
-
 
 @app.route("/my_account/friends/")
 def my_account_friends():
@@ -446,8 +450,6 @@ def add_friend(username):
 
     # Redirect back to the friend recommendations page or a success page
     return redirect(url_for('my_account_friends'))
-
-
 
 @app.route("/my_account/myevents/")
 def my_account_myevents():
@@ -619,9 +621,6 @@ def get_friend_recommendations(username, depth=2):
 
     return recommended_users
 
-
-
-
 @app.route("/recommendations")
 def friend_recommendations():
     k = int(request.args.get("k", 2))
@@ -665,7 +664,6 @@ def show_users():
         f"<h1>Users, Their Friends, and Events</h1>{user_list_html}"
     )
 
-
 @app.route("/events")
 def new_events():
     events = Event.query.all()
@@ -694,4 +692,3 @@ def are_you_sure(event_id):
             flash('Event deletion cancelled.', 'info')
             return redirect(url_for('edit_event', event_id=event_id))
     return render_template('are_you_sure.html', event_id=event_id, event=event, profile_picture=get_user_profile_picture())
-

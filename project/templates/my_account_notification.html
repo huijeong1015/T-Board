@@ -95,6 +95,7 @@
     {%endif%}
   </div>
 </div>
+{% include 'base_event.html' %}
 <style>
 .notification-tab {
   width: 100%;
@@ -208,89 +209,23 @@
   font: 700 40px "Ubuntu Mono", sans-serif;
   position: relative;
 }
-.account3 {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
 .name {
   color: #000000;
   text-align: left;
   font: 400 36px "Ubuntu Condensed", sans-serif;
   position: relative;
 }
-.frame-event {
-  padding: 20px 50px 20px 50px;
+.frame-myevent {
+  background: transparent;
   display: flex;
   flex-direction: row;
-  gap: 18px;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-shrink: 0;
+  align-items: center;
+  border-radius: 15px;
+  width: 100%;
+  height: fit-content;
   position: relative;
-}
-.image-1 {
-  flex-shrink: 0;
-  width: 365px;
-  height: 189px;
-  position: relative;
-  max-width: 95%;
-  max-height: 95%;
-  display: block;
-}
-.right2 {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  align-self: stretch;
-  flex-shrink: 0;
-  width: 340px;
-  position: relative;
-}
-.frame-info {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex: 1;
-  position: relative;
-}
-.date {
-  color: #000000;
-  text-align: left;
-  font: 400 28px "Ubuntu Condensed", sans-serif;
-  position: relative;
-}
-.time {
-  color: #000000;
-  text-align: left;
-  font: 400 28px "Ubuntu Condensed", sans-serif;
-  position: relative;
-}
-.location {
-  color: #000000;
-  text-align: left;
-  font: 400 28px "Ubuntu Condensed", sans-serif;
-  position: relative;
-}
-.frame-btn2 {
-  padding: 0px 50px 0px 50px;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-  align-self: stretch;
-  flex-shrink: 0;
-  position: relative;
-}
-.account4 {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
+  gap: 20px;
+  margin-bottom: 20px;
 }
 button {
   flex-shrink: 0;
@@ -309,11 +244,11 @@ button {
   position: relative;
 }
 .set-notif {
-    color: #ffffff;
+    color: black;
     text-align: left;
-    font: 400 24px "Ubuntu Mono", sans-serif;
+    font: 400 25px "Ubuntu Mono", sans-serif;
     position: relative;
-  }
+}
 .event-name-txt {
     color: #000000;
     text-align: left;
@@ -325,6 +260,9 @@ button {
     text-align: left;
     font: 400 25px "Ubuntu Condensed", sans-serif;
     position: relative;
+}
+.dropdown {
+  font: 400 20px "Ubuntu Mono", sans-serif;
 }
 .sub-right {
     display: flex;

@@ -569,8 +569,15 @@ def set_notification():
 
 @app.route("/my_account/notification/")
 def my_account_notification():
-    return render_template('my_account_notification.html', username=session.get('username'), 
-                           interests=get_user_interests(), profile_picture=get_user_profile_picture())
+    user = get_user()
+    attendees = Attendee.query.filter_by(user_id=user.id).all()
+    notif_events = [attendee.event for attendee in attendees]
+
+    return render_template('my_account_notification.html', 
+                           username=session.get('username'), 
+                           interests=get_user_interests(), 
+                           profile_picture=get_user_profile_picture(),
+                           notif_events=notif_events)
 
 @app.route("/my_account/settings/", methods=["GET", "POST"])
 def my_account_settings():

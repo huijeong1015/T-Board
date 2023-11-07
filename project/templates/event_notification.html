@@ -39,27 +39,7 @@
                 d="M200 0L204.49 13.8197H219.021L207.265 22.3607L211.756 36.1803L200 27.6393L188.244 36.1803L192.735 22.3607L180.979 13.8197H195.51L200 0Z"
                 stroke="#838383"
                 stroke-width="2"
-            />
-            </svg> 
-            <form action="{{ url_for('main_dashboard') }}" method="post">
-                <input type="hidden" name="event-details" value="{{ event['id'] }}">
-                <button type="submit" class="btn-event-details" name="event-details-button">
-                    <svg
-                        width="68"
-                        height="47"
-                        viewBox="0 0 68 47"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        style="vertical-align: middle;"
-                    >
-                        <path
-                        d="M42.5 0V15.6667H0V31.3333H42.5V47L68 23.265L42.5 0Z"
-                        fill="#657895"
-                        />
-                    </svg>
-                </button>
-            </form>
-                      
+            />          
         </div>
     </div>
     <div class="sub-right">
@@ -83,6 +63,27 @@
     color: #ffffff;
     text-align: left;
     font: 400 24px "Ubuntu Mono", sans-serif;
+    position: relative;
+  }
+.event-name-txt {
+    color: #000000;
+    text-align: left;
+    font: 400 30px "Ubuntu Condensed", sans-serif;
+    position: relative;
+}
+.event-details-txt {
+    color: #000000;
+    text-align: left;
+    font: 400 25px "Ubuntu Condensed", sans-serif;
+    position: relative;
+}
+.sub-right {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: column;
+    height: 239px;
     position: relative;
   }
 </style>

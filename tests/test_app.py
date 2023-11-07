@@ -25,10 +25,11 @@ def test_show_events(client):
     # Populate the database with a sample event
     event = Event(
         name="Sample Event",
-        date="2023-10-15",
+        date="2024-10-15",
         time="10:00",
         location="Test Location",
         description="This is a test event.",
+        event_type="other"
     )
     with app.app_context():
         db.session.add(event)
@@ -76,11 +77,12 @@ def test_my_account_page_contains_userinfo(client):
 def test_search_event_keywords(client):
     # add the event
     event = Event(
-        name="Tech Conference 2023",
-        date="2023-11-20",
+        name="Tech Conference 2024",
+        date="2024-11-20",
         time="09:00",
         location="Silicon Valley Convention Center",
-        description="",
+        description="Join industry leaders...", 
+        event_type="Networking",
     )
     with app.app_context():
         db.session.add(event)
@@ -125,10 +127,11 @@ def test_injection(client):
     # Attempted to inject with raw SQL language
     event = Event(
         name="T-Board App Grand Release Press Conference",
-        date="2023-11-15",
+        date="2024-11-15",
         time="23:59",
         location="BA1160",
         description="Sample'); drop table events; --",
+        event_type= "Networking",
     )
     with app.app_context():
         db.session.add(event)
@@ -153,6 +156,7 @@ def test_event_post(client):
             time="02:20",
             location="test location",
             description="test event description",
+            event_type="other"
         ),
         follow_redirects=True,
     )

@@ -646,6 +646,16 @@ def set_notification():
 
     return redirect(url_for('main_dashboard'))
 
+@app.route('/set_rating', methods=['POST'])
+def set_rating():
+    username = session.get('username')
+    user = User.query.filter_by(username=username).first()
+    event_id = request.form.get('event_id')
+
+    
+
+    return redirect(url_for('main_dashboard'))
+
 @app.route("/my_account/notification/", methods=['GET', 'POST'])
 def my_account_notification():
     user = get_user()

@@ -890,6 +890,7 @@ def new_events():
 @app.route('/are_you_sure/<int:event_id>', methods=['GET', 'POST'])
 def are_you_sure(event_id):
     event = Event.query.filter_by(id=event_id).first()
+    event_name = event.name
     if event: 
         if request.method == 'POST':
             if 'yes' in request.form:
@@ -900,4 +901,4 @@ def are_you_sure(event_id):
             elif 'no' in request.form:
                 flash('Event deletion cancelled.', 'info')
                 return redirect(url_for('edit_event', event_id=event_id))
-    return render_template('are_you_sure.html', event_id=event_id, event=event, profile_picture=get_user_profile_picture())
+    return render_template('are_you_sure.html', event_id=event_id, event_name=event_name, event=event, profile_picture=get_user_profile_picture())

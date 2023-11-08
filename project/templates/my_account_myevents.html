@@ -198,24 +198,32 @@
   text-align: left;
   font: 700 40px "Ubuntu Mono", sans-serif;
   position: relative;
+  padding-bottom: 20px;
 }
 .frame-myevent {
   background: transparent;
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   border-radius: 15px;
   width: 100%;
   height: fit-content;
   position: relative;
   gap: 20px;
-  margin-bottom: 20px;
+}
+.sub-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 100%;
+  gap: 20px;
 }
 .sub-bottom {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
   width: 350px;
+  gap: 20px;
 }
 .sub-right {
   display: flex;
@@ -232,15 +240,16 @@
 .btn-edit {
   padding: 0%;
 }
-.icon-pencil {
-  width: 38px;
-  height: 38px;
-}
 .message {
   color: #000000;
   text-align: left;
   font: 400 32px "Ubuntu Condensed", sans-serif;
   position: relative;
+}
+.btn-delete {
+  padding: 0%;
+  background-color: transparent;
+  border-color: transparent;
 }
 </style>
 {% endblock %}

@@ -5,9 +5,8 @@
     <div class="board">
       <div class="event-details">
         <div class="top">
-          <div class="left">
-            <h1>Are you sure you want to delete your event?</h1>
-          </div>
+            <h1 class="prompt">Are you sure you want to delete</h1>
+            <h1 class="prompt">"{{ event_name }}" event?</h1>
         </div>
         <!-- Start of the form -->
         <form action="{{ url_for('are_you_sure', event_id=event_id) }}" method="post">
@@ -56,172 +55,13 @@
   justify-content: flex-start;
   position: relative;
 }
-.event-post-form {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-}
 .top {
   display: flex;
-  flex-direction: row;
-  gap: 18px;
-  align-items: flex-end;
-  justify-content: left;
-  align-self: stretch;
-  flex-shrink: 0;
-  position: relative;
-}
-.left {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: flex-end;
-  justify-content: center;
-  flex: 1;
-  position: relative;
-}
-.image-1 {
-  flex-shrink: 0;
-  width: 365px;
-  height: 189px;
-  position: relative;
-  max-width: 95%;
-  max-height: 95%;
-  display: block;
-}
-.btn-edit {
-  display: flex;
   flex-direction: column;
-  gap: 10px;
-  align-items: flex-end;
-  justify-content: flex-end;
+  align-items: center;
   align-self: stretch;
   flex-shrink: 0;
   position: relative;
-}
-.icon-pencil {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-}
-.bottom {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  align-items: center;
-  justify-content: center;
-  align-self: stretch;
-  flex-shrink: 0;
-  position: relative;
-}
-#input-name {
-  background: #ffffff;
-  border-radius: 5px;
-  width: 100%;
-  position: relative;
-  font: 400 20px "Ubuntu Condensed", sans-serif;
-  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-}
-#input-date {
-  background: #ffffff;
-  border-radius: 5px;
-  width: 100%;
-  position: relative;
-  font: 400 20px "Ubuntu Condensed", sans-serif;
-  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-}
-#input-time {
-  background: #ffffff;
-  border-radius: 5px;
-  width: 100%;
-  position: relative;
-  font: 400 20px "Ubuntu Condensed", sans-serif;
-  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-}
-#input-loc {
-  background: #ffffff;
-  border-radius: 5px;
-  width: 100%;
-  position: relative;
-  font: 400 20px "Ubuntu Condensed", sans-serif;
-  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-}
-#input-reg {
-  background: #ffffff;
-  border-radius: 5px;
-  width: 100%;
-  position: relative;
-  font: 400 20px "Ubuntu Condensed", sans-serif;
-  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-}
-#input-desc {
-  background: #ffffff;
-  height: 150px;
-  width: 100%;
-  position: relative;
-  font: 400 20px "Ubuntu Condensed", sans-serif;
-  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-}
-.toggle {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  padding: 10px;
-  font: 400 20px "Ubuntu Condensed", sans-serif;
-  border-radius: 5px;
-  background-color: white;
-  border: 2px solid #657895;
-  box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  text-align: left;
-}
-.dropdown-svg {
-  width: 15px;
-  height: 15px;
-}
-#checkboxes {
-  display: none;
-  font: 400 20px "Ubuntu Condensed", sans-serif;
-  background-color: #ffffffb6;
-  border: 2px solid #657895;
-}
-#checkboxes label {
-  display: block;
-}
-#checkboxes label:hover {
-  background-color: #a2b7ca;
-}
-.checkbox {
-  accent-color: #657895;
-}
-.multi-select-event-type {
-  width: 100%;
-}
-.event-type {
-  position: relative;
-}
-.event-type select {
-  width: 100%;
-  font-weight: bold;
-}
-.over-select {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-}
-.btn-frame {
-  width: 100%;
-  display: flex;
-  padding: 20px 20px 20px 20px;
-  align-items: center;
-  justify-content: center;
-  position: relative;  
 }
 .btn-submit {
   background: #a2b7ca;
@@ -245,7 +85,6 @@
     width: 100%;
     gap: 50px;
 }
-
 .btn-no {
   background: #cd6262;
   border-radius: 5px;
@@ -266,9 +105,11 @@
   padding: 10px;
   position: relative;
 }
-
-.left h1 {
-  font-size: 50px;
+.top h1 {
+  font: 700 40px "Ubuntu Mono", sans-serif;
+  color: #3f3f3f;
+  text-shadow: 0 0 BLACK;
+  text-align: center;
 }
 </style>
 {% endblock %}

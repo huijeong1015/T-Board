@@ -247,45 +247,42 @@
 .frame-myevent {
   background: transparent;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   border-radius: 15px;
   width: 100%;
   height: fit-content;
   position: relative;
-  gap: 20px;
   margin-bottom: 20px;
+}
+.sub-top {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 100%;
 }
 .sub-bottom {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  width: 350px;
-}
-.sub-right {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-  flex-wrap: column;
-  height: 239px;
-  position: relative;
+  justify-content: flex-end;
+  width: 100%;
+  padding-right: 20px;
 }
 .frame-info {
   width: fit-content;
+  align-self: flex-start;
 }
 .btn-edit {
   padding: 0%;
 }
-.icon-pencil {
-  width: 38px;
-  height: 38px;
-}
 .btn-event-details {
-    position: relative;
-    overflow: visible;
-    background: transparent;
-    border: none;
-    }
+  position: relative;
+  overflow: visible;
+  background: transparent;
+  border: none;
+}
+.form-btn {
+  margin-bottom: 0%;
+}
 </style>
 {% endblock %}

@@ -326,7 +326,7 @@ def main_dashboard():
     error_msg = ""
     ics_text = ""
     bookmark_checked =False 
-    is_sidetab_visible = session.get('is_sidetab_visible', False)
+    is_sidetab_visible = session.get('is_sidetab_visible', True)
 
     if 'view_event_details' in session:
         event_id = session.pop('view_event_details', None)
@@ -391,7 +391,8 @@ def main_dashboard():
                            sort_by=sort_by, 
                            event_types_checked=user.get_event_types_checked(),
                            username=username,
-                           list_of_event_types=LIST_OF_EVENT_TYPES)
+                           list_of_event_types=LIST_OF_EVENT_TYPES,
+                           is_sidetab_visible=is_sidetab_visible,)
 
 @app.route('/download_ics_file', methods=['POST'])
 def download_ics_file():

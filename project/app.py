@@ -361,6 +361,8 @@ def main_dashboard():
             user_rating = Rating.query.filter_by(user_id=user.id, event_id=event.id).first()
             user_rating_value = user_rating.rating if user_rating else 5 #Base case will be 5
 
+
+
             if attendee_record != None and attendee_record.notification_preference !=-1: 
                 notification_checked=True
         
@@ -394,7 +396,6 @@ def main_dashboard():
             error_msg = "We couldn't find any matches for \"" + keyword + '".'
     bookmarked_events_ids = [event.id for event in bookmarked_events]
     username=session.get('username')
-
 
     db.session.commit()
     return render_template("main_dashboard.html", 
@@ -683,6 +684,7 @@ def set_rating():
     username = session.get('username')
     user = User.query.filter_by(username=username).first()
     event_id = request.form.get('event_id')
+    event = Event.query.filter_by(id=event_id).first()
     updated_rating = request.form.get('updated_rating', type=int)
 
     # Find the rating by this user for this event, or initialize a new one
@@ -695,7 +697,7 @@ def set_rating():
         rating = Rating(user_id=user.id, event_id=event_id, rating=updated_rating)
         db.session.add(rating)
 
-    print(rating) #Wrong output atm
+    event.update_average_rating()
 
     db.session.commit()
     session['view_event_details'] = event_id

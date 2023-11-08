@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from pathlib import Path
 from werkzeug.security import generate_password_hash
 import json
+from sqlalchemy.sql import func
+
 
 # Configuration
 USERS_DATABASE = "users.db"
@@ -90,12 +92,20 @@ class Event(db.Model):
     event_type = db.Column(db.String(100), nullable=False)
     attendees = db.relationship('Attendee', back_populates='event')
     event_ratings = db.relationship("Rating", back_populates="event")
+    average_rating = db.Column(db.Integer, nullable=True)
 
     # New method to calculate average rating
     def calculate_average_rating(self):
         total_rating = sum(rating.rating for rating in self.event_ratings)
         count_ratings = len(self.event_ratings)
         return total_rating / count_ratings if count_ratings else 0
+    
+    def update_average_rating(self):
+        # Calculate the average rating
+        avg_rating = db.session.query(func.avg(Rating.rating)).filter(Rating.event_id == self.id).scalar()
+        # Round the average rating to the nearest whole integer and store it
+        self.average_rating = int(round(avg_rating)) if avg_rating is not None else 0
+
 
     created_by_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_by = db.relationship('User', back_populates='created_events')

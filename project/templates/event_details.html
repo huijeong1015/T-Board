@@ -80,7 +80,7 @@
               <form method="POST" action="{{ url_for('set_rating') }}" class="form-show-rating">
                 <input type="hidden" name="event_id" value="{{ event.id }}">
                 <div class="rate">
-                  <label for="updated_rating">Select a Rating:</label>
+                  <label for="updated_rating">Select a Rating:</label> 
                   <select id = "updated_rating" name="updated_rating" onchange="this.form.submit()">
                     <option value="0" {% if user_rating == 0 %}selected{% endif %}>None</option> 
                     <option value="5" {% if user_rating == 5 %}selected{% endif %}>5 stars</option>
@@ -390,6 +390,17 @@ object-fit: cover;
   align-self: stretch;
   flex-shrink: 0;
   position: relative;
+}
+.rating {
+  color: #000000;
+  text-align: left;
+  font: 400 16px "Ubuntu Condensed", sans-serif;
+  position: absolute;
+  left: 0px;
+  top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 </style>  
 {% endblock %}

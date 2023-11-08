@@ -20,26 +20,10 @@
     </div>
   </div>
   <div class="sidetab">
-    <svg
-      class="icon-cog"
-      width="50"
-      height="50"
-      viewBox="0 0 50 50"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      onclick="toggleSidetab()"
-    >
-      <path
-        d="M21.8828 0L18.7656 7.41895C18.1421 7.60598 17.581 7.91771 17.0199 8.22943L9.601 5.11222L5.11222 9.601L8.22943 17.0199C7.9177 17.6434 7.66833 18.1421 7.41895 18.7656L0 21.8828V28.1172L7.41895 31.2344C7.66833 31.8579 7.9177 32.3566 8.22943 32.98L5.11222 40.399L9.601 44.8878L17.0199 41.7706C17.581 42.0199 18.1421 42.3317 18.7656 42.581L21.8828 50H28.1172L31.2344 42.581C31.7955 42.3317 32.419 42.0823 32.9801 41.7706L40.399 44.8878L44.8878 40.399L41.7706 32.98C42.0199 32.419 42.3317 31.7955 42.581 31.2344L50 28.1172V21.8828L42.581 18.7656C42.394 18.2045 42.0823 17.581 41.7706 17.0199L44.8878 9.601L40.399 5.11222L32.9801 8.22943C32.419 7.98005 31.7955 7.66833 31.2344 7.41895L28.1172 0L21.8828 0ZM25 15.586C30.1746 15.586 34.3516 19.7631 34.3516 24.9377C34.3516 30.1122 30.1746 34.2893 25 34.2893C19.8254 34.2893 15.6484 30.1122 15.6484 24.9377C15.6484 19.7631 19.8254 15.586 25 15.586Z"
-        fill="#D9D9D9"
-      />
-    </svg>
+    <svg class="icon-filter" onclick="toggleSidetab()" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="white" stroke-width="1.5"><path d="m21 17.5c0 1.933-1.567 3.5-3.5 3.5s-3.5-1.567-3.5-3.5 1.567-3.5 3.5-3.5 3.5 1.567 3.5 3.5z"/><path d="m17.5 14h-11c-1.933 0-3.5 1.567-3.5 3.5s1.567 3.5 3.5 3.5h11c1.933 0 3.5-1.567 3.5-3.5s-1.567-3.5-3.5-3.5z"/><path d="m3 6.5c0 1.933 1.567 3.5 3.5 3.5s3.5-1.567 3.5-3.5-1.567-3.5-3.5-3.5-3.5 1.567-3.5 3.5z"/><path d="m6.5 3h11c1.933 0 3.5 1.567 3.5 3.5s-1.567 3.5-3.5 3.5h-11c-1.933 0-3.5-1.567-3.5-3.5s1.567-3.5 3.5-3.5z"/></g></svg>
     <div class="sidetab_alt_text" id="sidetab_alt_text">
-      <div class="welcome_text">
-        Welcome to T-Board,<br>{{ username }}!<br>
-      </div>
       <div class="details_text">
-        Click the cog for more detailed searches!
+        ^ Click for a more detailed search
       </div>
     </div>
     <form action="/main_dashboard" method="POST" class="sidetab_filters" id="sidetab_filters">
@@ -114,7 +98,7 @@
 }
 .sidetab {
   padding: 60px 0px 60px 0px;
-  display: fixed;
+  display: flex;
   flex-direction: column;
   gap: 43px;
   align-items: flex-start;
@@ -124,13 +108,12 @@
   position: relative;
   width: 300px;
   height: 350px;
-  background-color: gray;
   border-radius: 10px;
   padding: 20px;
 }
 .sidetab_alt_text {
   display: block;
-  font: 400 25px "Ubuntu Mono", sans-serif;
+  font: 400 25px "Ubuntu Condensed", sans-serif;
   color: white;
   line-height: 1.25;
   margin-bottom: 30px;
@@ -141,16 +124,10 @@
   margin-left: 30px;
   align-items: center;
 }
-.welcome_text {
-  margin-top: 30px;
-  margin-bottom: 40px; 
-}
 .details_text {
   text-align: left; 
-  position: relative; 
-  bottom: -20px; 
+  position: relative;
 }
-
 .sidetab_filters {
   display: none;
 }
@@ -208,10 +185,12 @@
   font: 400 24px "Ubuntu Mono", sans-serif;
   position: relative;
 }
-.icon-cog {
+.icon-filter {
   flex-shrink: 0;
   position: relative;
   overflow: visible;
+  width: 50px;
+  height: 50px;
 }
 .apply_filter {
   color: white;

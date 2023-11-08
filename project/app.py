@@ -695,6 +695,7 @@ def set_rating():
         rating = Rating(user_id=user.id, event_id=event_id, rating=updated_rating)
         db.session.add(rating)
 
+    #code goes here
     event.update_average_rating()
 
     db.session.commit()

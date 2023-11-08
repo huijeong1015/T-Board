@@ -398,9 +398,6 @@ def download_ics_file():
     e.location = event.location
     e.description = event.description
     
-    print("preference is:")
-    print(preference)
-
     if preference is not None:
         alarm_trigger = timedelta(minutes=-preference)
         alarm = ics.alarm.DisplayAlarm(trigger=alarm_trigger)

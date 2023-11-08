@@ -1,9 +1,10 @@
-import pytest
+import pytest, ics
 from pathlib import Path
-from project.app import app, db, Event, User, get_current_user_friends, get_friend_recommendations, filter_friends_by_search_term
+from project.app import app, db, Event, User, get_current_user_friends, get_friend_recommendations, filter_friends_by_search_term, get_user
 from flask import abort, flash, Flask, request, redirect, url_for, session
 from flask.helpers import get_flashed_messages
 from pytest import MonkeyPatch
+# from bs4 import BeautifulSoup
 TEST_DB = "test.db"
 
 @pytest.fixture
@@ -170,11 +171,11 @@ def test_event_post(client):
 def test_login_invalid_user(client): #invalid username
     response = client.post('/login', data=dict(username="'non_existent_user'", password="password"), follow_redirects=True)
     assert response.request.path == '/login/'
+
 def test_login_invalid_password(client):
     # Attempt to login with an incorrect password
     response = client.post('/login', data=dict(username="'non_existent_user'", password="password"), follow_redirects=True)
     assert response.request.path == '/login/'
-#working cases for login (successful actions)
 
 def test_register_empty_fields(client):
     """Test registration with empty fields."""
@@ -182,6 +183,7 @@ def test_register_empty_fields(client):
     response = client.post('/register', data={}, follow_redirects=True)
     assert response.request.path == '/register/'
     # assert 'All fields are required.' in get_flashed_messages()[0]  # Replace with the appropriate error message
+
 def test_register_existing_username(client):
     """Test registration with an existing username."""
     existingUser = User(username= "existing_name", password= "password", 
@@ -198,6 +200,7 @@ def test_register_existing_username(client):
     assert response.request.path == '/register/'
     # assert b"This Username is taken, please try a different one." in response.data
     # assert 'This Username is taken, please try a different one.' in get_flashed_messages()[0]  # Assert the flashed error message
+
 def test_register_non_utoronto_email(client):
     # Test the registration route with missing required fields
     data = {"input-id": "newuser",
@@ -207,6 +210,7 @@ def test_register_non_utoronto_email(client):
     response = client.post('/register/', data=data)
     assert response.request.path == '/register/'
     assert b"Enter University of Toronto email." in response.data
+
 def test_register_success(client):
     data = {
         "input-id": "new_user1",
@@ -216,6 +220,7 @@ def test_register_success(client):
     }
     response = client.post('/register/', data=data)
     assert b"" in response.data
+
 def test_register_existing_email(client):
     # Test the registration route with an existing email
     data = {
@@ -229,7 +234,6 @@ def test_register_existing_email(client):
     response = client.post('/register/', data=data)
     assert response.request.path == '/register/'
     # assert b"This email has already been used." in response.data
-#WORKING TEST CASES FOR SUCCESS/VALID THINGS
 
 def test_bookmark_get(client):
     """Test accessing the bookmark page with a GET request."""
@@ -237,6 +241,7 @@ def test_bookmark_get(client):
         response = client.get('/bookmark')
         assert response.request.path == '/bookmark'
         # assert b'Bookmarked Events' in response.data  # Check for the presence of the bookmarked event
+
 def test_bookmark_post_event_details(client):
     """Test bookmarking an event with a POST request."""
     with client:
@@ -257,6 +262,7 @@ def test_bookmark_post_event_details(client):
         response = client.post('/bookmark', data={'event-details': '1'})
         assert response.status_code == 308  
         #assert 'Test Event' in response.data.decode()  # Check for the presence of the bookmarked event
+
 def test_bookmark_post_remove_from_bookmarks(client):
     """Test removing an event from bookmarks with a POST request."""
     with client:
@@ -276,6 +282,7 @@ def test_bookmark_post_remove_from_bookmarks(client):
         response = client.post('/bookmark', data={'remove-from-bookmarks': '1'})
         assert response.status_code == 308  # Replace with the expected HTTP status code
         # assert b'Removed from bookmarks' in response.data  # Check for the removal confirmation message
+
 def test_bookmark_post_invalid_event_details(client):
     """Test attempting to bookmark an invalid event with a POST request."""
     with client:
@@ -284,6 +291,7 @@ def test_bookmark_post_invalid_event_details(client):
         response = client.post('/bookmark', data={'event-details': '999'})
         assert response.status_code == 308 
         # assert b'Event not found' in response.data  # Check for the error message
+
 def test_bookmark_post_invalid_remove_from_bookmarks(client):
     """Test attempting to remove an invalid event from bookmarks with a POST request."""
     with client:
@@ -307,6 +315,7 @@ def test_dashboard_get(client):
         response = client.get('/main_dashboard')
         assert response.request.path == '/main_dashboard'
         # assert b'Bookmarked Events' in response.data  # Check for the presence of the bookmarked event
+
 def test_dashboard_post_event_details(client):
     """Test bookmarking an event with a POST request."""
     with client:
@@ -328,7 +337,6 @@ def test_dashboard_post_event_details(client):
         assert response.status_code == 308  
         #assert 'Test Event' in response.data.decode()  # Check for the presence of the bookmarked event
 
-import ics
 def test_download_ics_file(client):
     with client:
         with app.app_context():
@@ -368,7 +376,6 @@ def test_attend_event(client):
         response = client.post('/attend_event/1', data={'action': 'unattend'}, follow_redirects=True)
         assert response.status_code == 200
 
-# from bs4 import BeautifulSoup
 @pytest.mark.skip(reason="KeyError: 'event'")
 def test_my_account_event_history(client):
     with client:
@@ -440,6 +447,7 @@ def test_my_account_friends(client):
                         email = "someone1@mailutoronto.ca", interests= "testing", profile_picture="Default")
             db.session.add(test_user)
             db.session.commit()
+
             response = test_app.get('/my_account/friends')
             assert response.status_code == 308 
 
@@ -450,6 +458,7 @@ def test_my_account_myevents(client):
                             email = "someone1@mailutoronto.ca", interests= "testing", profile_picture="Default")
             db.session.add(test_user)
             db.session.commit()
+
             response = client.post('/login', data={'username': 'testuser', 'password': 'password'}, follow_redirects=True)
             # assert response.request.path == '/main_dashboard/'
             response = client.get('/my_account/myevents')
@@ -462,6 +471,7 @@ def test_my_account_notification(client):
                             email = "someone1@mailutoronto.ca", interests= "testing", profile_picture="Default")
             db.session.add(test_user)
             db.session.commit()
+
             response = client.post('/login', data={'username': 'testuser', 'password': 'password'}, follow_redirects=True)
             # assert response.request.path == '/main_dashboard/'
             response = client.get('/my_account/notification')
@@ -474,6 +484,7 @@ def test_my_account_settings(client):
                             email = "someone1@mailutoronto.ca", interests= "testing", profile_picture="Default")
             db.session.add(test_user)
             db.session.commit()
+
             response = client.post('/login', data={'username': 'testuser', 'password': 'password'}, follow_redirects=True)
             # assert response.request.path == '/main_dashboard/'
             response = client.get('/my_account/settings')
@@ -487,17 +498,13 @@ def test_my_account_edit_profile(client):
             db.session.add(test_user)
             db.session.commit()
 
-        # Simulate a form submission to edit interests and profile picture
             response = client.post('/my_account/edit_profile', data={
                 "input-interests": "New Interests",
                 "submit-btn": "New Profile Picture"
             })
-
-            # Assert that the response status code is 200 (OK) or the expected status code
             assert response.status_code == 308
 
-            # Verify that the user's interests and profile picture have been updated
-            user = User.query.filter_by(username=session.get('username')).first()
+            # user = get_user("testuser")
             # assert user.interests == "New Interests"
             # assert user.profile_picture == "New Profile Picture"
 
@@ -508,7 +515,7 @@ def test_add_event(client):
                             email = "someone1@mailutoronto.ca", interests= "testing", profile_picture="Default")
         db.session.add(test_user)
         db.session.commit()
-        # Simulate a form submission to add a new event
+
         response = client.post('/event_post', data={
             "input-name": "New Event",
             "input-date": "2024-01-01",
@@ -536,7 +543,7 @@ def test_edit_event(client):
             description="Test Description",event_type="Networking",created_by=test_user,)
         db.session.add(test_event)
         db.session.commit()
-         # Initial event details page
+        # Initial event details page
         response = client.get('/edit_event/1')
         assert response.status_code == 200
         # Edit the event
@@ -546,32 +553,26 @@ def test_edit_event(client):
         response = client.post('/edit_event/1', data={'delete_event': 'Delete Event'}, follow_redirects=True)
         assert response.status_code == 200
 
-# def test_show_users(client):
-#     # Create sample users with friends and events
-#     user1 = User(username= "user1", password= "password", 
-#                             email = "someone1@mailutoronto.ca", interests= "testing", profile_picture="Default")
-#     user2 =  User(username= "user2", password= "password", 
-#                             email = "someone2@mailutoronto.ca", interests= "testing", profile_picture="Default")
-#     user3 =  User(username= "user3", password= "password", 
-#                             email = "someone3@mailutoronto.ca", interests= "testing", profile_picture="Default")
-#     user1.friends.append(user2)
-#     user2.friends.append(user1)
-#     user2.friends.append(user3)
-#     user3.friends.append(user2)
-#     with app.app_context():
-#         db.session.add(user1)
-#         db.session.add(user2)
-#         db.session.add(user3)
-#         db.session.commit()
-#     # Fetch the /users route
-#     response = client.get("/users")
-#     # Check if the response status code is 200 (OK)
-#     assert response.status_code == 200
-#     # Check if the rendered HTML contains user data
-#     assert b"<h1>Users, Their Friends, and Events</h1>" in response.data
-#     assert b"user1: Friends - user2, Events - Event 1, Event 2" in response.data
-#     assert b"user2: Friends - user1, user3, Events - Event 2" in response.data
-#     assert b"user3: Friends - user2, Events - Event 1, Event 2" in response.data
+@pytest.mark.skip(reason="AttributeError: 'User'")
+def test_show_users(client):
+    with client, app.app_context():
+            # Create sample users with friends and events
+        user1 = User(username= "user1", password= "password", 
+                                email = "someone1@mailutoronto.ca", interests= "testing", profile_picture="Default")
+        user2 =  User(username= "user2", password= "password", 
+                                email = "someone2@mailutoronto.ca", interests= "testing", profile_picture="Default")
+        user3 =  User(username= "user3", password= "password", 
+                                email = "someone3@mailutoronto.ca", interests= "testing", profile_picture="Default")
+        user1.friends.append(user2)
+        user2.friends.append(user1)
+        user2.friends.append(user3)
+        user3.friends.append(user2)
+        db.session.add(user1)
+        db.session.add(user2)
+        db.session.add(user3)
+        db.session.commit()
+        response = client.get("/users")
+        assert response.status_code == 200
 
 def test_are_you_sure(client):
     # Send a POST request to 'are_you_sure' route

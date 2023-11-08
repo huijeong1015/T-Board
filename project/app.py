@@ -13,7 +13,7 @@ from flask import (
     request,
     jsonify
 )
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
@@ -223,7 +223,6 @@ def bookmark():
 def event_post():
     return render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_types)
 
-
 @app.route('/toggle_value', methods=['POST'])
 def handle_button_click():
     #get the button value and print it
@@ -321,8 +320,10 @@ def main_dashboard():
     error_msg = ""
     ics_text = ""
     bookmark_checked =False 
+
     if 'view_event_details' in session:
         event_id = session.pop('view_event_details', None)
+        event = Event.query.filter_by(id=event_id).first()
         attendee_record = Attendee.query.filter_by(user_id=user.id, event_id=event_id).first()
         flag = 'attending' if attendee_record else 'not attending'
         bookmarked_events_ids = [event.id for event in bookmarked_events]
@@ -388,6 +389,7 @@ def main_dashboard():
 @app.route('/download_ics_file', methods=['POST'])
 def download_ics_file():
     event_id = int(request.form.get('export-calendar'))
+    preference = int(request.form.get('preference')) if request.form.get('preference') else None
     event = Event.query.filter_by(id=event_id).first()
     c = ics.Calendar()
     e = ics.Event()
@@ -396,6 +398,12 @@ def download_ics_file():
     e.begin = e.begin.shift(hours=5) #EST
     e.location = event.location
     e.description = event.description
+    
+    if preference is not None:
+        alarm_trigger = timedelta(minutes=-preference)
+        alarm = ics.alarm.DisplayAlarm(trigger=alarm_trigger)
+        e.alarms.append(alarm)  
+    
     c.events.add(e)
 
     filename = (event.name).strip().replace(' ','') + '.ics'

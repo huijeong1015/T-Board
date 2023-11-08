@@ -125,6 +125,69 @@
         {% block content %}
         {% endblock %}
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        // $(document).ready(function() {
+        //     $(document).on('click', '.btn-bookmark', function(event) {
+        //         event.preventDefault(); // Prevent form submission or default button action
+
+        //         var button = $(this); // The button that was clicked
+        //         var buttonValue = button.val(); // The value of the button
+        //             // Perform the AJAX call
+        //             $.ajax({
+        //                 url: '/toggle_value', // The route in your Flask app
+        //                 type: 'POST',
+        //                 contentType: 'application/json;charset=UTF-8',
+        //                 data: JSON.stringify({ value: buttonValue }),
+        //                 dataType: 'json',
+        //                 success: function(response) {
+        //                     console.log('Server response:', response);
+        //                     // Optionally toggle button appearance based on response
+        //                     if (response.added) {
+        //                         button.addClass('added');
+        //                     } else {
+        //                         button.removeClass('added');
+        //                     }
+        //                 },
+        //                 error: function(xhr, status, error) {
+        //                     console.log('An error occurred:', error);
+        //                 }
+        //             });
+        //     });
+        // });
+        $(document).ready(function() {
+            $(document).on('click', '.btn-bookmark', function(event) {
+                event.preventDefault(); // Prevent form submission or default button action
+
+                var button = $(this); // The button that was clicked
+                var buttonValue = button.val(); // The value of the button
+
+                // Perform the AJAX call
+                $.ajax({
+                    url: '/toggle_value', // The route in your Flask app
+                    type: 'POST',
+                    contentType: 'application/json;charset=UTF-8',
+                    data: JSON.stringify({ value: buttonValue }),
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log('Server response:', response);
+                        // Toggle SVG appearance based on response
+                        var svg = button.find('svg'); // Find the SVG within the clicked button
+                        if (response.added) {
+                            svg.attr('fill', '#A34A4A'); // Fill color for bookmarked
+                            button.addClass('added');
+                        } else {
+                            svg.attr('fill', 'none'); // No fill for not bookmarked
+                            button.removeClass('added');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('An error occurred:', error);
+                    }
+                });
+            });
+        });
+        </script>
 </body>
 {% include "base_input.html" %}
 <style>

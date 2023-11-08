@@ -10,8 +10,7 @@ from flask import (
     flash,
     render_template_string,
     send_file,
-    request,
-    jsonify
+    request
 )
 from datetime import datetime
 from flask_bootstrap import Bootstrap
@@ -27,7 +26,6 @@ from project.register import *
 from werkzeug.security import check_password_hash
 import re
 import ics
-
 
 app.config["SECRET_KEY"] = os.urandom(24)
 
@@ -267,47 +265,6 @@ def bookmark():
 def event_post():
     return render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_types)
 
-
-@app.route('/toggle_value', methods=['POST'])
-def handle_button_click():
-    #get the button value and print it
-    data = request.get_json()
-    bookmark_id = data['value']
-    print("the button value is" + bookmark_id)
-    #get the user and the username and their bookmarked events
-    user = get_user()
-    username = user.username
-    bookmarked_events = user.bookmarked_events
-
-    #filter the db for the event we need to bookmark and print its value
-    event_to_bookmark = Event.query.filter_by(id=bookmark_id).first()
-    print(event_to_bookmark)
-
-    is_bookmarked = False    
-
-    if event_to_bookmark not in bookmarked_events:
-        bookmarked_events.append(event_to_bookmark)
-        try:
-            db.session.commit()
-            response_message = 'Event added to bookmarks.'
-            is_bookmarked = True
-        except Exception as e:
-            db.session.rollback()
-            response_message = 'Error adding event to bookmarks.'
-        # current_user_id.bookmarked_events.append(bookmark_id)
-        # if no work try printing the events being queried in the db.py file
-    else:
-        bookmarked_events.remove(event_to_bookmark)
-        try:
-            db.session.commit()
-            response_message = 'Event removed from bookmarks.'
-            is_bookmarked = False
-        except Exception as e:
-            db.session.rollback()
-            response_message = 'Error removing event from bookmarks.'
-            print(event)
-    return jsonify(success=True, response_message = response_message, added = is_bookmarked)  # Send a response back to the client@app.route('/path_to_flask_route', methods=['POST'])
-
 @app.route("/main_dashboard/", methods=["GET", "POST"])
 def main_dashboard():
     error_msg = ""
@@ -347,7 +304,7 @@ def main_dashboard():
             print(bookmark_id)
             print(event_to_bookmark)
             
-
+            #bookmarks event if it has not already been bookmarked
             if event_to_bookmark not in bookmarked_events:
                 bookmarked_events.append(event_to_bookmark)
                 db.session.commit()
@@ -357,6 +314,7 @@ def main_dashboard():
                 # current_user_id.bookmarked_events.append(bookmark_id)
                 # if no work try printing the events being queried in the db.py file
             else:
+                #removes event from the bookmarked events if button pressed while event is already bookmarked
                 bookmarked_events.remove(event_to_bookmark)
                 db.session.commit()
                 for event in bookmarked_events:

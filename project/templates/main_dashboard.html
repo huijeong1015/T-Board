@@ -20,11 +20,8 @@
     </div>
   </div>
   <div class="sidetab">
-    <svg class="icon-filter" onclick="toggleSidetab()" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="white" stroke-width="1.5"><path d="m21 17.5c0 1.933-1.567 3.5-3.5 3.5s-3.5-1.567-3.5-3.5 1.567-3.5 3.5-3.5 3.5 1.567 3.5 3.5z"/><path d="m17.5 14h-11c-1.933 0-3.5 1.567-3.5 3.5s1.567 3.5 3.5 3.5h11c1.933 0 3.5-1.567 3.5-3.5s-1.567-3.5-3.5-3.5z"/><path d="m3 6.5c0 1.933 1.567 3.5 3.5 3.5s3.5-1.567 3.5-3.5-1.567-3.5-3.5-3.5-3.5 1.567-3.5 3.5z"/><path d="m6.5 3h11c1.933 0 3.5 1.567 3.5 3.5s-1.567 3.5-3.5 3.5h-11c-1.933 0-3.5-1.567-3.5-3.5s1.567-3.5 3.5-3.5z"/></g></svg>
+    <svg class="icon-filter" onclick="toggleSidetab()" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="m5.33008 2h13.33992c1.11 0 2.0201.90999 2.0201 2.01999v2.22c0 .81-.51 1.82001-1.01 2.32001" stroke-miterlimit="10"/><path d="m14.3206 19.0699c0 .61-.4001 1.41-.9101 1.72l-1.41.9101c-1.31.81-3.12996-.1001-3.12996-1.7201v-5.35c0-.71-.39999-1.62-.80999-2.12l-3.84003-4.03996c-.51-.51-.90997-1.40999-.90997-2.01999" stroke-miterlimit="10"/><path d="m16.0692 16.5201c1.7673 0 3.2-1.4327 3.2-3.2s-1.4327-3.2-3.2-3.2c-1.7674 0-3.2001 1.4327-3.2001 3.2s1.4327 3.2 3.2001 3.2z"/><path d="m19.8691 17.1201-1-1"/></g></svg>
     <div class="sidetab_alt_text" id="sidetab_alt_text">
-      <div class="details_text">
-        ^ Click for a more detailed search
-      </div>
     </div>
     <form action="/main_dashboard" method="POST" class="sidetab_filters" id="sidetab_filters">
       <div class="show-bookmark">
@@ -83,7 +80,6 @@
   position: relative;
   padding: 20px 20px 20px 20px;
   overflow: visible;
-  width: 1080px;
 }
 .board {
   background: #d9d9d9;
@@ -100,23 +96,17 @@
   padding: 60px 0px 60px 0px;
   display: flex;
   flex-direction: column;
-  gap: 43px;
+  gap: 10px;
   align-items: flex-start;
-  justify-content: flex-start;
   align-self: stretch;
-  flex-shrink: 0;
   position: relative;
-  width: 300px;
-  height: 350px;
-  border-radius: 10px;
-  padding: 20px;
+  max-width: 250px;
 }
 .sidetab_alt_text {
   display: block;
   font: 400 25px "Ubuntu Condensed", sans-serif;
   color: white;
   line-height: 1.25;
-  margin-bottom: 30px;
   text-align: center; /* This will center all text by default */
 }
 .sidetab_alt_text svg {
@@ -149,7 +139,7 @@
 .show_bookmark_label {
   color: #ffffff;
   text-align: center;
-  font: 400 17px "Ubuntu Mono", sans-serif;
+  font: 400 20px "Ubuntu Condensed", sans-serif;
   width: 200px;
   position: relative;
   display: inline-flex;
@@ -157,7 +147,7 @@
 .show_filter_label {
   color: white;
   text-align: center;
-  font: 400 17px "Ubuntu Mono", sans-serif;
+  font: 400 20px "Ubuntu Condensed", sans-serif;
   width: 90px;
   position: relative;
   display: inline-flex;
@@ -176,14 +166,16 @@
 }
 .dropdown {
   text-align: left;
-  font: 400 24px "Ubuntu Mono", sans-serif;
+  font: 400 20px "Ubuntu Condensed", sans-serif;
   position: relative;
 }
 .sort-by {
   color: #ffffff;
   text-align: left;
-  font: 400 24px "Ubuntu Mono", sans-serif;
+  display: flex;
+  flex-direction: column;
   position: relative;
+  font: 400 20px "Ubuntu Condensed", sans-serif;
 }
 .icon-filter {
   flex-shrink: 0;
@@ -195,7 +187,7 @@
 .apply_filter {
   color: white;
   text-align: left;
-  font: 400 12px "Ubuntu Mono", sans-serif;
+  font: 400 20px "Ubuntu Condensed", sans-serif;
   position: relative;
   margin-bottom: 20px;
 }

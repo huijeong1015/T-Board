@@ -223,7 +223,6 @@ def bookmark():
 def event_post():
     return render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_types)
 
-
 @app.route('/toggle_value', methods=['POST'])
 def handle_button_click():
     #get the button value and print it
@@ -386,7 +385,7 @@ def main_dashboard():
                            list_of_event_types=LIST_OF_EVENT_TYPES)
 
 @app.route('/download_ics_file', methods=['POST'])
-def download_ics_file():
+def download_ics_file(preference=None):
     event_id = int(request.form.get('export-calendar'))
     event = Event.query.filter_by(id=event_id).first()
     c = ics.Calendar()

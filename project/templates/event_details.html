@@ -89,6 +89,21 @@
                   fill="#657895"
                 />
               </svg>
+              {% if flag == 'attending' %}
+              <form method="POST" action="{{ url_for('set_rating', event_id=event.id) }}" class="form-show-rating">
+                <div class="rate">
+                  <label for="updated_rating">Select a Rating:</label>
+                  <select id = "updated_rating" name="updated_rating" onchange="this.form.submit()">
+                    <option value="5" {% if event.user_rating == 5 %}selected{% endif %}>5 stars</option>
+                    <option value="4" {% if event.user_rating == 4 %}selected{% endif %}>4 stars</option>
+                    <option value="3" {% if event.user_rating == 3 %}selected{% endif %}>3 stars</option>
+                    <option value="2" {% if event.user_rating == 2 %}selected{% endif %}>2 stars</option>
+                    <option value="1" {% if event.user_rating == 1 %}selected{% endif %}>1 star</option>
+                    <option value="0" {% if event.user_rating == 0 %}selected{% endif %}>0 star</option> 
+                  </select>
+                </div>
+              </form>
+              {% endif %}
             </div>
           </div>
           <div class="right">

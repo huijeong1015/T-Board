@@ -320,9 +320,10 @@ def main_dashboard():
     error_msg = ""
     ics_text = ""
     bookmark_checked =False 
+
     if 'view_event_details' in session:
         event_id = session.pop('view_event_details', None)
-        event = Event.query.filter_by(user_id=user.id, event_is=event_id).first()
+        event = Event.query.filter_by(id=event_id).first()
         attendee_record = Attendee.query.filter_by(user_id=user.id, event_id=event_id).first()
         flag = 'attending' if attendee_record else 'not attending'
         bookmarked_events_ids = [event.id for event in bookmarked_events]

@@ -265,7 +265,7 @@ def handle_button_click():
     return jsonify(success=True, response_message = response_message, added = is_bookmarked)  # Send a response back to the client@app.route('/path_to_flask_route', methods=['POST'])
 
 @app.route("/filtering/", methods=["GET", "POST"])
-def filter_events():
+def filter_events(searching=False):
     user=get_user()
     if  user.event_types_checked == None or user.event_types_checked == '[false]' or user.event_types_checked == '[]':
         event_types_checked = [False] 
@@ -281,20 +281,22 @@ def filter_events():
         events = filtered_events 
     print(user)
     if request.method == "POST":
-        if request.form.getlist('filter') != []:
-            event_types_checked = request.form.getlist('filter')
+        if not searching:
+            if request.form.getlist('filter') != []:
+                event_types_checked = request.form.getlist('filter')
 
-            filtered_events = []
-            for filter in event_types_checked: 
-                filtered_events = filtered_events + (Event.query.filter(Event.event_type.contains(filter)).all())
-        else:
-            sql = text("SELECT * FROM events;")
-            events = db.session.execute(sql)
-            filtered_events = events
-            event_types_checked = []
+                filtered_events = []
+                for filter in event_types_checked: 
+                    filtered_events = filtered_events + (Event.query.filter(Event.event_type.contains(filter)).all())
+            else:
+                sql = text("SELECT * FROM events;")
+                events = db.session.execute(sql)
+                filtered_events = events
+                event_types_checked = []
     events = filtered_events 
     user.set_event_types_checked(event_types_checked)
     db.session.commit()
+    
     return(events)
 
 @app.route("/main_dashboard/", methods=["GET", "POST"])
@@ -466,13 +468,15 @@ def search_event():
     error_msg = ""
     keyword = request.form["input-search"]
     # some error handling before results are used
+
     results = []
-    filtered_events = filter_events()
+    filtered_events = filter_events(searching = True)
+    filtered_events_ids = [event.id for event in filtered_events]
     if keyword:
         results = Event.query\
-            .filter(Event.name.contains(keyword))\
-            .filter(~Event.bookmarked_ref.any(User.id == user.id))\
+            .filter(Event.name.contains(keyword), Event.id.in_(filtered_events_ids))\
             .all()
+            # .filter(~Event.bookmarked_ref.any(User.id == user.id))\
     if len(results) == 0:
         error_msg = "We couldn't find any matches for \"" + keyword + '".'
     return render_template("main_dashboard.html", events=results, error_msg=error_msg, profile_picture=get_user_profile_picture(), event_types_checked = user.get_event_types_checked())

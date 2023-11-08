@@ -13,8 +13,7 @@
       </a>
     </div>
     <div class="event-history-tab">
-      <a href="{{ url_for('my_account_event_history', username=session['username']) }}"></a>
-
+      <a href="{{ url_for('my_account_event_history', username=session['username']) }}">
         <svg
         class="history"
         width="50"
@@ -208,6 +207,7 @@
   text-align: left;
   font: 700 40px "Ubuntu Mono", sans-serif;
   position: relative;
+  padding-bottom: 20px;
 }
 .name {
   color: #000000;
@@ -272,6 +272,6 @@ button {
     flex-wrap: column;
     height: 239px;
     position: relative;
-  }
+}
 </style>
 {% endblock %}

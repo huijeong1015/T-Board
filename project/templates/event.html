@@ -2,43 +2,18 @@
 <div class="frame-event">
     <div class="left">
         <img src="{{ url_for('static', filename='event_photos/' + event['event_type'].lower() + '.png') }}" alt="Image" class="event-image">
-        <svg
-        class="rating"
-        width="220"
-        height="40"
-        viewBox="0 0 220 40"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        >
-        <path
-            d="M20 0L24.4903 13.8197H39.0211L27.2654 22.3607L31.7557 36.1803L20 27.6393L8.2443 36.1803L12.7346 22.3607L0.97887 13.8197H15.5097L20 0Z"
-            fill="#FF9900"
-            stroke="#838383"
-            stroke-width="2"
-        />
-        <path
-            d="M65 0L69.4903 13.8197H84.0211L72.2654 22.3607L76.7557 36.1803L65 27.6393L53.2443 36.1803L57.7346 22.3607L45.9789 13.8197H60.5097L65 0Z"
-            fill="#FF9900"
-            stroke="#838383"
-            stroke-width="2"
-        />
-        <path
-            d="M110 0L114.49 13.8197H129.021L117.265 22.3607L121.756 36.1803L110 27.6393L98.2443 36.1803L102.735 22.3607L90.9789 13.8197H105.51L110 0Z"
-            fill="#FF9900"
-            stroke="#838383"
-            stroke-width="2"
-        />
-        <path
-            d="M155 0L159.49 13.8197H174.021L162.265 22.3607L166.756 36.1803L155 27.6393L143.244 36.1803L147.735 22.3607L135.979 13.8197H150.51L155 0Z"
-            stroke="#838383"
-            stroke-width="2"
-        />
-        <path
-            d="M200 0L204.49 13.8197H219.021L207.265 22.3607L211.756 36.1803L200 27.6393L188.244 36.1803L192.735 22.3607L180.979 13.8197H195.51L200 0Z"
-            stroke="#838383"
-            stroke-width="2"
-        />
-        </svg>
+        <svg class="rating" width="220" height="40" viewBox="0 0 220 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {% set avg_rating = event['average_rating'] if event['average_rating'] is not none else 0 %}
+            {% for i in range(1, 6) %}
+                {% if i <= avg_rating %}
+                    <!-- Full star -->
+                    <path d="M{{ i * 40 - 20 }} 0L{{ i * 40 - 15.5097 }} 13.8197H{{ i * 40 }}L{{ i * 40 - 11.7557 }} 22.3607L{{ i * 40 - 7.2654 }} 36.1803L{{ i * 40 - 20 }} 27.6393L{{ i * 40 - 32.7557 }} 36.1803L{{ i * 40 - 28.2654 }} 22.3607L{{ i * 40 - 40.0211 }} 13.8197H{{ i * 40 - 24.4903 }}L{{ i * 40 - 20 }} 0Z" fill="#FF9900" stroke="#838383" stroke-width="2"/>
+                {% else %}
+                    <!-- Empty star -->
+                    <path d="M{{ i * 40 - 20 }} 0L{{ i * 40 - 15.5097 }} 13.8197H{{ i * 40 }}L{{ i * 40 - 11.7557 }} 22.3607L{{ i * 40 - 7.2654 }} 36.1803L{{ i * 40 - 20 }} 27.6393L{{ i * 40 - 32.7557 }} 36.1803L{{ i * 40 - 28.2654 }} 22.3607L{{ i * 40 - 40.0211 }} 13.8197H{{ i * 40 - 24.4903 }}L{{ i * 40 - 20 }} 0Z" stroke="#838383" stroke-width="2"/>
+                {% endif %}
+            {% endfor %}
+        </svg>        
     </div>
     <div class="right">
         <div class="frame-info">

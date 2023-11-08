@@ -352,8 +352,6 @@ def main_dashboard():
             user_rating = Rating.query.filter_by(user_id=user.id, event_id=event.id).first()
             user_rating_value = user_rating.rating if user_rating else 5 #Base case will be 5
 
-
-
             if attendee_record != None and attendee_record.notification_preference !=-1: 
                 notification_checked=True
         

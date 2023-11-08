@@ -73,14 +73,14 @@ function toggleSidetab() {
   const alt_text = document.getElementById('sidetab_alt_text');
   let isSidetabVisible;
 
-  if (form.style.display === 'none' || form.style.display === '') {
-    form.style.display = 'block';
-    alt_text.style.display = 'none';
-    isSidetabVisible = false;
-  } else {
+  if (form.style.display === 'block') {
     form.style.display = 'none';
     alt_text.style.display = 'block';
     isSidetabVisible = true;
+  } else {
+    form.style.display = 'block';
+    alt_text.style.display = 'none';
+    isSidetabVisible = false;
   }
 
   fetch('/set_sidetab_state', {
@@ -97,7 +97,6 @@ function toggleSidetab() {
 }
 
 </script>
-
 
 {% include "base_event.html" %}
 <style>

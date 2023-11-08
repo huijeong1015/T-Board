@@ -35,13 +35,16 @@ db = SQLAlchemy(app)
 
 
 
-
 # Association table for many-to-many relationship between users and events
-attendees = db.Table(
-    "attendees",
-    db.Column("user_id", db.Integer, db.ForeignKey("users.id"), primary_key=True),
-    db.Column("event_id", db.Integer, db.ForeignKey("events.id"), primary_key=True),
-)
+class Attendee(db.Model):
+    __tablename__ = "attendees"
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'), primary_key=True)
+    notification_preference = db.Column(db.Integer, nullable=False, default=-1)
+
+    # Relationships
+    user = db.relationship("User", back_populates="events_attending")
+    event = db.relationship("Event", back_populates="attendees")
 
 # Association table for self-referential many-to-many relationship (friends)
 user_friends = db.Table(
@@ -80,13 +83,7 @@ class Event(db.Model):
     reg_link = db.Column(db.String(200), nullable=True) 
     description = db.Column(db.Text, nullable=False)
     event_type = db.Column(db.String(100), nullable=False)
-
-
-    attendees = db.relationship(
-        "User", 
-        secondary=attendees, 
-        back_populates="events_attending",  
-    )
+    attendees = db.relationship('Attendee', back_populates='event')
 
     created_by_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_by = db.relationship('User', back_populates='created_events')
@@ -125,12 +122,7 @@ class User(db.Model):
     created_events = db.relationship('Event', back_populates='created_by', lazy='dynamic')
     bookmarked_events = db.relationship('Event', secondary=saved_events,
                                              backref=db.backref('bookmarked_ref', lazy='dynamic'))  
-    events_attending = db.relationship(
-        'Event', 
-        secondary=attendees, 
-        back_populates='attendees', 
-        lazy='dynamic'
-    )
+    events_attending = db.relationship('Attendee', back_populates='user')
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
@@ -138,9 +130,6 @@ class User(db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
-# sample_users = [
-#     {"username": "admin", "password": "adminpass", "email": "admin@mail.utoronto.ca", "interests": "Being an administrator","profile_picture": "Admin" }
-# ]
 sample_events = [
     {"name": "Tech Conference 2023", "date": "2023-11-20", "time": "09:00", "location": "Silicon Valley Convention Center", "description": "Join industry leaders...", "event_type": "Networking"},
     {"name": "Music Festival", "date": "2023-08-15", "time": "12:00", "location": "Central Park, New York", "description": "A celebration of music...", "event_type": "Other"},
@@ -203,10 +192,6 @@ with app.app_context():
         tech_conference = Event.query.filter_by(name="Tech Conference 2023").first()
         music_festival = Event.query.filter_by(name="Music Festival").first()
         MAT188 = Event.query.filter_by(name="MAT188 Tutoring").first()
-
-        # user_a.events.append(tech_conference)
-        # user_b.events.append(music_festival)
-        # user_c.events.append(MAT188)
 
         db.session.add(admin)
         db.session.add(user_a)

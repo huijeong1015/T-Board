@@ -107,11 +107,24 @@
           {% endif %}
           <div class="description">
               Event description: {{ event.description }}
-          </div>
-          <div class="review">Reviews:</div>                    
+          </div>                   
         </div>
       </div>
     </div>
+  </div>
+  <div class="sidetab">
+    <div class="show-notifications">
+      {% if flag == 'attending' %}
+      <form method="POST" action="{{ url_for('set_notification', event_id=event.id) }}" class="form-show-notification">
+        <!-- Hidden input to send the event_id to the backend -->
+        <input type="hidden" name="event_id" value="{{ event.id }}">
+        <label for="show-notification" class="show-notification-message">Receive Notifications</label><br>
+        <input type="checkbox" id="show-notifications" name="show-notification" value="show-notification" class="checkbox" onchange="this.form.submit()" {{ 'checked' if notification_checked else '' }}>
+      </form>
+      {% endif %}
+    </div>
+    
+  </div>
 </div>
 <style>
 .dashboard {
@@ -221,6 +234,13 @@ object-fit: cover;
 .form-button {
   margin-block-end: 0%;
 }
+.form-show-notification {
+  margin: 0%;
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 5px;
+  align-items: center;
+}
 .btn-bookmark {
   flex-shrink: 0;
   position: relative;
@@ -307,12 +327,6 @@ object-fit: cover;
   font: 400 30px "Ubuntu Condensed", sans-serif;
   position: relative;
 }
-.review {
-  color: #000000;
-  text-align: left;
-  font: 400 30px "Ubuntu Condensed", sans-serif;
-  position: relative;
-}
 .attend-button-container {
   display: flex;
   text-align: right;
@@ -338,6 +352,41 @@ object-fit: cover;
   border: none; 
   color: #1e1e1e; 
   font: 700 30px "Ubuntu Mono", sans-serif; 
+}
+.show-notifications {
+  display: flex;
+  flex-direction: row;
+  width: 240px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.checkbox {
+  background: #d9d9d9;
+  width: 30px;
+  height: 30px;
+  position: relative;
+}
+
+.show-notification-message {
+  color: #ffffff;
+  text-align: left;
+  font: 400 24px "Ubuntu Mono", sans-serif;
+  position: relative;
+  width: 190px;
+  display: inline-flex;
+}
+.sidetab {
+  padding: 60px 0px 60px 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 43px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
 }
 </style>  
 {% endblock %}

@@ -264,19 +264,15 @@ def handle_button_click():
             print(event)
     return jsonify(success=True, response_message = response_message, added = is_bookmarked)  # Send a response back to the client@app.route('/path_to_flask_route', methods=['POST'])
 
-@app.route("/main_dashboard/", methods=["GET", "POST"])
-def main_dashboard():
-    username = session.get('username')
-    user = User.query.filter_by(username=username).first()
-
-    error_msg = ""
-    bookmark_checked = False
-    if  user.event_types_checked == None or user.event_types_checked == '[false]' or user.event_types_checked == []:
+@app.route("/filtering/", methods=["GET", "POST"])
+def filter():
+    user=get_user()
+    if  user.event_types_checked == None or user.event_types_checked == '[false]' or user.event_types_checked == '[]':
         event_types_checked = [False] 
         user.set_event_types_checked(event_types_checked)
         db.session.commit()
         sql = text("SELECT * FROM events;")
-        events = db.session.execute(sql)
+        filtered_events = db.session.execute(sql)
     else:
         event_types_checked = user.get_event_types_checked()
         filtered_events = []
@@ -284,21 +280,53 @@ def main_dashboard():
             filtered_events = filtered_events + (Event.query.filter(Event.event_type.contains(filter)).all())
         events = filtered_events 
     print(user)
-    
+    if request.method == "POST":
+        if request.form.getlist('filter') != []:
+            event_types_checked = request.form.getlist('filter')
+
+            filtered_events = []
+            for filter in event_types_checked: 
+                filtered_events = filtered_events + (Event.query.filter(Event.event_type.contains(filter)).all())
+        else:
+            sql = text("SELECT * FROM events;")
+            events = db.session.execute(sql)
+            filtered_events = events
+            event_types_checked = []
+    events = filtered_events 
+    user.set_event_types_checked(event_types_checked)
+    db.session.commit()
+    return(events)
+
+@app.route("/main_dashboard/", methods=["GET", "POST"])
+def main_dashboard():
+    # if  user.event_types_checked == None or user.event_types_checked == '[false]' or user.event_types_checked == []:
+    #     event_types_checked = [False] 
+    #     user.set_event_types_checked(event_types_checked)
+    #     db.session.commit()
+    #     sql = text("SELECT * FROM events;")
+    #     events = db.session.execute(sql)
+    # else:
+    #     event_types_checked = user.get_event_types_checked()
+    #     filtered_events = []
+    #     for filter in event_types_checked: 
+    #         filtered_events = filtered_events + (Event.query.filter(Event.event_type.contains(filter)).all())
+    #     events = filtered_events 
+    # print(user)
+    sql = text("SELECT * FROM events;")
+    events = db.session.execute(sql)
 
     username = session.get('username')
     user = User.query.filter_by(username=username).first()
+    if user.event_types_checked == None:
+        user.set_event_types_checked ([])
     bookmarked_events = user.bookmarked_events
     sort_by = request.form.get('sort-by')
-
+    error_msg = ""
     ics_text = ""
-   
+    bookmark_checked =False 
     if 'view_event_details' in session:
         event_id = session.pop('view_event_details', None)
-        filtered_events = []
-        for filter in event_types_checked: 
-            filtered_events = filtered_events + (Event.query.filter(Event.event_type.contains(filter)).all())
-        events = filtered_events 
+
         attendee_record = Attendee.query.filter_by(user_id=user.id, event_id=event_id).first()
         flag = 'attending' if attendee_record else 'not attending'
         bookmarked_events_ids = [event.id for event in bookmarked_events]
@@ -345,19 +373,8 @@ def main_dashboard():
 
 
         # Handles filter checkboxes
-        if request.form.getlist('filter') != []:
-            event_types_checked = request.form.getlist('filter')
 
-            filtered_events = []
-            for filter in event_types_checked: 
-                filtered_events = filtered_events + (Event.query.filter(Event.event_type.contains(filter)).all())
-        else:
-            sql = text("SELECT * FROM events;")
-            events = db.session.execute(sql)
-            filtered_events = events
-            event_types_checked = []
 
-        events = filtered_events
         # Sort the events based on what user selected
         if sort_by == "asc-alphabetic":
             events = sort_events_by_name(events, 'A to Z')
@@ -367,11 +384,11 @@ def main_dashboard():
             events = sort_events_by_date(events, 'Oldest to Newest')
         elif sort_by == "desc-date":  
             events = sort_events_by_date(events, 'Newest to Oldest')
-
+    
+    events = filter()
     bookmarked_events_ids = [event.id for event in bookmarked_events]
     username=session.get('username')
 
-    user.set_event_types_checked(event_types_checked)
 
     db.session.commit()
     return render_template("main_dashboard.html", 

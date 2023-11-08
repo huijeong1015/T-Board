@@ -125,8 +125,6 @@ def login():
                 # Start a user session
                 session["username"] = username
                 session['user_id'] = user.id
-
-
                 return redirect(url_for("main_dashboard"))
 
     return render_template("login.html", error=error)
@@ -326,7 +324,6 @@ def main_dashboard():
     bookmark_checked =False 
     if 'view_event_details' in session:
         event_id = session.pop('view_event_details', None)
-
         attendee_record = Attendee.query.filter_by(user_id=user.id, event_id=event_id).first()
         flag = 'attending' if attendee_record else 'not attending'
         bookmarked_events_ids = [event.id for event in bookmarked_events]

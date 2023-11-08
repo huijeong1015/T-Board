@@ -13,7 +13,7 @@ from flask import (
     request,
     jsonify
 )
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
@@ -385,8 +385,9 @@ def main_dashboard():
                            list_of_event_types=LIST_OF_EVENT_TYPES)
 
 @app.route('/download_ics_file', methods=['POST'])
-def download_ics_file(preference=None):
+def download_ics_file():
     event_id = int(request.form.get('export-calendar'))
+    preference = int(request.form.get('preference')) if request.form.get('preference') else None
     event = Event.query.filter_by(id=event_id).first()
     c = ics.Calendar()
     e = ics.Event()
@@ -395,6 +396,15 @@ def download_ics_file(preference=None):
     e.begin = e.begin.shift(hours=5) #EST
     e.location = event.location
     e.description = event.description
+    
+    print("preference is:")
+    print(preference)
+
+    if preference is not None:
+        alarm_trigger = timedelta(minutes=-preference)
+        alarm = ics.alarm.DisplayAlarm(trigger=alarm_trigger)
+        e.alarms.append(alarm)  
+    
     c.events.add(e)
 
     filename = (event.name).strip().replace(' ','') + '.ics'

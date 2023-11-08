@@ -767,7 +767,7 @@ def edit_event(event_id):
                 event.time= event_time
                 event.date= event_date
                 db.session.commit()
-                return redirect(url_for("my_account_myevents"))
+                return redirect(url_for("my_account_myevents", username=session.get('username')))
             else:
                 #TODO: Give useful message to user
                 pass
@@ -896,7 +896,7 @@ def are_you_sure(event_id):
                 db.session.delete(event)
                 db.session.commit()
                 flash('Event has been deleted!', 'success')
-                return redirect(url_for('my_account_myevents'))
+                return redirect(url_for('my_account_myevents', username=session.get('username')))
             elif 'no' in request.form:
                 flash('Event deletion cancelled.', 'info')
                 return redirect(url_for('edit_event', event_id=event_id))

@@ -125,8 +125,6 @@ def login():
                 # Start a user session
                 session["username"] = username
                 session['user_id'] = user.id
-
-
                 return redirect(url_for("main_dashboard"))
 
     return render_template("login.html", error=error)
@@ -299,21 +297,20 @@ def filter_events(searching=False):
     
     return(events)
 
+def sort(events, sort_by):
+# Sort the events based on what user selected
+    if sort_by == "asc-alphabetic":
+         events = sort_events_by_name(events, 'A to Z')
+    elif sort_by == "desc-alphabetic":
+        events = sort_events_by_name(events, 'Z to A')
+    elif sort_by == "asc-date":
+        events = sort_events_by_date(events, 'Oldest to Newest')
+    elif sort_by == "desc-date":  
+        events = sort_events_by_date(events, 'Newest to Oldest')   
+    return (events)
+
 @app.route("/main_dashboard/", methods=["GET", "POST"])
 def main_dashboard():
-    # if  user.event_types_checked == None or user.event_types_checked == '[false]' or user.event_types_checked == []:
-    #     event_types_checked = [False] 
-    #     user.set_event_types_checked(event_types_checked)
-    #     db.session.commit()
-    #     sql = text("SELECT * FROM events;")
-    #     events = db.session.execute(sql)
-    # else:
-    #     event_types_checked = user.get_event_types_checked()
-    #     filtered_events = []
-    #     for filter in event_types_checked: 
-    #         filtered_events = filtered_events + (Event.query.filter(Event.event_type.contains(filter)).all())
-    #     events = filtered_events 
-    # print(user)
     sql = text("SELECT * FROM events;")
     events = db.session.execute(sql)
 
@@ -328,7 +325,6 @@ def main_dashboard():
     bookmark_checked =False 
     if 'view_event_details' in session:
         event_id = session.pop('view_event_details', None)
-
         attendee_record = Attendee.query.filter_by(user_id=user.id, event_id=event_id).first()
         flag = 'attending' if attendee_record else 'not attending'
         bookmarked_events_ids = [event.id for event in bookmarked_events]
@@ -373,21 +369,8 @@ def main_dashboard():
             print (request.form.get("show-bookmarked"))
             events = user.bookmarked_events
 
-
-        # Handles filter checkboxes
-
-
-        # Sort the events based on what user selected
-        if sort_by == "asc-alphabetic":
-            events = sort_events_by_name(events, 'A to Z')
-        elif sort_by == "desc-alphabetic":
-            events = sort_events_by_name(events, 'Z to A')
-        elif sort_by == "asc-date":
-            events = sort_events_by_date(events, 'Oldest to Newest')
-        elif sort_by == "desc-date":  
-            events = sort_events_by_date(events, 'Newest to Oldest')
-    
     events = filter_events()
+    events = sort(events, sort_by)
     bookmarked_events_ids = [event.id for event in bookmarked_events]
     username=session.get('username')
 

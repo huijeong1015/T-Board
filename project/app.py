@@ -249,8 +249,6 @@ def handle_button_click():
         except Exception as e:
             db.session.rollback()
             response_message = 'Error adding event to bookmarks.'
-        # current_user_id.bookmarked_events.append(bookmark_id)
-        # if no work try printing the events being queried in the db.py file
     else:
         bookmarked_events.remove(event_to_bookmark)
         try:
@@ -263,28 +261,67 @@ def handle_button_click():
             print(event)
     return jsonify(success=True, response_message = response_message, added = is_bookmarked)  # Send a response back to the client@app.route('/path_to_flask_route', methods=['POST'])
 
+@app.route("/filtering/", methods=["GET", "POST"])
+def filter():
+    user=get_user()
+    if  user.event_types_checked == None or user.event_types_checked == '[false]' or user.event_types_checked == '[]':
+        event_types_checked = [False] 
+        user.set_event_types_checked(event_types_checked)
+        db.session.commit()
+        sql = text("SELECT * FROM events;")
+        filtered_events = db.session.execute(sql)
+    else:
+        event_types_checked = user.get_event_types_checked()
+        filtered_events = []
+        for filter in event_types_checked: 
+            filtered_events = filtered_events + (Event.query.filter(Event.event_type.contains(filter)).all())
+        events = filtered_events 
+    print(user)
+    if request.method == "POST":
+        if request.form.getlist('filter') != []:
+            event_types_checked = request.form.getlist('filter')
+
+            filtered_events = []
+            for filter in event_types_checked: 
+                filtered_events = filtered_events + (Event.query.filter(Event.event_type.contains(filter)).all())
+        else:
+            sql = text("SELECT * FROM events;")
+            events = db.session.execute(sql)
+            filtered_events = events
+            event_types_checked = []
+    events = filtered_events 
+    user.set_event_types_checked(event_types_checked)
+    db.session.commit()
+    return(events)
+
+def sort(events, sort_by):
+# Sort the events based on what user selected
+    if sort_by == "asc-alphabetic":
+         events = sort_events_by_name(events, 'A to Z')
+    elif sort_by == "desc-alphabetic":
+        events = sort_events_by_name(events, 'Z to A')
+    elif sort_by == "asc-date":
+        events = sort_events_by_date(events, 'Oldest to Newest')
+    elif sort_by == "desc-date":  
+        events = sort_events_by_date(events, 'Newest to Oldest')   
+    return (events)
+
 @app.route("/main_dashboard/", methods=["GET", "POST"])
 def main_dashboard():
-    error_msg = ""
-    bookmark_checked = False
-    event_types_checked = [False] * len(LIST_OF_EVENT_TYPES) # initializes event types' check marks; this imitates Ghamr's implementation of bookmark checks.
-
-    username = session.get('username')
-    user = User.query.filter_by(username=username).first()
-    print(user)
     sql = text("SELECT * FROM events;")
     events = db.session.execute(sql)
-    
+
     username = session.get('username')
     user = User.query.filter_by(username=username).first()
+    if user.event_types_checked == None:
+        user.set_event_types_checked ([])
     bookmarked_events = user.bookmarked_events
     sort_by = request.form.get('sort-by')
-
+    error_msg = ""
     ics_text = ""
-   
+    bookmark_checked =False 
     if 'view_event_details' in session:
         event_id = session.pop('view_event_details', None)
-        event = Event.query.filter_by(id=event_id).first()
         attendee_record = Attendee.query.filter_by(user_id=user.id, event_id=event_id).first()
         flag = 'attending' if attendee_record else 'not attending'
         bookmarked_events_ids = [event.id for event in bookmarked_events]
@@ -323,58 +360,19 @@ def main_dashboard():
                                    bookmarked_events=bookmarked_events_ids, 
                                    notification_checked=notification_checked)
         
-        # Handles bookmark button
-        if request.form.get('bookmark') != None:
-            bookmark_id = int(request.form['bookmark'])
-            event_to_bookmark = Event.query.filter_by(id=bookmark_id).first()
-            print(bookmark_id)
-            print(event_to_bookmark)
-            
 
-            if event_to_bookmark not in bookmarked_events:
-                bookmarked_events.append(event_to_bookmark)
-                db.session.commit()
-                for event in bookmarked_events:
-                    print(event)
-                    print("eventid" + str(event.id))
-
-            else:
-                bookmarked_events.remove(event_to_bookmark)
-                db.session.commit()
-                for event in bookmarked_events:
-                    print(event)
-        
         if request.form.get('show-bookmarked') != None:
             bookmark_checked = request.form.get('show-bookmarked')
             print (request.form.get("show-bookmarked"))
             events = user.bookmarked_events
 
-
-        # Handles filter checkboxes
-        if request.form.getlist('filter') != None:
-            chosen_filters = request.form.getlist('filter')
-            if chosen_filters != []:
-                event_types_checked[LIST_OF_EVENT_TYPES.index(chosen_filters[0])] = chosen_filters[0]
-                events = Event.query.filter(Event.event_type.contains(chosen_filters[0])).all()
-                print(chosen_filters)
-                for each in chosen_filters:
-                    if each != chosen_filters[0]:
-                        print(each)
-                        event_types_checked[LIST_OF_EVENT_TYPES.index(each)] = each
-                        events = events + Event.query.filter(Event.event_type.contains(each)).all()
-        
-        # Sort the events based on what user selected
-        if sort_by == "asc-alphabetic":
-            events = sort_events_by_name(events, 'A to Z')
-        elif sort_by == "desc-alphabetic":
-            events = sort_events_by_name(events, 'Z to A')
-        elif sort_by == "asc-date":
-            events = sort_events_by_date(events, 'Oldest to Newest')
-        elif sort_by == "desc-date":  
-            events = sort_events_by_date(events, 'Newest to Oldest')
-
+    events = filter()
+    events = sort(events, sort_by)
     bookmarked_events_ids = [event.id for event in bookmarked_events]
     username=session.get('username')
+
+
+    db.session.commit()
     return render_template("main_dashboard.html", 
                            events=events, 
                            profile_picture=get_user_profile_picture(), 
@@ -382,8 +380,9 @@ def main_dashboard():
                            bookmark_checked=bookmark_checked, 
                            bookmarked_events=bookmarked_events_ids, 
                            sort_by=sort_by, 
-                           event_types_checked=event_types_checked,
-                           username=username)
+                           event_types_checked=user.get_event_types_checked(),
+                           username=username,
+                           list_of_event_types=LIST_OF_EVENT_TYPES)
 
 @app.route('/download_ics_file', methods=['POST'])
 def download_ics_file():
@@ -450,7 +449,7 @@ def attend_event(event_id):
 
     return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, bookmarked_events=bookmarked_events_ids)
 
-@app.route("/search_dashboard/", methods=["POST"])
+@app.route("/search_dashboard/", methods=["POST", "GET"])
 def search_event():
     user = get_user()
     error_msg = ""
@@ -464,7 +463,7 @@ def search_event():
             .all()
     if len(results) == 0:
         error_msg = "We couldn't find any matches for \"" + keyword + '".'
-    return render_template("main_dashboard.html", events=results, error_msg=error_msg, profile_picture=get_user_profile_picture())
+    return render_template("main_dashboard.html", events=results, error_msg=error_msg, profile_picture=get_user_profile_picture(), event_types_checked = user.get_event_types_checked())
 
 @app.route("/<username>/event_history/")
 def my_account_event_history(username):

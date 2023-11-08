@@ -10,8 +10,7 @@ from flask import (
     flash,
     render_template_string,
     send_file,
-    request,
-    jsonify
+    request
 )
 from datetime import datetime
 from flask_bootstrap import Bootstrap
@@ -28,34 +27,26 @@ from werkzeug.security import check_password_hash
 import re
 import ics
 
-
 app.config["SECRET_KEY"] = os.urandom(24)
-LIST_OF_EVENT_TYPES = ["Tutoring", "Sports", "Club", "Networking", "Other"] 
 
 #Helper functions
-def get_user_interests(username=None):
-    if not username:
-        username=session.get('username')
+def get_user_interests():
+    username=session.get('username')
     user = User.query.filter_by(username=username).first()
     return user.interests
 
-def get_user_email(username=None):
-    if not username:
-        username=session.get('username')
+def get_user_email():
+    username=session.get('username')
     user = User.query.filter_by(username=username).first()
     return user.email
 
-def get_user_profile_picture(username = None):
-    if not username:
-        username = session.get('username')
+def get_user_profile_picture():
+    username=session.get('username')
     user = User.query.filter_by(username=username).first()
-    if user:
-            return user.profile_picture
-    return "default_profile_picture.jpg"
+    return user.profile_picture
 
-def get_user(username = None):
-    if not username:
-        username = session.get('username')
+def get_user():
+    username = session.get('username')
     user = User.query.filter_by(username=username).first()
     return(user)  
 
@@ -193,6 +184,57 @@ def register():
             return redirect(url_for("login"))
 
     return render_template("register.html")
+
+# def register():
+#     error = None
+#     if request.method == "POST":
+#         username = request.form["input-id"]
+#         email = request.form["input-email"]
+#         confirm_email = request.form["input-confirm-email"]
+#         password = request.form["input-pwd"]
+#         confirm_password = request.form["input-confirm-pwd"]
+#         interests = request.form["input-interests"]
+
+#         # Check if username or email is already taken
+#         username_check = User.query.filter_by(username=username).first()
+#         email_check = User.query.filter_by(email=email).first()
+
+#         # Password strength check
+#         password_strength = check_password_strength(password)
+
+#         # Perform validation checks on the form data
+#         if (
+#             not username
+#             or not email
+#             or not confirm_email
+#             or not password
+#             or not confirm_password
+#         ):
+#             error = "All fields are required."
+#             flash(error)
+#         elif email != confirm_email:
+#             error = "Emails do not match."
+#             flash(error)
+#         elif password != confirm_password:
+#             error = "Passwords do not match."
+#             flash(error)
+#         elif password_strength != "strong":
+#             error = f"Password strength is {password_strength}. Please use a stronger password at least 8 characters long with one upper case, lower case, digit, and special character."
+#             flash(error)
+#         elif username_check is not None:
+#             error = "This Username is taken, please try a different one."
+#             flash(error)
+#         elif email_check is not None:
+#             error = "This email has already been used. Please return to the login page or use a different email."
+#             flash(error)
+#         else:
+#             new_user = User(username=username, email=email, interests=interests, profile_picture = "default")
+#             new_user.set_password(password)  # Hash the password
+#             db.session.add(new_user)
+#             db.session.commit()
+#             return redirect(url_for("login"))
+
+#     return render_template("register.html")
   
 @app.route("/bookmark/", methods=["GET", "POST"])
 def bookmark():
@@ -223,53 +265,10 @@ def bookmark():
 def event_post():
     return render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_types)
 
-
-@app.route('/toggle_value', methods=['POST'])
-def handle_button_click():
-    #get the button value and print it
-    data = request.get_json()
-    bookmark_id = data['value']
-    print("the button value is" + bookmark_id)
-    #get the user and the username and their bookmarked events
-    user = get_user()
-    username = user.username
-    bookmarked_events = user.bookmarked_events
-
-    #filter the db for the event we need to bookmark and print its value
-    event_to_bookmark = Event.query.filter_by(id=bookmark_id).first()
-    print(event_to_bookmark)
-
-    is_bookmarked = False    
-
-    if event_to_bookmark not in bookmarked_events:
-        bookmarked_events.append(event_to_bookmark)
-        try:
-            db.session.commit()
-            response_message = 'Event added to bookmarks.'
-            is_bookmarked = True
-        except Exception as e:
-            db.session.rollback()
-            response_message = 'Error adding event to bookmarks.'
-        # current_user_id.bookmarked_events.append(bookmark_id)
-        # if no work try printing the events being queried in the db.py file
-    else:
-        bookmarked_events.remove(event_to_bookmark)
-        try:
-            db.session.commit()
-            response_message = 'Event removed from bookmarks.'
-            is_bookmarked = False
-        except Exception as e:
-            db.session.rollback()
-            response_message = 'Error removing event from bookmarks.'
-            print(event)
-    return jsonify(success=True, response_message = response_message, added = is_bookmarked)  # Send a response back to the client@app.route('/path_to_flask_route', methods=['POST'])
-
 @app.route("/main_dashboard/", methods=["GET", "POST"])
 def main_dashboard():
     error_msg = ""
     bookmark_checked = False
-    event_types_checked = [False] * len(LIST_OF_EVENT_TYPES) # initializes event types' check marks; this imitates Ghamr's implementation of bookmark checks.
-
     username = session.get('username')
     user = User.query.filter_by(username=username).first()
     print(user)
@@ -282,22 +281,6 @@ def main_dashboard():
     sort_by = request.form.get('sort-by')
 
     ics_text = ""
-   
-    if 'view_event_details' in session:
-        event_id = session.pop('view_event_details', None)
-        event = Event.query.filter_by(id=event_id).first()
-        attendee_record = Attendee.query.filter_by(user_id=user.id, event_id=event_id).first()
-        flag = 'attending' if attendee_record else 'not attending'
-        bookmarked_events_ids = [event.id for event in bookmarked_events]
-        
-        if attendee_record.notification_preference != -1:
-            notification_checked=True
-        else:
-            notification_checked=False
-
-        # Directly render the event details template
-        return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag,
-                               bookmarked_events=bookmarked_events_ids, notification_checked=notification_checked)
 
     if request.method == "POST":
         # Handles event details button
@@ -306,23 +289,13 @@ def main_dashboard():
             event = Event.query.filter_by(id=event_id).first()
             username = session.get('username')
             user = User.query.filter_by(username=username).first()
-            attendee_record = Attendee.query.filter_by(user_id=user.id, event_id=event_id).first()
-            flag = 'attending' if attendee_record else 'not attending'
+            flag = 'not attending'
+
+            if user in event.attendees:
+                flag = 'attending'
 
             bookmarked_events_ids = [event.id for event in bookmarked_events]
-
-            if attendee_record != None and attendee_record.notification_preference !=-1: 
-                notification_checked=True
-        
-            else:
-                notification_checked=False
-
-            return render_template("event_details.html", 
-                                   event=event, 
-                                   profile_picture=get_user_profile_picture(), 
-                                   flag=flag, 
-                                   bookmarked_events=bookmarked_events_ids, 
-                                   notification_checked=notification_checked)
+            return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, bookmarked_events=bookmarked_events_ids)
         
         # Handles bookmark button
         if request.form.get('bookmark') != None:
@@ -331,15 +304,17 @@ def main_dashboard():
             print(bookmark_id)
             print(event_to_bookmark)
             
-
+            #bookmarks event if it has not already been bookmarked
             if event_to_bookmark not in bookmarked_events:
                 bookmarked_events.append(event_to_bookmark)
                 db.session.commit()
                 for event in bookmarked_events:
                     print(event)
                     print("eventid" + str(event.id))
-
+                # current_user_id.bookmarked_events.append(bookmark_id)
+                # if no work try printing the events being queried in the db.py file
             else:
+                #removes event from the bookmarked events if button pressed while event is already bookmarked
                 bookmarked_events.remove(event_to_bookmark)
                 db.session.commit()
                 for event in bookmarked_events:
@@ -349,23 +324,14 @@ def main_dashboard():
             bookmark_checked = request.form.get('show-bookmarked')
             print (request.form.get("show-bookmarked"))
             events = user.bookmarked_events
-
-
-        # Handles filter checkboxes
-        if request.form.getlist('filter') != None:
-            chosen_filters = request.form.getlist('filter')
-            if chosen_filters != []:
-                event_types_checked[LIST_OF_EVENT_TYPES.index(chosen_filters[0])] = chosen_filters[0]
-                events = Event.query.filter(Event.event_type.contains(chosen_filters[0])).all()
-                print(chosen_filters)
-                for each in chosen_filters:
-                    if each != chosen_filters[0]:
-                        print(each)
-                        event_types_checked[LIST_OF_EVENT_TYPES.index(each)] = each
-                        events = events + Event.query.filter(Event.event_type.contains(each)).all()
         
-        # Sort the events based on what user selected
-        if sort_by == "asc-alphabetic":
+        #Sort the events based on what user selected
+        if sort_by == "None":
+            if request.form.get('show-bookmarked') != None:
+                events = events
+            else:
+                events = db.session.execute(sql) #simply reset it
+        elif sort_by == "asc-alphabetic":
             events = sort_events_by_name(events, 'A to Z')
         elif sort_by == "desc-alphabetic":
             events = sort_events_by_name(events, 'Z to A')
@@ -375,16 +341,9 @@ def main_dashboard():
             events = sort_events_by_date(events, 'Newest to Oldest')
 
     bookmarked_events_ids = [event.id for event in bookmarked_events]
-    username=session.get('username')
-    return render_template("main_dashboard.html", 
-                           events=events, 
-                           profile_picture=get_user_profile_picture(), 
-                           error_msg=error_msg, 
-                           bookmark_checked=bookmark_checked, 
-                           bookmarked_events=bookmarked_events_ids, 
-                           sort_by=sort_by, 
-                           event_types_checked=event_types_checked,
-                           username=username)
+    return render_template("main_dashboard.html", events=events, profile_picture=get_user_profile_picture(), 
+                           error_msg=error_msg, bookmark_checked=bookmark_checked, 
+                           bookmarked_events=bookmarked_events_ids, sort_by=sort_by)
 
 @app.route('/download_ics_file', methods=['POST'])
 def download_ics_file():
@@ -425,22 +384,18 @@ def attend_event(event_id):
     action = request.form.get('action')
     flag = 'not attending' #base case
 
-    # Find existing attendee record
-    attendee = Attendee.query.filter_by(user_id=user.id, event_id=event.id).first()
-
     if action == 'attend':
-        # If the user is not attending, add them as an attendee
-        if not attendee:
-            new_attendee = Attendee(user_id=user.id, event_id=event.id, notification_preference='-1')
-            db.session.add(new_attendee)
+        # If the user is not attending, add them to the attendees list
+        if user not in event.attendees:
+            event.attendees.append(user)
             db.session.commit()
-            flag = 'attending'
+        flag = 'attending'
     elif action == 'unattend':
-        # If the user is attending, remove them as an attendee
-        if attendee:
-            db.session.delete(attendee)
+        # If the user is attending, remove them from the attendees list
+        if user in event.attendees:
+            event.attendees.remove(user)
             db.session.commit()
-            flag = 'not attending'
+        flag = 'not attending'
 
     return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, bookmarked_events=bookmarked_events_ids)
 
@@ -460,38 +415,29 @@ def search_event():
         error_msg = "We couldn't find any matches for \"" + keyword + '".'
     return render_template("main_dashboard.html", events=results, error_msg=error_msg, profile_picture=get_user_profile_picture())
 
-@app.route("/<username>/event_history/")
-def my_account_event_history(username):
-    # Security check: Make sure the logged-in user is accessing their own event history or the user is an admin.
-    logged_in_username = session.get('username')
-    if not logged_in_username:
-        return redirect(url_for('login'))
+@app.route("/my_account/event_history/")
+def my_account_event_history():
+    username=session.get('username')
     user = User.query.filter_by(username=username).first()
-    if not user:
-        return "User not found", 404
-
-    attendee_records = Attendee.query.filter_by(user_id=user.id).all()
+    events_attending = user.events_attending
 
     current_datetime = datetime.now()
     future_events = []
-    past_events = []
+    past_events =[]
 
-    for attendee in attendee_records:
-        event = attendee.event
-        event_datetime_str = f"{event.date} {event.time}"
-        event_datetime_dt = datetime.strptime(event_datetime_str, "%Y-%m-%d %H:%M")
-
+    for event in events_attending:
+        event_datetime = f"{event.date} {event.time}"
+        event_datetime_dt = datetime.strptime(event_datetime, "%Y-%m-%d %H:%M")
         if event_datetime_dt > current_datetime:
             future_events.append(event)
         else:
             past_events.append(event)
-
+    
     past_events = sort_events_by_date(past_events, 'Newest to Oldest')
     future_events = sort_events_by_date(future_events, 'Newest to Oldest')
 
-    return render_template('my_account_eventhistory.html', username=username, 
-                           interests=get_user_interests(username), 
-                           profile_picture=get_user_profile_picture(username),
+    return render_template('my_account_eventhistory.html', username=session.get('username'), 
+                           interests=get_user_interests(), profile_picture=get_user_profile_picture(),
                            future_events=future_events, past_events=past_events)
 
 def get_current_user_friends(username):
@@ -511,29 +457,27 @@ def filter_friends_by_search_term(friends_list, search_term):
     ]
     return filtered_list
 
-@app.route("/<username>/friends/")
-def my_account_friends(username):
+
+
+@app.route("/my_account/friends/")
+def my_account_friends():
+    username = session.get('username')
+    
     # Ensure the user is logged in or handle appropriately if not
-    logged_in_username = session.get('username')
-    if not logged_in_username:
+    if not username:
         # Redirect to login page or handle it however you prefer
         return redirect(url_for('login'))
-    
 
     # Fetch user-specific data
-    interests = get_user_interests(username)
-    profile_picture = get_user_profile_picture(username)
+    interests = get_user_interests()
+    profile_picture = get_user_profile_picture()
     friends_list = get_current_user_friends(username)
     
     # Get the list of friend recommendations
     recommendations = get_friend_recommendations(username)
 
-    search_term = request.args.get('search', '')
-    if search_term:
-        friends_list = filter_friends_by_search_term(friends_list, search_term)
-
     # Pass everything to the template
-    return render_template('my_account_friends.html',  # Make sure the template name matches your setup
+    return render_template('my_account_friends.html', 
                            username=username,
                            interests=interests, 
                            profile_picture=profile_picture,
@@ -557,128 +501,30 @@ def add_friend(username):
     db.session.commit()
 
     # Redirect back to the friend recommendations page or a success page
-    return redirect(url_for('my_account_friends', username=session['username']))
+    return redirect(url_for('my_account_friends'))
 
-@app.route('/remove_friend/<username>', methods=['POST'])
-def remove_friend(username):
-    if 'username' not in session:
-        return redirect(url_for('login'))  # Redirect to login if the user is not logged in
 
-    current_user = User.query.filter_by(username=session['username']).first()
-    friend_to_remove = User.query.filter_by(username=username).first()
-    
-    if not friend_to_remove:
-        return "User not found", 404  # Or handle it with a flash message and redirect
 
-    # Assuming 'friends' is a many-to-many relationship attribute of the 'User' model
-    current_user.friends.remove(friend_to_remove)
-    
-    db.session.commit()
-
-    # Redirect to the friends list or a confirmation page
-    return redirect(url_for('my_account_friends', username=session['username']))
-
-@app.route('/add_friend_via_form', methods=['POST'])
-def add_friend_via_form():
-    if 'username' not in session:
-        return redirect(url_for('login'))  # Redirect to login if the user is not logged in
-
-    friend_username = request.form['friend_username']  # Get the username from the form data
-    current_user = User.query.filter_by(username=session['username']).first()
-    friend_to_add = User.query.filter_by(username=friend_username).first()
-
-    if not friend_to_add:
-        return "User not found", 404  # Or handle appropriately
-
-    # Add the logic to create a friendship relationship here
-    current_user.friends.append(friend_to_add)
-    db.session.commit()
-
-    # Redirect back to the friend recommendations page or a success page
-    return redirect(url_for('my_account_friends', username=session['username']))
-
-@app.route("/<username>/myevents/")
-def my_account_myevents(username):
-    # It's a good practice to not assume the session username is the same as the one in the URL
-    # You can check if the logged-in user is the same as the username in the URL or if the user has special privileges
-    logged_in_username = session.get('username')
-
-    # Redirect to the login page if the user is not logged in
-    if not logged_in_username:
-        return redirect(url_for('login'))
-
+@app.route("/my_account/myevents/")
+def my_account_myevents():
+    username=session.get('username')
     user = User.query.filter_by(username=username).first()
-    if not user:
-        return "User not found", 404  # Or handle it however you prefer
-
+    
     if username == 'admin':
         events_created_by_user = Event.query.all()
     else:
         events_created_by_user = Event.query.filter_by(created_by_id=user.id).all()
 
     return render_template('my_account_myevents.html', 
-                           username=username, 
-                           interests=get_user_interests(username), 
-                           myevents=events_created_by_user, 
-                           profile_picture=get_user_profile_picture(username))
-
-@app.route('/set_notification', methods=['POST'])
-def set_notification():
-    username = session.get('username')
-    user = User.query.filter_by(username=username).first()
-    event_id = request.form.get('event_id')
-    attendee_record = Attendee.query.filter_by(user_id=user.id, event_id=event_id).first()
-
-    if 'show-notification' in request.form:
-        attendee_record.notification_preference = 30 #Default will be 30 minutes
-    else:
-        attendee_record.notification_preference = -1
-
-    db.session.commit()
-    session['view_event_details'] = event_id
-
-    return redirect(url_for('main_dashboard'))
-
-@app.route("/my_account/notification/", methods=['GET', 'POST'])
-def my_account_notification():
-    user = get_user()
-    attendees = Attendee.query.filter_by(user_id=user.id).all()    
- 
-    notif_events_with_prefs = [{
-        'event': attendee.event,
-        'notification_preference': attendee.notification_preference
-    } for attendee in attendees if attendee.notification_preference != -1]
-
-    if request.method == "POST":
-        updated_event_id = request.form.get('updated_event_id')  # Make sure this matches your form input name
-        updated_notification = request.form.get('updated_notification')
-        attendee_record = Attendee.query.filter_by(user_id=user.id, event_id=updated_event_id).first()
-        
-        # Update notification preferences based on user input
-        if updated_notification == '30-mins':
-            attendee_record.notification_preference = 30
-        elif updated_notification == '1-hour':
-            attendee_record.notification_preference = 60
-        elif updated_notification == '1-day':
-            attendee_record.notification_preference = 1440 
-        elif updated_notification == '1-week':
-            attendee_record.notification_preference = 10080
-        
-        # Commit the changes to the database
-        db.session.commit()
-        
-        # Redirect to refresh the page and see the changes
-        return redirect(url_for('my_account_notification'))
-    
-    if notif_events_with_prefs:
-        print(notif_events_with_prefs[0])
-
-    # Render the page with the sorted events and preferences
-    return render_template('my_account_notification.html', 
                            username=session.get('username'), 
                            interests=get_user_interests(), 
-                           profile_picture=get_user_profile_picture(),
-                           notif_events=notif_events_with_prefs)
+                           myevents=events_created_by_user, 
+                           profile_picture=get_user_profile_picture())
+
+@app.route("/my_account/notification/")
+def my_account_notification():
+    return render_template('my_account_notification.html', username=session.get('username'), 
+                           interests=get_user_interests(), profile_picture=get_user_profile_picture())
 
 @app.route("/my_account/settings/", methods=["GET", "POST"])
 def my_account_settings():
@@ -747,8 +593,7 @@ def add_event():
 
 @app.route('/edit_event/<int:event_id>', methods=["GET", "POST"])
 def edit_event(event_id):
-    # event = Event.query.get(event_id)
-    event = db.session.get(Event, event_id)
+    event = Event.query.get(event_id)
     if request.method == 'POST':
         if 'finish_edit' in request.form:
             event = Event.query.filter_by(id=event_id).first()
@@ -830,6 +675,9 @@ def get_friend_recommendations(username, depth=2):
 
     return recommended_users
 
+
+
+
 @app.route("/recommendations")
 def friend_recommendations():
     k = int(request.args.get("k", 2))
@@ -873,6 +721,7 @@ def show_users():
         f"<h1>Users, Their Friends, and Events</h1>{user_list_html}"
     )
 
+
 @app.route("/events")
 def new_events():
     events = Event.query.all()
@@ -891,14 +740,13 @@ def new_events():
 @app.route('/are_you_sure/<int:event_id>', methods=['GET', 'POST'])
 def are_you_sure(event_id):
     event = Event.query.filter_by(id=event_id).first()
-    if event: 
-        if request.method == 'POST':
-            if 'yes' in request.form:
-                db.session.delete(event)
-                db.session.commit()
-                flash('Event has been deleted!', 'success')
-                return redirect(url_for('my_account_myevents'))
-            elif 'no' in request.form:
-                flash('Event deletion cancelled.', 'info')
-                return redirect(url_for('edit_event', event_id=event_id))
+    if request.method == 'POST':
+        if 'yes' in request.form:
+            db.session.delete(event)
+            db.session.commit()
+            flash('Event has been deleted!', 'success')
+            return redirect(url_for('my_account_myevents'))
+        elif 'no' in request.form:
+            flash('Event deletion cancelled.', 'info')
+            return redirect(url_for('edit_event', event_id=event_id))
     return render_template('are_you_sure.html', event_id=event_id, event=event, profile_picture=get_user_profile_picture())

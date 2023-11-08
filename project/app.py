@@ -30,6 +30,7 @@ import ics
 
 
 app.config["SECRET_KEY"] = os.urandom(24)
+LIST_OF_EVENT_TYPES = ["Tutoring", "Sports", "Club", "Networking", "Other"] 
 
 #Helper functions
 def get_user_interests(username=None):
@@ -265,6 +266,8 @@ def handle_button_click():
 def main_dashboard():
     error_msg = ""
     bookmark_checked = False
+    event_types_checked = [False] * len(LIST_OF_EVENT_TYPES) # initializes event types' check marks; this imitates Ghamr's implementation of bookmark checks.
+
     username = session.get('username')
     user = User.query.filter_by(username=username).first()
     print(user)
@@ -312,8 +315,12 @@ def main_dashboard():
             else:
                 notification_checked=False
 
-            return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, 
-                                   bookmarked_events=bookmarked_events_ids, notification_checked=notification_checked)
+            return render_template("event_details.html", 
+                                   event=event, 
+                                   profile_picture=get_user_profile_picture(), 
+                                   flag=flag, 
+                                   bookmarked_events=bookmarked_events_ids, 
+                                   notification_checked=notification_checked)
         
         # Handles bookmark button
         if request.form.get('bookmark') != None:
@@ -340,14 +347,23 @@ def main_dashboard():
             bookmark_checked = request.form.get('show-bookmarked')
             print (request.form.get("show-bookmarked"))
             events = user.bookmarked_events
+
+
+        # Handles filter checkboxes
+        if request.form.getlist('filter') != None:
+            chosen_filters = request.form.getlist('filter')
+            if chosen_filters != []:
+                event_types_checked[LIST_OF_EVENT_TYPES.index(chosen_filters[0])] = chosen_filters[0]
+                events = Event.query.filter(Event.event_type.contains(chosen_filters[0])).all()
+                print(chosen_filters)
+                for each in chosen_filters:
+                    if each != chosen_filters[0]:
+                        print(each)
+                        event_types_checked[LIST_OF_EVENT_TYPES.index(each)] = each
+                        events = events + Event.query.filter(Event.event_type.contains(each)).all()
         
-        #Sort the events based on what user selected
-        if sort_by == "None":
-            if request.form.get('show-bookmarked') != None:
-                events = events
-            else:
-                events = db.session.execute(sql) #simply reset it
-        elif sort_by == "asc-alphabetic":
+        # Sort the events based on what user selected
+        if sort_by == "asc-alphabetic":
             events = sort_events_by_name(events, 'A to Z')
         elif sort_by == "desc-alphabetic":
             events = sort_events_by_name(events, 'Z to A')
@@ -357,9 +373,16 @@ def main_dashboard():
             events = sort_events_by_date(events, 'Newest to Oldest')
 
     bookmarked_events_ids = [event.id for event in bookmarked_events]
-    return render_template("main_dashboard.html", events=events, profile_picture=get_user_profile_picture(), 
-                           error_msg=error_msg, bookmark_checked=bookmark_checked, 
-                           bookmarked_events=bookmarked_events_ids, sort_by=sort_by)
+    username=session.get('username')
+    return render_template("main_dashboard.html", 
+                           events=events, 
+                           profile_picture=get_user_profile_picture(), 
+                           error_msg=error_msg, 
+                           bookmark_checked=bookmark_checked, 
+                           bookmarked_events=bookmarked_events_ids, 
+                           sort_by=sort_by, 
+                           event_types_checked=event_types_checked,
+                           username=username)
 
 @app.route('/download_ics_file', methods=['POST'])
 def download_ics_file():

@@ -306,6 +306,12 @@ def sort(events, sort_by):
         events = sort_events_by_date(events, 'Newest to Oldest')   
     return (events)
 
+@app.route('/set_sidetab_state', methods=['POST'])
+def set_sidetab_state():
+    data = request.get_json()
+    session['is_sidetab_visible'] = data['isSidetabVisible']
+    return jsonify(success=True)
+
 @app.route("/main_dashboard/", methods=["GET", "POST"])
 def main_dashboard():
     sql = text("SELECT * FROM events;")
@@ -320,6 +326,7 @@ def main_dashboard():
     error_msg = ""
     ics_text = ""
     bookmark_checked =False 
+    is_sidetab_visible = session.get('is_sidetab_visible', False)
 
     if 'view_event_details' in session:
         event_id = session.pop('view_event_details', None)

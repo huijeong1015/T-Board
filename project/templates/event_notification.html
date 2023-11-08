@@ -42,6 +42,7 @@
             />  
             </svg>
             <form method="POST" action="{{ url_for('download_ics_file') }}">
+                <input type="hidden" name="preference" value="{{ event['notification_preference'] }}">
                 <button name="export-calendar" id="btn-calendar" class="btn-calendar" value="{{ event['event'].id }}"> 
                     <svg
                         class="btn-calendar"

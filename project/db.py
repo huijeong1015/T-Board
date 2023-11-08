@@ -33,8 +33,6 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
-
-
 # Association table for many-to-many relationship between users and events
 class Attendee(db.Model):
     __tablename__ = "attendees"
@@ -68,9 +66,6 @@ event_types = [
     {"name": "Other"},
 ]
 
-
-
-
 # Model for events
 #Current supported event types: ["Tutoring", "Sports", "Club", "Networking", "Other"] 
 class Event(db.Model):
@@ -89,9 +84,7 @@ class Event(db.Model):
     created_by = db.relationship('User', back_populates='created_events')
     def __repr__(self):
         return f"<Event {self.name}>"
-
-
-
+    
 profile_pic_types = [
     {"name": "Default"},
     {"name": "Surprised"},

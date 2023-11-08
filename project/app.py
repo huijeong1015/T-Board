@@ -265,7 +265,7 @@ def handle_button_click():
     return jsonify(success=True, response_message = response_message, added = is_bookmarked)  # Send a response back to the client@app.route('/path_to_flask_route', methods=['POST'])
 
 @app.route("/filtering/", methods=["GET", "POST"])
-def filter():
+def filter_events():
     user=get_user()
     if  user.event_types_checked == None or user.event_types_checked == '[false]' or user.event_types_checked == '[]':
         event_types_checked = [False] 
@@ -385,7 +385,7 @@ def main_dashboard():
         elif sort_by == "desc-date":  
             events = sort_events_by_date(events, 'Newest to Oldest')
     
-    events = filter()
+    events = filter_events()
     bookmarked_events_ids = [event.id for event in bookmarked_events]
     username=session.get('username')
 
@@ -467,6 +467,7 @@ def search_event():
     keyword = request.form["input-search"]
     # some error handling before results are used
     results = []
+    filtered_events = filter_events()
     if keyword:
         results = Event.query\
             .filter(Event.name.contains(keyword))\

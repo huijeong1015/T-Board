@@ -13,11 +13,11 @@ basedir = Path(__file__).resolve().parent
 users_db_path = basedir.joinpath(USERS_DATABASE)
 events_db_path = basedir.joinpath(EVENTS_DATABASE)
 
-if users_db_path.exists():
-   users_db_path.unlink()
+#if users_db_path.exists():
+#   users_db_path.unlink()
 
-if events_db_path.exists():
-   events_db_path.unlink()
+#if events_db_path.exists():
+#   events_db_path.unlink()
 
 # Setting up Flask app instance
 app = Flask(__name__)

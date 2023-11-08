@@ -2,7 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from pathlib import Path
 from werkzeug.security import generate_password_hash
-
+import json
 
 # Configuration
 USERS_DATABASE = "users.db"
@@ -33,14 +33,12 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
-
 # Association table for many-to-many relationship between users and events
 class Attendee(db.Model):
     __tablename__ = "attendees"
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     event_id = db.Column(db.Integer, db.ForeignKey('events.id'), primary_key=True)
     notification_preference = db.Column(db.Integer, nullable=False, default=-1)
-    user_rating = db.Column(db.Integer, nullable=False, default=-1)
 
     # Relationships
     user = db.relationship("User", back_populates="events_attending")
@@ -55,7 +53,6 @@ class Rating(db.Model):
     # Relationships using back_populates, with the overlaps keyword
     user = db.relationship("User", back_populates="user_ratings", overlaps="user_ratings")
     event = db.relationship("Event", back_populates="event_ratings", overlaps="event_ratings")
-
 
 # Association table for self-referential many-to-many relationship (friends)
 user_friends = db.Table(
@@ -104,7 +101,7 @@ class Event(db.Model):
     created_by = db.relationship('User', back_populates='created_events')
     def __repr__(self):
         return f"<Event {self.name}>"
-
+    
 profile_pic_types = [
     {"name": "Default"},
     {"name": "Surprised"},
@@ -125,6 +122,7 @@ class User(db.Model):
     email = db.Column(db.String(128), unique=True, nullable=False)
     interests = db.Column(db.String(255), nullable=False, default="")
     profile_picture = db.Column(db.String(100), nullable=False, default="default")
+    event_types_checked = db.Column(db.Text)
     user_ratings = db.relationship("Rating", back_populates="user")
     friends = db.relationship(
         "User",
@@ -141,6 +139,12 @@ class User(db.Model):
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
+    def set_event_types_checked(self, items_list):
+        self.event_types_checked = json.dumps(items_list)
+
+    def get_event_types_checked(self):
+        return json.loads(self.event_types_checked)    
+    
     def __repr__(self):
         return '<User {}>'.format(self.username)
 

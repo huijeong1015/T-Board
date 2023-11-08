@@ -2,7 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from pathlib import Path
 from werkzeug.security import generate_password_hash
-
+import json
 
 # Configuration
 USERS_DATABASE = "users.db"
@@ -112,6 +112,8 @@ class User(db.Model):
     email = db.Column(db.String(128), unique=True, nullable=False)
     interests = db.Column(db.String(255), nullable=False, default="")
     profile_picture = db.Column(db.String(100), nullable=False, default="default")
+    event_types_checked = db.Column(db.Text)
+
     friends = db.relationship(
         "User",
         secondary=user_friends,
@@ -127,6 +129,12 @@ class User(db.Model):
     def set_password(self, password):
         self.password = generate_password_hash(password)
 
+    def set_event_types_checked(self, items_list):
+        self.event_types_checked = json.dumps(items_list)
+
+    def get_event_types_checked(self):
+        return json.loads(self.event_types_checked)    
+    
     def __repr__(self):
         return '<User {}>'.format(self.username)
 

@@ -76,19 +76,6 @@
                   </svg>
                 </button>
               </form> 
-              <svg
-                class="btn-share"
-                width="58"
-                height="50"
-                viewBox="0 0 58 50"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M36.0717 0V14.2857C7.50028 14.2857 0.357422 28.9286 0.357422 50C4.07171 35.8571 14.6431 28.5714 28.9289 28.5714H36.0717V42.8571L57.5003 20.2857L36.0717 0Z"
-                  fill="#657895"
-                />
-              </svg>
               {% if flag == 'attending' %}
               <form method="POST" action="{{ url_for('set_rating') }}" class="form-show-rating">
                 <input type="hidden" name="event_id" value="{{ event.id }}">

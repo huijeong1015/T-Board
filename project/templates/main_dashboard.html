@@ -48,16 +48,10 @@
         <label for="show-bookmarked" class="show_bookmark_label">Show bookmarked events</label><br>
       </div>
       <div class = "apply_filter">
-        <input class="checkbox" type="checkbox" id="filter_club" name="filter" value="Club" onchange="this.form.submit()"  {{ 'checked' if event_types_checked[2] else '' }}>
-        <label class="show_filter_label" for="filter">Club</label>
-        <input class="checkbox" type="checkbox" name="filter" value="Networking" onchange="this.form.submit()"  {{ 'checked' if event_types_checked[3] else '' }}>
-        <label class="show_filter_label" for="filter">Networking</label><br>
-        <input class="checkbox" type="checkbox" name="filter" value="Sports" onchange="this.form.submit()"  {{ 'checked' if event_types_checked[1] else '' }}>
-        <label class="show_filter_label" for="filter">Sports</label>
-        <input class="checkbox" type="checkbox" name="filter" value="Tutoring" onchange="this.form.submit()"  {{ 'checked' if event_types_checked[0] else '' }}>
-        <label class="show_filter_label" for="filter">Tutoring</label><br>
-        <input class="checkbox" type="checkbox" name="filter" value="Other" onchange="this.form.submit()"  {{ 'checked' if event_types_checked[4] else '' }}>
-        <label class="show_filter_label" for="filter">Other</label>
+        {% for event_type in list_of_event_types %}
+          <input class="checkbox" type="checkbox" id="filter_{{ event_type }}" name="filter" value="{{ event_type }}" onchange="this.form.submit()"  {{ 'checked' if event_type in event_types_checked else '' }}>
+          <label class="show_filter_label" for="filter">{{ event_type }}</label>
+        {% endfor %}
       </div>
       <div class="sort">
         <label for="sort-by" class="sort-by">Sort by:</label>

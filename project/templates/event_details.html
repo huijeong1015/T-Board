@@ -76,22 +76,6 @@
                   </svg>
                 </button>
               </form> 
-              {% if flag == 'attending' %}
-              <form method="POST" action="{{ url_for('set_rating') }}" class="form-show-rating">
-                <input type="hidden" name="event_id" value="{{ event.id }}">
-                <div class="rate">
-                  <label for="updated_rating">Select a Rating:</label> 
-                  <select id = "updated_rating" name="updated_rating" onchange="this.form.submit()">
-                    <option value="0" {% if user_rating == 0 %}selected{% endif %}>None</option> 
-                    <option value="5" {% if user_rating == 5 %}selected{% endif %}>5 stars</option>
-                    <option value="4" {% if user_rating == 4 %}selected{% endif %}>4 stars</option>
-                    <option value="3" {% if user_rating == 3 %}selected{% endif %}>3 stars</option>
-                    <option value="2" {% if user_rating == 2 %}selected{% endif %}>2 stars</option>
-                    <option value="1" {% if user_rating == 1 %}selected{% endif %}>1 star</option>
-                  </select>
-                </div>
-              </form>
-              {% endif %}
             </div>
           </div>
           <div class="right">
@@ -110,7 +94,36 @@
           {% endif %}
           <div class="description">
               Event description: {{ event.description }}
-          </div>                   
+          </div>
+          <div class="rating">Ratings: 
+            <div class="stars">
+            {% set avg_rating = event['average_rating'] if event['average_rating'] is not none else 0 %}
+            {% for i in range(1, 6) %}
+                {% if i <= avg_rating %}
+                    <!-- Full star -->
+                    <svg class="svg-star" fill="#FF9900" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m13.7276 3.44418 1.7598 3.5487c.24.49399.8799.96782 1.4199 1.05855l3.1896.53432c2.0398.34278 2.5198 1.83485 1.0499 3.30675l-2.4797 2.5002c-.42.4234-.6499 1.24-.52 1.8248l.71 3.095c.5599 2.4498-.73 3.3975-2.8797 2.1171l-2.9897-1.7844c-.5399-.3226-1.4298-.3226-1.9798 0l-2.98963 1.7844c-2.13977 1.2804-3.43962.3226-2.87968-2.1171l.70992-3.095c.12998-.5848-.09999-1.4014-.51995-1.8248l-2.47972-2.5002c-1.45984-1.4719-.98989-2.96397 1.04988-3.30675l3.18965-.53432c.52994-.09073 1.16987-.56456 1.40984-1.05855l1.75979-3.5487c.9599-1.92557 2.5197-1.92557 3.4696 0z" stroke="#838383" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+                {% else %}
+                    <!-- Empty star -->
+                    <svg class="svg-star" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m13.7276 3.44418 1.7598 3.5487c.24.49399.8799.96782 1.4199 1.05855l3.1896.53432c2.0398.34278 2.5198 1.83485 1.0499 3.30675l-2.4797 2.5002c-.42.4234-.6499 1.24-.52 1.8248l.71 3.095c.5599 2.4498-.73 3.3975-2.8797 2.1171l-2.9897-1.7844c-.5399-.3226-1.4298-.3226-1.9798 0l-2.98963 1.7844c-2.13977 1.2804-3.43962.3226-2.87968-2.1171l.70992-3.095c.12998-.5848-.09999-1.4014-.51995-1.8248l-2.47972-2.5002c-1.45984-1.4719-.98989-2.96397 1.04988-3.30675l3.18965-.53432c.52994-.09073 1.16987-.56456 1.40984-1.05855l1.75979-3.5487c.9599-1.92557 2.5197-1.92557 3.4696 0z" stroke="#838383" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+                {% endif %}
+            {% endfor %}
+            </div>
+            {% if flag == 'attending' %}
+            <form method="POST" action="{{ url_for('set_rating') }}" class="form-show-rating" style="margin:0%">
+              <input type="hidden" name="event_id" value="{{ event.id }}">
+              <div class="rate">
+                <select class="rate" id="updated_rating" name="updated_rating" onchange="this.form.submit()">
+                  <option value="0" {% if user_rating == 0 %}selected disabled{% endif %}>Rate this event</option> 
+                  <option value="5" {% if user_rating == 5 %}selected{% endif %}>5 stars</option>
+                  <option value="4" {% if user_rating == 4 %}selected{% endif %}>4 stars</option>
+                  <option value="3" {% if user_rating == 3 %}selected{% endif %}>3 stars</option>
+                  <option value="2" {% if user_rating == 2 %}selected{% endif %}>2 stars</option>
+                  <option value="1" {% if user_rating == 1 %}selected{% endif %}>1 star</option>
+                </select>
+              </div>
+            </form>
+            {% endif %}
+          </div>       
         </div>
       </div>
     </div>
@@ -304,7 +317,6 @@ object-fit: cover;
   align-items: flex-start;
   justify-content: flex-start;
   align-self: stretch;
-  flex: 1;
   position: relative;
 }
 .registration {
@@ -380,16 +392,24 @@ object-fit: cover;
   flex-shrink: 0;
   position: relative;
 }
+.rate {
+  font: 400 20px "Ubuntu Condensed", sans-serif;
+}
 .rating {
-  color: #000000;
-  text-align: left;
-  font: 400 16px "Ubuntu Condensed", sans-serif;
-  position: absolute;
-  left: 0px;
-  top: 6px;
+  font: 400 30px "Ubuntu Condensed", sans-serif;
   display: flex;
+  flex-direction: row;
+  justify-content: center;
   align-items: center;
-  justify-content: flex-start;
+  gap: 10px;
+}
+.stars {
+  display: flex;
+  flex-direction: row;
+}
+.svg-star {
+width: 40px;
+height: 40px;
 }
 </style>  
 {% endblock %}

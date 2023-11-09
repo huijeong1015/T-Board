@@ -262,7 +262,7 @@ def handle_button_click():
     return jsonify(success=True, response_message = response_message, added = is_bookmarked)  # Send a response back to the client@app.route('/path_to_flask_route', methods=['POST'])
 
 @app.route("/filtering/", methods=["GET", "POST"])
-def filter():
+def filter_events(searching=False):
     user=get_user()
     if  user.event_types_checked == None or user.event_types_checked == '[false]' or user.event_types_checked == '[]':
         event_types_checked = [False] 
@@ -278,20 +278,22 @@ def filter():
         events = filtered_events 
     print(user)
     if request.method == "POST":
-        if request.form.getlist('filter') != []:
-            event_types_checked = request.form.getlist('filter')
+        if not searching:
+            if request.form.getlist('filter') != []:
+                event_types_checked = request.form.getlist('filter')
 
-            filtered_events = []
-            for filter in event_types_checked: 
-                filtered_events = filtered_events + (Event.query.filter(Event.event_type.contains(filter)).all())
-        else:
-            sql = text("SELECT * FROM events;")
-            events = db.session.execute(sql)
-            filtered_events = events
-            event_types_checked = []
+                filtered_events = []
+                for filter in event_types_checked: 
+                    filtered_events = filtered_events + (Event.query.filter(Event.event_type.contains(filter)).all())
+            else:
+                sql = text("SELECT * FROM events;")
+                events = db.session.execute(sql)
+                filtered_events = events
+                event_types_checked = []
     events = filtered_events 
     user.set_event_types_checked(event_types_checked)
     db.session.commit()
+    
     return(events)
 
 def sort(events, sort_by):
@@ -306,11 +308,17 @@ def sort(events, sort_by):
         events = sort_events_by_date(events, 'Newest to Oldest')   
     return (events)
 
+@app.route('/set_sidetab_state', methods=['POST'])
+def set_sidetab_state():
+    data = request.get_json()
+    session['is_sidetab_visible'] = data['isSidetabVisible']
+    return jsonify(success=True)
+
 @app.route("/main_dashboard/", methods=["GET", "POST"])
 def main_dashboard():
     sql = text("SELECT * FROM events;")
     events = db.session.execute(sql)
-
+    search_result = []
     username = session.get('username')
     user = User.query.filter_by(username=username).first()
     if user.event_types_checked == None:
@@ -320,6 +328,7 @@ def main_dashboard():
     error_msg = ""
     ics_text = ""
     bookmark_checked =False 
+    is_sidetab_visible = session.get('is_sidetab_visible', True)
 
     if 'view_event_details' in session:
         event_id = session.pop('view_event_details', None)
@@ -367,14 +376,23 @@ def main_dashboard():
                                    notification_checked=notification_checked,
                                    user_rating=user_rating_value)
         
-
+            
         if request.form.get('show-bookmarked') != None:
             bookmark_checked = request.form.get('show-bookmarked')
             print (request.form.get("show-bookmarked"))
             events = user.bookmarked_events
+        if 'input-search' in request.form:
+                search_result = search_event(events) 
 
-    events = filter()
-    events = sort(events, sort_by)
+    if 'input-search' not in request.form:    
+        events = filter_events()
+        events = sort(events, sort_by)
+    else:
+        events = search_result
+        events = sort(events, sort_by)
+        if len(events) <= 0:
+            keyword = request.form['input-search']
+            error_msg = "We couldn't find any matches for \"" + keyword + '".'
     bookmarked_events_ids = [event.id for event in bookmarked_events]
     username=session.get('username')
 
@@ -387,7 +405,33 @@ def main_dashboard():
                            sort_by=sort_by, 
                            event_types_checked=user.get_event_types_checked(),
                            username=username,
-                           list_of_event_types=LIST_OF_EVENT_TYPES)
+                           list_of_event_types=LIST_OF_EVENT_TYPES,
+                           is_sidetab_visible=is_sidetab_visible,)
+
+# @app.route("/search_dashboard/", methods=["POST", "GET"])
+@app.route("/main_dashboard/", methods=["POST", "GET"])
+def search_event(events):
+    user = get_user()
+    error_msg = ""
+    keyword = request.form["input-search"]
+    # some error handling before results are used
+
+    results = []
+    filtered_events = filter_events(searching = True)
+    filtered_events_ids = [event.id for event in filtered_events]
+    if keyword:
+        results = Event.query\
+            .filter(Event.name.contains(keyword), Event.id.in_(filtered_events_ids))\
+            .all()
+            # .filter(~Event.bookmarked_ref.any(User.id == user.id))\
+        
+    return results
+    # return render_template("main_dashboard.html", 
+    #                        events=results, 
+    #                        error_msg=error_msg, 
+    #                        profile_picture=get_user_profile_picture(), 
+    #                        event_types_checked = user.get_event_types_checked(),
+    #                        list_of_event_types=LIST_OF_EVENT_TYPES)
 
 @app.route('/download_ics_file', methods=['POST'])
 def download_ics_file():
@@ -456,22 +500,6 @@ def attend_event(event_id):
 
     db.session.commit()
     return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, bookmarked_events=bookmarked_events_ids)
-
-@app.route("/search_dashboard/", methods=["POST", "GET"])
-def search_event():
-    user = get_user()
-    error_msg = ""
-    keyword = request.form["input-search"]
-    # some error handling before results are used
-    results = []
-    if keyword:
-        results = Event.query\
-            .filter(Event.name.contains(keyword))\
-            .filter(~Event.bookmarked_ref.any(User.id == user.id))\
-            .all()
-    if len(results) == 0:
-        error_msg = "We couldn't find any matches for \"" + keyword + '".'
-    return render_template("main_dashboard.html", events=results, error_msg=error_msg, profile_picture=get_user_profile_picture(), event_types_checked = user.get_event_types_checked())
 
 @app.route("/<username>/event_history/")
 def my_account_event_history(username):

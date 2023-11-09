@@ -13,8 +13,7 @@
       </a>
     </div>
     <div class="event-history-tab">
-      <a href="{{ url_for('my_account_event_history', username=session['username']) }}"></a>
-
+      <a href="{{ url_for('my_account_event_history', username=username) }}">
         <svg
         class="history"
         width="50"

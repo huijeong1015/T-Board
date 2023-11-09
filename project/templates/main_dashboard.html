@@ -45,7 +45,7 @@
     <form action="/main_dashboard" method="POST" class="sidetab_filters" id="sidetab_filters" style="{{ 'display: block;' if not is_sidetab_visible else '' }}">
       <div class="show-bookmark">
         <input type="checkbox" id="show-bookmarked" name="show-bookmarked" value="show-bookmarked" class="checkbox" onchange="this.form.submit()" {{ 'checked' if bookmark_checked else '' }}>
-        <label for="show-bookmarked" class="show_bookmark_label">Show bookmarked events</label><br>
+        <label for="show-bookmarked" class="show_bookmark_label">Hide bookmarked events</label><br>
       </div>
       <div class = "apply_filter">
         {% for event_type in list_of_event_types %}
@@ -53,6 +53,11 @@
           <label class="show_filter_label" for="filter">{{ event_type }}</label>
         {% endfor %}
       </div>
+      <div Class = "reset-filters">
+        <button type="submit" class="reset-filters" name="reset-filters" value="reset-filters">
+        </button>
+      </div>
+      
       <div class="sort">
         <label for="sort-by" class="sort-by">Sort by:</label>
         <select id="sort-by" name="sort-by" class="dropdown" onchange="this.form.submit()">

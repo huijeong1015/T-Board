@@ -223,8 +223,10 @@ def bookmark():
 def event_post():
     return render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_types)
 
+#handles bookmarking button for bookmarking 
 @app.route('/toggle_value', methods=['POST'])
 def handle_button_click():
+    
     #get the button value and print it
     data = request.get_json()
     bookmark_id = data['value']
@@ -240,6 +242,8 @@ def handle_button_click():
 
     is_bookmarked = False    
 
+
+        
     if event_to_bookmark not in bookmarked_events:
         bookmarked_events.append(event_to_bookmark)
         try:
@@ -259,7 +263,10 @@ def handle_button_click():
             db.session.rollback()
             response_message = 'Error removing event from bookmarks.'
             print(event)
-    return jsonify(success=True, response_message = response_message, added = is_bookmarked)  # Send a response back to the client@app.route('/path_to_flask_route', methods=['POST'])
+    if session['show-bookmarked'] == 'show-bookmarked':
+        print(session['show-bookmarked'])
+        return jsonify( {'redirect': url_for("main_dashboard")})
+    return jsonify(success=True, response_message = response_message, added = is_bookmarked)  # Send a response back to the client
 
 @app.route("/filtering/", methods=["GET", "POST"])
 def filter_events(searching=False):
@@ -279,7 +286,7 @@ def filter_events(searching=False):
     print(user)
     if request.method == "POST":
         if not searching:
-            if request.form.getlist('filter') != []:
+            if request.form.getlist('filter') != [] and request.form.getlist('reset-filters') == []:
                 event_types_checked = request.form.getlist('filter')
 
                 filtered_events = []
@@ -327,9 +334,11 @@ def main_dashboard():
     sort_by = request.form.get('sort-by')
     error_msg = ""
     ics_text = ""
-    bookmark_checked =False 
+    # bookmark_checked =False 
     is_sidetab_visible = session.get('is_sidetab_visible', True)
-
+    if 'show-bookmarked' not in session:
+        session['show-bookmarked']='false'
+        print(session['show-bookmarked'])
     if 'view_event_details' in session:
         event_id = session.pop('view_event_details', None)
         event = Event.query.filter_by(id=event_id).first()
@@ -371,33 +380,53 @@ def main_dashboard():
                                    bookmarked_events=bookmarked_events_ids, 
                                    notification_checked=notification_checked)
         
-            
+        if request.form.get('reset-filters') != None:
+            user.set_event_types_checked([])
+
         if request.form.get('show-bookmarked') != None:
-            bookmark_checked = request.form.get('show-bookmarked')
+            
+            session['show-bookmarked'] = request.form.get('show-bookmarked')
             print (request.form.get("show-bookmarked"))
-            events = user.bookmarked_events
+        else:
+            session['show-bookmarked'] = 'false'
+            
+
         if 'input-search' in request.form:
                 search_result = search_event(events) 
 
     if 'input-search' not in request.form:    
         events = filter_events()
         events = sort(events, sort_by)
+        if str(type(events)) != "<class 'sqlalchemy.engine.cursor.CursorResult'>" :
+            print(type(events))
+            if  len(events) <= 0 :
+                error_msg = "Looks like there are no events to show, try reseting your filters or unchecking the \"Hide bookmarked events\" check box"
     else:
         events = search_result
         events = sort(events, sort_by)
         if len(events) <= 0:
             keyword = request.form['input-search']
             error_msg = "We couldn't find any matches for \"" + keyword + '".'
+
+
     bookmarked_events_ids = [event.id for event in bookmarked_events]
     username=session.get('username')
-
-
+    if session['show-bookmarked'] == 'show-bookmarked':
+        bookmark_checked = True
+        bookmarked_evevnts_ids_set = set(bookmarked_events_ids)
+        event_ids = [event.id for event in events if event.id not in bookmarked_evevnts_ids_set]
+        events = Event.query.filter(Event.id.in_(event_ids)).all()
+    # session['show-bookmarked'] = bookmark_checked
+    else:
+        bookmark_checked = False
+    
+     
     db.session.commit()
     return render_template("main_dashboard.html", 
                            events=events, 
                            profile_picture=get_user_profile_picture(), 
                            error_msg=error_msg, 
-                           bookmark_checked=bookmark_checked, 
+                           bookmark_checked=bookmark_checked,
                            bookmarked_events=bookmarked_events_ids, 
                            sort_by=sort_by, 
                            event_types_checked=user.get_event_types_checked(),

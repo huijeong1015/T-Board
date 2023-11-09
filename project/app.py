@@ -330,7 +330,6 @@ def main_dashboard():
         user_rating = Rating.query.filter_by(user_id=user.id, event_id=event.id).first()
         user_rating_value = user_rating.rating if user_rating else 0 #Base case will be 0
         event.count_attendees()
-        print(event.number_of_attendees)
 
         if attendee_record.notification_preference != -1:
             notification_checked=True
@@ -354,9 +353,7 @@ def main_dashboard():
             bookmarked_events_ids = [event.id for event in bookmarked_events]
             user_rating = Rating.query.filter_by(user_id=user.id, event_id=event.id).first()
             user_rating_value = user_rating.rating if user_rating else 0 #Base case will be 0
-            
             event.count_attendees()
-            print(event.number_of_attendees)
 
             if attendee_record != None and attendee_record.notification_preference !=-1: 
                 notification_checked=True

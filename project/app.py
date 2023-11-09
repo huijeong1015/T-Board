@@ -488,21 +488,24 @@ def attend_event(event_id):
 
     # Find existing attendee record
     attendee = Attendee.query.filter_by(user_id=user.id, event_id=event.id).first()
-
+    
     if action == 'attend':
         # If the user is not attending, add them as an attendee
         if not attendee:
             new_attendee = Attendee(user_id=user.id, event_id=event.id, notification_preference='-1')
             db.session.add(new_attendee)
+            event.count_attendees()
             db.session.commit()
             flag = 'attending'
     elif action == 'unattend':
         # If the user is attending, remove them as an attendee
         if attendee:
             db.session.delete(attendee)
+            event.count_attendees()
             db.session.commit()
             flag = 'not attending'
 
+    db.session.commit()
     return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, bookmarked_events=bookmarked_events_ids)
 
 @app.route("/<username>/event_history/")

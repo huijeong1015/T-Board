@@ -973,9 +973,9 @@ def new_events():
 
 @app.route('/are_you_sure/<int:event_id>', methods=['GET', 'POST'])
 def are_you_sure(event_id):
-    event = Event.query.filter_by(id=event_id).first()
-    event_name = event.name
     if event: 
+        event = Event.query.filter_by(id=event_id).first()
+        event_name = event.name
         if request.method == 'POST':
             if 'yes' in request.form:
                 db.session.delete(event)

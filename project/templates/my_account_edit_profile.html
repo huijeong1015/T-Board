@@ -50,19 +50,18 @@
           <button class="toggle" id="toggle-btn" name="toggle-btn" type="button">
             {{ profile_picture }}
           </button>
-          </div>
           <div id="checkboxes">
-              {% for pic in profile_pics %}
-              {% if pic.name == profile_picture %}
-              <label for="{{ pic.name }}">
-                <input type="radio" name="profile_pic" id="{{ pic.name }}" value="{{ pic.name }}" class="radio" onchange="displaySelected()" checked/>{{ pic.name }}
-              </label>    
-              {% else %}          
-              <label for="{{ pic.name }}">
-                  <input type="radio" name="profile_pic" id="{{ pic.name }}" value="{{ pic.name }}" class="radio" onchange="displaySelected()"/>{{ pic.name }}
-              </label>
-              {% endif %}
-              {% endfor %}
+          {% for pic in profile_pics %}
+          {% if pic.name == profile_picture %}
+          <label for="{{ pic.name }}">
+            <input type="radio" name="profile_pic" id="{{ pic.name }}" value="{{ pic.name }}" class="radio" onchange="displaySelected()" checked/>{{ pic.name }}
+          </label>    
+          {% else %}          
+          <label for="{{ pic.name }}">
+              <input type="radio" name="profile_pic" id="{{ pic.name }}" value="{{ pic.name }}" class="radio" onchange="displaySelected()"/>{{ pic.name }}
+          </label>
+          {% endif %}
+          {% endfor %}
           </div>
         </div>
       </div>

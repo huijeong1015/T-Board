@@ -20,10 +20,11 @@
         </div>
         <div class="sub-right">
             <div class="frame-info">
-                <div class="event-name-txt">Name: {{ event['name'] }}</div>
+                <div class="event-name-txt"><b>{{ event['name'] }}</b></div>
                 <div class="event-details-txt">Date: {{ event['date'] }}</div>
                 <div class="event-details-txt">Time: {{ event['time'] }}</div>
                 <div class="event-details-txt">Location: {{ event['location'] }}</div>
+                <div class="event-details-txt"># of Attendees: {{event['number_of_attendees'] }}</div>
             </div>
             <div class="sub-bottom btns">
                 <a href="{{ url_for('edit_event', event_id=event['id']) }}" class="btn-edit">

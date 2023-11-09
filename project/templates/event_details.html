@@ -3,116 +3,95 @@
 <div class="dashboard">
   <div class="frame">
     <div class="board">
-      <div class="frame-event-details">
-        <div class="top">
-          <form method="POST" action="{{ url_for('attend_event', event_id=event.id) }}" class="form-button">
-            <div class="attend-button-container">
-              {% if flag == 'attending' %}
-                <input type="hidden" name="action" value="unattend">
-                <button class="btn-submit" type="submit" id="already-attend-btn">ALREADY ATTENDING</button>
+      <div class="top">
+        <div class="frame-btn2">
+          <div class="name"><b>{{ event.name }}</b></div>
+          <form method="POST" class="form-button">
+            <button class="btn" type="submit" name="bookmark" id="btn" value="{{ event['id'] }}">
+              {% if event['id'] in bookmarked_events %}
+                  <svg class="svg-event" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="#A34A4A" stroke-linecap="round" stroke-width="2"><path d="m11 2c-3.77124 0-5.65685 0-6.82843 1.12874-1.17157 1.12874-1.17157 2.94542-1.17157 6.57879v8.27327c0 2.3059 0 3.4588.77285 3.8715 1.49662.7991 4.30395-1.8671 5.63715-2.6699.7732-.4656 1.1598-.6984 1.59-.6984s.8168.2328 1.59.6984c1.3332.8028 4.1405 3.469 5.6372 2.6699.7728-.4127.7728-1.5656.7728-3.8715v-6.9808" stroke-linejoin="round"/><path d="m13 6h8"/></g></svg>
               {% else %}
-                <input type="hidden" name="action" value="attend">
-                <button class="btn-submit" type="submit" id="attend-btn">ATTEND</button>
+                  <svg class="svg-event" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="#A34A4A" stroke-linecap="round" stroke-width="2"><path d="m11 2c-3.77124 0-5.65685 0-6.82843 1.12874-1.17157 1.12874-1.17157 2.94542-1.17157 6.57879v8.27327c0 2.3059 0 3.4588.77285 3.8715 1.49662.7991 4.30395-1.8671 5.63715-2.6699.7732-.4656 1.1598-.6984 1.59-.6984s.8168.2328 1.59.6984c1.3332.8028 4.1405 3.469 5.6372 2.6699.7728-.4127.7728-1.5656.7728-3.8715v-4.9808" stroke-linejoin="round"/><path d="m17 10v-8m-4 4h8"/></g></svg>
               {% endif %}
+            </button>
+          </form>
+          <form method="POST" action="{{ url_for('download_ics_file') }}" class="form-button">
+            <button name="export-calendar" id="btn-calendar" class="btn" value="{{ event['id'] }}">
+              <svg class="svg-event" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="#4F7942" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="m15 19.5c.4915.5057 1.7998 2.5 2.5 2.5m2.5-2.5c-.4915.5057-1.7998 2.5-2.5 2.5m0 0v-8"/><path d="m18 2v2m-12-2v2"/><path d="m12.5 22h-1.45c-4.03051 0-6.04576 0-7.29788-1.3536-1.25212-1.3537-1.25212-3.5323-1.25212-7.8896v-.5136c0-4.35726 0-6.53592 1.25212-7.88956s3.26737-1.35364 7.29788-1.35364h1.9c4.0305 0 6.0458 0 7.2979 1.35364 1.1788 1.27439 1.2478 3.28 1.2518 7.14636"/><path d="m3 8h18"/></g></svg>
+            </button>
+          </form> 
+        </div>
+        <form method="POST" action="{{ url_for('attend_event', event_id=event.id) }}" class="form-button">
+            {% if flag == 'attending' %}
+              <input type="hidden" name="action" value="unattend">
+              <button class="btn-submit" type="submit" id="already-attend-btn">ALREADY ATTENDING</button>
+            {% else %}
+              <input type="hidden" name="action" value="attend">
+              <button class="btn-submit" type="submit" id="attend-btn">ATTEND</button>
+            {% endif %}
+        </form>
+      </div>
+      <div class="middle">
+          <img class="event-image" src="{{ url_for('static', filename='event_photos/' + event['event_type'].lower() + '.png') }}" alt="Event Image"/>
+          <div class="frame-info">
+            <div class="date">Date: {{ event.date }}</div>
+            <div class="time">Time: {{ event.time }}</div>
+            <div class="location">Location: {{ event.location }}</div>
+          </div>
+      </div>
+      <div class="bottom">
+        {% if event.reg_link %}
+        <div class="registration">
+            Register here: {{ event.reg_link }}
+        </div>
+        {% endif %}
+        <div class="description">
+            Event description: {{ event.description }}
+        </div>
+        <div class="rating">Ratings: 
+          <div class="stars">
+          {% set avg_rating = event['average_rating'] if event['average_rating'] is not none else 0 %}
+          {% for i in range(1, 6) %}
+              {% if i <= avg_rating %}
+                  <!-- Full star -->
+                  <svg class="svg-star" fill="#FF9900" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m13.7276 3.44418 1.7598 3.5487c.24.49399.8799.96782 1.4199 1.05855l3.1896.53432c2.0398.34278 2.5198 1.83485 1.0499 3.30675l-2.4797 2.5002c-.42.4234-.6499 1.24-.52 1.8248l.71 3.095c.5599 2.4498-.73 3.3975-2.8797 2.1171l-2.9897-1.7844c-.5399-.3226-1.4298-.3226-1.9798 0l-2.98963 1.7844c-2.13977 1.2804-3.43962.3226-2.87968-2.1171l.70992-3.095c.12998-.5848-.09999-1.4014-.51995-1.8248l-2.47972-2.5002c-1.45984-1.4719-.98989-2.96397 1.04988-3.30675l3.18965-.53432c.52994-.09073 1.16987-.56456 1.40984-1.05855l1.75979-3.5487c.9599-1.92557 2.5197-1.92557 3.4696 0z" stroke="#838383" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+              {% else %}
+                  <!-- Empty star -->
+                  <svg class="svg-star" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m13.7276 3.44418 1.7598 3.5487c.24.49399.8799.96782 1.4199 1.05855l3.1896.53432c2.0398.34278 2.5198 1.83485 1.0499 3.30675l-2.4797 2.5002c-.42.4234-.6499 1.24-.52 1.8248l.71 3.095c.5599 2.4498-.73 3.3975-2.8797 2.1171l-2.9897-1.7844c-.5399-.3226-1.4298-.3226-1.9798 0l-2.98963 1.7844c-2.13977 1.2804-3.43962.3226-2.87968-2.1171l.70992-3.095c.12998-.5848-.09999-1.4014-.51995-1.8248l-2.47972-2.5002c-1.45984-1.4719-.98989-2.96397 1.04988-3.30675l3.18965-.53432c.52994-.09073 1.16987-.56456 1.40984-1.05855l1.75979-3.5487c.9599-1.92557 2.5197-1.92557 3.4696 0z" stroke="#838383" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+              {% endif %}
+          {% endfor %}
+          </div>
+          {% if flag == 'attending' %}
+          <form method="POST" action="{{ url_for('set_rating') }}" class="form-show-rating" style="margin:0%">
+            <input type="hidden" name="event_id" value="{{ event.id }}">
+            <div class="rate">
+              <select class="rate" id="updated_rating" name="updated_rating" onchange="this.form.submit()">
+                <option value="0" {% if user_rating == 0 %}selected disabled{% endif %}>Rate this event</option> 
+                <option value="5" {% if user_rating == 5 %}selected{% endif %}>5 stars</option>
+                <option value="4" {% if user_rating == 4 %}selected{% endif %}>4 stars</option>
+                <option value="3" {% if user_rating == 3 %}selected{% endif %}>3 stars</option>
+                <option value="2" {% if user_rating == 2 %}selected{% endif %}>2 stars</option>
+                <option value="1" {% if user_rating == 1 %}selected{% endif %}>1 star</option>
+              </select>
             </div>
           </form>
-          <div class="name"><b>{{ event.name }}</b></div>
-        </div>
-        <div class="middle">
-          <div class="left">
-            <img class="event-image" src="{{ url_for('static', filename='event_photos/' + event['event_type'].lower() + '.png') }}" alt="Event Image"/>
-            <div class="frame-btn2">
-              <form method="POST" class="form-button">
-                <button class="btn-bookmark" type="submit" name="bookmark" id="btn-bookmark" value="{{ event['id'] }}">
-                  {% if event['id'] in bookmarked_events %}
-                      <svg class="svg-event" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="#A34A4A" stroke-linecap="round" stroke-width="2"><path d="m11 2c-3.77124 0-5.65685 0-6.82843 1.12874-1.17157 1.12874-1.17157 2.94542-1.17157 6.57879v8.27327c0 2.3059 0 3.4588.77285 3.8715 1.49662.7991 4.30395-1.8671 5.63715-2.6699.7732-.4656 1.1598-.6984 1.59-.6984s.8168.2328 1.59.6984c1.3332.8028 4.1405 3.469 5.6372 2.6699.7728-.4127.7728-1.5656.7728-3.8715v-6.9808" stroke-linejoin="round"/><path d="m13 6h8"/></g></svg>
-                  {% else %}
-                      <svg class="svg-event" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="#A34A4A" stroke-linecap="round" stroke-width="2"><path d="m11 2c-3.77124 0-5.65685 0-6.82843 1.12874-1.17157 1.12874-1.17157 2.94542-1.17157 6.57879v8.27327c0 2.3059 0 3.4588.77285 3.8715 1.49662.7991 4.30395-1.8671 5.63715-2.6699.7732-.4656 1.1598-.6984 1.59-.6984s.8168.2328 1.59.6984c1.3332.8028 4.1405 3.469 5.6372 2.6699.7728-.4127.7728-1.5656.7728-3.8715v-4.9808" stroke-linejoin="round"/><path d="m17 10v-8m-4 4h8"/></g></svg>
-                  {% endif %}
-                </button>
-              </form>
-              <form method="POST" action="{{ url_for('download_ics_file') }}" class="form-button">
-                <button name="export-calendar" id="btn-calendar" class="btn-calendar" value="{{ event['id'] }}">
-                  <svg
-                    class="btn-calendar"
-                    width="45"
-                    height="50"
-                    viewBox="0 0 45 50"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M0.607422 0V12.5H44.3574V0H0.607422ZM0.607422 18.75V49.4375C0.607422 49.75 0.857422 50 1.16992 50H43.7324C44.0449 50 44.2949 49.75 44.2949 49.4375V18.75H0.544922H0.607422ZM6.85742 25H13.1074V31.25H6.85742V25ZM19.3574 25H25.6074V31.25H19.3574V25ZM31.8574 25H38.1074V31.25H31.8574V25ZM6.85742 37.5H13.1074V43.75H6.85742V37.5ZM19.3574 37.5H25.6074V43.75H19.3574V37.5Z"
-                      fill="#7CA34A"
-                    />
-                  </svg>
-                </button>
-              </form> 
-            </div>
-          </div>
-          <div class="right">
-            <div class="frame-info">
-              <div class="date">Date: <b>{{ event.date }}</b></div>
-              <div class="time">Time: <b>{{ event.time }}</b></div>
-              <div class="location">Location: <b>{{ event.location }}</b></div>
-            </div>
-          </div>
-        </div>
-        <div class="bottom">
-          {% if event.reg_link %}
-          <div class="registration">
-              Register here: {{ event.reg_link }}
-          </div>
           {% endif %}
-          <div class="description">
-              Event description: {{ event.description }}
-          </div>
-          <div class="rating">Ratings: 
-            <div class="stars">
-            {% set avg_rating = event['average_rating'] if event['average_rating'] is not none else 0 %}
-            {% for i in range(1, 6) %}
-                {% if i <= avg_rating %}
-                    <!-- Full star -->
-                    <svg class="svg-star" fill="#FF9900" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m13.7276 3.44418 1.7598 3.5487c.24.49399.8799.96782 1.4199 1.05855l3.1896.53432c2.0398.34278 2.5198 1.83485 1.0499 3.30675l-2.4797 2.5002c-.42.4234-.6499 1.24-.52 1.8248l.71 3.095c.5599 2.4498-.73 3.3975-2.8797 2.1171l-2.9897-1.7844c-.5399-.3226-1.4298-.3226-1.9798 0l-2.98963 1.7844c-2.13977 1.2804-3.43962.3226-2.87968-2.1171l.70992-3.095c.12998-.5848-.09999-1.4014-.51995-1.8248l-2.47972-2.5002c-1.45984-1.4719-.98989-2.96397 1.04988-3.30675l3.18965-.53432c.52994-.09073 1.16987-.56456 1.40984-1.05855l1.75979-3.5487c.9599-1.92557 2.5197-1.92557 3.4696 0z" stroke="#838383" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
-                {% else %}
-                    <!-- Empty star -->
-                    <svg class="svg-star" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m13.7276 3.44418 1.7598 3.5487c.24.49399.8799.96782 1.4199 1.05855l3.1896.53432c2.0398.34278 2.5198 1.83485 1.0499 3.30675l-2.4797 2.5002c-.42.4234-.6499 1.24-.52 1.8248l.71 3.095c.5599 2.4498-.73 3.3975-2.8797 2.1171l-2.9897-1.7844c-.5399-.3226-1.4298-.3226-1.9798 0l-2.98963 1.7844c-2.13977 1.2804-3.43962.3226-2.87968-2.1171l.70992-3.095c.12998-.5848-.09999-1.4014-.51995-1.8248l-2.47972-2.5002c-1.45984-1.4719-.98989-2.96397 1.04988-3.30675l3.18965-.53432c.52994-.09073 1.16987-.56456 1.40984-1.05855l1.75979-3.5487c.9599-1.92557 2.5197-1.92557 3.4696 0z" stroke="#838383" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
-                {% endif %}
-            {% endfor %}
-            </div>
-            {% if flag == 'attending' %}
-            <form method="POST" action="{{ url_for('set_rating') }}" class="form-show-rating" style="margin:0%">
-              <input type="hidden" name="event_id" value="{{ event.id }}">
-              <div class="rate">
-                <select class="rate" id="updated_rating" name="updated_rating" onchange="this.form.submit()">
-                  <option value="0" {% if user_rating == 0 %}selected disabled{% endif %}>Rate this event</option> 
-                  <option value="5" {% if user_rating == 5 %}selected{% endif %}>5 stars</option>
-                  <option value="4" {% if user_rating == 4 %}selected{% endif %}>4 stars</option>
-                  <option value="3" {% if user_rating == 3 %}selected{% endif %}>3 stars</option>
-                  <option value="2" {% if user_rating == 2 %}selected{% endif %}>2 stars</option>
-                  <option value="1" {% if user_rating == 1 %}selected{% endif %}>1 star</option>
-                </select>
-              </div>
-            </form>
-            {% endif %}
-          </div>       
-        </div>
+        </div>       
       </div>
     </div>
   </div>
+  {% if flag == 'attending' %}
   <div class="sidetab">
     <div class="show-notifications">
-      {% if flag == 'attending' %}
       <form method="POST" action="{{ url_for('set_notification', event_id=event.id) }}" class="form-show-notification">
         <!-- Hidden input to send the event_id to the backend -->
         <input type="hidden" name="event_id" value="{{ event.id }}">
-        <label for="show-notification" class="show-notification-message">Receive Notifications</label><br>
+        <label for="show-notification" class="show-notification-message">Allow setting notifications</label><br>
         <input type="checkbox" id="show-notifications" name="show-notification" value="show-notification" class="checkbox" onchange="this.form.submit()" {{ 'checked' if notification_checked else '' }}>
       </form>
-      {% endif %}
     </div>
-    
   </div>
+  {% endif %}
 </div>
 <style>
 .dashboard {
@@ -125,27 +104,13 @@
   position: relative;
   width: 100%;
 }
-.frame {
-  background: #786554;
-  position: relative;
-  padding: 20px 20px 20px 20px;
-  overflow: visible;
-}
 .board {
   background: #d9d9d9;
   position: relative;
   box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-}
-.frame-event-details {
-  padding: 20px 54px 20px 54px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  align-items: center;
-  justify-content: flex-start;
-  align-self: stretch;
-  flex: 1;
-  position: relative;
+  height: 100%;
+  width: 1080px;
+  border: 20px solid #786554;
 }
 .event-image {
 flex-shrink: 0;
@@ -160,23 +125,24 @@ border: 5px solid #656e7a;
 object-fit: cover;
 }
 .top {
+  padding: 25px;
+  display: flex;
+  flex-direction: row;
   flex-shrink: 0;
-  width: 910px;
-  height: 47px;
+  width: 100%;
   position: relative;
+  justify-content: space-between;
+  align-items: center;
 }
 .name {
   color: #000000;
   text-align: left;
   font: 400 36px "Ubuntu Condensed", sans-serif;
-  position: absolute;
-  left: 0px;
-  top: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  position: relative;
+  width: fit-content;
 }
 .middle {
+  padding: 0px 25px 0px 25px;
   display: flex;
   flex-direction: row;
   gap: 18px;
@@ -186,27 +152,16 @@ object-fit: cover;
   flex-shrink: 0;
   position: relative;
 }
-.left {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-shrink: 0;
-  position: relative;
-  width: 350px;
-}
 .frame-btn2 {
   display: flex;
   flex-direction: row;
   gap: 20px;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   flex-shrink: 0;
-  width: 100%;
+  width: fit-content;
   height: fit-content;
   position: relative;
-  margin-bottom: 15px;
 }
 .form-button {
   margin-block-end: 0%;
@@ -218,33 +173,13 @@ object-fit: cover;
   gap: 5px;
   align-items: center;
 }
-.btn-bookmark {
+.btn {
   flex-shrink: 0;
   position: relative;
   overflow: visible;
   background: transparent;
   border: none;
   padding: 0px;
-}
-.btn-share {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-  background: transparent;
-  border: none;
-  padding: 0px;
-}
-.right {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  align-self: stretch;
-  flex-shrink: 0;
-  width: 527px;
-  position: relative;
 }
 .frame-info {
   display: flex;
@@ -253,7 +188,7 @@ object-fit: cover;
   align-items: flex-start;
   justify-content: flex-start;
   flex-shrink: 0;
-  width: 463px;
+  width: 100%;
   position: relative;
 }
 .date {
@@ -275,6 +210,7 @@ object-fit: cover;
   position: relative;
 }
 .bottom {
+  padding: 25px;
   display: flex;
   flex-direction: column;
   gap: 30px;
@@ -329,18 +265,16 @@ object-fit: cover;
   align-items: center;
   margin-bottom: 30px;
 }
-
 .checkbox {
   background: #d9d9d9;
   width: 30px;
   height: 30px;
   position: relative;
 }
-
 .show-notification-message {
   color: #ffffff;
   text-align: left;
-  font: 400 24px "Ubuntu Mono", sans-serif;
+  font: 400 25px "Ubuntu Condensed", sans-serif;
   position: relative;
   width: 190px;
   display: inline-flex;
@@ -372,12 +306,12 @@ object-fit: cover;
   flex-direction: row;
 }
 .svg-star {
-width: 40px;
-height: 40px;
+  width: 40px;
+  height: 40px;
 }
 .svg-event {
-width: 50px;
-height: fit-content;
+  width: 50px;
+  height: fit-content;
 }
 </style>  
 {% endblock %}

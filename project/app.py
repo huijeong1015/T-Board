@@ -313,7 +313,7 @@ def sort(events, sort_by):
 def main_dashboard():
     sql = text("SELECT * FROM events;")
     events = db.session.execute(sql)
-
+    search_result = []
     username = session.get('username')
     user = User.query.filter_by(username=username).first()
     if user.event_types_checked == None:
@@ -363,14 +363,23 @@ def main_dashboard():
                                    bookmarked_events=bookmarked_events_ids, 
                                    notification_checked=notification_checked)
         
-
+            
         if request.form.get('show-bookmarked') != None:
             bookmark_checked = request.form.get('show-bookmarked')
             print (request.form.get("show-bookmarked"))
             events = user.bookmarked_events
+        if 'input-search' in request.form:
+                search_result = search_event(events) 
 
-    events = filter_events()
-    events = sort(events, sort_by)
+    if 'input-search' not in request.form:    
+        events = filter_events()
+        events = sort(events, sort_by)
+    else:
+        events = search_result
+        events = sort(events, sort_by)
+        if len(events) <= 0:
+            keyword = request.form['input-search']
+            error_msg = "We couldn't find any matches for \"" + keyword + '".'
     bookmarked_events_ids = [event.id for event in bookmarked_events]
     username=session.get('username')
 
@@ -386,6 +395,31 @@ def main_dashboard():
                            event_types_checked=user.get_event_types_checked(),
                            username=username,
                            list_of_event_types=LIST_OF_EVENT_TYPES)
+
+# @app.route("/search_dashboard/", methods=["POST", "GET"])
+@app.route("/main_dashboard/", methods=["POST", "GET"])
+def search_event(events):
+    user = get_user()
+    error_msg = ""
+    keyword = request.form["input-search"]
+    # some error handling before results are used
+
+    results = []
+    filtered_events = filter_events(searching = True)
+    filtered_events_ids = [event.id for event in filtered_events]
+    if keyword:
+        results = Event.query\
+            .filter(Event.name.contains(keyword), Event.id.in_(filtered_events_ids))\
+            .all()
+            # .filter(~Event.bookmarked_ref.any(User.id == user.id))\
+        
+    return results
+    # return render_template("main_dashboard.html", 
+    #                        events=results, 
+    #                        error_msg=error_msg, 
+    #                        profile_picture=get_user_profile_picture(), 
+    #                        event_types_checked = user.get_event_types_checked(),
+    #                        list_of_event_types=LIST_OF_EVENT_TYPES)
 
 @app.route('/download_ics_file', methods=['POST'])
 def download_ics_file():
@@ -444,25 +478,6 @@ def attend_event(event_id):
             flag = 'not attending'
 
     return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, bookmarked_events=bookmarked_events_ids)
-
-@app.route("/search_dashboard/", methods=["POST", "GET"])
-def search_event():
-    user = get_user()
-    error_msg = ""
-    keyword = request.form["input-search"]
-    # some error handling before results are used
-
-    results = []
-    filtered_events = filter_events(searching = True)
-    filtered_events_ids = [event.id for event in filtered_events]
-    if keyword:
-        results = Event.query\
-            .filter(Event.name.contains(keyword), Event.id.in_(filtered_events_ids))\
-            .all()
-            # .filter(~Event.bookmarked_ref.any(User.id == user.id))\
-    if len(results) == 0:
-        error_msg = "We couldn't find any matches for \"" + keyword + '".'
-    return render_template("main_dashboard.html", events=results, error_msg=error_msg, profile_picture=get_user_profile_picture(), event_types_checked = user.get_event_types_checked())
 
 @app.route("/<username>/event_history/")
 def my_account_event_history(username):

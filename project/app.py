@@ -243,7 +243,7 @@ def handle_button_click():
     #get the button value and print it
     data = request.get_json()
     bookmark_id = data['value']
-    print("the button value is" + bookmark_id)
+    print("the button value is " + bookmark_id)
     #get the user and the username and their bookmarked events
     user = get_user()
     username = user.username

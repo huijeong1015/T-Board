@@ -6,7 +6,8 @@
       <div class="event-list">
         {%if not bookmarked_events%}
         <div class="no-bookmark">
-          You have no bookmarked events
+          <p style="font-size: 40px;">You currently don't have any bookmarked events...</p>
+          <p style="font-size: 30px;">Try bookmarking events from main dashboard.</p>
         </div>
         {%else %}
           {% for event in bookmarked_events %}

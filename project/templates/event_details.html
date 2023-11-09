@@ -24,39 +24,11 @@
             <div class="frame-btn2">
               <form method="POST" class="form-button">
                 <button class="btn-bookmark" type="submit" name="bookmark" id="btn-bookmark" value="{{ event['id'] }}">
-                    {% if event['id'] in bookmarked_events %}
-                        <svg
-                            id="btn-bookmark-svg"
-                            class="btn-bookmark"
-                            width="27"
-                            height="54"
-                            viewBox="0 0 27 54"
-                            fill="#A34A4A"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                            d="M12.7929 39.7929L1 51.5858V1H26V51.5858L14.2071 39.7929L13.5 39.0858L12.7929 39.7929Z"
-                            stroke="#A34A4A"
-                            stroke-width="2"
-                            />
-                        </svg>
-                    {% else %}
-                        <svg
-                        id="btn-bookmark-svg"
-                        class="btn-bookmark"
-                        width="27"
-                        height="54"
-                        viewBox="0 0 27 54"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path
-                        d="M12.7929 39.7929L1 51.5858V1H26V51.5858L14.2071 39.7929L13.5 39.0858L12.7929 39.7929Z"
-                        stroke="#A34A4A"
-                        stroke-width="2"
-                        />
-                        </svg>
-                    {% endif %}
+                  {% if event['id'] in bookmarked_events %}
+                      <svg class="svg-event" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="#A34A4A" stroke-linecap="round" stroke-width="2"><path d="m11 2c-3.77124 0-5.65685 0-6.82843 1.12874-1.17157 1.12874-1.17157 2.94542-1.17157 6.57879v8.27327c0 2.3059 0 3.4588.77285 3.8715 1.49662.7991 4.30395-1.8671 5.63715-2.6699.7732-.4656 1.1598-.6984 1.59-.6984s.8168.2328 1.59.6984c1.3332.8028 4.1405 3.469 5.6372 2.6699.7728-.4127.7728-1.5656.7728-3.8715v-6.9808" stroke-linejoin="round"/><path d="m13 6h8"/></g></svg>
+                  {% else %}
+                      <svg class="svg-event" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="#A34A4A" stroke-linecap="round" stroke-width="2"><path d="m11 2c-3.77124 0-5.65685 0-6.82843 1.12874-1.17157 1.12874-1.17157 2.94542-1.17157 6.57879v8.27327c0 2.3059 0 3.4588.77285 3.8715 1.49662.7991 4.30395-1.8671 5.63715-2.6699.7732-.4656 1.1598-.6984 1.59-.6984s.8168.2328 1.59.6984c1.3332.8028 4.1405 3.469 5.6372 2.6699.7728-.4127.7728-1.5656.7728-3.8715v-4.9808" stroke-linejoin="round"/><path d="m17 10v-8m-4 4h8"/></g></svg>
+                  {% endif %}
                 </button>
               </form>
               <form method="POST" action="{{ url_for('download_ics_file') }}" class="form-button">
@@ -254,14 +226,6 @@ object-fit: cover;
   border: none;
   padding: 0px;
 }
-.btn-calendar {
-  flex-shrink: 0;
-  position: relative;
-  overflow: visible;
-  background: transparent;
-  border: none;
-  padding: 0px;
-}
 .btn-share {
   flex-shrink: 0;
   position: relative;
@@ -410,6 +374,10 @@ object-fit: cover;
 .svg-star {
 width: 40px;
 height: 40px;
+}
+.svg-event {
+width: 50px;
+height: fit-content;
 }
 </style>  
 {% endblock %}

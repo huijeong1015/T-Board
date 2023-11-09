@@ -135,6 +135,14 @@ def login():
         
     return render_template("login.html", error=error)
 
+from flask import session, redirect, url_for, flash
+
+@app.route('/logout', methods=["GET", "POST"])
+def logout():
+    session.pop('username', None)
+    session.pop('user_id', None)  
+    return redirect(url_for('login'))
+
 @app.route("/finish_setup/", methods=["GET", "POST"])
 def finish_account_setup():
     username = session.get('username')

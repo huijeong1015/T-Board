@@ -205,6 +205,7 @@ def register():
             db.session.add(new_user)
             db.session.commit()
             email_temporary_pwd(email, temp_pwd)
+            flash("A temporary password has been sent to your email. Please check.")
             return redirect(url_for("login"))
 
     return render_template("register.html")

@@ -93,6 +93,7 @@ class Event(db.Model):
     attendees = db.relationship('Attendee', back_populates='event')
     event_ratings = db.relationship("Rating", back_populates="event")
     average_rating = db.Column(db.Integer, nullable=True)
+    number_of_attendees = db.Column(db.Integer, nullable=False, default=0)
 
     # New method to calculate average rating
     def calculate_average_rating(self):
@@ -105,6 +106,11 @@ class Event(db.Model):
         avg_rating = db.session.query(func.avg(Rating.rating)).filter(Rating.event_id == self.id).scalar()
         # Round the average rating to the nearest whole integer and store it
         self.average_rating = int(round(avg_rating)) if avg_rating is not None else 0
+
+    def count_attendees(self):
+    # Use a SQLAlchemy query to count attendees associated with this event
+        tmpNum = db.session.query(func.count(Attendee.user_id)).filter(Attendee.event_id == self.id).scalar()
+        self.number_of_attendees = tmpNum
 
 
     created_by_id = db.Column(db.Integer, db.ForeignKey('users.id'))

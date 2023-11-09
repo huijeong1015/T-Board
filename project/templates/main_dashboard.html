@@ -34,7 +34,7 @@
         fill="#D9D9D9"
       />
     </svg>
-    <div class="sidetab_alt_text" id="sidetab_alt_text">
+    <div class="sidetab_alt_text" id="sidetab_alt_text" style="{{ 'display: none;' if not is_sidetab_visible else '' }}">
       <div class="welcome_text">
         Welcome to T-Board,<br>{{ username }}!<br>
       </div>
@@ -42,7 +42,7 @@
         Click the cog for more detailed searches!
       </div>
     </div>
-    <form action="/main_dashboard" method="POST" class="sidetab_filters" id="sidetab_filters">
+    <form action="/main_dashboard" method="POST" class="sidetab_filters" id="sidetab_filters" style="{{ 'display: block;' if not is_sidetab_visible else '' }}">
       <div class="show-bookmark">
         <input type="checkbox" id="show-bookmarked" name="show-bookmarked" value="show-bookmarked" class="checkbox" onchange="this.form.submit()" {{ 'checked' if bookmark_checked else '' }}>
         <label for="show-bookmarked" class="show_bookmark_label">Show bookmarked events</label><br>
@@ -68,17 +68,34 @@
 </div>
 
 <script>
-  function toggleSidetab() {
-    const form = document.getElementById('sidetab_filters');
-    const alt_text = document.getElementById('sidetab_alt_text');
-    if (form.style.display === 'none' || form.style.display === '') {
-      form.style.display = 'block';
-      alt_text.style.display = 'none';
-    } else {
-      form.style.display = 'none';
-      alt_text.style.display = 'block';
-    }
+function toggleSidetab() {
+  const form = document.getElementById('sidetab_filters');
+  const alt_text = document.getElementById('sidetab_alt_text');
+  let isSidetabVisible;
+
+  if (form.style.display === 'block') {
+    form.style.display = 'none';
+    alt_text.style.display = 'block';
+    isSidetabVisible = true;
+  } else {
+    form.style.display = 'block';
+    alt_text.style.display = 'none';
+    isSidetabVisible = false;
   }
+
+  fetch('/set_sidetab_state', {
+    method: 'POST',
+    body: JSON.stringify({ 'isSidetabVisible': isSidetabVisible }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then(response => response.json())
+    .then(data => console.log(data))
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
+
   (function(global) {
     if (typeof(global) === "undefined") {
       throw new Error("window is undefined");

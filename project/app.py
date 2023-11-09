@@ -11,7 +11,8 @@ from flask import (
     render_template_string,
     send_file,
     request,
-    jsonify
+    jsonify,
+    make_response
 )
 from datetime import datetime, timedelta
 from flask_bootstrap import Bootstrap
@@ -133,9 +134,9 @@ def login():
                 session['user_id'] = user.id
                 return redirect(url_for("main_dashboard"))
         
-    return render_template("login.html", error=error)
-
-from flask import session, redirect, url_for, flash
+    response = make_response(render_template("login.html", error=error))
+    response.headers["Cache-Control"] = "no-store"
+    return response
 
 @app.route('/logout', methods=["GET", "POST"])
 def logout():

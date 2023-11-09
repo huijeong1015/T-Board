@@ -329,14 +329,12 @@ def main_dashboard():
         bookmarked_events_ids = [event.id for event in bookmarked_events]
         user_rating = Rating.query.filter_by(user_id=user.id, event_id=event.id).first()
         user_rating_value = user_rating.rating if user_rating else 0 #Base case will be 0
-        event.count_attendees()
 
         if attendee_record.notification_preference != -1:
             notification_checked=True
         else:
             notification_checked=False
 
-        db.session.commit()
         # Directly render the event details template
         return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag,
                                bookmarked_events=bookmarked_events_ids, notification_checked=notification_checked, user_rating=user_rating_value)
@@ -353,7 +351,6 @@ def main_dashboard():
             bookmarked_events_ids = [event.id for event in bookmarked_events]
             user_rating = Rating.query.filter_by(user_id=user.id, event_id=event.id).first()
             user_rating_value = user_rating.rating if user_rating else 0 #Base case will be 0
-            event.count_attendees()
 
             if attendee_record != None and attendee_record.notification_preference !=-1: 
                 notification_checked=True
@@ -381,7 +378,6 @@ def main_dashboard():
     bookmarked_events_ids = [event.id for event in bookmarked_events]
     username=session.get('username')
 
-    db.session.commit()
     return render_template("main_dashboard.html", 
                            events=events, 
                            profile_picture=get_user_profile_picture(), 

@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from pathlib import Path
 from werkzeug.security import generate_password_hash
 import json
+from sqlalchemy.sql import func
+
 
 # Configuration
 USERS_DATABASE = "users.db"
@@ -44,6 +46,16 @@ class Attendee(db.Model):
     user = db.relationship("User", back_populates="events_attending")
     event = db.relationship("Event", back_populates="attendees")
 
+class Rating(db.Model):
+    __tablename__ = "ratings"
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'), primary_key=True)
+    rating = db.Column(db.Float, nullable=False)
+
+    # Relationships using back_populates, with the overlaps keyword
+    user = db.relationship("User", back_populates="user_ratings", overlaps="user_ratings")
+    event = db.relationship("Event", back_populates="event_ratings", overlaps="event_ratings")
+
 # Association table for self-referential many-to-many relationship (friends)
 user_friends = db.Table(
     "user_friends",
@@ -79,6 +91,27 @@ class Event(db.Model):
     description = db.Column(db.Text, nullable=False)
     event_type = db.Column(db.String(100), nullable=False)
     attendees = db.relationship('Attendee', back_populates='event')
+    event_ratings = db.relationship("Rating", back_populates="event")
+    average_rating = db.Column(db.Integer, nullable=True)
+    number_of_attendees = db.Column(db.Integer, nullable=False, default=0)
+
+    # New method to calculate average rating
+    def calculate_average_rating(self):
+        total_rating = sum(rating.rating for rating in self.event_ratings)
+        count_ratings = len(self.event_ratings)
+        return total_rating / count_ratings if count_ratings else 0
+    
+    def update_average_rating(self):
+        # Calculate the average rating
+        avg_rating = db.session.query(func.avg(Rating.rating)).filter(Rating.event_id == self.id).scalar()
+        # Round the average rating to the nearest whole integer and store it
+        self.average_rating = int(round(avg_rating)) if avg_rating is not None else 0
+
+    def count_attendees(self):
+    # Use a SQLAlchemy query to count attendees associated with this event
+        tmpNum = db.session.query(func.count(Attendee.user_id)).filter(Attendee.event_id == self.id).scalar()
+        self.number_of_attendees = tmpNum
+
 
     created_by_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     created_by = db.relationship('User', back_populates='created_events')
@@ -106,7 +139,7 @@ class User(db.Model):
     interests = db.Column(db.String(255), nullable=False, default="")
     profile_picture = db.Column(db.String(100), nullable=False, default="default")
     event_types_checked = db.Column(db.Text)
-
+    user_ratings = db.relationship("Rating", back_populates="user")
     friends = db.relationship(
         "User",
         secondary=user_friends,

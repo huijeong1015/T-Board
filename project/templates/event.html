@@ -3,6 +3,19 @@
     <div class="event-content">
         <div class="left">
             <img src="{{ url_for('static', filename='event_photos/' + event['event_type'].lower() + '.png') }}" alt="Image" class="event-image">
+            <svg class="rating" width="220" height="40" viewBox="0 0 220 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                {% set avg_rating = event['average_rating'] if event['average_rating'] is not none else 0 %}
+                {% for i in range(1, 6) %}
+                    {% if i <= avg_rating %}
+                        <!-- Full star -->
+                        <path d="M{{ i * 40 - 20 }} 0L{{ i * 40 - 15.5097 }} 13.8197H{{ i * 40 }}L{{ i * 40 - 11.7557 }} 22.3607L{{ i * 40 - 7.2654 }} 36.1803L{{ i * 40 - 20 }} 27.6393L{{ i * 40 - 32.7557 }} 36.1803L{{ i * 40 - 28.2654 }} 22.3607L{{ i * 40 - 40.0211 }} 13.8197H{{ i * 40 - 24.4903 }}L{{ i * 40 - 20 }} 0Z" fill="#FF9900" stroke="#838383" stroke-width="2"/>
+                    {% else %}
+                        <!-- Empty star -->
+                        <path d="M{{ i * 40 - 20 }} 0L{{ i * 40 - 15.5097 }} 13.8197H{{ i * 40 }}L{{ i * 40 - 11.7557 }} 22.3607L{{ i * 40 - 7.2654 }} 36.1803L{{ i * 40 - 20 }} 27.6393L{{ i * 40 - 32.7557 }} 36.1803L{{ i * 40 - 28.2654 }} 22.3607L{{ i * 40 - 40.0211 }} 13.8197H{{ i * 40 - 24.4903 }}L{{ i * 40 - 20 }} 0Z" stroke="#838383" stroke-width="2"/>
+                    {% endif %}
+                {% endfor %}
+            </svg>
+            <div class="attendee-count-txt">Attendees: {{event['number_of_attendees'] }}</div>    
         </div>
         <div class="right">
             <div class="frame-info">

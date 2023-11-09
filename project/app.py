@@ -336,7 +336,9 @@ def main_dashboard():
         attendee_record = Attendee.query.filter_by(user_id=user.id, event_id=event_id).first()
         flag = 'attending' if attendee_record else 'not attending'
         bookmarked_events_ids = [event.id for event in bookmarked_events]
-        
+        user_rating = Rating.query.filter_by(user_id=user.id, event_id=event.id).first()
+        user_rating_value = user_rating.rating if user_rating else 0 #Base case will be 0
+
         if attendee_record.notification_preference != -1:
             notification_checked=True
         else:
@@ -344,7 +346,7 @@ def main_dashboard():
 
         # Directly render the event details template
         return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag,
-                               bookmarked_events=bookmarked_events_ids, notification_checked=notification_checked)
+                               bookmarked_events=bookmarked_events_ids, notification_checked=notification_checked, user_rating=user_rating_value)
 
     if request.method == "POST":
         # Handles event details button
@@ -355,8 +357,9 @@ def main_dashboard():
             user = User.query.filter_by(username=username).first()
             attendee_record = Attendee.query.filter_by(user_id=user.id, event_id=event_id).first()
             flag = 'attending' if attendee_record else 'not attending'
-
             bookmarked_events_ids = [event.id for event in bookmarked_events]
+            user_rating = Rating.query.filter_by(user_id=user.id, event_id=event.id).first()
+            user_rating_value = user_rating.rating if user_rating else 0 #Base case will be 0
 
             if attendee_record != None and attendee_record.notification_preference !=-1: 
                 notification_checked=True
@@ -364,12 +367,14 @@ def main_dashboard():
             else:
                 notification_checked=False
 
+            db.session.commit()
             return render_template("event_details.html", 
                                    event=event, 
                                    profile_picture=get_user_profile_picture(), 
                                    flag=flag, 
                                    bookmarked_events=bookmarked_events_ids, 
-                                   notification_checked=notification_checked)
+                                   notification_checked=notification_checked,
+                                   user_rating=user_rating_value)
         
             
         if request.form.get('show-bookmarked') != None:
@@ -391,8 +396,6 @@ def main_dashboard():
     bookmarked_events_ids = [event.id for event in bookmarked_events]
     username=session.get('username')
 
-
-    db.session.commit()
     return render_template("main_dashboard.html", 
                            events=events, 
                            profile_picture=get_user_profile_picture(), 
@@ -478,21 +481,24 @@ def attend_event(event_id):
 
     # Find existing attendee record
     attendee = Attendee.query.filter_by(user_id=user.id, event_id=event.id).first()
-
+    
     if action == 'attend':
         # If the user is not attending, add them as an attendee
         if not attendee:
             new_attendee = Attendee(user_id=user.id, event_id=event.id, notification_preference='-1')
             db.session.add(new_attendee)
+            event.count_attendees()
             db.session.commit()
             flag = 'attending'
     elif action == 'unattend':
         # If the user is attending, remove them as an attendee
         if attendee:
             db.session.delete(attendee)
+            event.count_attendees()
             db.session.commit()
             flag = 'not attending'
 
+    db.session.commit()
     return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, bookmarked_events=bookmarked_events_ids)
 
 @app.route("/<username>/event_history/")
@@ -673,6 +679,33 @@ def set_notification():
     session['view_event_details'] = event_id
 
     return redirect(url_for('main_dashboard'))
+
+@app.route('/set_rating', methods=['POST'])
+def set_rating():
+    username = session.get('username')
+    user = User.query.filter_by(username=username).first()
+    event_id = request.form.get('event_id')
+    event = Event.query.filter_by(id=event_id).first()
+    updated_rating = request.form.get('updated_rating', type=int)
+
+    # Find the rating by this user for this event, or initialize a new one
+    rating = Rating.query.filter_by(user_id=user.id, event_id=event_id).first()
+    if rating:
+        # Update the existing rating
+        rating.rating = updated_rating
+    else:
+        # Create a new rating instance
+        rating = Rating(user_id=user.id, event_id=event_id, rating=updated_rating)
+        db.session.add(rating)
+
+    #code goes here
+    event.update_average_rating()
+
+    db.session.commit()
+    session['view_event_details'] = event_id
+
+    return redirect(url_for('main_dashboard')) 
+
 
 @app.route("/my_account/notification/", methods=['GET', 'POST'])
 def my_account_notification():

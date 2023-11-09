@@ -6,15 +6,15 @@
       <div class="top">
         <div class="frame-btn2">
           <div class="name"><b>{{ event.name }}</b></div>
-          <form method="POST" class="form-button">
-            <button class="btn" type="submit" name="bookmark" id="btn" value="{{ event['id'] }}">
-              {% if event['id'] in bookmarked_events %}
-                  <svg class="svg-event" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="#A34A4A" stroke-linecap="round" stroke-width="2"><path d="m11 2c-3.77124 0-5.65685 0-6.82843 1.12874-1.17157 1.12874-1.17157 2.94542-1.17157 6.57879v8.27327c0 2.3059 0 3.4588.77285 3.8715 1.49662.7991 4.30395-1.8671 5.63715-2.6699.7732-.4656 1.1598-.6984 1.59-.6984s.8168.2328 1.59.6984c1.3332.8028 4.1405 3.469 5.6372 2.6699.7728-.4127.7728-1.5656.7728-3.8715v-6.9808" stroke-linejoin="round"/><path d="m13 6h8"/></g></svg>
-              {% else %}
-                  <svg class="svg-event" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="#A34A4A" stroke-linecap="round" stroke-width="2"><path d="m11 2c-3.77124 0-5.65685 0-6.82843 1.12874-1.17157 1.12874-1.17157 2.94542-1.17157 6.57879v8.27327c0 2.3059 0 3.4588.77285 3.8715 1.49662.7991 4.30395-1.8671 5.63715-2.6699.7732-.4656 1.1598-.6984 1.59-.6984s.8168.2328 1.59.6984c1.3332.8028 4.1405 3.469 5.6372 2.6699.7728-.4127.7728-1.5656.7728-3.8715v-4.9808" stroke-linejoin="round"/><path d="m17 10v-8m-4 4h8"/></g></svg>
-              {% endif %}
+          <form class="btn-bookmark-form" method="POST" action="/main_dashboard" style="margin: 0%;">
+            <button class="btn-bookmark" type="submit" name="bookmark" value="{{ event['id'] }}">
+                {% if event['id'] in bookmarked_events %}
+                    <svg class="svg-event" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="#A34A4A" stroke-linecap="round" stroke-width="2"><path d="m11 2c-3.77124 0-5.65685 0-6.82843 1.12874-1.17157 1.12874-1.17157 2.94542-1.17157 6.57879v8.27327c0 2.3059 0 3.4588.77285 3.8715 1.49662.7991 4.30395-1.8671 5.63715-2.6699.7732-.4656 1.1598-.6984 1.59-.6984s.8168.2328 1.59.6984c1.3332.8028 4.1405 3.469 5.6372 2.6699.7728-.4127.7728-1.5656.7728-3.8715v-6.9808" stroke-linejoin="round"/><path d="m13 6h8"/></g></svg>
+                {% else %}
+                    <svg class="svg-event" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="#A34A4A" stroke-linecap="round" stroke-width="2"><path d="m11 2c-3.77124 0-5.65685 0-6.82843 1.12874-1.17157 1.12874-1.17157 2.94542-1.17157 6.57879v8.27327c0 2.3059 0 3.4588.77285 3.8715 1.49662.7991 4.30395-1.8671 5.63715-2.6699.7732-.4656 1.1598-.6984 1.59-.6984s.8168.2328 1.59.6984c1.3332.8028 4.1405 3.469 5.6372 2.6699.7728-.4127.7728-1.5656.7728-3.8715v-4.9808" stroke-linejoin="round"/><path d="m17 10v-8m-4 4h8"/></g></svg>
+                {% endif %}
             </button>
-          </form>
+        </form> 
           <form method="POST" action="{{ url_for('download_ics_file') }}" class="form-button">
             <button name="export-calendar" id="btn-calendar" class="btn" value="{{ event['id'] }}">
               <svg class="svg-event" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="#4F7942" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="m15 19.5c.4915.5057 1.7998 2.5 2.5 2.5m2.5-2.5c-.4915.5057-1.7998 2.5-2.5 2.5m0 0v-8"/><path d="m18 2v2m-12-2v2"/><path d="m12.5 22h-1.45c-4.03051 0-6.04576 0-7.29788-1.3536-1.25212-1.3537-1.25212-3.5323-1.25212-7.8896v-.5136c0-4.35726 0-6.53592 1.25212-7.88956s3.26737-1.35364 7.29788-1.35364h1.9c4.0305 0 6.0458 0 7.2979 1.35364 1.1788 1.27439 1.2478 3.28 1.2518 7.14636"/><path d="m3 8h18"/></g></svg>

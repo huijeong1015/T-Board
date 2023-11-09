@@ -245,7 +245,7 @@ def handle_button_click():
     #get the button value and print it
     data = request.get_json()
     bookmark_id = data['value']
-    print("the button value is" + bookmark_id)
+    print("the button value is " + bookmark_id)
     #get the user and the username and their bookmarked events
     user = get_user()
     username = user.username
@@ -885,7 +885,7 @@ def edit_event(event_id):
                 event.time= event_time
                 event.date= event_date
                 db.session.commit()
-                return redirect(url_for("my_account_myevents"))
+                return redirect(url_for("my_account_myevents", username=session.get('username')))
             else:
                 #TODO: Give useful message to user
                 pass
@@ -1008,14 +1008,16 @@ def new_events():
 @app.route('/are_you_sure/<int:event_id>', methods=['GET', 'POST'])
 def are_you_sure(event_id):
     event = Event.query.filter_by(id=event_id).first()
+    event_name = ""
     if event: 
+        event_name = event.name
         if request.method == 'POST':
             if 'yes' in request.form:
                 db.session.delete(event)
                 db.session.commit()
                 flash('Event has been deleted!', 'success')
-                return redirect(url_for('my_account_myevents'))
+                return redirect(url_for('my_account_myevents', username=session.get('username')))
             elif 'no' in request.form:
                 flash('Event deletion cancelled.', 'info')
                 return redirect(url_for('edit_event', event_id=event_id))
-    return render_template('are_you_sure.html', event_id=event_id, event=event, profile_picture=get_user_profile_picture())
+    return render_template('are_you_sure.html', event_id=event_id, event_name=event_name, event=event, profile_picture=get_user_profile_picture())

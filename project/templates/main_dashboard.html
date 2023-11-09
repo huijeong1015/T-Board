@@ -21,12 +21,12 @@
   </div>
   <div class="sidetab">
     <svg class="icon-filter" onclick="toggleSidetab()" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="m5.33008 2h13.33992c1.11 0 2.0201.90999 2.0201 2.01999v2.22c0 .81-.51 1.82001-1.01 2.32001" stroke-miterlimit="10"/><path d="m14.3206 19.0699c0 .61-.4001 1.41-.9101 1.72l-1.41.9101c-1.31.81-3.12996-.1001-3.12996-1.7201v-5.35c0-.71-.39999-1.62-.80999-2.12l-3.84003-4.03996c-.51-.51-.90997-1.40999-.90997-2.01999" stroke-miterlimit="10"/><path d="m16.0692 16.5201c1.7673 0 3.2-1.4327 3.2-3.2s-1.4327-3.2-3.2-3.2c-1.7674 0-3.2001 1.4327-3.2001 3.2s1.4327 3.2 3.2001 3.2z"/><path d="m19.8691 17.1201-1-1"/></g></svg>
-    <div class="sidetabpalt_text" id="sidetab_alt_text">
-      <div class="details-text">
+    <div class="sidetab_alt_text" id="sidetab_alt_text" style="{{ 'display: none;' if not is_sidetab_visible else '' }}">
+      <div class="details_text">
         Click the filter icon for more detailed search
       </div>
     </div>
-    <form action="/main_dashboard" method="POST" class="sidetab_filters" id="sidetab_filters">
+    <form action="/main_dashboard" method="POST" class="sidetab_filters" id="sidetab_filters" style="{{ 'display: block;' if not is_sidetab_visible else '' }}">
       <div class="show-bookmark">
         <input type="checkbox" id="show-bookmarked" name="show-bookmarked" value="show-bookmarked" class="checkbox" onchange="this.form.submit()" {{ 'checked' if bookmark_checked else '' }}>
         <label for="show-bookmarked" class="show_bookmark_label">Show bookmarked events</label><br>
@@ -52,18 +52,36 @@
 </div>
 
 <script>
-  function toggleSidetab() {
-    const form = document.getElementById('sidetab_filters');
-    const alt_text = document.getElementById('sidetab_alt_text');
-    if (form.style.display === 'none' || form.style.display === '') {
-      form.style.display = 'block';
-      alt_text.style.display = 'none';
-    } else {
-      form.style.display = 'none';
-      alt_text.style.display = 'block';
-    }
+function toggleSidetab() {
+  const form = document.getElementById('sidetab_filters');
+  const alt_text = document.getElementById('sidetab_alt_text');
+  let isSidetabVisible;
+
+  if (form.style.display === 'block') {
+    form.style.display = 'none';
+    alt_text.style.display = 'block';
+    isSidetabVisible = true;
+  } else {
+    form.style.display = 'block';
+    alt_text.style.display = 'none';
+    isSidetabVisible = false;
   }
+
+  fetch('/set_sidetab_state', {
+    method: 'POST',
+    body: JSON.stringify({ 'isSidetabVisible': isSidetabVisible }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then(response => response.json())
+    .then(data => console.log(data))
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
+
 </script>
+
 {% include "base_event.html" %}
 <style>
 .dashboard {

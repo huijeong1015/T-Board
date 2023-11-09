@@ -383,16 +383,19 @@ def main_dashboard():
         if request.form.get('reset-filters') != None:
             user.set_event_types_checked([])
 
+
+
         if request.form.get('show-bookmarked') != None:
             
             session['show-bookmarked'] = request.form.get('show-bookmarked')
             print (request.form.get("show-bookmarked"))
+        elif 'input-search' in request.form:
+            search_result = search_event(events) 
         else:
             session['show-bookmarked'] = 'false'
             
 
-        if 'input-search' in request.form:
-                search_result = search_event(events) 
+
 
     if 'input-search' not in request.form:    
         events = filter_events()

@@ -42,7 +42,7 @@
         Click the cog for more detailed searches!
       </div>
     </div>
-    <form action="/main_dashboard" method="POST" class="sidetab_filters" id="sidetab_filters" style="{{ 'display: block;' if not is_sidetab_visible else '' }}">
+    <form action="/main_dashboard" method="POST" class="sidetab_filters {{ 'hidden' if is_sidetab_visible else '' }}" id="sidetab_filters">
       <div class="show-bookmark">
         <input type="checkbox" id="show-bookmarked" name="show-bookmarked" value="show-bookmarked" class="checkbox" onchange="this.form.submit()" {{ 'checked' if bookmark_checked else '' }}>
         <label for="show-bookmarked" class="show_bookmark_label">Show bookmarked events</label><br>
@@ -100,6 +100,7 @@ function toggleSidetab() {
 
 {% include "base_event.html" %}
 <style>
+.hidden { display: none; }
 .dashboard {
   padding: 0px 25px 0px 25px;
   display: flex;

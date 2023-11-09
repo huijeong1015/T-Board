@@ -8,7 +8,11 @@
           <div class="error">
             <p style="font-size: 50px;">Hmmm...</p>
             <p style="font-size: 30px;">{{ error_msg }}</p>
+            {% if error_msg == "Looks like there are no events to show." %}
+            <p style="font-size: 25px;">Try resetting your filters or unchecking the "Hide bookmarked events" checkbox.</p>
+            {% else %}
             <p style="font-size: 25px;">Try a different keyword. To return to main dashboard, click the T-board logo.</p>
+            {% endif %}
           </div>
         {% endif %}
         {% for event in events %}
@@ -29,17 +33,21 @@
     <form action="/main_dashboard" method="POST" class="sidetab_filters" id="sidetab_filters" style="{{ 'display: block;' if not is_sidetab_visible else '' }}">
       <div class="show-bookmark">
         <input type="checkbox" id="show-bookmarked" name="show-bookmarked" value="show-bookmarked" class="checkbox" onchange="this.form.submit()" {{ 'checked' if bookmark_checked else '' }}>
-        <label for="show-bookmarked" class="show_bookmark_label">Hide bookmarked events</label><br>
+        <label for="show-bookmarked" class="show_bookmark_label" style="margin:0%">Hide bookmarked events</label><br>
       </div>
-      <div class = "apply_filter">
+      <div class="apply_filter">Filter by event types:
         {% for event_type in list_of_event_types %}
+        <div class="filter">
           <input class="checkbox" type="checkbox" id="filter_{{ event_type }}" name="filter" value="{{ event_type }}" onchange="this.form.submit()"  {{ 'checked' if event_type in event_types_checked else '' }}>
-          <label class="show_filter_label" for="filter">{{ event_type }}</label>
+          <label class="show_filter_label" for="filter" style="margin:0%">{{ event_type }}</label>
+        </div>
         {% endfor %}
       </div>
-      <div Class = "reset-filters">
-        <button type="submit" class="reset-filters" name="reset-filters" value="reset-filters">
+      <div class = "reset-filters">
+        <button type="submit" class="btn-reset-filters" name="reset-filters" value="reset-filters">
+          <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m20.0092 2v3.13219c0 .29386-.3674.42689-.5555.20114-1.8311-2.04583-4.492-3.33333-7.4537-3.33333-5.52285 0-10 4.47715-10 10 0 5.5228 4.47715 10 10 10 5.5228 0 10-4.4772 10-10" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
         </button>
+        <label for="reset-filters" class="show_filter_label" style="margin:0%">Reset filters</label>
       </div>
       
       <div class="sort">
@@ -214,7 +222,6 @@ function toggleSidetab() {
   display: flex;
   flex-direction: column;
   margin-bottom: 30px;
-  gap: 10px;
 }
 .dropdown {
   text-align: left;
@@ -228,6 +235,7 @@ function toggleSidetab() {
   flex-direction: column;
   position: relative;
   font: 400 20px "Ubuntu Condensed", sans-serif;
+  margin: 0%;
 }
 .icon-filter {
   flex-shrink: 0;
@@ -236,12 +244,35 @@ function toggleSidetab() {
   width: 50px;
   height: 50px;
 }
+.filter {
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
 .apply_filter {
+  display: flex;
+  flex-direction: column;
   color: white;
   text-align: left;
   font: 400 20px "Ubuntu Condensed", sans-serif;
   position: relative;
   margin-bottom: 20px;
+  margin-top: 20px;
+  gap: 5px;
+}
+.btn-reset-filters {
+  background-color: transparent;
+  border: transparent;
+  padding: 0%;
+}
+.reset-filters {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 20px;
 }
 </style>
 {% endblock %}

@@ -133,7 +133,6 @@ def login():
                 session['user_id'] = user.id
                 return redirect(url_for("main_dashboard"))
         
-
     return render_template("login.html", error=error)
 
 @app.route("/finish_setup/", methods=["GET", "POST"])

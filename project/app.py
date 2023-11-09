@@ -94,10 +94,16 @@ def sort_events_by_name(events, order):
 
     return sorted_events
 
-#Main Functions
 @app.route("/", methods=["GET", "POST"])
+def first_page():
+    return redirect(url_for("login"))
+
 @app.route("/login/", methods=["GET", "POST"])
 def login():
+    if 'username' in session:
+        print('we hit this case')
+        return redirect(url_for("main_dashboard"))
+    
     error = None
     if request.method == "POST":
         username = request.form["username"]
@@ -126,6 +132,7 @@ def login():
                 session["username"] = username
                 session['user_id'] = user.id
                 return redirect(url_for("main_dashboard"))
+        
 
     return render_template("login.html", error=error)
 

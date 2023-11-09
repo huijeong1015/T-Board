@@ -37,9 +37,11 @@
           <label class="show_filter_label" for="filter">{{ event_type }}</label>
         {% endfor %}
       </div>
-      <div Class = "reset-filters">
-        <button type="submit" class="reset-filters" name="reset-filters" value="reset-filters">
+      <div class = "reset-filters">
+        <button type="submit" class="btn-reset-filters" name="reset-filters" value="reset-filters">
+          <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m20.0092 2v3.13219c0 .29386-.3674.42689-.5555.20114-1.8311-2.04583-4.492-3.33333-7.4537-3.33333-5.52285 0-10 4.47715-10 10 0 5.5228 4.47715 10 10 10 5.5228 0 10-4.4772 10-10" stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
         </button>
+        <label for="reset-filters" class="show_filter_label" style="margin:0%">Reset filters</label>
       </div>
       
       <div class="sort">
@@ -214,7 +216,6 @@ function toggleSidetab() {
   display: flex;
   flex-direction: column;
   margin-bottom: 30px;
-  gap: 10px;
 }
 .dropdown {
   text-align: left;
@@ -228,6 +229,7 @@ function toggleSidetab() {
   flex-direction: column;
   position: relative;
   font: 400 20px "Ubuntu Condensed", sans-serif;
+  margin: 0%;
 }
 .icon-filter {
   flex-shrink: 0;
@@ -242,6 +244,18 @@ function toggleSidetab() {
   font: 400 20px "Ubuntu Condensed", sans-serif;
   position: relative;
   margin-bottom: 20px;
+}
+.btn-reset-filters {
+  background-color: transparent;
+  border: transparent;
+  padding: 0%;
+}
+.reset-filters {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 20px;
 }
 </style>
 {% endblock %}

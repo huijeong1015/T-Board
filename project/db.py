@@ -170,6 +170,7 @@ sample_events = [
     {"name": "Concrete Canoe General Meeting", "date": "2023-05-01", "time": "07:00", "location": "Bahen Centre", "description": "General meeting open to the public", "event_type": "Club"},
     {"name": "MAT188 Tutoring", "date": "2023-07-10", "time": "10:00", "location": "Zoom", "description": "Running through Mat188 homework problems", "event_type": "Tutoring"}, 
 ]
+#Add more
 
 with app.app_context():
     # Create tables
@@ -193,26 +194,26 @@ with app.app_context():
             is_first_login=False
         )
         user_a = User(
-            username="user_a",
+            username="Karl A",
             password=generate_password_hash("password_a"),
             email="a@mail.com",
-            interests="Interests A",
-            profile_picture="Default",
+            interests="Volleyball, Computer Engineering",
+            profile_picture="Surprised",
             is_first_login=False
         )
         user_b = User(
-            username="user_b",
+            username="Alex B",
             password=generate_password_hash("password_b"),
             email="b@mail.com",
-            interests="Interests B",
+            interests="Literature",
             profile_picture="Happy",
             is_first_login=False
         )
         user_c = User(
-            username="user_c",
+            username="Jamie C",
             password=generate_password_hash("password_c"),
             email="c@mail.com",
-            interests="Interests C",
+            interests="Science",
             profile_picture="Cool",
             is_first_login=False
         )

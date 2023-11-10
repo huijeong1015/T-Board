@@ -9,7 +9,7 @@
           <form class="form-button" method="POST" action="/main_dashboard" style="margin: 0%;">
             <button class="btn-bookmark" type="submit" name="bookmark" value="{{ event['id'] }}">
                 {% if event['id'] in bookmarked_events %}
-                    <svg class="svg-event" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="#A34A4A" stroke-linecap="round" stroke-width="2"><path d="m11 2c-3.77124 0-5.65685 0-6.82843 1.12874-1.17157 1.12874-1.17157 2.94542-1.17157 6.57879v8.27327c0 2.3059 0 3.4588.77285 3.8715 1.49662.7991 4.30395-1.8671 5.63715-2.6699.7732-.4656 1.1598-.6984 1.59-.6984s.8168.2328 1.59.6984c1.3332.8028 4.1405 3.469 5.6372 2.6699.7728-.4127.7728-1.5656.7728-3.8715v-6.9808" stroke-linejoin="round"/><path d="m13 6h8"/></g></svg>
+                    <svg class="svg-event" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="#333333" stroke-linecap="round" stroke-width="2"><path d="m11 2c-3.77124 0-5.65685 0-6.82843 1.12874-1.17157 1.12874-1.17157 2.94542-1.17157 6.57879v8.27327c0 2.3059 0 3.4588.77285 3.8715 1.49662.7991 4.30395-1.8671 5.63715-2.6699.7732-.4656 1.1598-.6984 1.59-.6984s.8168.2328 1.59.6984c1.3332.8028 4.1405 3.469 5.6372 2.6699.7728-.4127.7728-1.5656.7728-3.8715v-6.9808" stroke-linejoin="round"/><path d="m13 6h8"/></g></svg>
                 {% else %}
                     <svg class="svg-event" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="#A34A4A" stroke-linecap="round" stroke-width="2"><path d="m11 2c-3.77124 0-5.65685 0-6.82843 1.12874-1.17157 1.12874-1.17157 2.94542-1.17157 6.57879v8.27327c0 2.3059 0 3.4588.77285 3.8715 1.49662.7991 4.30395-1.8671 5.63715-2.6699.7732-.4656 1.1598-.6984 1.59-.6984s.8168.2328 1.59.6984c1.3332.8028 4.1405 3.469 5.6372 2.6699.7728-.4127.7728-1.5656.7728-3.8715v-4.9808" stroke-linejoin="round"/><path d="m17 10v-8m-4 4h8"/></g></svg>
                 {% endif %}
@@ -24,7 +24,7 @@
         <form method="POST" action="{{ url_for('attend_event', event_id=event.id) }}" class="form-button">
             {% if flag == 'attending' %}
               <input type="hidden" name="action" value="unattend">
-              <button class="btn-submit" type="submit" id="already-attend-btn">ALREADY ATTENDING</button>
+              <button class="btn-submit" type="submit" id="already-attend-btn">ATTENDING</button>
             {% else %}
               <input type="hidden" name="action" value="attend">
               <button class="btn-submit" type="submit" id="attend-btn">ATTEND</button>
@@ -34,21 +34,23 @@
       <div class="middle">
           <img class="event-image" src="{{ url_for('static', filename='event_photos/' + event['event_type'].lower() + '.png') }}" alt="Event Image"/>
           <div class="frame-info">
-            <div class="date">Date: {{ event.date }}</div>
-            <div class="time">Time: {{ event.time }}</div>
-            <div class="location">Location: {{ event.location }}</div>
+            <div class="date"><b>Date:</b> {{ event.date }}</div>
+            <div class="time"><b>Time:</b> {{ event.time }}</div>
+            <div class="location"><b>Location:</b> {{ event.location }}</div>
           </div>
       </div>
       <div class="bottom">
         {% if event.reg_link %}
         <div class="registration">
-            Register here: {{ event.reg_link }}
+          <p><b>Register here:</b></p>
+          <p>{{ event.reg_link }}</p>
         </div>
         {% endif %}
         <div class="description">
-            Event description: {{ event.description }}
+            <p><b>Event description:</b></p>
+            <p>{{ event.description }}</p>
         </div>
-        <div class="rating">Ratings: 
+        <div class="rating"><b>Ratings:</b>
           <div class="stars">
           {% set avg_rating = event['average_rating'] if event['average_rating'] is not none else 0 %}
           {% for i in range(1, 6) %}
@@ -139,14 +141,15 @@ object-fit: cover;
   text-align: left;
   font: 400 36px "Ubuntu Condensed", sans-serif;
   position: relative;
-  width: fit-content;
+  max-width: 650px;
+  word-wrap: break-word;
 }
 .middle {
   padding: 0px 25px 0px 25px;
   display: flex;
   flex-direction: row;
   gap: 18px;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-start;
   align-self: stretch;
   flex-shrink: 0;
@@ -163,7 +166,7 @@ object-fit: cover;
   height: fit-content;
   position: relative;
 }
-.fsvg.remove();orm-button {
+.form-button {
   margin-block-end: 0%;
 }
 .form-show-notification {
@@ -196,7 +199,7 @@ object-fit: cover;
   align-items: flex-start;
   justify-content: flex-start;
   flex-shrink: 0;
-  width: 100%;
+  width: 607px;
   position: relative;
 }
 .date {
@@ -226,12 +229,15 @@ object-fit: cover;
   justify-content: flex-start;
   align-self: stretch;
   position: relative;
+  width: 1040px;
 }
 .registration {
   color: #000000;
   text-align: left;
   font: 400 30px "Ubuntu Condensed", sans-serif;
   position: relative;
+  width: 990px;
+  word-wrap: break-word;
 }
 .description {
   color: #000000;

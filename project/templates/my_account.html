@@ -42,9 +42,9 @@
             {% endif %}
           </div>
           <div class="right">
-            <div class="hello">HELLO, {{ username }}!</div>
+            <div class="hello">HELLO, {{ username.upper() }}!</div>
             <div class="interests">
-              Interests: {{ interests }}
+              <b>Interests:</b> {{ interests }}
             </div>
           </div>
         </div>
@@ -138,20 +138,23 @@
   flex-shrink: 1;
   height: fit-content;
   position: relative;
+  padding-bottom: 20px;
 }
 .hello {
   color: #1e1e1e;
   text-align: left;
   font: 700 64px "Ubuntu Mono", sans-serif;
   position: relative;
-  width: 100%;
+  width: 670px;
+  word-wrap: break-word;
 }
 .interests {
   color: #1e1e1e;
   text-align: left;
   font: 400 32px "Ubuntu Condensed", sans-serif;
   position: relative;
-  width: 100%;
+  width: 670px;
+  word-wrap: break-word;
 }
 .bottom {
   display: flex;

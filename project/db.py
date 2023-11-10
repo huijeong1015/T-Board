@@ -169,6 +169,10 @@ sample_events = [
     {"name": "Music Festival", "date": "2023-08-15", "time": "12:00", "location": "Central Park, New York", "description": "A celebration of music...", "event_type": "Other"},
     {"name": "Concrete Canoe General Meeting", "date": "2023-05-01", "time": "07:00", "location": "Bahen Centre", "description": "General meeting open to the public", "event_type": "Club"},
     {"name": "MAT188 Tutoring", "date": "2023-07-10", "time": "10:00", "location": "Zoom", "description": "Running through Mat188 homework problems", "event_type": "Tutoring"}, 
+    {"name": "Paris 2024 Opening Ceremony Viewing", "date": "2024-07-26", "time": "09:00", "location": "Sandford Fleming Building Basement, ECE Common Room", "reg_link": "https://www.paris2024.org/en/", "description": "And cheer for the Canadian team!", "event_type": "Sports"}, 
+    {"name": "T-Board App Grand Release Press Conference", "date": "2023-11-15", "time": "12:00", "location": "#BA1160 Bahen Centre, 40 St. George St.", "reg_link": "https://q.utoronto.ca/courses/324733/assignments/1141725", "description": "And witness the establishment of the almost-greatest event billboard ever made in U of T history!", "event_type": "Club"}, 
+    {"name": "Free Frisbee @ Front", "date": "2023-11-13", "time": "17:00", "location": "Front Campus, King's College Cir.", "description": "Enjoy the last bit of the new Front Campus lawn before winter!", "event_type": "Sports"}, 
+    {"name": "Celebrating Lunar New Year!", "date": "2024-02-09", "time": "19:00", "location": "Sandford Fleming Building Basement, ECE Common Room", "description": "All can join; wish a happy new year to everyone at U of T!", "event_type": "Club"} 
 ]
 #Add more
 

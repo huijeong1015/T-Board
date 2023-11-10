@@ -172,7 +172,11 @@ sample_events = [
     {"name": "Paris 2024 Opening Ceremony Viewing", "date": "2024-07-26", "time": "09:00", "location": "Sandford Fleming Building Basement, ECE Common Room", "reg_link": "https://www.paris2024.org/en/", "description": "And cheer for the Canadian team!", "event_type": "Sports"}, 
     {"name": "T-Board App Grand Release Press Conference", "date": "2023-11-15", "time": "12:00", "location": "#BA1160 Bahen Centre, 40 St. George St.", "reg_link": "https://q.utoronto.ca/courses/324733/assignments/1141725", "description": "And witness the establishment of the almost-greatest event billboard ever made in U of T history!", "event_type": "Club"}, 
     {"name": "Free Frisbee @ Front", "date": "2023-11-13", "time": "17:00", "location": "Front Campus, King's College Cir.", "description": "Enjoy the last bit of the new Front Campus lawn before winter!", "event_type": "Sports"}, 
-    {"name": "Celebrating Lunar New Year!", "date": "2024-02-09", "time": "19:00", "location": "Sandford Fleming Building Basement, ECE Common Room", "description": "All can join; wish a happy new year to everyone at U of T!", "event_type": "Club"} 
+    {"name": "Celebrating Lunar New Year!", "date": "2024-02-09", "time": "19:00", "location": "Sandford Fleming Building Basement, ECE Common Room", "description": "All can join; wish a happy new year to everyone at U of T!", "event_type": "Club"},
+    {"name": "Python Basics for Data Science & Data Manipulation with Python", "date": "2023-11-16", "time": "17:30", "location": "UC 261, 15 King's College Circle", "description": "workshop", "event_type": "Club", "reg_link": "https://docs.google.com/forms/d/e/1FAIpQLSfXfHDoW1j1Ff8Uod_KpFWag9cFCuAcxczNDWhek4_o7ty04w/viewform"}, 
+    {"name": "UTWind Controls Team Meeting", "date": "2023-11-16", "time": "18:10", "location": "Myhal arena", "description": "for controls team member", "event_type": "Club"},
+    {"name": "Drop-in Tennis", "date": "2023-11-17", "time": "10:00", "location": "Athletic Center", "description": "for detailed schedule in the link", "event_type": "Sports", "reg_link": "https://kpe.utoronto.ca/sport-recreationrecreational-workouts-activitiesdrop-sports-activities/drop-tennis"},
+    {"name": "Drop-in Ice Skating", "date": "2023-11-19", "time": "13:00", "location": "Athletic Center", "description": "for detailed schedule in the link", "event_type": "Sports", "reg_link": "https://kpe.utoronto.ca/sport-recreationrecreational-workouts-activitiesdrop-sports-activities/drop-ice-skate"},
 ]
 #Add more
 

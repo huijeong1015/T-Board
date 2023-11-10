@@ -25,3 +25,4 @@ WTForms==3.1.0
 pytest==7.4.2
 black
 ics==0.7.2
+gunicorn==21.2.0

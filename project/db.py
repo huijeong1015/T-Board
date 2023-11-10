@@ -169,6 +169,10 @@ sample_events = [
     {"name": "Music Festival", "date": "2023-08-15", "time": "12:00", "location": "Central Park, New York", "description": "A celebration of music...", "event_type": "Other"},
     {"name": "Concrete Canoe General Meeting", "date": "2023-05-01", "time": "07:00", "location": "Bahen Centre", "description": "General meeting open to the public", "event_type": "Club"},
     {"name": "MAT188 Tutoring", "date": "2023-07-10", "time": "10:00", "location": "Zoom", "description": "Running through Mat188 homework problems", "event_type": "Tutoring"}, 
+    {"name": "Python Basics for Data Science & Data Manipulation with Python", "date": "2023-11-16", "time": "17:30", "location": "UC 261, 15 King's College Circle", "description": "workshop", "event_type": "Club", "reg_link": "https://docs.google.com/forms/d/e/1FAIpQLSfXfHDoW1j1Ff8Uod_KpFWag9cFCuAcxczNDWhek4_o7ty04w/viewform"}, 
+    {"name": "UTWind Controls Team Meeting", "date": "2023-11-16", "time": "18:10", "location": "Myhal arena", "description": "for controls team member", "event_type": "Club"},
+    {"name": "Drop-in Tennis", "date": "2023-11-17", "time": "10:00", "location": "Athletic Center", "description": "for detailed schedule in the link", "event_type": "Sports", "reg_link": "https://kpe.utoronto.ca/sport-recreationrecreational-workouts-activitiesdrop-sports-activities/drop-tennis"},
+    {"name": "Drop-in Ice Skating", "date": "2023-11-19", "time": "13:00", "location": "Athletic Center", "description": "for detailed schedule in the link", "event_type": "Sports", "reg_link": "https://kpe.utoronto.ca/sport-recreationrecreational-workouts-activitiesdrop-sports-activities/drop-ice-skate"},
 ]
 #Add more
 

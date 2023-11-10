@@ -257,8 +257,6 @@ def handle_button_click():
     print(event_to_bookmark)
 
     is_bookmarked = False    
-
-
         
     if event_to_bookmark not in bookmarked_events:
         bookmarked_events.append(event_to_bookmark)
@@ -824,6 +822,8 @@ def add_event():
     event_datetime_dt = datetime.strptime(event_datetime, "%Y-%m-%d %H:%M")
 
     current_datetime = datetime.now()
+    print(current_datetime)
+    print(event_datetime_dt)
     if event_datetime_dt > current_datetime:
         new_event = Event(name=event_name, date=event_date, time=event_time, location=event_location, reg_link=reg_link,
                       description=event_description, event_type=event_type, created_by=user)
@@ -832,8 +832,8 @@ def add_event():
         render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_types)
         return redirect(url_for("main_dashboard"))
     else:
-        print("invalid date or time. should b ") #TODO: Give useful message to user
-        return (render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_types))
+        flash("You cannot post a past event. Change your event's date and time.")
+        return render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_types)
 
 @app.route('/edit_event/<int:event_id>', methods=["GET", "POST"])
 def edit_event(event_id):

@@ -7,6 +7,13 @@
         <div class="top">
           <h1>Create Your Event</h1> 
         </div>
+        {% for message in get_flashed_messages() %}
+        <div class="container">
+          <div class="alert alert-warning">
+              {{ message }}
+          </div>
+        </div>
+        {% endfor %}
         <div class="bottom">      
           <form action="{{url_for('add_event')}}" method="POST" class="event-post-form">
             <div class="input">
@@ -136,6 +143,20 @@ function checkEventTypeSelected() {
   background: #d9d9d9;
   position: relative;
   box-shadow: inset 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+.alert-warning::before {
+  color: #3e495a;
+  font: 400 20px "Ubuntu Condensed", sans-serif;
+  content: "* ";  
+}
+.alert-warning {
+  color: black;
+  background-color: #a2b7ca;
+  border-color: #a2b7ca;
+  text-align: left;
+  width: 100%;
+  font: 400 20px "Ubuntu Condensed", sans-serif;
+  position: relative;
 }
 .event-details {
   padding: 50px;

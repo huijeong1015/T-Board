@@ -565,7 +565,6 @@ def my_account_event_history(username):
 
     return render_template('my_account_eventhistory.html', username=username, 
                            interests=get_user_interests(username), 
-                           user_profile_picture=get_user_profile_picture(),
                            profile_picture=get_user_profile_picture(username),
                            future_events=future_events, past_events=past_events)
 
@@ -611,7 +610,6 @@ def my_account_friends(username):
     return render_template('my_account_friends.html',  # Make sure the template name matches your setup
                            username=username,
                            interests=interests, 
-                           user_profile_picture=get_user_profile_picture(),
                            profile_picture=profile_picture,
                            friends=friends_list,
                            recommended_friends=recommendations)
@@ -694,7 +692,6 @@ def my_account_myevents(username):
 
     return render_template('my_account_myevents.html', 
                            username=username, 
-                           user_profile_picture=get_user_profile_picture(),
                            interests=get_user_interests(username), 
                            myevents=events_created_by_user, 
                            profile_picture=get_user_profile_picture(username))

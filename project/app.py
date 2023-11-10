@@ -953,9 +953,7 @@ def are_you_sure(event_id):
             if 'yes' in request.form:
                 db.session.delete(event)
                 db.session.commit()
-                flash('Event has been deleted!', 'success')
                 return redirect(url_for('my_account_myevents', username=session.get('username')))
             elif 'no' in request.form:
-                flash('Event deletion cancelled.', 'info')
                 return redirect(url_for('edit_event', event_id=event_id))
     return render_template('are_you_sure.html', event_id=event_id, event_name=event_name, event=event, profile_picture=get_user_profile_picture())

@@ -223,7 +223,7 @@ def bookmark():
             event_id = int(request.form["event-details"])
             event = Event.query.filter_by(id=event_id).first()
             bookmarked_events_ids = [event.id for event in bookmarked]
-            return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), bookmarked_events=bookmarked_events_ids)   
+            return render_template("event_details.html", username=username, event=event, profile_picture=get_user_profile_picture(), bookmarked_events=bookmarked_events_ids)   
         if request.form.get("remove-from-bookmarks") != None:
             bookmark_id = int(request.form["remove-from-bookmarks"])
             event_to_remove = Event.query.filter_by(id=bookmark_id).first() 
@@ -237,7 +237,7 @@ def bookmark():
 
 @app.route("/event_post/")
 def event_post():
-    return render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_types)
+    return render_template('event_post.html', username=session.get('username'), profile_picture=get_user_profile_picture(), event_types=event_types)
 
 #handles bookmarking button for bookmarking 
 @app.route('/toggle_value', methods=['POST'])
@@ -370,7 +370,7 @@ def main_dashboard():
             notification_checked=False
 
         # Directly render the event details template
-        return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag,
+        return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, username=username,
                                bookmarked_events=bookmarked_events_ids, notification_checked=notification_checked, user_rating=user_rating_value)
 
     if request.method == "POST":
@@ -394,6 +394,7 @@ def main_dashboard():
 
             db.session.commit()
             return render_template("event_details.html", 
+                                   username=username,
                                    event=event, 
                                    profile_picture=get_user_profile_picture(), 
                                    flag=flag, 
@@ -532,7 +533,7 @@ def attend_event(event_id):
             flag = 'not attending'
 
     db.session.commit()
-    return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, bookmarked_events=bookmarked_events_ids)
+    return render_template("event_details.html", username=username, event=event, profile_picture=get_user_profile_picture(), flag=flag, bookmarked_events=bookmarked_events_ids)
 
 @app.route("/<username>/event_history/")
 def my_account_event_history(username):
@@ -832,11 +833,11 @@ def add_event():
                       description=event_description, event_type=event_type, created_by=user)
         db.session.add(new_event)
         db.session.commit()
-        render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_types)
+        render_template('event_post.html', username=session.get('username'), profile_picture=get_user_profile_picture(), event_types=event_types)
         return redirect(url_for("main_dashboard"))
     else:
         flash("You cannot post a past event. Change your event's date and time.")
-        return render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_types)
+        return render_template('event_post.html', username=session.get('username'), profile_picture=get_user_profile_picture(), event_types=event_types)
 
 @app.route('/edit_event/<int:event_id>', methods=["GET", "POST"])
 def edit_event(event_id):
@@ -869,7 +870,7 @@ def edit_event(event_id):
         elif 'delete_event' in request.form:
             return redirect(url_for("are_you_sure", event_id=event_id))
 
-    return render_template('event_edit.html', profile_picture=get_user_profile_picture(), event=event, event_types=event_types)
+    return render_template('event_edit.html', username=session.get('username'), profile_picture=get_user_profile_picture(), event=event, event_types=event_types)
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -959,4 +960,4 @@ def are_you_sure(event_id):
                 return redirect(url_for('my_account_myevents', username=session.get('username')))
             elif 'no' in request.form:
                 return redirect(url_for('edit_event', event_id=event_id))
-    return render_template('are_you_sure.html', event_id=event_id, event_name=event_name, event=event, profile_picture=get_user_profile_picture())
+    return render_template('are_you_sure.html', username=session.get('username'), event_id=event_id, event_name=event_name, event=event, profile_picture=get_user_profile_picture())

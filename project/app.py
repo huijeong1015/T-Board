@@ -28,8 +28,7 @@ from project.register import *
 from werkzeug.security import check_password_hash
 import re
 import ics
-from pytz import timezone
-
+import pytz
 
 app.config["SECRET_KEY"] = os.urandom(24)
 LIST_OF_EVENT_TYPES = ["Tutoring", "Sports", "Club", "Networking", "Other"] 
@@ -547,16 +546,16 @@ def my_account_event_history(username):
 
     attendee_records = Attendee.query.filter_by(user_id=user.id).all()
 
-    current_est_time = datetime.now(timezone('EST'))
+    current_datetime = datetime.now(pytz.timezone('EST'))
     future_events = []
     past_events = []
 
     for attendee in attendee_records:
         event = attendee.event
         event_datetime_str = f"{event.date} {event.time}"
-        event_datetime_dt = datetime.strptime(event_datetime_str, "%Y-%m-%d %H:%M")
+        event_datetime_dt = datetime.strptime(event_datetime_str, "%Y-%m-%d %H:%M").replace(tzinfo=pytz.timezone('EST'))
 
-        if event_datetime_dt > current_est_time:
+        if event_datetime_dt > current_datetime:
             future_events.append(event)
         else:
             past_events.append(event)
@@ -820,12 +819,12 @@ def add_event():
     event_type = request.form.get("event_type")
 
     event_datetime = f"{event_date} {event_time}"
-    event_datetime_dt = datetime.strptime(event_datetime, "%Y-%m-%d %H:%M")
+    event_datetime_dt = datetime.strptime(event_datetime, "%Y-%m-%d %H:%M").replace(tzinfo=pytz.timezone('EST'))
 
-    current_est_datetime = datetime.now(timezone('EST'))
-    print(current_est_datetime)
+    current_datetime = datetime.now(pytz.timezone('EST'))
+    print(current_datetime)
     print(event_datetime_dt)
-    if event_datetime_dt > current_est_datetime:
+    if event_datetime_dt > current_datetime:
         new_event = Event(name=event_name, date=event_date, time=event_time, location=event_location, reg_link=reg_link,
                       description=event_description, event_type=event_type, created_by=user)
         db.session.add(new_event)
@@ -853,9 +852,9 @@ def edit_event(event_id):
             event_date= request.form["input-date"]
             event_time= request.form["input-time"]
             event_datetime = f"{event_date} {event_time}"
-            event_datetime_dt = datetime.strptime(event_datetime, "%Y-%m-%d %H:%M")
-            current_est_datetime = datetime.now(timezone('EST'))
-            if event_datetime_dt > current_est_datetime:
+            event_datetime_dt = datetime.strptime(event_datetime, "%Y-%m-%d %H:%M").replace(tzinfo=pytz.timezone('EST'))
+            current_datetime = datetime.now(pytz.timezone('EST'))
+            if event_datetime_dt > current_datetime:
                 event.time= event_time
                 event.date= event_date
                 db.session.commit()

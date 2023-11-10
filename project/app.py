@@ -660,8 +660,14 @@ def add_friend_via_form():
     current_user = User.query.filter_by(username=session['username']).first()
     friend_to_add = User.query.filter_by(username=friend_username).first()
 
+    #Check if friend exists
     if not friend_to_add:
         #TODO: Add useful message to user here
+        return redirect(url_for('my_account_friends', username=session['username']))
+    
+    # Check if the friend is already in the current user's friend list
+    if friend_to_add in current_user.friends:
+        # TODO: Add message to inform that the user is already a friend
         return redirect(url_for('my_account_friends', username=session['username']))
 
     # Add the logic to create a friendship relationship here

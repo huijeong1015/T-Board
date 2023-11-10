@@ -807,19 +807,6 @@ def my_account_edit_profile():
                            email=get_user_email(), password=session.get('password'), interests=get_user_interests(),
                            profile_picture=get_user_profile_picture(), profile_pics=profile_pic_types)
 
-@app.route("/dataset")
-def show_events():
-    sql = text("SELECT * FROM events;")
-    result = db.session.execute(sql)
-
-    # Extracting data from the ResultProxy object
-    events = [
-        {column: value for column, value in zip(result.keys(), row)} for row in result
-    ]
-
-    # You might return events as a string or JSON, or render them in a template
-    return str(events)
-
 @app.route("/event_post", methods=["POST"])
 def add_event():
     username = session.get('username')
@@ -954,41 +941,6 @@ def friend_recommendations():
 
     return render_template_string(
         f"<h1>Friend Recommendations</h1>{recommendations_html}"
-    )
-
-@app.route("/users")
-def show_users():
-    users = User.query.all()
-    user_data = {
-        user.username: {
-            "friends": [friend.username for friend in user.friends],
-            "events": [event.name for event in user.events],
-        }
-        for user in users
-    }
-    user_list_html = "<ul>"
-    for username, data in user_data.items():
-        friends = ", ".join(data["friends"]) if data["friends"] else "None"
-        events = ", ".join(data["events"]) if data["events"] else "None"
-        user_list_html += f"<li>{username}: Friends - {friends}, Events - {events}</li>"
-    user_list_html += "</ul>"
-    return render_template_string(
-        f"<h1>Users, Their Friends, and Events</h1>{user_list_html}"
-    )
-
-@app.route("/events")
-def new_events():
-    events = Event.query.all()
-    event_data = {
-        event.name: [attendee.username for attendee in event.attendees]
-        for event in events
-    }
-    event_list_html = "<ul>"
-    for event_name, attendees in event_data.items():
-        event_list_html += f'<li>{event_name}: Attendees - {", ".join(attendees) if attendees else "None"}</li>'
-    event_list_html += "</ul>"
-    return render_template_string(
-        f"<h1>Events and Their Attendees</h1>{event_list_html}"
     )
 
 @app.route('/are_you_sure/<int:event_id>', methods=['GET', 'POST'])

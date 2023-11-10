@@ -35,8 +35,11 @@
             </defs>
             </svg>
           </a>
+          <div style="font: 400 50px 'Ubuntu Condensed', sans-serif; color: #d9d9d9">
+            |
+          </div>
           <div class="title-txt">
-            | {{ user }}’s Bookmarked Events
+            {{ user.upper() }}’s Bookmarked Events
           </div>
         </div>
         <div class="frame-btn">
@@ -116,9 +119,8 @@
         text-align: left;
         font: 400 50px "Ubuntu Condensed", sans-serif;
         position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
+        width: 615px;
+        word-wrap: break-word;
     }
     .frame-btn {
       display: flex;

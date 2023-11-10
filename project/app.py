@@ -541,9 +541,6 @@ def my_account_event_history(username):
     if not logged_in_username:
         return redirect(url_for('login'))
     user = User.query.filter_by(username=username).first()
-    if not user:
-        return "User not found", 404
-
     attendee_records = Attendee.query.filter_by(user_id=user.id).all()
 
     current_datetime = datetime.now(pytz.timezone('EST'))
@@ -622,7 +619,8 @@ def add_friend(username):
     friend_to_add = User.query.filter_by(username=username).first()
     
     if not friend_to_add:
-        return "User not found", 404  # Or handle appropriately
+        #TODO: Add useful message to user here
+        return redirect(url_for('my_account_friends', username=session['username']))
 
     # Add the logic to create a friendship relationship here
     # This will depend on how your database relationships are set up
@@ -642,7 +640,8 @@ def remove_friend(username):
     friend_to_remove = User.query.filter_by(username=username).first()
     
     if not friend_to_remove:
-        return "User not found", 404  # Or handle it with a flash message and redirect
+        #TODO: Add useful message to user here
+        return redirect(url_for('my_account_friends', username=session['username']))
 
     # Assuming 'friends' is a many-to-many relationship attribute of the 'User' model
     current_user.friends.remove(friend_to_remove)
@@ -662,7 +661,8 @@ def add_friend_via_form():
     friend_to_add = User.query.filter_by(username=friend_username).first()
 
     if not friend_to_add:
-        return "User not found", 404  # Or handle appropriately
+        #TODO: Add useful message to user here
+        return redirect(url_for('my_account_friends', username=session['username']))
 
     # Add the logic to create a friendship relationship here
     current_user.friends.append(friend_to_add)
@@ -682,9 +682,7 @@ def my_account_myevents(username):
         return redirect(url_for('login'))
 
     user = User.query.filter_by(username=username).first()
-    if not user:
-        return "User not found", 404  # Or handle it however you prefer
-
+  
     if username == 'admin':
         events_created_by_user = Event.query.all()
     else:

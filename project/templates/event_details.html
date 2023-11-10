@@ -24,7 +24,7 @@
         <form method="POST" action="{{ url_for('attend_event', event_id=event.id) }}" class="form-button">
             {% if flag == 'attending' %}
               <input type="hidden" name="action" value="unattend">
-              <button class="btn-submit" type="submit" id="already-attend-btn">ATTENDING</button>
+              <button class="btn-submit" type="submit" id="already-attend-btn">ALREADY ATTENDING</button>
             {% else %}
               <input type="hidden" name="action" value="attend">
               <button class="btn-submit" type="submit" id="attend-btn">ATTEND</button>
@@ -34,23 +34,21 @@
       <div class="middle">
           <img class="event-image" src="{{ url_for('static', filename='event_photos/' + event['event_type'].lower() + '.png') }}" alt="Event Image"/>
           <div class="frame-info">
-            <div class="date"><b>Date:</b> {{ event.date }}</div>
-            <div class="time"><b>Time:</b> {{ event.time }}</div>
-            <div class="location"><b>Location:</b> {{ event.location }}</div>
+            <div class="date">Date: {{ event.date }}</div>
+            <div class="time">Time: {{ event.time }}</div>
+            <div class="location">Location: {{ event.location }}</div>
           </div>
       </div>
       <div class="bottom">
         {% if event.reg_link %}
         <div class="registration">
-          <p><b>Register here:</b></p>
-          <p>{{ event.reg_link }}</p>
+            Register here: {{ event.reg_link }}
         </div>
         {% endif %}
         <div class="description">
-            <p><b>Event description:</b></p>
-            <p>{{ event.description }}</p>
+            Event description: {{ event.description }}
         </div>
-        <div class="rating"><b>Ratings:</b>
+        <div class="rating">Ratings: 
           <div class="stars">
           {% set avg_rating = event['average_rating'] if event['average_rating'] is not none else 0 %}
           {% for i in range(1, 6) %}
@@ -141,15 +139,14 @@ object-fit: cover;
   text-align: left;
   font: 400 36px "Ubuntu Condensed", sans-serif;
   position: relative;
-  max-width: 650px;
-  word-wrap: break-word;
+  width: fit-content;
 }
 .middle {
   padding: 0px 25px 0px 25px;
   display: flex;
   flex-direction: row;
   gap: 18px;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
   align-self: stretch;
   flex-shrink: 0;
@@ -166,7 +163,7 @@ object-fit: cover;
   height: fit-content;
   position: relative;
 }
-.fsvg.remove();orm-button {
+.form-button {
   margin-block-end: 0%;
 }
 .form-show-notification {
@@ -199,7 +196,7 @@ object-fit: cover;
   align-items: flex-start;
   justify-content: flex-start;
   flex-shrink: 0;
-  width: 607px;
+  width: 100%;
   position: relative;
 }
 .date {
@@ -229,15 +226,12 @@ object-fit: cover;
   justify-content: flex-start;
   align-self: stretch;
   position: relative;
-  width: 1040px;
 }
 .registration {
   color: #000000;
   text-align: left;
   font: 400 30px "Ubuntu Condensed", sans-serif;
   position: relative;
-  width: 990px;
-  word-wrap: break-word;
 }
 .description {
   color: #000000;

@@ -28,7 +28,7 @@
   <div class="frame-event-btn">
       <form method="POST" action="/bookmark" style="margin: 0%;">
         <button class="btn-bookmark" type="submit" name="remove-from-bookmarks" value="{{ event['id'] }}">
-          <svg class="svg-event" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="#A34A4A" stroke-linecap="round" stroke-width="2"><path d="m11 2c-3.77124 0-5.65685 0-6.82843 1.12874-1.17157 1.12874-1.17157 2.94542-1.17157 6.57879v8.27327c0 2.3059 0 3.4588.77285 3.8715 1.49662.7991 4.30395-1.8671 5.63715-2.6699.7732-.4656 1.1598-.6984 1.59-.6984s.8168.2328 1.59.6984c1.3332.8028 4.1405 3.469 5.6372 2.6699.7728-.4127.7728-1.5656.7728-3.8715v-6.9808" stroke-linejoin="round"/><path d="m13 6h8"/></g></svg>
+          <svg class="svg-event" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="#333333" stroke-linecap="round" stroke-width="2"><path d="m11 2c-3.77124 0-5.65685 0-6.82843 1.12874-1.17157 1.12874-1.17157 2.94542-1.17157 6.57879v8.27327c0 2.3059 0 3.4588.77285 3.8715 1.49662.7991 4.30395-1.8671 5.63715-2.6699.7732-.4656 1.1598-.6984 1.59-.6984s.8168.2328 1.59.6984c1.3332.8028 4.1405 3.469 5.6372 2.6699.7728-.4127.7728-1.5656.7728-3.8715v-6.9808" stroke-linejoin="round"/><path d="m13 6h8"/></g></svg>
         </button>
       </form>
       <form method="POST" action="{{ url_for('download_ics_file') }}" style="margin: 0%;">

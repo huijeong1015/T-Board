@@ -44,13 +44,12 @@
         </div>
     </div>
         <div class="frame-info">
+            <form action="{{ url_for('my_account_notification') }}" method="POST" style="margin: 0%; height: 100%;"></form>
             <div class="event-name-txt"><b>{{ event['event'].name }}</b></div>
             <div class="event-details-txt">Date: {{ event['event'].date }}</div>
             <div class="event-details-txt">Time: {{ event['event'].time }}</div>
             <input type="hidden" name="updated_event_id" value="{{ event['event'].id }}">
             <div class="notif">
-                
-            <form action="{{ url_for('my_account_notification') }}" method="POST" style="margin: 0%; height: 100%;">
                 <label for="set-notif-{{ event.id }}" class="set-notif">Set to:</label>
                 <select id="set-notif-{{ event.id }}" name="updated_notification" class="dropdown" onchange="this.form.submit()">
                     <option value="30-mins" {% if event.notification_preference == 30 %}selected{% endif %}>30 minutes before</option>

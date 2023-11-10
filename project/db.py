@@ -11,16 +11,6 @@ USERS_DATABASE = "users.db"
 EVENTS_DATABASE = "events.db"
 basedir = Path(__file__).resolve().parent
 
-# Delete the databases if they exist
-users_db_path = basedir.joinpath(USERS_DATABASE)
-events_db_path = basedir.joinpath(EVENTS_DATABASE)
-
-if users_db_path.exists():
-   users_db_path.unlink()
-
-if events_db_path.exists():
-   events_db_path.unlink()
-
 # Setting up Flask app instance
 app = Flask(__name__)
 

@@ -28,7 +28,7 @@ from project.register import *
 from werkzeug.security import check_password_hash
 import re
 import ics
-
+import pytz
 
 app.config["SECRET_KEY"] = os.urandom(24)
 LIST_OF_EVENT_TYPES = ["Tutoring", "Sports", "Club", "Networking", "Other"] 
@@ -257,8 +257,6 @@ def handle_button_click():
     print(event_to_bookmark)
 
     is_bookmarked = False    
-
-
         
     if event_to_bookmark not in bookmarked_events:
         bookmarked_events.append(event_to_bookmark)
@@ -548,14 +546,14 @@ def my_account_event_history(username):
 
     attendee_records = Attendee.query.filter_by(user_id=user.id).all()
 
-    current_datetime = datetime.now()
+    current_datetime = datetime.now(pytz.timezone('EST'))
     future_events = []
     past_events = []
 
     for attendee in attendee_records:
         event = attendee.event
         event_datetime_str = f"{event.date} {event.time}"
-        event_datetime_dt = datetime.strptime(event_datetime_str, "%Y-%m-%d %H:%M")
+        event_datetime_dt = datetime.strptime(event_datetime_str, "%Y-%m-%d %H:%M").replace(tzinfo=pytz.timezone('EST'))
 
         if event_datetime_dt > current_datetime:
             future_events.append(event)
@@ -567,6 +565,7 @@ def my_account_event_history(username):
 
     return render_template('my_account_eventhistory.html', username=username, 
                            interests=get_user_interests(username), 
+                           user_profile_picture=get_user_profile_picture(),
                            profile_picture=get_user_profile_picture(username),
                            future_events=future_events, past_events=past_events)
 
@@ -612,6 +611,7 @@ def my_account_friends(username):
     return render_template('my_account_friends.html',  # Make sure the template name matches your setup
                            username=username,
                            interests=interests, 
+                           user_profile_picture=get_user_profile_picture(),
                            profile_picture=profile_picture,
                            friends=friends_list,
                            recommended_friends=recommendations)
@@ -694,6 +694,7 @@ def my_account_myevents(username):
 
     return render_template('my_account_myevents.html', 
                            username=username, 
+                           user_profile_picture=get_user_profile_picture(),
                            interests=get_user_interests(username), 
                            myevents=events_created_by_user, 
                            profile_picture=get_user_profile_picture(username))
@@ -821,9 +822,11 @@ def add_event():
     event_type = request.form.get("event_type")
 
     event_datetime = f"{event_date} {event_time}"
-    event_datetime_dt = datetime.strptime(event_datetime, "%Y-%m-%d %H:%M")
+    event_datetime_dt = datetime.strptime(event_datetime, "%Y-%m-%d %H:%M").replace(tzinfo=pytz.timezone('EST'))
 
-    current_datetime = datetime.now()
+    current_datetime = datetime.now(pytz.timezone('EST'))
+    print(current_datetime)
+    print(event_datetime_dt)
     if event_datetime_dt > current_datetime:
         new_event = Event(name=event_name, date=event_date, time=event_time, location=event_location, reg_link=reg_link,
                       description=event_description, event_type=event_type, created_by=user)
@@ -832,8 +835,8 @@ def add_event():
         render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_types)
         return redirect(url_for("main_dashboard"))
     else:
-        print("invalid date or time. should b ") #TODO: Give useful message to user
-        return (render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_types))
+        flash("You cannot post a past event. Change your event's date and time.")
+        return render_template('event_post.html', profile_picture=get_user_profile_picture(), event_types=event_types)
 
 @app.route('/edit_event/<int:event_id>', methods=["GET", "POST"])
 def edit_event(event_id):
@@ -852,8 +855,8 @@ def edit_event(event_id):
             event_date= request.form["input-date"]
             event_time= request.form["input-time"]
             event_datetime = f"{event_date} {event_time}"
-            event_datetime_dt = datetime.strptime(event_datetime, "%Y-%m-%d %H:%M")
-            current_datetime = datetime.now()
+            event_datetime_dt = datetime.strptime(event_datetime, "%Y-%m-%d %H:%M").replace(tzinfo=pytz.timezone('EST'))
+            current_datetime = datetime.now(pytz.timezone('EST'))
             if event_datetime_dt > current_datetime:
                 event.time= event_time
                 event.date= event_date
@@ -953,9 +956,7 @@ def are_you_sure(event_id):
             if 'yes' in request.form:
                 db.session.delete(event)
                 db.session.commit()
-                flash('Event has been deleted!', 'success')
                 return redirect(url_for('my_account_myevents', username=session.get('username')))
             elif 'no' in request.form:
-                flash('Event deletion cancelled.', 'info')
                 return redirect(url_for('edit_event', event_id=event_id))
     return render_template('are_you_sure.html', event_id=event_id, event_name=event_name, event=event, profile_picture=get_user_profile_picture())

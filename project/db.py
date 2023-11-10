@@ -155,9 +155,8 @@ class User(db.Model):
         return '<User {}>'.format(self.username)
 
 sample_events = [
-    {"name": "Tech Conference 2023", "date": "2023-11-20", "time": "09:00", "location": "Silicon Valley Convention Center", "description": "Join industry leaders...", "event_type": "Networking"},
-    {"name": "Music Festival", "date": "2023-08-15", "time": "12:00", "location": "Central Park, New York", "description": "A celebration of music...", "event_type": "Other"},
-    {"name": "Concrete Canoe General Meeting", "date": "2023-05-01", "time": "07:00", "location": "Bahen Centre", "description": "General meeting open to the public", "event_type": "Club"},
+    {"name": "Graduate Open House", "date": "2024-01-08", "time": "16:00", "location": "Zoom meeting", "description": "Are you interested in applying for graduate studies in drama, theatre, and performance studies at the University of Toronto? Attend our online Graduate Open House to find out about our curriculum, program requirements, funding opportunities and extracurricular activities; meet our faculty and staff; and tour our spaces virtually.", "event_type": "Networking"},
+    {"name": "Concrete Canoe General Meeting", "date": "2023-05-01", "time": "19:00", "location": "Bahen Centre", "description": "General meeting open to the public", "event_type": "Club"},
     {"name": "MAT188 Tutoring", "date": "2023-07-10", "time": "10:00", "location": "Zoom", "description": "Running through Mat188 homework problems", "event_type": "Tutoring"}, 
     {"name": "Paris 2024 Opening Ceremony Viewing", "date": "2024-07-26", "time": "09:00", "location": "Sandford Fleming Building Basement, ECE Common Room", "reg_link": "https://www.paris2024.org/en/", "description": "And cheer for the Canadian team!", "event_type": "Sports"}, 
     {"name": "T-Board App Grand Release Press Conference", "date": "2023-11-15", "time": "12:00", "location": "#BA1160 Bahen Centre, 40 St. George St.", "reg_link": "https://q.utoronto.ca/courses/324733/assignments/1141725", "description": "And witness the establishment of the almost-greatest event billboard ever made in U of T history!", "event_type": "Club"}, 
@@ -167,12 +166,13 @@ sample_events = [
     {"name": "UTWind Controls Team Meeting", "date": "2023-11-16", "time": "18:10", "location": "Myhal arena", "description": "for controls team member", "event_type": "Club"},
     {"name": "Drop-in Tennis", "date": "2023-11-17", "time": "10:00", "location": "Athletic Center", "description": "for detailed schedule in the link", "event_type": "Sports", "reg_link": "https://kpe.utoronto.ca/sport-recreationrecreational-workouts-activitiesdrop-sports-activities/drop-tennis"},
     {"name": "Drop-in Ice Skating", "date": "2023-11-19", "time": "13:00", "location": "Athletic Center", "description": "for detailed schedule in the link", "event_type": "Sports", "reg_link": "https://kpe.utoronto.ca/sport-recreationrecreational-workouts-activitiesdrop-sports-activities/drop-ice-skate"},
-    {"name": "ECE344 Exam Jam", "date": "2023-12-07", "time": "09:00", "location": "#SF3202, Sandford Fleming Building", "description": "Use this last day to get yourself ready for you very first exam!", "event_type": "Tutoring"},
+    {"name": "ECE344 Exam Jam", "date": "2023-12-07", "time": "09:00", "location": "SF3202, Sandford Fleming Building", "description": "Use this last day to get yourself ready for your very first exam!", "event_type": "Tutoring"},
     {"name": "Celebrate Christmas!", "date": "2023-12-24", "time": "19:00", "location": "ECE Common Room", "description": "Organized individually, available to all. Free cookies and donuts available for pickup!", "event_type": "Club"},
     {"name": "Superbowl Viewing", "date": "2024-02-11", "time": "17:00", "location": "SF Basement, ECE Common Room", "description": "Watch American football with everyone!", "event_type": "Sports"},
     {"name": "Walk @ Nathan Philips Square", "date": "2023-12-07", "time": "19:00", "location": "Chestnut Residence, 88 Chestnut St.", "description": "Have a walk in the annual Cavalcade of Lights and relax yourself before the exam period! All attendees should meet in the lobby.", "event_type": "Other", "reg_link": "https://www.toronto.ca/explore-enjoy/festivals-events/cavalcade-of-lights/"},
+    {"name": "Just Machine Learning", "date": "2024-01-22", "time": "11:00", "location": "Data Sciences Institute, 10th floor Seminar Room, 700 University Avenue, Toronto", "description": "Join us for the Data Sciences Speaker Series with Prof. Tina Eliassi-Rad is the inaugural President Joseph E. Aoun Professor at Northeastern University.  This talk is co-sponsored by the Data Sciences Institute and the Centre for Analytics and Artificial Intelligence Engineering (CARTE), University of Toronto.", "event_type": "Networking", "reg_link": "https://www.eventbrite.ca/e/just-machine-learning-prof-tina-eliassi-rad-tickets-736594964367?aff=oddtdtcreator"},
+    {"name": "History of Modern Philosophy Group Talk", "date": "2023-12-08", "time": "15:00", "location": "Jackman Humanities Building, Room 418, 170 St. George Street", "description": "The History of Philosophy Group is pleased to welcome as speaker David James Barnett, an associate professor of Philosophy at the University of Toronto who specializes in epistemology and the philosophy of mind.", "event_type": "Networking"},
 ]
-#Add more
 
 with app.app_context():
     # Create tables

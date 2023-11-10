@@ -5,7 +5,7 @@ import secrets
 import os
 
 PWD_LEN = 10
-TBOARD_URL = "http://localhost:5000/"
+TBOARD_URL = "https://t-board.onrender.com/"
 TBOARD_EMAIL = "ece444tboard@gmail.com"
 TBOARD_PWD = "vjau nxth hark wjgo"
 

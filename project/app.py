@@ -821,6 +821,10 @@ def my_account_edit_profile():
         user.profile_picture = new_profile_picture
         db.session.commit()  
 
+        return render_template('my_account_settings.html', username=session.get('username'), 
+                           email=get_user_email(), password=session.get('password'), interests=get_user_interests(),
+                           profile_picture=get_user_profile_picture(), profile_pics=profile_pic_types, top_right_image=None)
+
     return render_template('my_account_edit_profile.html', username=session.get('username'), 
                            email=get_user_email(), password=session.get('password'), interests=get_user_interests(),
                            profile_picture=get_user_profile_picture(), profile_pics=profile_pic_types, top_right_image=None)

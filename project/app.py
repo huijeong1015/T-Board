@@ -534,7 +534,7 @@ def attend_event(event_id):
     db.session.commit()
     return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, bookmarked_events=bookmarked_events_ids, top_right_image=None)
 
-@app.route("/<username>/event_history/") #This Function
+@app.route("/<username>/event_history/")
 def my_account_event_history(username):
     # Security check: Make sure the logged-in user is accessing their own event history or the user is an admin.
     logged_in_username = session.get('username')
@@ -584,7 +584,7 @@ def filter_friends_by_search_term(friends_list, search_term):
     ]
     return filtered_list
 
-@app.route("/<username>/friends/") #This function
+@app.route("/<username>/friends/")
 def my_account_friends(username):
     # Ensure the user is logged in or handle appropriately if not
     logged_in_username = session.get('username')
@@ -679,7 +679,7 @@ def add_friend_via_form():
     # Redirect back to the friend recommendations page or a success page
     return redirect(url_for('my_account_friends', username=session['username']))
 
-@app.route("/<username>/myevents/") #This function
+@app.route("/<username>/myevents/")
 def my_account_myevents(username):
     # It's a good practice to not assume the session username is the same as the one in the URL
     # You can check if the logged-in user is the same as the username in the URL or if the user has special privileges
@@ -701,7 +701,6 @@ def my_account_myevents(username):
     if top_right:
         top_right_user = User.query.filter_by(username=top_right).first()
         session['top_right_image'] = top_right_user.profile_picture
-
 
     return render_template('my_account_myevents.html', 
                            username=username, 

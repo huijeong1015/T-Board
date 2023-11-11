@@ -29,6 +29,7 @@ from werkzeug.security import check_password_hash
 import re
 import ics
 import pytz
+from .ai import get_events
 
 app.config["SECRET_KEY"] = os.urandom(24)
 LIST_OF_EVENT_TYPES = ["Tutoring", "Sports", "Club", "Networking", "Other"] 
@@ -456,14 +457,21 @@ def main_dashboard():
 def search_event():
     keyword = request.form["input-search"]
     # some error handling before results are used
+    toggle = "toggle-search" in request.form  # Checks if the toggle is checked
 
     results = []
-    filtered_events, error_msg = filter_events(searching = True)
-    filtered_events_ids = [event.id for event in filtered_events]
-    if keyword:
-        results = Event.query\
-            .filter(Event.name.contains(keyword), Event.id.in_(filtered_events_ids))\
-            .all()
+    if toggle:
+        # Execute raw SQL using the text() function to wrap the SQL statement
+        query = get_events(keyword)
+        if query != "No":
+            results = db.session.execute(text(get_events(keyword))).fetchall()
+    else:
+        filtered_events, error_msg = filter_events(searching = True)
+        filtered_events_ids = [event.id for event in filtered_events]
+        if keyword:
+            results = Event.query\
+                .filter(Event.name.contains(keyword), Event.id.in_(filtered_events_ids))\
+                .all()
         
     return results, error_msg
 

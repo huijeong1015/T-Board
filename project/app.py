@@ -535,7 +535,7 @@ def attend_event(event_id):
     return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), flag=flag, bookmarked_events=bookmarked_events_ids, top_right_image=None)
 
 @app.route("/<username>/event_history/") #This Function
-def my_account_event_history(username, top_right=None):
+def my_account_event_history(username):
     # Security check: Make sure the logged-in user is accessing their own event history or the user is an admin.
     logged_in_username = session.get('username')
     if not logged_in_username:
@@ -561,6 +561,7 @@ def my_account_event_history(username, top_right=None):
     past_events = sort_events_by_date(past_events, 'Newest to Oldest')
     future_events = sort_events_by_date(future_events, 'Newest to Oldest')
 
+    top_right = request.args.get('top_right')
     print(top_right)
     if top_right:
         top_right_user = User.query.filter_by(username=top_right).first()
@@ -593,7 +594,7 @@ def filter_friends_by_search_term(friends_list, search_term):
     return filtered_list
 
 @app.route("/<username>/friends/") #This function
-def my_account_friends(username, top_right=None):
+def my_account_friends(username):
     # Ensure the user is logged in or handle appropriately if not
     logged_in_username = session.get('username')
     if not logged_in_username:
@@ -612,6 +613,7 @@ def my_account_friends(username, top_right=None):
     if search_term:
         friends_list = filter_friends_by_search_term(friends_list, search_term)
 
+    top_right = request.args.get('top_right')
     print(top_right)
     if top_right:
         top_right_user = User.query.filter_by(username=top_right).first()
@@ -696,7 +698,7 @@ def add_friend_via_form():
     return redirect(url_for('my_account_friends', username=session['username']))
 
 @app.route("/<username>/myevents/") #This function
-def my_account_myevents(username, top_right=None):
+def my_account_myevents(username):
     # It's a good practice to not assume the session username is the same as the one in the URL
     # You can check if the logged-in user is the same as the username in the URL or if the user has special privileges
     logged_in_username = session.get('username')
@@ -712,6 +714,7 @@ def my_account_myevents(username, top_right=None):
     else:
         events_created_by_user = Event.query.filter_by(created_by_id=user.id).all()
 
+    top_right = request.args.get('top_right')
     print(top_right)
     if top_right:
         top_right_user = User.query.filter_by(username=top_right).first()

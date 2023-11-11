@@ -65,7 +65,7 @@
             {% endif %}
           </div>
           <div class="friend-details">
-            <a href="{{ url_for('my_account_myevents', username=friend.username) }}" class="profile-link">{{ friend.username }}</a>
+            <a href="{{ url_for('my_account_myevents', username=friend.username, top_right=session['username']) }}" class="profile-link">{{ friend.username }}</a>
             <!-- Delete friend button -->
             {% if session['username'] == username %}
               <form action="{{ url_for('remove_friend', username=friend.username) }}" method="post" class="remove-friend-form">

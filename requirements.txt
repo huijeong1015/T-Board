@@ -27,3 +27,4 @@ black
 ics==0.7.2
 gunicorn==21.2.0
 pytz
+psycopg2-binary==2.9.9

@@ -561,20 +561,11 @@ def my_account_event_history(username):
     past_events = sort_events_by_date(past_events, 'Newest to Oldest')
     future_events = sort_events_by_date(future_events, 'Newest to Oldest')
 
-    top_right = request.args.get('top_right')
-    print(top_right)
-    if top_right:
-        top_right_user = User.query.filter_by(username=top_right).first()
-        top_right_image = top_right_user.profile_picture
-        print(top_right_image)
-    else:
-        top_right_image=None
-
     return render_template('my_account_eventhistory.html', username=username, 
                            interests=get_user_interests(username), 
                            profile_picture=get_user_profile_picture(username),
                            future_events=future_events, past_events=past_events,
-                           top_right_image=top_right_image)
+                           top_right_image=session.get('top_right_image'))
 
 def get_current_user_friends(username):
     # Assuming 'db' is your database connection object and 'User' is your user model
@@ -613,15 +604,6 @@ def my_account_friends(username):
     if search_term:
         friends_list = filter_friends_by_search_term(friends_list, search_term)
 
-    top_right = request.args.get('top_right')
-    print(top_right)
-    if top_right:
-        top_right_user = User.query.filter_by(username=top_right).first()
-        top_right_image = top_right_user.profile_picture
-        print(top_right_image)
-    else:
-        top_right_image=None
-
     # Pass everything to the template
     return render_template('my_account_friends.html',  # Make sure the template name matches your setup
                            username=username,
@@ -629,7 +611,7 @@ def my_account_friends(username):
                            profile_picture=profile_picture,
                            friends=friends_list,
                            recommended_friends=recommendations,
-                           top_right_image=top_right_image)
+                           top_right_image=session.get('top_right_image'))
 
 @app.route('/add_friend/<username>', methods=['POST'])
 def add_friend(username):
@@ -715,20 +697,18 @@ def my_account_myevents(username):
         events_created_by_user = Event.query.filter_by(created_by_id=user.id).all()
 
     top_right = request.args.get('top_right')
-    print(top_right)
+  
     if top_right:
         top_right_user = User.query.filter_by(username=top_right).first()
-        top_right_image = top_right_user.profile_picture
-        print(top_right_image)
-    else:
-        top_right_image=None
+        session['top_right_image'] = top_right_user.profile_picture
+
 
     return render_template('my_account_myevents.html', 
                            username=username, 
                            interests=get_user_interests(username), 
                            myevents=events_created_by_user, 
                            profile_picture=get_user_profile_picture(username),
-                           top_right_image=top_right_image)
+                           top_right_image=session.get('top_right_image'))
 
 @app.route('/set_notification', methods=['POST'])
 def set_notification():

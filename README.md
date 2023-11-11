@@ -3,7 +3,7 @@
   <summary>Table of Contents</summary>
   <ol>
     <li><a href="#Project-Description">Project Description</a></li>
-    <li><a href="#Future-Itterations">Future Itterations</a></li>
+    <li><a href="#Future-iterations">Future iterations</a></li>
     <li><a href="#Tools-and-Standards">Tools and Standards</a></li>
         <ul>
             <li><a href="#Built-with">Built with</a></li>
@@ -26,7 +26,7 @@ You can access the application at: [T-Board](https://ece444-tboard.onrender.com/
 
 ![Main](/Images_for_documentation/Maindashboard.png)  
 
-## Future Itterations
+## Future iterations
 In future releases, we aim to have the following integrated in the application:
 * More event types, filters, and sorting options (the three are coupled together)
 * Autocomplete search in the search bar
@@ -42,7 +42,7 @@ In future releases, we aim to have the following integrated in the application:
 * [Figma](https://www.figma.com/)
 * [Render](https://www.render.com) 
 
-**Disclaimer: While a majority of the code in this project is written by our team, we openly used ChatGPT to aid our development process. **
+**Disclaimer: While a majority of the code in this project is written by our team, we openly used ChatGPT to aid our development process.**
 
 ### Project Management 
 For managing and tracking our progress, we are using [Trello](https://trello.com/).  

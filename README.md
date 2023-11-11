@@ -3,6 +3,7 @@
   <summary>Table of Contents</summary>
   <ol>
     <li><a href="#Project-Description">Project Description</a></li>
+    <li><a href="#Future-Itterations">Future Itterations</a></li>
     <li><a href="#Tools-and-Standards">Tools and Standards</a></li>
         <ul>
             <li><a href="#Built-with">Built with</a></li>
@@ -12,23 +13,36 @@
     <li><a href="#Getting-Started">Getting Started</a></li>
         <ul>
             <li><a href="#Prerequisites">Prerequisites</a></li>
-            <li><a href="#Deployment">Deployment</a></li>
+            <li><a href="#Local-Deployment">Local Deployment</a></li>
         </ul>
     <li><a href="#Contact-Information">Contact Information</a></li>    
   </ol>
 </details>
 
 ## Project Description
-T-Board is a platform that assembles and lists all campus events for students at the University of Toronto. It provides a comprehensive dashboard where verified users and official clubs can effortlessly post and promote their student events and club activities. Users can rate past events and report spam, while refining event searches based on criteria like club affiliation, timing, location, event type, popularity, and ratings. Additionally, T-Board facilitates event engagement by enabling students to RSVP for upcoming events, syncing them with their timetables for easy tracking. Event organizers benefit from access to RSVP lists, ensuring efficient event management and planning.
+Tboard, tailored for the University of Toronto community, is a user-friendly event dashboard application that facilitates the discovery and management of campus events. Upon registration, users can effortlessly search for events using filters and sort options, such as event type or alphabetical order. The bookmark feature enables users to save and track events they're interested in, with options to view details, delete bookmarks, or download event files. Tboard also offers a rating system, allowing users to provide feedback on attended events, which contributes to an event's overall rating. Users can create and delete their own events, providing a platform for event organization and management. Additionally, the app includes a personal profile management section, where users can view their event history, manage friends, adjust notification settings, and edit their profile, enhancing the overall user experience.
 
-We are currently in the process of developing this project. Here is a prototype image for proof of concept. 
-![Prototype](/Images_for_documentation/Prototype_Image.png)  
+You can access the application at: [T-Board](https://ece444-tboard.onrender.com/)
+
+![Main](/Images_for_documentation/Maindashboard.png)  
+
+## Future Itterations
+In future releases, we aim to have the following integrated in the application:
+* More event types, filters, and sorting options (the three are coupled together)
+* Autocomplete search in the search bar
+* Friend requests/messaging
+* Integrating AI
+  * Event recommendation based on user interest
+  * Event recommendation based on events that friends have attended and have highly rated 
 
 ## Tools and Standards
 ### Built with 
 * [Flask](https://palletsprojects.com/p/flask/)
 * [Docker](https://www.docker.com)
 * [Figma](https://www.figma.com/)
+* [Render](https://www.render.com) 
+
+**Disclaimer: While a majority of the code in this project is written by our team, we openly used ChatGPT to aid our development process. **
 
 ### Project Management 
 For managing and tracking our progress, we are using [Trello](https://trello.com/).  
@@ -42,17 +56,17 @@ Our team is following [Google's Code Style Guide](https://google.github.io/style
 These are the prerequisites for our internal team. We will update this section once our project is deployed with instructions for outside contributors.
 
 * Install [Docker](https://www.docker.com)  
-* Install virtual environment (See chapter 1 in ECE444 textbook for instructions)
+* Install virtual environment
 
-#### Deployment  
-These are the deployment instructions for our internal team. We will update this section once our project is deployed with instructions for outside contributors.      
+#### Local Deployment  
+These are the instructions for local deployment:    
 
-2. Activate your virtual environment
-3. Download all requirements using 'pip install -r requirements.txt'
-4. Set the environment variable to the app.py file (e.g. set FLASK_APP = project/app.py for windows)
-5. Run "python db.py"
-6. Run "python -m flask run"
-7. Paste local host address into browser of your choice
+1. Activate your virtual environment
+2. Download all requirements using 'pip install -r requirements.txt'
+3. Set the environment variable to the app.py file (e.g. set FLASK_APP = project/app.py for windows)
+4. Delete any existing .db files
+5. Run "python -m flask run"
+6. Paste local host address into browser of your choice
 
 ## Contact Information
 * Hui Lee: huijeong.lee@mail.utoronto.ca    

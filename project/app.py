@@ -540,7 +540,7 @@ def my_account_event_history(username):
     logged_in_username = session.get('username')
     if not logged_in_username:
         return redirect(url_for('login'))
-
+    
     user = User.query.filter_by(username=username).first()
     attendee_records = Attendee.query.filter_by(user_id=user.id).all()
 
@@ -621,7 +621,8 @@ def add_friend(username):
     friend_to_add = User.query.filter_by(username=username).first()
     
     if not friend_to_add:
-        #TODO: Add useful message to user here
+        error = "No a valid user to add."
+        flash(error)
         return redirect(url_for('my_account_friends', username=session['username']))
 
     # Add the logic to create a friendship relationship here
@@ -642,7 +643,8 @@ def remove_friend(username):
     friend_to_remove = User.query.filter_by(username=username).first()
     
     if not friend_to_remove:
-        #TODO: Add useful message to user here
+        error = "No valid user to remove."
+        flash(error)
         return redirect(url_for('my_account_friends', username=session['username']))
 
     # Assuming 'friends' is a many-to-many relationship attribute of the 'User' model
@@ -665,11 +667,15 @@ def add_friend_via_form():
     #Check if friend exists
     if not friend_to_add:
         #TODO: Add useful message to user here
+        error = f"No \"{friend_username}\" user found. Please check for potential typos."
+        flash(error)
         return redirect(url_for('my_account_friends', username=session['username']))
     
     # Check if the friend is already in the current user's friend list
     if friend_to_add in current_user.friends:
         # TODO: Add message to inform that the user is already a friend
+        error = f"\"{friend_username}\" is already a friend. Don't need to add again"
+        flash(error)
         return redirect(url_for('my_account_friends', username=session['username']))
 
     # Add the logic to create a friendship relationship here

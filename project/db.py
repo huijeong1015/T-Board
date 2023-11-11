@@ -1,10 +1,10 @@
+import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from pathlib import Path
 from werkzeug.security import generate_password_hash
 import json
 from sqlalchemy.sql import func
-
 
 # Configuration
 USERS_DATABASE = "users.db"
@@ -14,15 +14,17 @@ basedir = Path(__file__).resolve().parent
 # Setting up Flask app instance
 app = Flask(__name__)
 
-app.config[
-    "SQLALCHEMY_DATABASE_URI"
-] = f"sqlite:///{Path(basedir).joinpath(EVENTS_DATABASE)}"
-app.config["SQLALCHEMY_BINDS"] = {
+url = os.getenv('DATABASE_URL', f'sqlite:///{Path(basedir).joinpath(EVENTS_DATABASE)}')
+if url.startswith("postgres://"):
+    url = url.replace("postgres://", "postgresql://", 1)
+SQLALCHEMY_DATABASE_URI = url
+SQLALCHEMY_BINDS = {
     "users": f"sqlite:///{Path(basedir).joinpath(USERS_DATABASE)}",
     "events": f"sqlite:///{Path(basedir).joinpath(EVENTS_DATABASE)}",
 }
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+app.config.from_object(__name__)
 db = SQLAlchemy(app)
 
 # Association table for many-to-many relationship between users and events
@@ -124,7 +126,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     is_first_login = db.Column(db.Boolean, nullable=False, default=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
-    password = db.Column(db.String(128), nullable=False)
+    password = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(128), unique=True, nullable=False)
     interests = db.Column(db.String(255), nullable=False, default="")
     profile_picture = db.Column(db.String(100), nullable=False, default="default")
@@ -231,8 +233,14 @@ with app.app_context():
         MAT188 = Event.query.filter_by(name="MAT188 Tutoring").first()
 
         db.session.add(admin)
+
+        db.session.commit()
         db.session.add(user_a)
+
+        db.session.commit()
         db.session.add(user_b)
+
+        db.session.commit()
         db.session.add(user_c)
 
         db.session.commit()

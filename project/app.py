@@ -141,7 +141,8 @@ def login():
 @app.route('/logout', methods=["GET", "POST"])
 def logout():
     session.pop('username', None)
-    session.pop('user_id', None)  
+    session.pop('user_id', None) 
+    session.pop('top_right_image', None)  
     return redirect(url_for('login'))
 
 @app.route("/finish_setup/", methods=["GET", "POST"])

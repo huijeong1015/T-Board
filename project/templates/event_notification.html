@@ -44,26 +44,29 @@
         </div>
     </div>
         <div class="frame-info">
-            <form action="{{ url_for('my_account_notification') }}" method="POST" style="margin: 0%; height: 100%;"></form>
-            <div class="event-name-txt"><b>{{ event['event'].name }}</b></div>
-            <div class="event-details-txt">Date: {{ event['event'].date }}</div>
-            <div class="event-details-txt">Time: {{ event['event'].time }}</div>
-            <input type="hidden" name="updated_event_id" value="{{ event['event'].id }}">
-            <div class="notif">
-                <label for="set-notif-{{ event.id }}" class="set-notif">Set to:</label>
-                <select id="set-notif-{{ event.id }}" name="updated_notification" class="dropdown" onchange="this.form.submit()">
-                    <option value="30-mins" {% if event.notification_preference == 30 %}selected{% endif %}>30 minutes before</option>
-                    <option value="1-hour" {% if event.notification_preference == 60 %}selected{% endif %}>1 hour before</option>
-                    <option value="1-day" {% if event.notification_preference == 1440 %}selected{% endif %}>1 day before</option>
-                    <option value="1-week" {% if event.notification_preference == 10080 %}selected{% endif %}>1 week before</option>
-                </select>
-            </form>              
-            <form method="POST" action="{{ url_for('download_ics_file') }}">
-                <input type="hidden" name="preference" value="{{ event['notification_preference'] }}">
-                <button name="export-calendar" id="btn-calendar" class="btn-calendar" value="{{ event['event'].id }}" style="padding: 0%"> 
-                    <svg class="svg-event" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="#4F7942" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="m15 19.5c.4915.5057 1.7998 2.5 2.5 2.5m2.5-2.5c-.4915.5057-1.7998 2.5-2.5 2.5m0 0v-8"/><path d="m18 2v2m-12-2v2"/><path d="m12.5 22h-1.45c-4.03051 0-6.04576 0-7.29788-1.3536-1.25212-1.3537-1.25212-3.5323-1.25212-7.8896v-.5136c0-4.35726 0-6.53592 1.25212-7.88956s3.26737-1.35364 7.29788-1.35364h1.9c4.0305 0 6.0458 0 7.2979 1.35364 1.1788 1.27439 1.2478 3.28 1.2518 7.14636"/><path d="m3 8h18"/></g></svg>
-                </button>
-            </form>    
+            <div class="frame-info">
+                <div class="event-name-txt"><b>{{ event['event'].name }}</b></div>
+                <div class="event-details-txt">Date: {{ event['event'].date }}</div>
+                <div class="event-details-txt">Time: {{ event['event'].time }}</div>
+                <div class="notif">
+                    <form action="{{ url_for('my_account_notification') }}" method="POST" style="margin: 0%; height: 100%;">
+                        <input type="hidden" name="updated_event_id" value="{{ event['event'].id }}">
+                        <label for="set-notif-{{ event.id }}" class="set-notif">Set to:</label>
+                        <select id="set-notif-{{ event.id }}" name="updated_notification" class="dropdown" onchange="this.form.submit()">
+                            <option value="30-mins" {% if event.notification_preference == 30 %}selected{% endif %}>30 minutes before</option>
+                            <option value="1-hour" {% if event.notification_preference == 60 %}selected{% endif %}>1 hour before</option>
+                            <option value="1-day" {% if event.notification_preference == 1440 %}selected{% endif %}>1 day before</option>
+                            <option value="1-week" {% if event.notification_preference == 10080 %}selected{% endif %}>1 week before</option>
+                        </select>
+                    </form>
+                    <form method="POST" action="{{ url_for('download_ics_file') }}">
+                        <input type="hidden" name="preference" value="{{ event['notification_preference'] }}">
+                        <button name="export-calendar" id="btn-calendar" class="btn-calendar" value="{{ event['event'].id }}" style="padding: 0%"> 
+                            <svg class="svg-event" fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g stroke="#4F7942" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="m15 19.5c.4915.5057 1.7998 2.5 2.5 2.5m2.5-2.5c-.4915.5057-1.7998 2.5-2.5 2.5m0 0v-8"/><path d="m18 2v2m-12-2v2"/><path d="m12.5 22h-1.45c-4.03051 0-6.04576 0-7.29788-1.3536-1.25212-1.3537-1.25212-3.5323-1.25212-7.8896v-.5136c0-4.35726 0-6.53592 1.25212-7.88956s3.26737-1.35364 7.29788-1.35364h1.9c4.0305 0 6.0458 0 7.2979 1.35364 1.1788 1.27439 1.2478 3.28 1.2518 7.14636"/><path d="m3 8h18"/></g></svg>
+                        </button>
+                    </form> 
+                </div>
+            </div>  
         </div>
     </div>
 </div>

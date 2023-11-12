@@ -220,11 +220,6 @@ def bookmark():
     bookmarked = user.bookmarked_events
 
     if request.method == "POST":
-        if request.form.get("event-details") != None:
-            event_id = int(request.form["event-details"])
-            event = Event.query.filter_by(id=event_id).first()
-            bookmarked_events_ids = [event.id for event in bookmarked]
-            return render_template("event_details.html", event=event, profile_picture=get_user_profile_picture(), bookmarked_events=bookmarked_events_ids, top_right_image=None)   
         if request.form.get("remove-from-bookmarks") != None:
             bookmark_id = int(request.form["remove-from-bookmarks"])
             event_to_remove = Event.query.filter_by(id=bookmark_id).first() 
@@ -364,7 +359,7 @@ def main_dashboard():
         user_rating = Rating.query.filter_by(user_id=user.id, event_id=event.id).first()
         user_rating_value = user_rating.rating if user_rating else 0 #Base case will be 0
 
-        if attendee_record.notification_preference != -1:
+        if attendee_record != None and attendee_record.notification_preference !=-1: 
             notification_checked=True
         else:
             notification_checked=False
@@ -899,6 +894,27 @@ def page_not_found(e):
 @app.errorhandler(500)
 def internal_server_error(e):
     return render_template("500.html"), 500
+
+@app.route('/event_details/<int:event_id>', methods=["GET", "POST"])
+def show_event_details(event_id):
+    username = session.get('username')
+    user = User.query.filter_by(username=username).first()
+    event = Event.query.filter_by(id=event_id).first()
+    bookmarked = user.bookmarked_events
+    bookmarked_events_ids = [event.id for event in bookmarked]
+    attendee_record = Attendee.query.filter_by(user_id=user.id, event_id=event_id).first()
+    flag = 'attending' if attendee_record else 'not attending'
+    if attendee_record != None and attendee_record.notification_preference !=-1: 
+        notification_checked=True
+    else:
+        notification_checked=False
+    return render_template("event_details.html", 
+                        event=event, 
+                        profile_picture=get_user_profile_picture(), 
+                        flag=flag, 
+                        bookmarked_events=bookmarked_events_ids, 
+                        notification_checked=notification_checked,
+                        top_right_image=None)      
 
 # DFS Function for Friend Recommendations
 def dfs(graph, start, k):

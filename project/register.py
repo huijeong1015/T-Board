@@ -9,20 +9,22 @@ TBOARD_URL = "https://t-board.onrender.com/"
 TBOARD_EMAIL = "ece444tboard@gmail.com"
 TBOARD_PWD = "vjau nxth hark wjgo"
 
+
 # Helper functions
 # Generate a temporary password
 def generate_temporary_pwd():
     pwd_length = 10
     return secrets.token_urlsafe(pwd_length)
 
+
 def email_temporary_pwd(receiver, pwd):
     sender = TBOARD_EMAIL
-    
-    message = MIMEMultipart('alternative')
+
+    message = MIMEMultipart("alternative")
     message["Subject"] = "Temporary Password for T-Board Account"
     message["To"] = receiver
     message["From"] = sender
-    
+
     text = f"Your temporary password for T-board is:\n{pwd}"
     html = f"""\
 <html>
@@ -38,8 +40,8 @@ def email_temporary_pwd(receiver, pwd):
 </div>
 </body>
 </html>"""
-    text = MIMEText(text, 'plain')
-    html = MIMEText(html, 'html')
+    text = MIMEText(text, "plain")
+    html = MIMEText(html, "html")
     message.attach(text)
     message.attach(html)
 
